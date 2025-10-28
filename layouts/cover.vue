@@ -21,14 +21,14 @@
         <div class="author-name text-xl">{{ $slidev.configs.author }}</div>
       </div>
     </div>
-    <AcademicFooter />
+    <ScholarlyFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
-import AcademicFooter from '../components/AcademicFooter.vue'
+import ScholarlyFooter from '../components/ScholarlyFooter.vue'
 
 interface Author {
   name?: string
@@ -42,9 +42,9 @@ const props = defineProps<{
   footerMiddle?: string
 }>()
 
-// Get configs from useSlidevContext
+// Get configs from useSlideContext
 const { $slidev } = useSlideContext()
-const slidevConfigs = computed(() => $slidev.configs || {})
+const slidevConfigs = computed(() => ($slidev.configs as any) || {})
 
 // Parse authors from authors array (frontmatter)
 const parsedAuthors = computed(() => {
