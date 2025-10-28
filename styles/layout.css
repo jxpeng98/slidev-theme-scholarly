@@ -4,7 +4,50 @@
   --slidev-theme-primary: #5d8392;
 }
 
-.slidev-layout.cover,
+.slidev-layout.cover {
+  @apply h-full grid;
+
+  h1 {
+    @apply text-5xl leading-16 text-center;
+  }
+
+  h1 + p {
+    @apply -mt-1 opacity-50 mb-4 text-center;
+  }
+
+  h2 {
+    @apply text-center;
+  }
+
+  p + h2,
+  ul + h2,
+  table + h2 {
+    @apply mt-8;
+  }
+
+  .author-section {
+    @apply text-center;
+  }
+
+  .author-item {
+    @apply text-center px-4;
+    min-width: 200px;
+    max-width: 300px;
+  }
+
+  .author-name {
+    @apply font-semibold;
+  }
+
+  .author-institution {
+    @apply italic;
+  }
+
+  .author-email {
+    @apply text-sm font-mono;
+  }
+}
+
 .slidev-layout.intro {
   @apply h-full grid;
 
@@ -21,4 +64,95 @@
   table + h2 {
     @apply mt-10;
   }
+}
+
+footer {
+  @apply text-sm text-black;
+}
+
+/* Beamer-style footer */
+.beamer-footer {
+  @apply w-full;
+}
+
+.beamer-footer span {
+  @apply px-4 py-2 inline-block;
+}
+
+.beamer-footer-left {
+  background: linear-gradient(to right, #4a6b7a, rgba(74, 107, 122, 0.75));
+  @apply text-white;
+}
+
+.beamer-footer-center {
+  background: linear-gradient(to bottom, rgba(93, 131, 146, 0.85), rgba(93, 131, 146, 0.75));
+  @apply text-white flex-1 text-center;
+}
+
+.beamer-footer-right {
+  background: linear-gradient(to left, #6a97a8, rgba(106, 151, 168, 0.75));
+  @apply text-white;
+}
+
+/* Additional layouts */
+.slidev-layout.center,
+.slidev-layout.quote,
+.slidev-layout.fact,
+.slidev-layout.statement,
+.slidev-layout.section {
+  @apply h-full;
+}
+
+/* Centered layouts with constrained width */
+.slidev-layout.center > div {
+  @apply w-full;
+}
+
+.slidev-layout.quote > div,
+.slidev-layout.fact > div {
+  max-width: 56rem; /* 4xl */
+}
+
+.slidev-layout.statement > div {
+  max-width: 64rem; /* 5xl */
+}
+
+/* Heading styles for centered layouts */
+.slidev-layout.center h1 {
+  @apply text-5xl;
+}
+
+.slidev-layout.quote h1,
+.slidev-layout.fact h1,
+.slidev-layout.statement h1 {
+  @apply text-5xl;
+}
+
+.slidev-layout.section h1 {
+  @apply text-6xl font-bold;
+}
+
+.slidev-layout.fact h1 {
+  @apply text-7xl font-bold;
+}
+
+.slidev-layout.statement h1 {
+  @apply text-4xl font-light;
+}
+
+.slidev-layout.quote blockquote {
+  @apply text-3xl italic border-l-4 pl-6;
+  border-color: var(--slidev-theme-primary);
+}
+
+/* Two-column and image layouts */
+.slidev-layout.image-left,
+.slidev-layout.image-right,
+.slidev-layout.two-cols {
+  @apply h-full;
+}
+
+.slidev-layout.image-left img,
+.slidev-layout.image-right img {
+  @apply rounded-lg shadow-lg;
 }
