@@ -1,17 +1,36 @@
 ---
 theme: ./
+footerMiddle: Slidev Theme Academic
+authors:
+  - name: Jiaxin Peng
+    institution: Your University
+    email: jiaxin@example.edu
+  - name: Second Author
+    institution: Another University
+    email: second@example.edu
+  - name: Third Author
+    institution: Third University
+    email: third@example.edu
 ---
 
-# Slidev Theme Starter
+# Slidev Theme Academic
 
 Presentation slides for developers
 
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" flex="~ justify-center items-center gap-2" hover="bg-white bg-opacity-10">
-    Press Space for next page <div class="i-carbon:arrow-right inline-block"/>
-  </span>
-</div>
+<!--
+Multi-author example using authors array in frontmatter.
+For single author, use:
+author: Your Name
 
+Footer configuration:
+- footerLeft: Custom text for left footer (overrides author display)
+- footerMiddle: Custom text for middle footer (e.g., conference name)
+- footerRight: Automatically shows page numbers
+-->
+
+---
+layout: intro
+footerMiddle: Slidev Theme
 ---
 
 # What is Slidev?
@@ -32,6 +51,8 @@ Slidev is a slide maker and presentation tool designed for developers. It includ
 Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 ---
+layout: default
+---
 
 # Navigation
 
@@ -45,6 +66,20 @@ Hover on the bottom-left corner to see the navigation's controls panel
 | <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
+
+---
+layout: default
+---
+
+# This Slide Uses Default Layout
+
+Notice that even without specifying `layout: default`, this slide:
+- Uses the default layout automatically
+- Shows the footer with author information from the frontmatter
+- Displays the conference name in the middle
+- Shows page numbers on the right
+
+This demonstrates that **all footer configuration is global** and works across all slides.
 
 ---
 layout: image-right

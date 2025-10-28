@@ -1,8 +1,6 @@
 <template>
-  <div class="slidev-layout intro">
-    <div class="my-auto">
-      <slot />
-    </div>
+  <div class="slidev-layout default">
+    <slot />
     <AcademicFooter />
   </div>
 </template>
