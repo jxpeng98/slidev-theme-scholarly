@@ -4,6 +4,7 @@
     "": {
       "name": "slidev-theme-academic",
       "dependencies": {
+        "@slidev/client": "^52.6.0",
         "@slidev/types": "^52.6.0",
       },
       "devDependencies": {
