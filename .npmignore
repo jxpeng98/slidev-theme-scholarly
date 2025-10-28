@@ -1,0 +1,22 @@
+# Exclude development and documentation files
+example.md
+.github/
+.vscode/
+node_modules/
+dist/
+*.log
+*.tgz
+
+# Exclude CI/CD files
+.gitignore
+.editorconfig
+
+# Keep only necessary files for the theme
+!components/
+!layouts/
+!styles/
+!setup/
+!utils/
+!package.json
+!README.md
+!LICENSE
