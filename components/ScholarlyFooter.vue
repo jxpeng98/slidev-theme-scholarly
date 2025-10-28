@@ -1,5 +1,5 @@
 <template>
-  <footer class="absolute bottom-0 left-0 right-0">
+  <footer class="fixed bottom-0 left-0 right-0 z-50">
     <div class="flex justify-between beamer-footer">
       <span class="beamer-footer-left">{{ leftContent }}</span>
       <span class="beamer-footer-center">{{ middleContent }}</span>
@@ -24,18 +24,13 @@ const props = defineProps<{
   footerMiddle?: string
 }>()
 
-// Get configs from useSlidevContext
+// Get configs from useSlideContext
 const { $slidev } = useSlideContext()
-const slidevConfigs = computed(() => $slidev.configs || {})
+const slidevConfigs = computed(() => ($slidev.configs as any) || {})
 
 // Parse authors from authors array (frontmatter)
 const parsedAuthors = computed(() => {
-  // First try to get from props (per-slide override)
-  if (props.authors && Array.isArray(props.authors) && props.authors.length > 0) {
-    return props.authors
-  }
-  
-  // Then try to get from global frontmatter config
+  // Only read from global frontmatter config (first page)
   const globalAuthors = slidevConfigs.value?.authors
   if (globalAuthors && Array.isArray(globalAuthors) && globalAuthors.length > 0) {
     return globalAuthors as Author[]
@@ -46,8 +41,8 @@ const parsedAuthors = computed(() => {
 
 // Left content: custom or author(s)
 const leftContent = computed(() => {
-  // Check if custom footer left is provided
-  const footerLeft = props.footerLeft || slidevConfigs.value?.footerLeft
+  // Only read from global frontmatter config (first page)
+  const footerLeft = slidevConfigs.value?.footerLeft
   if (footerLeft) {
     return footerLeft
   }
@@ -70,7 +65,8 @@ const leftContent = computed(() => {
 
 // Middle content: custom or conference
 const middleContent = computed(() => {
-  const footerMiddle = props.footerMiddle || slidevConfigs.value?.footerMiddle
+  // Only read from global frontmatter config (first page)
+  const footerMiddle = slidevConfigs.value?.footerMiddle
   if (footerMiddle) {
     return footerMiddle
   }
