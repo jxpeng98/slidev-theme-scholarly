@@ -53,7 +53,7 @@ jobs:
           files: |
             dist/**/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Publish to NPM
         run: npm publish --provenance --access public
