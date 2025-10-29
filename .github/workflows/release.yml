@@ -50,8 +50,7 @@ jobs:
           body_path: release_notes.md
           draft: false
           prerelease: false
-          files: |
-            dist/**/*
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
