@@ -5,5 +5,10 @@
         "activityBar.background": "#41CAA1",
         "titleBar.activeBackground": "#56D0AB",
         "titleBar.activeForeground": "#081D17"
-    }
+    },
+    "slidev.include": [
+        "**/slides.md",
+        "example.md"
+    ],
+    "slidev.preview-sync": true
 }
