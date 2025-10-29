@@ -681,7 +681,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## Support
 
 - 📖 **Documentation**: [Slidev Documentation](https://sli.dev)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/pengjiaxin/slidev-theme-scholarly/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/jxpeng98/slidev-theme-scholarly/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/slidevjs/slidev/discussions)
 
 ---

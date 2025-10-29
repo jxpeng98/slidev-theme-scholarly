@@ -7,12 +7,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pengjiaxin/slidev-theme-scholarly.git"
+    "url": "git+https://github.com/jxpeng98/slidev-theme-scholarly.git"
   },
   "bugs": {
-    "url": "https://github.com/pengjiaxin/slidev-theme-scholarly/issues"
+    "url": "https://github.com/jxpeng98/slidev-theme-scholarly/issues"
   },
-  "homepage": "https://github.com/pengjiaxin/slidev-theme-scholarly#readme",
+  "homepage": "https://github.com/jxpeng98/slidev-theme-scholarly#readme",
   "keywords": [
     "slidev-theme",
     "slidev",
