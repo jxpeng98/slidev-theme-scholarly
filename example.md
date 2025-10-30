@@ -6,9 +6,9 @@ aspectRatio: 4/3
 lang: en
 theoremNumberFormat: '{number}'
 authors:
-  - name: Jiaxin Peng
+  - name: First Author
     institution: Your University
-    email: jiaxin@example.edu
+    email: first@example.edu
   - name: Second Author
     institution: Another University
     email: second@example.edu
