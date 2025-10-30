@@ -3,7 +3,7 @@ theme: ./
 footerMiddle: Slidev Theme Scholarly
 description: Presentation slides for scholars
 aspectRatio: 4/3
-lang: zh
+lang: en
 theoremNumberFormat: '{number}'
 authors:
   - name: Jiaxin Peng
@@ -193,9 +193,9 @@ Second paragraph (starting with —) = Attribution
 TIP: Keep quotes short and impactful for best effect
 -->
 
-生活就像一盒巧克力，你永远不知道下一颗是什么味道。
+Life is like a box of chocolates. You never know what you're gonna get.
 
-— 阿甘正传
+— Forrest Gump
 
 ---
 layout: section
@@ -453,17 +453,9 @@ TIP: Numbering resets at start of presentation automatically
 
 ## Mathematical Theorems
 
-<Theorem type="theorem" title="勾股定理">
+<Theorem type="theorem" title="Pythagorean Theorem">
 
-对于直角三角形，设两直角边为 $a$ 和 $b$，斜边为 $c$，则：
-
-$$a^2 + b^2 = c^2$$
-
-</Theorem>
-
-<Theorem type="theorem" title="勾股定理">
-
-对于直角三角形，设两直角边为 $a$ 和 $b$，斜边为 $c$，则：
+For a right triangle with legs \(a\) and \(b\), and hypotenuse \(c\), we have:
 
 $$a^2 + b^2 = c^2$$
 
@@ -471,7 +463,7 @@ $$a^2 + b^2 = c^2$$
 
 <Theorem type="lemma">
 
-闭区间上的每个连续函数都是一致连续的。
+All continuous functions on a closed interval are uniformly continuous.
 
 </Theorem>
 
@@ -495,15 +487,15 @@ All types auto-number separately in presentation order.
 
 ## Definitions and Examples
 
-<Theorem type="definition" title="极限">
+<Theorem type="definition" title="Limit">
 
-设函数 $f$ 在包含点 $a$ 的某个开区间上有定义。如果对于任意 $\epsilon > 0$，存在 $\delta > 0$ 使得当 $0 < |x - a| < \delta$ 时，有 $|f(x) - L| < \epsilon$，则称 $\lim_{x \to a} f(x) = L$。
+Let the function $f$ be defined on an open interval containing point $a$. If for any $\epsilon > 0$, there exists a $\delta > 0$ such that when $0 < |x - a| < \delta$, we have $|f(x) - L| < \epsilon$, then we say $\lim_{x \to a} f(x) = L$.
 
 </Theorem>
 
 <Theorem type="example">
 
-考虑函数 $f(x) = x^2$：
+Consider the function $f(x) = x^2$:
 
 - $f(0) = 0$
 - $f(1) = 1$
@@ -529,19 +521,19 @@ And more languages supported!
 
 <Theorem type="proposition">
 
-如果 $f$ 和 $g$ 在点 $a$ 处连续，则 $f + g$ 在点 $a$ 处也连续。
+If $f$ and $g$ are continuous at point $a$, then $f + g$ is also continuous at point $a$.
 
 </Theorem>
 
 <Theorem type="corollary">
 
-有限个连续函数的和仍然是连续函数。
+The sum of a finite number of continuous functions is still a continuous function.
 
 </Theorem>
 
 <Theorem type="remark">
 
-注意：此结果对于连续函数的乘积同样成立。
+Note: This result also holds for the product of continuous functions.
 
 </Theorem>
 
@@ -561,15 +553,15 @@ To hide numbering completely, use `:autoNumber="false"` (note the colon for bool
 
 ## Custom Numbering
 
-<Theorem type="theorem" number="3.1" title="特殊情况">
+<Theorem type="theorem" number="3.1" title="Special Case">
 
-有时我们需要使用特定的编号，比如 3.1 表示第三章第一个定理。
+Sometimes we need to use specific numbering, such as 3.1 to represent the first theorem in chapter 3.
 
 </Theorem>
 
-<Theorem type="theorem" :autoNumber="false" title="无编号定理">
+<Theorem type="theorem" :autoNumber="false" title="Unnumbered Theorem">
 
-这个定理没有编号，因为设置了 `autoNumber={false}`。
+This theorem has no number because `autoNumber={false}` is set.
 
 </Theorem>
 
@@ -587,4 +579,4 @@ Perfect for "Thank You", Q&A, or contact information.
 
 Questions?
 
-[Documentation](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)
+[Documentation](https://sli.dev) / [GitHub Repo](https://github.com/jxpeng98/slidev-theme-scholarly)
