@@ -156,6 +156,70 @@
     ],
     "description": "Insert Highlight component (Markdown syntax sugar)"
   },
+  "Slidev Scholarly: MetricCard": {
+    "prefix": ["scholarly-metric-card", "ss-metric-card"],
+    "body": [
+      "<MetricCard",
+      "  label=\"${1:Accuracy}\"",
+      "  value=\"${2:94.7}\"",
+      "  unit=\"${3:%}\"",
+      "  delta=\"${4:+3.2}\"",
+      "  caption=\"${5:Five-seed average against the supervised baseline}\"",
+      "  variant=\"${6|primary,success,warning,danger,info|}\"",
+      "/>",
+      "",
+      "$0"
+    ],
+    "description": "Insert MetricCard component"
+  },
+  "Slidev Scholarly: MetricGrid": {
+    "prefix": ["scholarly-metric-grid", "ss-metric-grid"],
+    "body": [
+      "<MetricGrid :columns=\"${1:3}\" :metrics=\"[",
+      "  { label: '${2:Accuracy}', value: '${3:94.7}', unit: '${4:%}', delta: '${5:+3.2}', variant: '${6|success,primary,warning,danger,info|}' },",
+      "  { label: '${7:Latency}', value: '${8:18}', unit: '${9:ms}', delta: '${10:-12%}', variant: '${11|info,primary,success,warning,danger|}' },",
+      "  { label: '${12:Energy}', value: '${13:-28}', unit: '${14:%}', delta: '${15:per sample}', variant: '${16|primary,success,warning,danger,info|}' }",
+      "]\" />",
+      "",
+      "$0"
+    ],
+    "description": "Insert MetricGrid component"
+  },
+  "Slidev Scholarly: EvidenceBlock": {
+    "prefix": ["scholarly-evidence-block", "ss-evidence-block"],
+    "body": [
+      "<EvidenceBlock",
+      "  title=\"${1:Ablation supports the routing module}\"",
+      "  label=\"${2:Evidence}\"",
+      "  source=\"${3:Table 3}\"",
+      "  confidence=\"${4:5 seeds}\"",
+      "  variant=\"${5|primary,success,warning,danger,info|}\"",
+      ">",
+      "",
+      "- ${6:Removing routing reduces accuracy by 2.1 points.}",
+      "- ${7:Throughput remains within the same deployment budget.}",
+      "",
+      "</EvidenceBlock>",
+      "",
+      "$0"
+    ],
+    "description": "Insert EvidenceBlock component"
+  },
+  "Slidev Scholarly: EquationBlock": {
+    "prefix": ["scholarly-equation-block", "ss-equation-block"],
+    "body": [
+      "<EquationBlock title=\"${1:Training Objective}\" reference=\"${2:1}\" caption=\"${3:Weighted supervised and regularization terms}\">",
+      "",
+      "\\$\\$",
+      "\\\\mathcal{L} = \\\\mathcal{L}_{task} + \\\\lambda \\\\mathcal{L}_{routing}",
+      "\\$\\$",
+      "",
+      "</EquationBlock>",
+      "",
+      "$0"
+    ],
+    "description": "Insert EquationBlock component"
+  },
   "Slidev Scholarly: Cite (Vue)": {
     "prefix": ["scholarly-cite-comp", "ss-cite-comp"],
     "body": [

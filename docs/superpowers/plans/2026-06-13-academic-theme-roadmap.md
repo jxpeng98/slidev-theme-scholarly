@@ -42,8 +42,9 @@
 | P0.3 Public theme config types | Complete | `index.d.ts` added; docs explain `colorSchema` vs `themeConfig.colorMode` |
 | P0.4 Release gate | Complete | `pnpm run check` runs token checks, docs build, CLI doctor, VS Code compile, and matrix dry-run |
 | P1.1 Academic layout pack | Complete | Eight layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 34 layout PNGs |
+| P1.2 Evidence components batch 1 | Complete | `MetricCard`, `MetricGrid`, `EvidenceBlock`, and `EquationBlock` added; `pnpm run check` and `pnpm run export:component-screenshots` pass with 13 component PNGs |
 
-Current decision: P0 and P1.1 are complete. Continue P1 with evidence components unless layout API feedback requires a follow-up.
+Current decision: P0, P1.1, and the first P1.2 evidence component batch are complete. Continue P1.2 with dataset/paper/contribution/caveat components unless component API feedback requires a follow-up.
 
 ---
 
@@ -365,23 +366,43 @@ feat(layouts): add academic presentation patterns
 
 **Steps:**
 
-- [ ] Implement components with semantic tokens from P0.
-- [ ] Prefer slots for body content and typed props for labels, values, variants, and references.
-- [ ] Add component snippets with realistic academic examples.
-- [ ] Add docs pages or update the component index with examples.
-- [ ] Export component screenshots:
+- [x] Implement batch 1 components with semantic tokens from P0:
+  - `MetricCard.vue`
+  - `MetricGrid.vue`
+  - `EvidenceBlock.vue`
+  - `EquationBlock.vue`
+- [x] Prefer slots for body content and typed props for labels, values, variants, and references in batch 1.
+- [x] Add component snippets with realistic academic examples for batch 1.
+- [x] Add docs pages and update the component index with examples for batch 1.
+- [x] Export component screenshots for batch 1:
 
 ```bash
 pnpm run export:component-screenshots
 ```
 
-- [ ] Run:
+- [x] Run:
 
 ```bash
 node scripts/check-color-mode-styles.mjs
 pnpm run docs:build
 pnpm run vscode:compile
 ```
+
+Current batch verification:
+
+```bash
+pnpm run check:components
+pnpm run export:component-screenshots
+pnpm run check
+```
+
+Next batch:
+
+- [ ] Implement `DatasetCard.vue`.
+- [ ] Implement `PaperCard.vue`.
+- [ ] Implement `ContributionList.vue`.
+- [ ] Implement `CaveatList.vue`.
+- [ ] Extend `scripts/check-academic-components.mjs` when each component graduates to stable docs/snippets/screenshots.
 
 **Acceptance Criteria:**
 
@@ -804,7 +825,8 @@ node cli/scholarly.mjs doctor
    - Complete. Eight planned layouts are implemented, documented, and covered by layout screenshots.
 
 2. **P1 Academic Evidence Components**
-   - Add `MetricCard`, `MetricGrid`, `EvidenceBlock`, and `EquationBlock`.
+   - Complete batch 1 with `MetricCard`, `MetricGrid`, `EvidenceBlock`, and `EquationBlock`.
+   - Next batch: `DatasetCard`, `PaperCard`, `ContributionList`, and `CaveatList`.
    - Reuse P0 semantic tokens for all surfaces and states.
 
 3. **P1 Academic Interaction Polish**

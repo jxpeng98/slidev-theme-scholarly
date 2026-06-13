@@ -63,6 +63,10 @@
         "Keywords",
         "Columns",
         "Highlight",
-        "ThemePreview"
+        "ThemePreview",
+        "MetricCard",
+        "MetricGrid",
+        "EvidenceBlock",
+        "EquationBlock"
     ]
 }

@@ -472,6 +472,75 @@ OPTIONS: color (green/blue/amber/red)
 Accuracy on benchmark dataset
 
 ---
+layout: default
+title: Evidence Summary
+subtitle: Metrics and claim support
+---
+
+<!--
+SLIDE: Evidence Summary
+LAYOUT: default
+COMPONENTS: <MetricCard>, <MetricGrid>, <EvidenceBlock>
+PURPOSE: Show compact evidence components for result-heavy academic slides
+-->
+
+<MetricCard
+  label="Main Result"
+  value="94.7"
+  unit="%"
+  delta="+3.2"
+  caption="Five-seed average on AcademicBench"
+  variant="success"
+/>
+
+<MetricGrid :columns="3" :metrics="[
+  { label: 'Macro F1', value: '0.93', delta: '+0.04', variant: 'success' },
+  { label: 'Latency', value: '18', unit: 'ms', delta: '-12%', variant: 'info' },
+  { label: 'Energy', value: '-28', unit: '%', delta: 'per sample', variant: 'primary' }
+]" />
+
+<EvidenceBlock
+  title="Ablation supports the routing module"
+  label="Evidence"
+  source="Table 3"
+  confidence="5 seeds"
+  variant="success"
+  compact
+>
+
+- Removing routing reduces accuracy by 2.1 points.
+- Throughput remains within the same deployment budget.
+
+</EvidenceBlock>
+
+---
+layout: default
+title: Training Objective
+subtitle: Equation evidence
+---
+
+<!--
+SLIDE: Equation Evidence
+LAYOUT: default
+COMPONENT: <EquationBlock>
+PURPOSE: Connect a method equation to the result claim
+-->
+
+<EquationBlock
+  title="Training Objective"
+  reference="1"
+  caption="Weighted supervised and routing losses used across all ablations."
+>
+
+$$
+\mathcal{L} = \mathcal{L}_{task} + \lambda \mathcal{L}_{routing}
+$$
+
+</EquationBlock>
+
+The routing term is active only during adaptation, so deployed inference cost stays unchanged.
+
+---
 layout: two-cols
 ratio: "1:1"
 title: Quantitative Results

@@ -95,5 +95,9 @@ $$a^2 + b^2 = c^2$$
 - [Keywords](./keywords.md) - 关键词标签
 - [Columns](./columns.md) - 多列布局
 - [Highlight](./highlight.md) - 文本高亮
+- [MetricCard](./metric-card.md) - 单个关键指标
+- [MetricGrid](./metric-grid.md) - 结果指标网格
+- [EvidenceBlock](./evidence-block.md) - 证据、来源和可信度说明
+- [EquationBlock](./equation-block.md) - 带标题、编号和说明的公式块
 - [Cite](./cite.md) - 学术引用
 - [ThemePreview](./theme-preview.md) - 主题配色预览

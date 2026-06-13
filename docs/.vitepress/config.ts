@@ -59,6 +59,10 @@ const vitePressOptions = {
               { text: 'Keywords', link: '/en/components/keywords' },
               { text: 'Columns', link: '/en/components/columns' },
               { text: 'Highlight', link: '/en/components/highlight' },
+              { text: 'MetricCard', link: '/en/components/metric-card' },
+              { text: 'MetricGrid', link: '/en/components/metric-grid' },
+              { text: 'EvidenceBlock', link: '/en/components/evidence-block' },
+              { text: 'EquationBlock', link: '/en/components/equation-block' },
               { text: 'Cite', link: '/en/components/cite' },
               { text: 'ThemePreview', link: '/en/components/theme-preview' }
             ]
@@ -105,6 +109,10 @@ const vitePressOptions = {
               { text: 'Keywords', link: '/zh/components/keywords' },
               { text: 'Columns', link: '/zh/components/columns' },
               { text: 'Highlight', link: '/zh/components/highlight' },
+              { text: 'MetricCard', link: '/zh/components/metric-card' },
+              { text: 'MetricGrid', link: '/zh/components/metric-grid' },
+              { text: 'EvidenceBlock', link: '/zh/components/evidence-block' },
+              { text: 'EquationBlock', link: '/zh/components/equation-block' },
               { text: 'Cite', link: '/zh/components/cite' },
               { text: 'ThemePreview', link: '/zh/components/theme-preview' }
             ]

@@ -16,6 +16,10 @@ This theme provides several components for academic presentations.
 | [Keywords](./keywords) | Keyword tags |
 | [Columns](./columns) | Multi-column layouts |
 | [Highlight](./highlight) | Text highlighting |
+| [MetricCard](./metric-card) | Single key metric with delta and caption |
+| [MetricGrid](./metric-grid) | Compact grid of result metrics |
+| [EvidenceBlock](./evidence-block) | Claim evidence, source, and confidence notes |
+| [EquationBlock](./equation-block) | Numbered equations with title and caption |
 | [Cite](./cite) | Academic citations |
 | [ThemePreview](./theme-preview) | Preview a color theme inside a block |
 
@@ -33,6 +37,8 @@ For a right triangle: $a^2 + b^2 = c^2$
 Important information here.
 
 </Block>
+
+<MetricCard label="Accuracy" value="94.7" unit="%" delta="+3.2" variant="success" />
 ```
 
 See individual component pages for detailed documentation.

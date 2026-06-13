@@ -60,7 +60,7 @@ The <Highlight type="warning">warning highlight</Highlight> draws attention.
 
 Consider the <Highlight type="success">success highlight</Highlight> for achievements.
 
-Also available: <Highlight type="info">info</Highlight> and <Highlight type="error">error</Highlight> styles.
+Also available: <Highlight type="info">info</Highlight> and <Highlight type="danger">danger</Highlight> styles.
 
 <!-- Slide 5: steps -->
 ---
@@ -138,3 +138,67 @@ subtitle: Local color theme preview
 This block previews a Scholarly color theme without changing the rest of the slide.
 
 </ThemePreview>
+
+<!-- Slide 10: metric-card -->
+---
+layout: default
+title: MetricCard Component
+subtitle: Single result metric
+---
+
+<MetricCard
+  label="Accuracy"
+  value="94.7"
+  unit="%"
+  delta="+3.2"
+  caption="Five-seed average against the supervised baseline"
+  variant="success"
+/>
+
+<!-- Slide 11: metric-grid -->
+---
+layout: default
+title: MetricGrid Component
+subtitle: Compact result summary
+---
+
+<MetricGrid :columns="3" :metrics="[
+  { label: 'Accuracy', value: '94.7', unit: '%', delta: '+3.2', variant: 'success' },
+  { label: 'Latency', value: '18', unit: 'ms', delta: '-12%', variant: 'info' },
+  { label: 'Energy', value: '-28', unit: '%', delta: 'per sample', variant: 'primary' }
+]" />
+
+<!-- Slide 12: evidence-block -->
+---
+layout: default
+title: EvidenceBlock Component
+subtitle: Claim support with source
+---
+
+<EvidenceBlock
+  title="Ablation supports the routing module"
+  label="Evidence"
+  source="Table 3"
+  confidence="5 seeds"
+  variant="success"
+>
+
+- Removing routing reduces accuracy by 2.1 points.
+- Throughput remains within the same deployment budget.
+
+</EvidenceBlock>
+
+<!-- Slide 13: equation-block -->
+---
+layout: default
+title: EquationBlock Component
+subtitle: Numbered equation with caption
+---
+
+<EquationBlock title="Training Objective" reference="1" caption="Weighted supervised and routing losses used in all ablations.">
+
+$$
+\mathcal{L} = \mathcal{L}_{task} + \lambda \mathcal{L}_{routing}
+$$
+
+</EquationBlock>

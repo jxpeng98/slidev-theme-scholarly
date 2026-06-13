@@ -13,6 +13,10 @@ const steps = [
     command: ['node', 'scripts/check-academic-layout-pack.mjs'],
   },
   {
+    name: 'Academic component contract',
+    command: ['node', 'scripts/check-academic-components.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

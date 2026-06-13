@@ -25,7 +25,11 @@ const COMPONENTS = {
   6: 'columns',
   7: 'keywords',
   8: 'cite',
-  9: 'theme-preview'
+  9: 'theme-preview',
+  10: 'metric-card',
+  11: 'metric-grid',
+  12: 'evidence-block',
+  13: 'equation-block'
 }
 
 console.log('🎨 Generating component screenshots...')
