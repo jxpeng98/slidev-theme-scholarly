@@ -45,56 +45,58 @@ const resolvedType = computed(() => {
   border-radius: 0.4em;
   font-weight: 500;
   line-height: 1.25;
+  background-color: var(--scholarly-highlight-bg);
+  color: var(--scholarly-highlight-fg);
 }
 
 .highlight-primary {
-  background-color: rgba(93, 131, 146, 0.2);
-  color: #4a6b7a;
+  --scholarly-highlight-bg: color-mix(in srgb, var(--slidev-theme-primary, #5d8392) 16%, white 84%);
+  --scholarly-highlight-fg: color-mix(in srgb, var(--slidev-theme-primary, #4a6b7a) 82%, black 18%);
 }
 
 .highlight-success {
-  background-color: rgba(16, 185, 129, 0.2);
-  color: #059669;
+  --scholarly-highlight-bg: color-mix(in srgb, #10b981 18%, white 82%);
+  --scholarly-highlight-fg: color-mix(in srgb, #059669 84%, black 16%);
 }
 
 .highlight-warning {
-  background-color: rgba(245, 158, 11, 0.2);
-  color: #d97706;
+  --scholarly-highlight-bg: color-mix(in srgb, #f59e0b 20%, white 80%);
+  --scholarly-highlight-fg: color-mix(in srgb, #b45309 88%, black 12%);
 }
 
 .highlight-danger {
-  background-color: rgba(239, 68, 68, 0.2);
-  color: #dc2626;
+  --scholarly-highlight-bg: color-mix(in srgb, #ef4444 16%, white 84%);
+  --scholarly-highlight-fg: color-mix(in srgb, #dc2626 86%, black 14%);
 }
 
 .highlight-info {
-  background-color: rgba(6, 182, 212, 0.2);
-  color: #0891b2;
+  --scholarly-highlight-bg: color-mix(in srgb, #06b6d4 18%, white 82%);
+  --scholarly-highlight-fg: color-mix(in srgb, #0891b2 84%, black 16%);
 }
 
-/* Dark mode support */
-:root.dark .highlight-primary {
-  background-color: rgba(93, 131, 146, 0.3);
-  color: #8fb3c2;
+/* Follow the theme color mode, not Slidev's raw html.dark class. */
+:global(:root[data-color-mode="dark"]) .highlight-primary {
+  --scholarly-highlight-bg: color-mix(in srgb, var(--slidev-theme-primary-light, #8fb3c2) 28%, transparent);
+  --scholarly-highlight-fg: color-mix(in srgb, var(--slidev-theme-primary-light, #8fb3c2) 72%, white 28%);
 }
 
-:root.dark .highlight-success {
-  background-color: rgba(16, 185, 129, 0.3);
-  color: #34d399;
+:global(:root[data-color-mode="dark"]) .highlight-success {
+  --scholarly-highlight-bg: color-mix(in srgb, #10b981 30%, transparent);
+  --scholarly-highlight-fg: #34d399;
 }
 
-:root.dark .highlight-warning {
-  background-color: rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+:global(:root[data-color-mode="dark"]) .highlight-warning {
+  --scholarly-highlight-bg: color-mix(in srgb, #f59e0b 30%, transparent);
+  --scholarly-highlight-fg: #fbbf24;
 }
 
-:root.dark .highlight-danger {
-  background-color: rgba(239, 68, 68, 0.3);
-  color: #f87171;
+:global(:root[data-color-mode="dark"]) .highlight-danger {
+  --scholarly-highlight-bg: color-mix(in srgb, #ef4444 30%, transparent);
+  --scholarly-highlight-fg: #f87171;
 }
 
-:root.dark .highlight-info {
-  background-color: rgba(6, 182, 212, 0.3);
-  color: #22d3ee;
+:global(:root[data-color-mode="dark"]) .highlight-info {
+  --scholarly-highlight-bg: color-mix(in srgb, #06b6d4 30%, transparent);
+  --scholarly-highlight-fg: #22d3ee;
 }
 </style>
