@@ -535,6 +535,20 @@ Themes are applied using CSS custom properties and data attributes:
 
 This allows for seamless theme switching without reloading the presentation.
 
+### Semantic Token Groups
+
+Scholarly keeps readable content colors separate from the theme's identity colors. When creating a new color theme or adjusting light/dark behavior, prefer these token groups instead of hard-coded component colors:
+
+| Token group | Purpose | Examples |
+|-------------|---------|----------|
+| Chrome tokens | Header, footer, toolbar, and navigation surfaces | `--scholarly-chrome-bg`, `--scholarly-toolbar-hover` |
+| Content tokens | Readable slide body surfaces, borders, code, quote, and table colors | `--scholarly-content-surface`, `--scholarly-code-bg`, `--scholarly-quote-fg` |
+| Accent tokens | Theme identity colors provided by color presets or `themeColors` | `--slidev-theme-primary`, `--slidev-theme-primary-light`, `--scholarly-accent` |
+| Semantic tokens | Variant-specific readable states for highlights, blocks, and theorems | `--scholarly-highlight-warning-bg`, `--scholarly-block-info-border`, `--scholarly-theorem-definition-accent` |
+| Interaction tokens | Hover, focus, pinned, active, and muted UI feedback | `--scholarly-toolbar-hover`, `--scholarly-content-fg-muted` |
+
+The key rule is that a background token and its foreground token must move together. For example, `Highlight` uses `--scholarly-highlight-*-bg` and `--scholarly-highlight-*-fg`, so a dark highlight background cannot accidentally inherit dark body text in light mode.
+
 ## Regenerate Theme Screenshots
 
 To export the first 4 slides of every theme example into `images/themes/*` (and sync to `docs/public/images/themes/*`), run:

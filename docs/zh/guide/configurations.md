@@ -72,6 +72,10 @@ authors:
 
 ```yaml
 themeConfig:
+  colorTheme: oxford-burgundy
+  fontTheme: traditional
+  colorMode: light
+  sectionMode: dark
   beamerNav: false  # 隐藏页脚导航按钮
   outlineToc: true
   outlineTocOpen: false
@@ -79,9 +83,14 @@ themeConfig:
 
 | 选项 | 控制内容 | 默认值 |
 |------|---------|--------|
+| `themeConfig.colorTheme` | Scholarly 配色预设 id，例如 `classic-blue`、`oxford-burgundy` 或 `high-contrast` | `classic-blue` |
+| `themeConfig.fontTheme` | Scholarly 字体预设 id，例如 `classic`、`traditional` 或 `technical` | `classic` |
+| `themeConfig.colorMode` | Scholarly 的语义 token 模式，影响页眉、页脚、highlight、引用、代码、表格、Block 和 Theorem 的可读颜色 | 跟随 Slidev 深色模式，默认深色外壳 |
+| `themeConfig.sectionMode` | `layout: section` 页面默认外观 | `dark` |
 | `themeConfig.beamerNav` | 在放映视图中显示 beamer 风格页脚导航按钮 | `true` |
 | `themeConfig.outlineToc` | 在页脚显示一个紧凑 TOC 按钮，点击后唤起目录面板 | `false` |
 | `themeConfig.outlineTocOpen` | 初始加载时默认展开目录面板 | `false` |
+| `themeConfig.footnoteDisplay` | 脚注静态显示和 hover 行为：`both`、`hover-only` 或 `notes-only` | `both` |
 
 说明：
 
@@ -92,6 +101,31 @@ themeConfig:
 - TOC 打开时会默认预览当前页；如果当前页被 `hideInToc: true` 隐藏，则自动回退到第一个可见目录项。
 - 单页设置 `hideInToc: true` 时会自动隐藏该页。
 - `outlineSidebar` / `outlineSidebarOpen` 旧配置仍然兼容，但新配置建议使用 `outlineToc` / `outlineTocOpen`。
+
+### Slidev Color Schema 与 Scholarly Color Mode
+
+Slidev 的 `colorSchema` 控制 Slidev 内置的浅色/深色切换，以及播放器是否允许切换模式。Scholarly 的 `themeConfig.colorMode` 控制本主题的语义 CSS token，包括外壳、highlight、引用、代码、表格、Block 和 Theorem 的表面颜色。
+
+当你希望 Slidev UI 支持两种模式时，使用 `colorSchema: both`。当你希望整套 Scholarly 可读 token 固定在某个模式时，使用 `themeConfig.colorMode`。
+
+```yaml
+---
+theme: scholarly
+colorSchema: both
+themeConfig:
+  colorTheme: high-contrast
+  colorMode: light
+  sectionMode: dark
+---
+```
+
+常见组合：
+
+| 场景 | 配置 |
+|------|------|
+| 浅色学术内容 + 深色章节页 | `themeConfig.colorMode: light` 和 `themeConfig.sectionMode: dark` |
+| 深色页眉/页脚 + 可读内容强调 | `themeConfig.colorMode: dark` |
+| 优先保证可访问性 | `themeConfig.colorTheme: high-contrast` 并显式设置 `themeConfig.colorMode` |
 
 ### 定理编号格式
 

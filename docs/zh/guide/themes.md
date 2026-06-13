@@ -535,6 +535,20 @@ themeColors:
 
 这允许无缝切换主题，无需重新加载演示文稿。
 
+### 语义 Token 分组
+
+Scholarly 会把可读内容颜色和主题识别色分开管理。新增配色主题或调整浅色/深色行为时，应优先使用这些 token 分组，而不是在组件里写死颜色：
+
+| Token 分组 | 用途 | 示例 |
+|------------|------|------|
+| Chrome tokens | 页眉、页脚、工具栏和导航表面 | `--scholarly-chrome-bg`、`--scholarly-toolbar-hover` |
+| Content tokens | 正文内容表面、边框、代码、引用和表格颜色 | `--scholarly-content-surface`、`--scholarly-code-bg`、`--scholarly-quote-fg` |
+| Accent tokens | 配色预设或 `themeColors` 提供的主题识别色 | `--slidev-theme-primary`、`--slidev-theme-primary-light`、`--scholarly-accent` |
+| Semantic tokens | highlight、Block、Theorem 等变体的可读状态 | `--scholarly-highlight-warning-bg`、`--scholarly-block-info-border`、`--scholarly-theorem-definition-accent` |
+| Interaction tokens | hover、focus、pinned、active 和弱化 UI 反馈 | `--scholarly-toolbar-hover`、`--scholarly-content-fg-muted` |
+
+核心规则是背景 token 和前景 token 必须成对变化。例如 `Highlight` 使用 `--scholarly-highlight-*-bg` 与 `--scholarly-highlight-*-fg`，这样浅色模式下的深色 highlight 背景不会再意外继承深色正文文本。
+
 ## 重新生成主题截图
 
 将每个主题示例的前 4 页导出到 `images/themes/*`（并同步到 `docs/public/images/themes/*`）：

@@ -139,7 +139,7 @@ function formatNumber(num: string): string {
   padding: 1rem 1.5rem;
   border-radius: 0.5rem;
   border-left: 4px solid;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--scholarly-content-surface-muted, rgba(255, 255, 255, 0.05));
 }
 
 .theorem-box.theorem-compact {
@@ -177,95 +177,95 @@ function formatNumber(num: string): string {
 
 /* Different colors for different types */
 .theorem-theorem {
-  border-left-color: #3b82f6; /* blue */
-  background-color: rgba(59, 130, 246, 0.1);
+  border-left-color: var(--scholarly-theorem-theorem-accent);
+  background-color: var(--scholarly-theorem-theorem-bg);
 }
 
 .theorem-theorem .theorem-type {
-  color: #3b82f6;
+  color: var(--scholarly-theorem-theorem-accent);
 }
 
 .theorem-lemma {
-  border-left-color: #8b5cf6; /* purple */
-  background-color: rgba(139, 92, 246, 0.1);
+  border-left-color: var(--scholarly-theorem-lemma-accent);
+  background-color: var(--scholarly-theorem-lemma-bg);
 }
 
 .theorem-lemma .theorem-type {
-  color: #8b5cf6;
+  color: var(--scholarly-theorem-lemma-accent);
 }
 
 .theorem-proposition {
-  border-left-color: #06b6d4; /* cyan */
-  background-color: rgba(6, 182, 212, 0.1);
+  border-left-color: var(--scholarly-theorem-proposition-accent);
+  background-color: var(--scholarly-theorem-proposition-bg);
 }
 
 .theorem-proposition .theorem-type {
-  color: #06b6d4;
+  color: var(--scholarly-theorem-proposition-accent);
 }
 
 .theorem-corollary {
-  border-left-color: #10b981; /* green */
-  background-color: rgba(16, 185, 129, 0.1);
+  border-left-color: var(--scholarly-theorem-corollary-accent);
+  background-color: var(--scholarly-theorem-corollary-bg);
 }
 
 .theorem-corollary .theorem-type {
-  color: #10b981;
+  color: var(--scholarly-theorem-corollary-accent);
 }
 
 .theorem-definition {
-  border-left-color: #f59e0b; /* amber */
-  background-color: rgba(245, 158, 11, 0.1);
+  border-left-color: var(--scholarly-theorem-definition-accent);
+  background-color: var(--scholarly-theorem-definition-bg);
 }
 
 .theorem-definition .theorem-type {
-  color: #f59e0b;
+  color: var(--scholarly-theorem-definition-accent);
 }
 
 .theorem-example {
-  border-left-color: #ec4899; /* pink */
-  background-color: rgba(236, 72, 153, 0.1);
+  border-left-color: var(--scholarly-theorem-example-accent);
+  background-color: var(--scholarly-theorem-example-bg);
 }
 
 .theorem-example .theorem-type {
-  color: #ec4899;
+  color: var(--scholarly-theorem-example-accent);
 }
 
 .theorem-remark {
-  border-left-color: #6b7280; /* gray */
-  background-color: rgba(107, 114, 128, 0.1);
+  border-left-color: var(--scholarly-theorem-remark-accent);
+  background-color: var(--scholarly-theorem-remark-bg);
 }
 
 .theorem-remark .theorem-type {
-  color: #6b7280;
+  color: var(--scholarly-theorem-remark-accent);
 }
 
 /* New types */
 .theorem-proof {
-  border-left-color: #475569; /* slate */
-  background-color: rgba(71, 85, 105, 0.1);
+  border-left-color: var(--scholarly-theorem-proof-accent);
+  background-color: var(--scholarly-theorem-proof-bg);
 }
 
 .theorem-proof .theorem-type {
-  color: #475569;
+  color: var(--scholarly-theorem-proof-accent);
   font-style: italic;
 }
 
 .theorem-note {
-  border-left-color: #0ea5e9; /* sky */
-  background-color: rgba(14, 165, 233, 0.1);
+  border-left-color: var(--scholarly-theorem-note-accent);
+  background-color: var(--scholarly-theorem-note-bg);
 }
 
 .theorem-note .theorem-type {
-  color: #0ea5e9;
+  color: var(--scholarly-theorem-note-accent);
 }
 
 .theorem-claim {
-  border-left-color: #f97316; /* orange */
-  background-color: rgba(249, 115, 22, 0.1);
+  border-left-color: var(--scholarly-theorem-claim-accent);
+  background-color: var(--scholarly-theorem-claim-bg);
 }
 
 .theorem-claim .theorem-type {
-  color: #f97316;
+  color: var(--scholarly-theorem-claim-accent);
 }
 
 /* Deep styles for content */
@@ -288,7 +288,8 @@ function formatNumber(num: string): string {
 }
 
 .theorem-content :deep(code) {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--scholarly-inline-code-bg, rgba(0, 0, 0, 0.2));
+  color: var(--scholarly-code-fg, inherit);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   font-size: 0.9em;

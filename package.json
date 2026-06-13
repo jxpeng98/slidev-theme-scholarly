@@ -31,6 +31,7 @@
     "setup",
     "utils",
     "vite.config.ts",
+    "index.d.ts",
     "README.md",
     "LICENSE"
   ],
@@ -54,10 +55,14 @@
   },
   "scripts": {
     "cli": "node cli/scholarly.mjs --help",
+    "check": "node scripts/release-ready.mjs",
+    "check:tokens": "node scripts/check-color-mode-styles.mjs",
+    "check:visual": "SCHOLARLY_FULL_VISUAL=1 node scripts/release-ready.mjs",
     "dev": "node scripts/slidev.mjs dev --open",
     "build": "node scripts/slidev.mjs build",
     "export": "node scripts/slidev.mjs export",
     "screenshot": "node scripts/slidev.mjs export --format png",
+    "theme:matrix": "node scripts/check-theme-matrix.mjs",
     "export:theme-images": "node scripts/export-theme-images.mjs",
     "export:layout-screenshots": "node scripts/export-layout-screenshots.mjs",
     "export:component-screenshots": "node scripts/export-component-screenshots.mjs",

@@ -72,6 +72,10 @@ Use `themeConfig` for theme-level behavior:
 
 ```yaml
 themeConfig:
+  colorTheme: oxford-burgundy
+  fontTheme: traditional
+  colorMode: light
+  sectionMode: dark
   beamerNav: false  # hide footer navigation buttons
   outlineToc: true
   outlineTocOpen: false
@@ -79,9 +83,14 @@ themeConfig:
 
 | Option | What it controls | Default |
 |--------|------------------|---------|
+| `themeConfig.colorTheme` | Scholarly color preset id, such as `classic-blue`, `oxford-burgundy`, or `high-contrast` | `classic-blue` |
+| `themeConfig.fontTheme` | Scholarly font preset id, such as `classic`, `traditional`, or `technical` | `classic` |
+| `themeConfig.colorMode` | Scholarly chrome/content token mode for header, footer, highlights, quotes, code, blocks, and theorem states | follows Slidev dark mode, defaulting to `dark` chrome |
+| `themeConfig.sectionMode` | Default appearance for `layout: section` slides | `dark` |
 | `themeConfig.beamerNav` | Show beamer-style footer navigation buttons in live play mode | `true` |
 | `themeConfig.outlineToc` | Show a compact TOC button in the footer that opens an outline panel | `false` |
 | `themeConfig.outlineTocOpen` | Start with the outline panel expanded | `false` |
+| `themeConfig.footnoteDisplay` | Static and hover behavior for footnotes: `both`, `hover-only`, or `notes-only` | `both` |
 
 Notes:
 
@@ -92,6 +101,31 @@ Notes:
 - When the TOC opens, it previews the current slide by default. If the current slide is hidden with `hideInToc: true`, it falls back to the first visible TOC item.
 - Slides with `hideInToc: true` are hidden automatically.
 - The legacy `outlineSidebar` / `outlineSidebarOpen` keys still work, but `outlineToc` / `outlineTocOpen` are the preferred names now.
+
+### Slidev Color Schema vs Scholarly Color Mode
+
+Slidev's `colorSchema` controls the built-in Slidev light/dark toggle and whether the player can switch modes. Scholarly's `themeConfig.colorMode` controls this theme's semantic CSS tokens, including chrome, highlights, blockquotes, code, tables, blocks, and theorem surfaces.
+
+Use `colorSchema: both` when you want Slidev's UI to support both modes. Use `themeConfig.colorMode` when you want a deck to pin Scholarly's readable token set.
+
+```yaml
+---
+theme: scholarly
+colorSchema: both
+themeConfig:
+  colorTheme: high-contrast
+  colorMode: light
+  sectionMode: dark
+---
+```
+
+Common patterns:
+
+| Pattern | Configuration |
+|---------|---------------|
+| Light academic content with dark section dividers | `themeConfig.colorMode: light` and `themeConfig.sectionMode: dark` |
+| Dark chrome with readable content accents | `themeConfig.colorMode: dark` |
+| Accessibility-first deck | `themeConfig.colorTheme: high-contrast` and explicit `themeConfig.colorMode` |
 
 ### Theorem Number Format
 

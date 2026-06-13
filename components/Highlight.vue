@@ -50,53 +50,52 @@ const resolvedType = computed(() => {
 }
 
 .highlight-primary {
-  --scholarly-highlight-bg: color-mix(in srgb, var(--slidev-theme-primary, #5d8392) 16%, white 84%);
-  --scholarly-highlight-fg: color-mix(in srgb, var(--slidev-theme-primary, #4a6b7a) 82%, black 18%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-primary-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-primary-fg);
 }
 
 .highlight-success {
-  --scholarly-highlight-bg: color-mix(in srgb, #10b981 18%, white 82%);
-  --scholarly-highlight-fg: color-mix(in srgb, #059669 84%, black 16%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-success-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-success-fg);
 }
 
 .highlight-warning {
-  --scholarly-highlight-bg: color-mix(in srgb, #f59e0b 20%, white 80%);
-  --scholarly-highlight-fg: color-mix(in srgb, #b45309 88%, black 12%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-warning-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-warning-fg);
 }
 
 .highlight-danger {
-  --scholarly-highlight-bg: color-mix(in srgb, #ef4444 16%, white 84%);
-  --scholarly-highlight-fg: color-mix(in srgb, #dc2626 86%, black 14%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-danger-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-danger-fg);
 }
 
 .highlight-info {
-  --scholarly-highlight-bg: color-mix(in srgb, #06b6d4 18%, white 82%);
-  --scholarly-highlight-fg: color-mix(in srgb, #0891b2 84%, black 16%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-info-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-info-fg);
 }
 
-/* Follow the theme color mode, not Slidev's raw html.dark class. */
 :global(:root[data-color-mode="dark"]) .highlight-primary {
-  --scholarly-highlight-bg: color-mix(in srgb, var(--slidev-theme-primary-light, #8fb3c2) 28%, transparent);
-  --scholarly-highlight-fg: color-mix(in srgb, var(--slidev-theme-primary-light, #8fb3c2) 72%, white 28%);
+  --scholarly-highlight-bg: var(--scholarly-highlight-primary-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-primary-fg);
 }
 
 :global(:root[data-color-mode="dark"]) .highlight-success {
-  --scholarly-highlight-bg: color-mix(in srgb, #10b981 30%, transparent);
-  --scholarly-highlight-fg: #34d399;
+  --scholarly-highlight-bg: var(--scholarly-highlight-success-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-success-fg);
 }
 
 :global(:root[data-color-mode="dark"]) .highlight-warning {
-  --scholarly-highlight-bg: color-mix(in srgb, #f59e0b 30%, transparent);
-  --scholarly-highlight-fg: #fbbf24;
+  --scholarly-highlight-bg: var(--scholarly-highlight-warning-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-warning-fg);
 }
 
 :global(:root[data-color-mode="dark"]) .highlight-danger {
-  --scholarly-highlight-bg: color-mix(in srgb, #ef4444 30%, transparent);
-  --scholarly-highlight-fg: #f87171;
+  --scholarly-highlight-bg: var(--scholarly-highlight-danger-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-danger-fg);
 }
 
 :global(:root[data-color-mode="dark"]) .highlight-info {
-  --scholarly-highlight-bg: color-mix(in srgb, #06b6d4 30%, transparent);
-  --scholarly-highlight-fg: #22d3ee;
+  --scholarly-highlight-bg: var(--scholarly-highlight-info-bg);
+  --scholarly-highlight-fg: var(--scholarly-highlight-info-fg);
 }
 </style>

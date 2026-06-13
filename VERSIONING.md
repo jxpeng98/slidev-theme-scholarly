@@ -27,15 +27,33 @@ They are related, but **do not share the same version number** anymore.
 
 ### Commands
 
+- 发布前检查：
+  - `pnpm run check`
+- 完整视觉检查（需要 Playwright Chromium）：
+  - `pnpm run check:visual`
 - 主题版本 bump（同时更新 docs）：
   - `pnpm bump patch|minor|major|X.Y.Z[-pre]`
 - 将主题版本同步到 docs：
   - `pnpm version:sync`
 
+- Release readiness:
+  - `pnpm run check`
+- Full visual readiness (requires Playwright Chromium):
+  - `pnpm run check:visual`
 - Bump theme (and docs) version:
   - `pnpm bump patch|minor|major|X.Y.Z[-pre]`
 - Sync docs version from theme:
   - `pnpm version:sync`
+
+### Release Checklist
+
+Before creating a theme release tag:
+
+1. Run `pnpm run check`.
+2. If the release changes styles, layouts, components, screenshots, or color tokens, run `pnpm run check:visual`.
+3. Inspect generated visual output under `/private/tmp/scholarly-theme-matrix/` when the visual check is enabled.
+4. Run `pnpm version:sync` after changing the root package version.
+5. Confirm `vscode-extension/package.json` is only changed when the VS Code extension itself is being released.
 
 ## 2) VS Code Extension (Marketplace / VSIX)
 

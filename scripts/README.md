@@ -11,6 +11,33 @@
 
 ## 使用方法
 
+### Theme matrix QA
+
+```bash
+# Generate light/dark readability screenshots for every color theme.
+pnpm run theme:matrix
+```
+
+This command builds temporary decks in `/private/tmp/scholarly-theme-matrix/_work`
+and exports PNGs to:
+
+```text
+/private/tmp/scholarly-theme-matrix/<color-theme>/<color-mode>/
+```
+
+Use a dry run when you only need to verify that the matrix can be generated
+without launching Playwright:
+
+```bash
+node scripts/check-theme-matrix.mjs --dry-run
+```
+
+Before exporting PNGs, make sure the Playwright browser is available:
+
+```bash
+pnpm exec playwright install chromium
+```
+
 ### 方法 1：使用 pnpm 脚本（推荐）
 
 ```bash

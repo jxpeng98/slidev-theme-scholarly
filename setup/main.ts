@@ -45,6 +45,7 @@ type ThemeConfig = {
   colorTheme?: string
   fontTheme?: string
   colorMode?: 'light' | 'dark'
+  sectionMode?: 'light' | 'dark'
   beamerNav?: boolean
   outlineSidebar?: boolean
   outlineSidebarOpen?: boolean

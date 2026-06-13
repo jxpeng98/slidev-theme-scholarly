@@ -65,85 +65,85 @@ withDefaults(defineProps<Props>(), {
 
 /* Default (Beamer-like blue block) */
 .block-default .block-header {
-  background: linear-gradient(to right, #4a6b7a, #5d8392);
-  color: white;
+  background: var(--scholarly-block-default-header-bg);
+  color: var(--scholarly-block-default-header-fg);
 }
 
 .block-default .block-content {
-  background: rgba(93, 131, 146, 0.1);
-  border: 1px solid rgba(93, 131, 146, 0.3);
+  background: var(--scholarly-block-default-content-bg);
+  border: 1px solid var(--scholarly-block-default-border);
   border-top: none;
 }
 
 /* Info (cyan/teal) */
 .block-info .block-header {
-  background: linear-gradient(to right, #0891b2, #06b6d4);
-  color: white;
+  background: var(--scholarly-block-info-header-bg);
+  color: var(--scholarly-block-info-header-fg);
 }
 
 .block-info .block-content {
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: var(--scholarly-block-info-content-bg);
+  border: 1px solid var(--scholarly-block-info-border);
   border-top: none;
 }
 
 /* Success (green) */
 .block-success .block-header {
-  background: linear-gradient(to right, #059669, #10b981);
-  color: white;
+  background: var(--scholarly-block-success-header-bg);
+  color: var(--scholarly-block-success-header-fg);
 }
 
 .block-success .block-content {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--scholarly-block-success-content-bg);
+  border: 1px solid var(--scholarly-block-success-border);
   border-top: none;
 }
 
 /* Warning (amber/orange) */
 .block-warning .block-header {
-  background: linear-gradient(to right, #d97706, #f59e0b);
-  color: white;
+  background: var(--scholarly-block-warning-header-bg);
+  color: var(--scholarly-block-warning-header-fg);
 }
 
 .block-warning .block-content {
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--scholarly-block-warning-content-bg);
+  border: 1px solid var(--scholarly-block-warning-border);
   border-top: none;
 }
 
 /* Danger (red) */
 .block-danger .block-header {
-  background: linear-gradient(to right, #dc2626, #ef4444);
-  color: white;
+  background: var(--scholarly-block-danger-header-bg);
+  color: var(--scholarly-block-danger-header-fg);
 }
 
 .block-danger .block-content {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--scholarly-block-danger-content-bg);
+  border: 1px solid var(--scholarly-block-danger-border);
   border-top: none;
 }
 
 /* Example (pink/purple) */
 .block-example .block-header {
-  background: linear-gradient(to right, #9333ea, #a855f7);
-  color: white;
+  background: var(--scholarly-block-example-header-bg);
+  color: var(--scholarly-block-example-header-fg);
 }
 
 .block-example .block-content {
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: var(--scholarly-block-example-content-bg);
+  border: 1px solid var(--scholarly-block-example-border);
   border-top: none;
 }
 
 /* Alert (Beamer alertblock style - red/brown) */
 .block-alert .block-header {
-  background: linear-gradient(to right, #be123c, #e11d48);
-  color: white;
+  background: var(--scholarly-block-alert-header-bg);
+  color: var(--scholarly-block-alert-header-fg);
 }
 
 .block-alert .block-content {
-  background: rgba(225, 29, 72, 0.1);
-  border: 1px solid rgba(225, 29, 72, 0.3);
+  background: var(--scholarly-block-alert-content-bg);
+  border: 1px solid var(--scholarly-block-alert-border);
   border-top: none;
 }
 
@@ -154,30 +154,30 @@ withDefaults(defineProps<Props>(), {
 }
 
 .block-default:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #5d8392;
+  border-left: 4px solid var(--scholarly-block-default-border);
 }
 
 .block-info:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #06b6d4;
+  border-left: 4px solid var(--scholarly-block-info-border);
 }
 
 .block-success:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid var(--scholarly-block-success-border);
 }
 
 .block-warning:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid var(--scholarly-block-warning-border);
 }
 
 .block-danger:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid var(--scholarly-block-danger-border);
 }
 
 .block-example:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #a855f7;
+  border-left: 4px solid var(--scholarly-block-example-border);
 }
 
 .block-alert:not(:has(.block-header)) .block-content {
-  border-left: 4px solid #e11d48;
+  border-left: 4px solid var(--scholarly-block-alert-border);
 }
 </style>
