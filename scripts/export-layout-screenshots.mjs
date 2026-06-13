@@ -46,7 +46,11 @@ const LAYOUTS = {
   27: 'paper-summary',
   28: 'related-work-matrix',
   29: 'method-pipeline',
-  30: 'result-highlight'
+  30: 'result-highlight',
+  31: 'experiment-grid',
+  32: 'limitation',
+  33: 'defense-question',
+  34: 'appendix-index'
 }
 
 console.log('🎨 Generating layout screenshots...')

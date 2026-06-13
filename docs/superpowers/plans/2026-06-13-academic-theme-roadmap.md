@@ -30,7 +30,7 @@
 - The latest color-mode fix added `scripts/check-color-mode-styles.mjs` and normalized quote/code/highlight/table colors around content tokens.
 - P0 implementation commit `44fd945` added semantic component tokens, the release gate, theme matrix dry-run coverage, public theme config types, and updated documentation.
 - Follow-up P0 visual verification repaired the local Playwright headless shell cache, completed the full theme matrix PNG export, and added footer-specific contrast tokens.
-- P1 layout work has started with the first four academic layouts: `paper-summary`, `related-work-matrix`, `method-pipeline`, and `result-highlight`.
+- P1.1 academic layout work is complete with all eight planned layouts: `paper-summary`, `related-work-matrix`, `method-pipeline`, `result-highlight`, `experiment-grid`, `limitation`, `defense-question`, and `appendix-index`.
 
 ## Status Snapshot: 2026-06-13
 
@@ -41,9 +41,9 @@
 | P0.2 Full PNG visual export | Complete | `pnpm run check:visual` passes; 72 PNGs exported under `/private/tmp/scholarly-theme-matrix` |
 | P0.3 Public theme config types | Complete | `index.d.ts` added; docs explain `colorSchema` vs `themeConfig.colorMode` |
 | P0.4 Release gate | Complete | `pnpm run check` runs token checks, docs build, CLI doctor, VS Code compile, and matrix dry-run |
-| P1.1 Academic layout pack | In progress | First four layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 30 layout PNGs |
+| P1.1 Academic layout pack | Complete | Eight layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 34 layout PNGs |
 
-Current decision: P0 is complete. Continue P1 by finishing the remaining four layouts or move to P1 evidence components if the first-batch layout API is accepted.
+Current decision: P0 and P1.1 are complete. Continue P1 with evidence components unless layout API feedback requires a follow-up.
 
 ---
 
@@ -294,12 +294,12 @@ build: add scholarly release readiness checks
   - `related-work-matrix`
   - `method-pipeline`
   - `result-highlight`
-- [ ] Add remaining planned layouts:
+- [x] Add remaining planned layouts:
   - `experiment-grid`
   - `limitation`
   - `defense-question`
   - `appendix-index`
-- [x] Keep first-batch layouts usable with plain Markdown slots first; add props only when they remove repeated markup.
+- [x] Keep layouts usable with plain Markdown slots first; add props only when they remove repeated markup.
 - [x] Update `shared/layouts.json` as the source metadata.
 - [x] Run existing sync scripts:
 
@@ -791,18 +791,17 @@ node cli/scholarly.mjs doctor
 
 ## Recommended Execution Sequence
 
-1. Start P1 with the Academic Layout Pack now that `pnpm run check` and `pnpm run check:visual` are green.
-2. Implement P1 layouts before P1 components when a component's API depends on layout use cases.
+1. Start P1 evidence components now that the Academic Layout Pack is complete and screenshots export cleanly.
+2. Reuse the new layout use cases to shape `MetricCard`, `MetricGrid`, `EvidenceBlock`, and `EquationBlock`.
 3. Update shared metadata before VS Code snippets/previews so tooling stays generated from source.
 4. Add docs in the same PR as each user-facing feature.
-5. Re-run `pnpm run check:visual` after each layout batch that changes rendered surfaces.
+5. Re-run `pnpm run check:visual` after batches that change rendered surfaces.
 6. Keep P3 behind explicit decisions; avoid making heavy automation part of the base theme until P0-P2 are stable.
 
 ## First Three PRs
 
 1. **P1 Academic Layout Pack**
-   - Add the first four layouts: `paper-summary`, `related-work-matrix`, `method-pipeline`, `result-highlight`.
-   - Update shared metadata, snippets, docs, and screenshots.
+   - Complete. Eight planned layouts are implemented, documented, and covered by layout screenshots.
 
 2. **P1 Academic Evidence Components**
    - Add `MetricCard`, `MetricGrid`, `EvidenceBlock`, and `EquationBlock`.

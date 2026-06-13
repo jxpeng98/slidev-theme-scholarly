@@ -416,6 +416,102 @@
     ],
     "description": "[Academic] Main-result slide with metric and evidence"
   },
+  "Slidev Scholarly: Experiment Grid Layout": {
+    "prefix": "ss-experiment-grid",
+    "body": [
+      "---",
+      "layout: experiment-grid",
+      "title: ${1:Experiment Grid}",
+      "description: ${2:Compare experimental settings, metrics, and notes.}",
+      "cols: ${3|2,3|}",
+      "experiments:",
+      "  - name: ${4:Ablation}",
+      "    setup: ${5:Remove one module at a time}",
+      "    result: ${6:-2.1}",
+      "    metric: ${7:accuracy points}",
+      "    note: ${8:Largest drop from routing module}",
+      "  - name: ${9:Robustness}",
+      "    setup: ${10:Evaluate across shifted domains}",
+      "    result: ${11:+1.4}",
+      "    metric: ${12:macro F1}",
+      "    note: ${13:Stable under moderate shift}",
+      "---",
+      "",
+      "${14:Optional note about experimental controls or evaluation protocol.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Experiment grid for settings and metrics"
+  },
+  "Slidev Scholarly: Limitation Layout": {
+    "prefix": "ss-limitation",
+    "body": [
+      "---",
+      "layout: limitation",
+      "title: ${1:Limitations}",
+      "heading: ${2:Boundary Conditions}",
+      "description: ${3:Name what the current study can and cannot support.}",
+      "---",
+      "",
+      "::limitation::",
+      "- ${4:The method assumes labeled target tasks.}",
+      "- ${5:Performance under severe distribution shift remains uncertain.}",
+      "",
+      "::mitigation::",
+      "- ${6:Report shifted-domain evaluation separately.}",
+      "- ${7:Scope the claim to labeled adaptation settings.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Limitation and mitigation slide"
+  },
+  "Slidev Scholarly: Defense Question Layout": {
+    "prefix": "ss-defense-question",
+    "body": [
+      "---",
+      "layout: defense-question",
+      "title: ${1:Defense Question}",
+      "question: ${2:Why does the proposed method outperform the strongest baseline?}",
+      "source: ${3:Committee question}",
+      "---",
+      "",
+      "${4:The routing stage improves specialization while keeping the base representation stable.}",
+      "",
+      "::evidence::",
+      "- ${5:Ablation shows the routing module contributes +2.1 points.}",
+      "- ${6:Variance stays low across five seeds.}",
+      "",
+      "::followup::",
+      "${7:If compute budget increases, compare against a larger teacher model.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Defense question with answer and evidence"
+  },
+  "Slidev Scholarly: Appendix Index Layout": {
+    "prefix": "ss-appendix-index",
+    "body": [
+      "---",
+      "layout: appendix-index",
+      "title: ${1:Appendix}",
+      "description: ${2:Fast map for backup slides and detailed evidence.}",
+      "items:",
+      "  - label: ${3:A1}",
+      "    title: ${4:Additional Experiments}",
+      "    description: ${5:Full ablation and robustness tables}",
+      "    page: ${6:31}",
+      "  - label: ${7:A2}",
+      "    title: ${8:Implementation Details}",
+      "    description: ${9:Hyperparameters, training setup, and data splits}",
+      "    page: ${10:34}",
+      "---",
+      "",
+      "${11:Optional note for backup-slide navigation.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Appendix index for backup slides"
+  },
   "Slidev Scholarly: Compare Layout": {
     "prefix": "ss-compare",
     "body": [

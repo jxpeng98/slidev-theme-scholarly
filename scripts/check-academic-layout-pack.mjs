@@ -10,6 +10,10 @@ const layoutIds = [
   'related-work-matrix',
   'method-pipeline',
   'result-highlight',
+  'experiment-grid',
+  'limitation',
+  'defense-question',
+  'appendix-index',
 ]
 
 const failures = []

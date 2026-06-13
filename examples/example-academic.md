@@ -235,6 +235,112 @@ PURPOSE: Lead with a key metric and support it with evidence
 - Evaluation: accuracy, throughput, and energy per sample
 
 ---
+layout: experiment-grid
+title: Experiment Grid
+description: Compare experimental settings, metrics, and notes.
+cols: 2
+experiments:
+  - name: Ablation
+    setup: Remove one component at a time
+    result: "-2.1"
+    metric: accuracy points
+    note: Routing module has the largest contribution
+  - name: Robustness
+    setup: Evaluate across shifted domains
+    result: "+1.4"
+    metric: macro F1
+    note: Stable under moderate distribution shift
+  - name: Efficiency
+    setup: Measure inference throughput
+    result: "142"
+    metric: samples per second
+    note: Same hardware budget as baseline
+  - name: Energy
+    setup: Track energy per sample
+    result: "-28%"
+    metric: power use
+    note: Lower cost without pruning
+---
+
+<!--
+SLIDE: Experiment Grid
+LAYOUT: experiment-grid
+PURPOSE: Compare experiment settings and results
+-->
+
+All experiments use the same preprocessing pipeline and report five-seed averages.
+
+---
+layout: limitation
+title: Limitations
+heading: Boundary Conditions
+description: Scope the claim before moving into the method details.
+---
+
+<!--
+SLIDE: Limitation
+LAYOUT: limitation
+PURPOSE: State limitations and mitigations clearly
+-->
+
+::limitation::
+- The method assumes labeled target tasks are available.
+- Severe distribution shift still requires separate calibration.
+
+::mitigation::
+- We report shifted-domain evaluation separately.
+- Claims are scoped to labeled adaptation settings.
+
+---
+layout: defense-question
+title: Defense Question
+question: Why does the routing module improve accuracy without increasing inference cost?
+source: Committee question
+---
+
+<!--
+SLIDE: Defense Question
+LAYOUT: defense-question
+PURPOSE: Prepare a direct answer with evidence and follow-up
+-->
+
+The routing stage improves specialization during adaptation while keeping the deployed base representation fixed.
+
+::evidence::
+- Ablation removes 2.1 accuracy points when routing is disabled.
+- Throughput remains within the same deployment budget.
+
+::followup::
+With a larger compute budget, compare against a larger teacher model and report cost-normalized accuracy.
+
+---
+layout: appendix-index
+title: Appendix
+description: Backup slides for experimental details and extended evidence.
+items:
+  - label: A1
+    title: Additional Experiments
+    description: Full ablation and robustness tables
+    page: 31
+  - label: A2
+    title: Implementation Details
+    description: Hyperparameters, training setup, and data splits
+    page: 34
+  - label: A3
+    title: Extended Metrics
+    description: Energy, throughput, and confidence intervals
+    page: 38
+---
+
+<!--
+SLIDE: Appendix Index
+LAYOUT: appendix-index
+PURPOSE: Map backup slides for Q&A navigation
+-->
+
+Use this index when jumping to backup evidence during questions.
+
+---
 layout: section
 ---
 

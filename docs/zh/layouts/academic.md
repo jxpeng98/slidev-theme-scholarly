@@ -135,6 +135,125 @@ variant: success
 
 ---
 
+## experiment-grid - 实验矩阵
+
+**用于：** 紧凑对比实验设置、指标结果和备注。
+
+```markdown
+---
+layout: experiment-grid
+title: 实验矩阵
+cols: 2
+experiments:
+  - name: Ablation
+    setup: 逐个移除模块
+    result: "-2.1"
+    metric: accuracy points
+    note: 路由模块影响最大
+  - name: Robustness
+    setup: 跨分布偏移评估
+    result: "+1.4"
+    metric: macro F1
+    note: 中等偏移下保持稳定
+---
+
+可以在这里补充实验控制变量或评估协议。
+```
+
+**属性：**
+- `experiments`：`{ name, setup, result, metric, note }` 数组
+- `cols`：网格列数，通常为 `2` 或 `3`
+- `setupLabel`、`metricLabel`、`noteLabel`：覆盖定义列表标签
+
+---
+
+## limitation - 限制与缓解
+
+**用于：** 说明结论边界，以及研究如何控制或限定这个问题。
+
+```markdown
+---
+layout: limitation
+title: 局限性
+heading: 适用边界
+description: 明确当前研究能支持和不能支持的结论。
+---
+
+::limitation::
+- 方法假设目标任务有标签。
+- 在严重分布偏移下的表现仍需验证。
+
+::mitigation::
+- 单独报告偏移域评估。
+- 将结论限定在有标签适配场景。
+```
+
+**属性：**
+- `limitation`、`mitigation`：不使用 slot 时的纯文本回退
+- `limitationLabel`、`mitigationLabel`：面板标题
+- `heading`、`description`、`eyebrow`：页面内文字控制
+
+---
+
+## defense-question - 答辩问题
+
+**用于：** 准备论文答辩或 Q&A 页，包含回答、证据和后续讨论。
+
+```markdown
+---
+layout: defense-question
+title: 答辩问题
+question: 为什么提出的方法能超过最强基线？
+source: Committee question
+---
+
+路由阶段提升了任务专门化能力，同时保持基础表示稳定。
+
+::evidence::
+- 消融实验显示路由模块贡献 +2.1 个点。
+- 五个随机种子下方差较低。
+
+::followup::
+如果计算预算增加，可以补充与更大 teacher model 的比较。
+```
+
+**属性：**
+- `question`：主问题
+- `source`：可选的问题来源或提问人标签
+- `answer`、`evidence`、`followup`：不使用 slot 时的纯文本回退
+- `answerLabel`、`evidenceLabel`、`followupLabel`：面板标题
+
+---
+
+## appendix-index - 附录索引
+
+**用于：** 为备份页、额外实验和证明构建快速导航。
+
+```markdown
+---
+layout: appendix-index
+title: 附录
+description: 备份页和详细证据的快速索引。
+items:
+  - label: A1
+    title: Additional Experiments
+    description: 完整消融和鲁棒性表格
+    page: 31
+  - label: A2
+    title: Implementation Details
+    description: 超参数、训练设置和数据划分
+    page: 34
+---
+
+可以在这里补充备份页导航说明。
+```
+
+**属性：**
+- `items`：`{ label, title, description, page }` 数组
+- `heading`、`description`、`eyebrow`：页面内文字控制
+
+---
+
 ## compare - 并排对比
 
 **用于：** 用带标签的双栏对比两种方法、方案或概念

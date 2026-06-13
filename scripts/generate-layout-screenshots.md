@@ -501,3 +501,89 @@ variant: success
 - Dataset: AcademicBench
 - Baseline: optimized supervised model
 - Metrics: accuracy, throughput, energy
+
+<!-- Slide 31: experiment-grid -->
+---
+layout: experiment-grid
+title: Experiment Grid
+description: Compare experimental settings, metrics, and notes.
+cols: 2
+experiments:
+  - name: Ablation
+    setup: Remove one component at a time
+    result: "-2.1"
+    metric: accuracy points
+    note: Routing module has the largest contribution
+  - name: Robustness
+    setup: Evaluate across shifted domains
+    result: "+1.4"
+    metric: macro F1
+    note: Stable under moderate shift
+  - name: Efficiency
+    setup: Measure inference throughput
+    result: "142"
+    metric: samples per second
+    note: Same hardware budget
+  - name: Energy
+    setup: Track energy per sample
+    result: "-28%"
+    metric: power use
+    note: Lower cost without pruning
+---
+
+All experiments use the same preprocessing pipeline and report five-seed averages.
+
+<!-- Slide 32: limitation -->
+---
+layout: limitation
+title: Limitations
+heading: Boundary Conditions
+description: Scope the claim before moving into the method details.
+---
+
+::limitation::
+- The method assumes labeled target tasks are available.
+- Severe distribution shift still requires separate calibration.
+
+::mitigation::
+- We report shifted-domain evaluation separately.
+- Claims are scoped to labeled adaptation settings.
+
+<!-- Slide 33: defense-question -->
+---
+layout: defense-question
+title: Defense Question
+question: Why does the routing module improve accuracy without increasing inference cost?
+source: Committee question
+---
+
+The routing stage improves specialization during adaptation while keeping the deployed base representation fixed.
+
+::evidence::
+- Ablation removes 2.1 accuracy points when routing is disabled.
+- Throughput remains within the same deployment budget.
+
+::followup::
+With a larger compute budget, compare against a larger teacher model and report cost-normalized accuracy.
+
+<!-- Slide 34: appendix-index -->
+---
+layout: appendix-index
+title: Appendix
+description: Backup slides for experimental details and extended evidence.
+items:
+  - label: A1
+    title: Additional Experiments
+    description: Full ablation and robustness tables
+    page: 31
+  - label: A2
+    title: Implementation Details
+    description: Hyperparameters, training setup, and data splits
+    page: 34
+  - label: A3
+    title: Extended Metrics
+    description: Energy, throughput, and confidence intervals
+    page: 38
+---
+
+Use this index when jumping to backup evidence during questions.

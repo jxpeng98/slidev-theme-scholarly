@@ -135,6 +135,125 @@ variant: success
 
 ---
 
+## experiment-grid - Experiment Grid
+
+**Use for:** Compare experimental settings, metrics, and notes in a compact grid.
+
+```markdown
+---
+layout: experiment-grid
+title: Experiment Grid
+cols: 2
+experiments:
+  - name: Ablation
+    setup: Remove one module at a time
+    result: "-2.1"
+    metric: accuracy points
+    note: Largest drop from routing module
+  - name: Robustness
+    setup: Evaluate across shifted domains
+    result: "+1.4"
+    metric: macro F1
+    note: Stable under moderate shift
+---
+
+Optional note about experimental controls or evaluation protocol.
+```
+
+**Props:**
+- `experiments`: Array of `{ name, setup, result, metric, note }`
+- `cols`: Number of grid columns, usually `2` or `3`
+- `setupLabel`, `metricLabel`, `noteLabel`: Override definition-list labels
+
+---
+
+## limitation - Limitation and Mitigation
+
+**Use for:** State the boundary of a claim and how the study controls or scopes it.
+
+```markdown
+---
+layout: limitation
+title: Limitations
+heading: Boundary Conditions
+description: Name what the current study can and cannot support.
+---
+
+::limitation::
+- The method assumes labeled target tasks.
+- Performance under severe distribution shift remains uncertain.
+
+::mitigation::
+- Report shifted-domain evaluation separately.
+- Scope the claim to labeled adaptation settings.
+```
+
+**Props:**
+- `limitation`, `mitigation`: Plain-text fallbacks when not using slots
+- `limitationLabel`, `mitigationLabel`: Panel headings
+- `heading`, `description`, `eyebrow`: In-slide text controls
+
+---
+
+## defense-question - Defense Question
+
+**Use for:** Prepare a thesis-defense or Q&A slide with answer, evidence, and follow-up.
+
+```markdown
+---
+layout: defense-question
+title: Defense Question
+question: Why does the proposed method outperform the strongest baseline?
+source: Committee question
+---
+
+The routing stage improves specialization while keeping the base representation stable.
+
+::evidence::
+- Ablation shows the routing module contributes +2.1 points.
+- Variance stays low across five seeds.
+
+::followup::
+If compute budget increases, compare against a larger teacher model.
+```
+
+**Props:**
+- `question`: Main prompt
+- `source`: Optional source or examiner label
+- `answer`, `evidence`, `followup`: Plain-text fallbacks when not using slots
+- `answerLabel`, `evidenceLabel`, `followupLabel`: Panel headings
+
+---
+
+## appendix-index - Appendix Index
+
+**Use for:** Build a backup-slide map for appendices, extra experiments, and proofs.
+
+```markdown
+---
+layout: appendix-index
+title: Appendix
+description: Fast map for backup slides and detailed evidence.
+items:
+  - label: A1
+    title: Additional Experiments
+    description: Full ablation and robustness tables
+    page: 31
+  - label: A2
+    title: Implementation Details
+    description: Hyperparameters, training setup, and data splits
+    page: 34
+---
+
+Optional note for backup-slide navigation.
+```
+
+**Props:**
+- `items`: Array of `{ label, title, description, page }`
+- `heading`, `description`, `eyebrow`: In-slide text controls
+
+---
+
 ## compare - Side-by-Side Comparison
 
 **Use for:** Compare two approaches, methods, or concepts with labeled columns
