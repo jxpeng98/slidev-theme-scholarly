@@ -6,6 +6,135 @@ title: 学术布局
 
 专为学术演示设计的布局 - 研究方法、结果、对比和参考文献。
 
+## paper-summary - 论文摘要
+
+**用于：** 汇总单篇论文的元信息、问题、方法和主要发现。
+
+```markdown
+---
+layout: paper-summary
+paperTitle: Efficient Adaptation for Scientific Models
+authors:
+  - A. Smith
+  - B. Lee
+venue: ICML
+year: 2026
+keywords:
+  - efficient learning
+  - adaptation
+---
+
+::problem::
+已有适配方法提升了准确率，但增加了计算成本。
+
+::method::
+论文在微调前加入轻量路由阶段。
+
+::finding::
+准确率提升 3.2 个点，同时不增加推理成本。
+```
+
+**属性：**
+- `paperTitle`：摘要头部展示的论文标题
+- `authors`：作者字符串或作者数组
+- `venue`、`year`、`doi`、`status`：可选元信息
+- `keywords`：主题标签字符串或数组
+- `problemLabel`、`methodLabel`、`findingLabel`：覆盖三张摘要卡片标题
+
+---
+
+## related-work-matrix - 相关工作矩阵
+
+**用于：** 在介绍贡献前，对比已有工作、方法假设和研究空白。
+
+```markdown
+---
+layout: related-work-matrix
+title: 相关工作
+description: 将当前工作放到已有方法谱系中定位。
+---
+
+| 工作 | 设置 | 方法 | 局限 |
+| --- | --- | --- | --- |
+| Smith et al. 2024 | 基准任务 | Transformer baseline | 计算成本高 |
+| 本文 | 同一基准 | **高效适配** | 需要任务标签 |
+
+::notes::
+用矩阵先说明研究空白，再进入方法页。
+```
+
+**属性：**
+- `title`、`subtitle`：可选页眉
+- `heading`：页面内主标题
+- `description`：矩阵上方的简短说明
+- `note`：不使用 `notes` slot 时的可选说明
+
+---
+
+## method-pipeline - 方法流程
+
+**用于：** 以有序步骤展示研究流程，并可突出当前步骤。
+
+```markdown
+---
+layout: method-pipeline
+title: 方法流程
+activeStep: 2
+steps:
+  - title: Collect
+    description: 整理数据集和约束
+    detail: N=12k samples
+  - title: Model
+    description: 训练提出的模型结构
+    detail: 3 ablations
+  - title: Validate
+    description: 与基线比较
+    detail: 5 seeds
+---
+
+可以在这里补充假设、控制变量或可复现性说明。
+```
+
+**属性：**
+- `steps`：`{ title, description, detail }` 数组
+- `activeStep`：要强调的步骤序号，从 1 开始
+- `heading`、`description`、`eyebrow`：页面内文字控制
+
+---
+
+## result-highlight - 结果强调
+
+**用于：** 先给出一个核心结果，再用证据或限制说明支撑它。
+
+```markdown
+---
+layout: result-highlight
+title: 主要结果
+heading: 我们的方法在不增加计算量的情况下提升准确率
+label: Accuracy
+metric: 94.7
+unit: "%"
+delta: +3.2 over baseline
+baseline: 5-seed average
+variant: success
+---
+
+- 解释这个结果意味着什么。
+- 说明对比对象或基准。
+
+::evidence::
+- Dataset: AcademicBench
+- Baseline: strong supervised model
+```
+
+**属性：**
+- `metric`、`unit`、`label`：主指标区域
+- `delta`、`baseline`：指标下方的上下文标签
+- `variant`：`primary`、`success`、`warning`、`danger` 或 `info`
+- `heading`、`description`、`eyebrow`：结论文字控制
+
+---
+
 ## compare - 并排对比
 
 **用于：** 用带标签的双栏对比两种方法、方案或概念

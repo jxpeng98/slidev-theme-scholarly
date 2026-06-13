@@ -6,6 +6,135 @@ title: Academic Layouts
 
 Specialized layouts designed for academic presentations - research methodology, results, comparisons, and references.
 
+## paper-summary - Paper Reading Summary
+
+**Use for:** Summarize one paper's metadata, problem, method, and main finding.
+
+```markdown
+---
+layout: paper-summary
+paperTitle: Efficient Adaptation for Scientific Models
+authors:
+  - A. Smith
+  - B. Lee
+venue: ICML
+year: 2026
+keywords:
+  - efficient learning
+  - adaptation
+---
+
+::problem::
+Prior adaptation methods improve accuracy but increase compute cost.
+
+::method::
+The paper adds a lightweight routing stage before fine-tuning.
+
+::finding::
+Accuracy improves by 3.2 points with no additional inference cost.
+```
+
+**Props:**
+- `paperTitle`: Paper title shown in the summary header
+- `authors`: String or array of author names
+- `venue`, `year`, `doi`, `status`: Optional metadata chips
+- `keywords`: String or array of topic chips
+- `problemLabel`, `methodLabel`, `findingLabel`: Override the three card headings
+
+---
+
+## related-work-matrix - Related Work Matrix
+
+**Use for:** Compare prior work, methods, assumptions, and gaps before introducing your contribution.
+
+```markdown
+---
+layout: related-work-matrix
+title: Related Work
+description: Position the current work against prior approaches.
+---
+
+| Work | Setting | Method | Limitation |
+| --- | --- | --- | --- |
+| Smith et al. 2024 | Benchmark | Transformer baseline | High compute cost |
+| Ours | Same benchmark | **Efficient adaptation** | Requires task labels |
+
+::notes::
+Use the matrix to make the research gap explicit before the method slide.
+```
+
+**Props:**
+- `title`, `subtitle`: Optional frame header
+- `heading`: Main in-slide heading
+- `description`: Short context above the matrix
+- `note`: Optional note when not using the `notes` slot
+
+---
+
+## method-pipeline - Method Pipeline
+
+**Use for:** Show a research workflow as ordered steps with optional active-step emphasis.
+
+```markdown
+---
+layout: method-pipeline
+title: Method Pipeline
+activeStep: 2
+steps:
+  - title: Collect
+    description: Curate the dataset and constraints
+    detail: N=12k samples
+  - title: Model
+    description: Train the proposed architecture
+    detail: 3 ablations
+  - title: Validate
+    description: Compare against baselines
+    detail: 5 seeds
+---
+
+Optional note about assumptions, controls, or reproducibility.
+```
+
+**Props:**
+- `steps`: Array of `{ title, description, detail }`
+- `activeStep`: 1-based step index to emphasize
+- `heading`, `description`, `eyebrow`: In-slide text controls
+
+---
+
+## result-highlight - Result Highlight
+
+**Use for:** Lead with one main result, then support it with evidence or caveats.
+
+```markdown
+---
+layout: result-highlight
+title: Main Result
+heading: Our method improves accuracy without extra compute
+label: Accuracy
+metric: 94.7
+unit: "%"
+delta: +3.2 over baseline
+baseline: 5-seed average
+variant: success
+---
+
+- Explain what the result means.
+- Name the comparison or benchmark.
+
+::evidence::
+- Dataset: AcademicBench
+- Baseline: strong supervised model
+```
+
+**Props:**
+- `metric`, `unit`, `label`: Main metric block
+- `delta`, `baseline`: Context chips below the metric
+- `variant`: `primary`, `success`, `warning`, `danger`, or `info`
+- `heading`, `description`, `eyebrow`: Claim text controls
+
+---
+
 ## compare - Side-by-Side Comparison
 
 **Use for:** Compare two approaches, methods, or concepts with labeled columns

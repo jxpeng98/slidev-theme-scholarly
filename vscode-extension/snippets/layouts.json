@@ -385,6 +385,125 @@
     "description": "[Emphasis] Focused message with icon"
   },
   "_comment_academic": "=== ACADEMIC LAYOUTS ===",
+  "Slidev Scholarly: Paper Summary Layout": {
+    "prefix": [
+      "scholarly-paper-summary",
+      "ss-paper-summary",
+      "ss-academic-paper-summary"
+    ],
+    "body": [
+      "---",
+      "layout: paper-summary",
+      "title: ${1:Paper Summary}",
+      "paperTitle: ${2:Title of the paper}",
+      "authors:",
+      "  - ${3:First Author}",
+      "  - ${4:Second Author}",
+      "venue: ${5:Conference or Journal}",
+      "year: ${6:2026}",
+      "keywords:",
+      "  - ${7:keyword}",
+      "---",
+      "",
+      "::problem::",
+      "${8:What gap or question does the paper address?}",
+      "",
+      "::method::",
+      "${9:What method or evidence does it use?}",
+      "",
+      "::finding::",
+      "${10:What is the main result or takeaway?}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Paper summary with metadata and takeaways"
+  },
+  "Slidev Scholarly: Related Work Matrix Layout": {
+    "prefix": [
+      "scholarly-related-work-matrix",
+      "ss-related-work-matrix",
+      "ss-academic-related-work-matrix"
+    ],
+    "body": [
+      "---",
+      "layout: related-work-matrix",
+      "title: ${1:Related Work}",
+      "description: ${2:Position the current work against prior approaches.}",
+      "---",
+      "",
+      "| Work | Setting | Method | Limitation |",
+      "| --- | --- | --- | --- |",
+      "| ${3:Smith et al. 2024} | ${4:Benchmark} | ${5:Transformer baseline} | ${6:High compute cost} |",
+      "| ${7:Ours} | ${8:Same benchmark} | **${9:Efficient adaptation}** | ${10:Requires task labels} |",
+      "",
+      "::notes::",
+      "${11:Use the matrix to make the gap explicit before introducing your method.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Related-work comparison matrix"
+  },
+  "Slidev Scholarly: Method Pipeline Layout": {
+    "prefix": [
+      "scholarly-method-pipeline",
+      "ss-method-pipeline",
+      "ss-academic-method-pipeline"
+    ],
+    "body": [
+      "---",
+      "layout: method-pipeline",
+      "title: ${1:Method Pipeline}",
+      "description: ${2:Show the research workflow from input to validated output.}",
+      "activeStep: ${3:2}",
+      "steps:",
+      "  - title: ${4:Collect}",
+      "    description: ${5:Curate the dataset and constraints}",
+      "    detail: ${6:N=12k samples}",
+      "  - title: ${7:Model}",
+      "    description: ${8:Train the proposed architecture}",
+      "    detail: ${9:3 ablations}",
+      "  - title: ${10:Validate}",
+      "    description: ${11:Compare against baselines}",
+      "    detail: ${12:5 seeds}",
+      "---",
+      "",
+      "${13:Optional note about assumptions, controls, or reproducibility.}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Method pipeline with step cards"
+  },
+  "Slidev Scholarly: Result Highlight Layout": {
+    "prefix": [
+      "scholarly-result-highlight",
+      "ss-result-highlight",
+      "ss-academic-result-highlight"
+    ],
+    "body": [
+      "---",
+      "layout: result-highlight",
+      "title: ${1:Main Result}",
+      "heading: ${2:Our method improves accuracy without extra compute}",
+      "description: ${3:Lead with the claim, then use the metric and evidence to support it.}",
+      "label: ${4:Accuracy}",
+      "metric: ${5:94.7}",
+      "unit: ${6:%}",
+      "delta: ${7:+3.2 over baseline}",
+      "baseline: ${8:5-seed average}",
+      "variant: ${9|primary,success,warning,danger,info|}",
+      "---",
+      "",
+      "- ${10:Explain what the result means.}",
+      "- ${11:Name the comparison or benchmark.}",
+      "",
+      "::evidence::",
+      "- ${12:Dataset: AcademicBench}",
+      "- ${13:Baseline: strong supervised model}",
+      "",
+      "$0"
+    ],
+    "description": "[Academic] Main-result slide with metric and evidence"
+  },
   "Slidev Scholarly: Compare Layout": {
     "prefix": [
       "scholarly-compare",

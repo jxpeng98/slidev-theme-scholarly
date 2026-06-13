@@ -30,6 +30,7 @@
 - The latest color-mode fix added `scripts/check-color-mode-styles.mjs` and normalized quote/code/highlight/table colors around content tokens.
 - P0 implementation commit `44fd945` added semantic component tokens, the release gate, theme matrix dry-run coverage, public theme config types, and updated documentation.
 - Follow-up P0 visual verification repaired the local Playwright headless shell cache, completed the full theme matrix PNG export, and added footer-specific contrast tokens.
+- P1 layout work has started with the first four academic layouts: `paper-summary`, `related-work-matrix`, `method-pipeline`, and `result-highlight`.
 
 ## Status Snapshot: 2026-06-13
 
@@ -40,8 +41,9 @@
 | P0.2 Full PNG visual export | Complete | `pnpm run check:visual` passes; 72 PNGs exported under `/private/tmp/scholarly-theme-matrix` |
 | P0.3 Public theme config types | Complete | `index.d.ts` added; docs explain `colorSchema` vs `themeConfig.colorMode` |
 | P0.4 Release gate | Complete | `pnpm run check` runs token checks, docs build, CLI doctor, VS Code compile, and matrix dry-run |
+| P1.1 Academic layout pack | In progress | First four layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 30 layout PNGs |
 
-Current P0 decision: P0 is complete for token contracts, public config typing, release gates, and full visual export. Next work should start with P1 academic layouts.
+Current decision: P0 is complete. Continue P1 by finishing the remaining four layouts or move to P1 evidence components if the first-batch layout API is accepted.
 
 ---
 
@@ -287,29 +289,39 @@ build: add scholarly release readiness checks
 
 **Steps:**
 
-- [ ] Add each layout with token-based surfaces and no hard-coded light/dark colors.
-- [ ] Keep each layout usable with plain Markdown slots first; add props only when they remove repeated markup.
-- [ ] Update `shared/layouts.json` as the source metadata.
-- [ ] Run existing sync scripts:
+- [x] Add first-batch layouts with token-based surfaces and no hard-coded light/dark colors:
+  - `paper-summary`
+  - `related-work-matrix`
+  - `method-pipeline`
+  - `result-highlight`
+- [ ] Add remaining planned layouts:
+  - `experiment-grid`
+  - `limitation`
+  - `defense-question`
+  - `appendix-index`
+- [x] Keep first-batch layouts usable with plain Markdown slots first; add props only when they remove repeated markup.
+- [x] Update `shared/layouts.json` as the source metadata.
+- [x] Run existing sync scripts:
 
 ```bash
 node vscode-extension/scripts/sync-shared-data.mjs
 node vscode-extension/scripts/sync-snippets.mjs
 ```
 
-- [ ] Add example slides to `examples/example-academic.md`.
-- [ ] Export layout screenshots:
+- [x] Add example slides to `examples/example-academic.md`.
+- [x] Export layout screenshots:
 
 ```bash
 pnpm run export:layout-screenshots
 ```
 
-- [ ] Run:
+- [x] Run:
 
 ```bash
 node scripts/check-color-mode-styles.mjs
 pnpm run docs:build
 pnpm run vscode:compile
+pnpm run check
 ```
 
 **Acceptance Criteria:**

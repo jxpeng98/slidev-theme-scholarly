@@ -131,6 +131,110 @@ OPTIONS: leftLabel, rightLabel, leftColor, rightColor
 - Runs on consumer GPUs
 
 ---
+layout: paper-summary
+title: Paper Context
+paperTitle: Efficient Adaptation for Scientific Models
+authors:
+  - A. Smith
+  - B. Lee
+venue: ICML
+year: 2026
+status: Accepted
+keywords:
+  - efficient learning
+  - model adaptation
+  - green AI
+---
+
+<!--
+SLIDE: Paper Summary
+LAYOUT: paper-summary
+PURPOSE: Summarize one paper's metadata and key takeaways
+-->
+
+::problem::
+Existing adaptation methods improve accuracy but often increase training and inference cost.
+
+::method::
+The paper inserts a lightweight routing stage before task-specific fine-tuning.
+
+::finding::
+Accuracy improves by 3.2 points while keeping inference cost unchanged.
+
+---
+layout: related-work-matrix
+title: Related Work
+description: Position our contribution against prior efficient learning approaches.
+---
+
+<!--
+SLIDE: Related Work Matrix
+LAYOUT: related-work-matrix
+PURPOSE: Compare prior work and make the research gap explicit
+-->
+
+| Work | Setting | Method | Limitation |
+| --- | --- | --- | --- |
+| LeCun et al. 2015 | General deep learning | Representation learning | Not optimized for deployment cost |
+| Smith 2023 | Efficient training | Distillation and pruning | Requires expensive teacher models |
+| Ours | Scientific models | **Lightweight adaptive routing** | Requires task labels |
+
+::notes::
+The matrix makes the gap explicit before introducing the proposed method.
+
+---
+layout: method-pipeline
+title: Method Pipeline
+description: Our workflow separates data curation, efficient adaptation, and validation.
+activeStep: 2
+steps:
+  - title: Curate
+    description: Filter noisy examples and normalize task labels
+    detail: 12k training samples
+  - title: Adapt
+    description: Learn lightweight routing before fine-tuning
+    detail: 3 ablation variants
+  - title: Validate
+    description: Compare accuracy, speed, and energy
+    detail: 5 random seeds
+---
+
+<!--
+SLIDE: Method Pipeline
+LAYOUT: method-pipeline
+PURPOSE: Show the ordered method steps with active-step emphasis
+-->
+
+Validation reports mean and standard deviation for each metric.
+
+---
+layout: result-highlight
+title: Main Result
+heading: Accuracy improves without extra inference cost
+description: The proposed routing stage improves downstream quality while preserving deployment efficiency.
+label: Accuracy
+metric: 94.7
+unit: "%"
+delta: +3.2 over baseline
+baseline: 5-seed average
+variant: success
+---
+
+<!--
+SLIDE: Result Highlight
+LAYOUT: result-highlight
+PURPOSE: Lead with a key metric and support it with evidence
+-->
+
+- The improvement is consistent across all evaluated datasets.
+- Runtime remains within the same deployment budget.
+
+::evidence::
+- Dataset: AcademicBench
+- Baseline: optimized supervised model
+- Evaluation: accuracy, throughput, and energy per sample
+
+---
 layout: section
 ---
 

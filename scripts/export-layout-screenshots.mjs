@@ -42,7 +42,11 @@ const LAYOUTS = {
   23: 'timeline',
   24: 'agenda',
   25: 'acknowledgments',
-  26: 'references'
+  26: 'references',
+  27: 'paper-summary',
+  28: 'related-work-matrix',
+  29: 'method-pipeline',
+  30: 'result-highlight'
 }
 
 console.log('🎨 Generating layout screenshots...')

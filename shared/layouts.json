@@ -37,6 +37,10 @@
         {
             "name": "academic",
             "items": [
+                "paper-summary",
+                "related-work-matrix",
+                "method-pipeline",
+                "result-highlight",
                 "compare",
                 "methodology",
                 "results",

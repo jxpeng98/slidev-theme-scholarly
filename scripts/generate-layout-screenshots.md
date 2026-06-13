@@ -418,3 +418,86 @@ layout: references
 4. **M.N., et al.** (2021). Swin Transformer: Hierarchical vision transformer using shifted windows. *IEEE ICCV*, 10012-10022.
 
 5. **O.P., et al.** (2018). Encoder-decoder with atrous separable convolution for semantic image segmentation. *ECCV*, 801-818.
+
+<!-- Slide 27: paper-summary -->
+---
+layout: paper-summary
+title: Paper Context
+paperTitle: Efficient Adaptation for Scientific Models
+authors:
+  - A. Smith
+  - B. Lee
+venue: ICML
+year: 2026
+status: Accepted
+keywords:
+  - efficient learning
+  - model adaptation
+---
+
+::problem::
+Existing adaptation methods improve accuracy but often increase training and inference cost.
+
+::method::
+The paper inserts a lightweight routing stage before task-specific fine-tuning.
+
+::finding::
+Accuracy improves by 3.2 points while keeping inference cost unchanged.
+
+<!-- Slide 28: related-work-matrix -->
+---
+layout: related-work-matrix
+title: Related Work Matrix
+description: Position the proposed method against prior efficient learning approaches.
+---
+
+| Work | Setting | Method | Limitation |
+| --- | --- | --- | --- |
+| ResNet | Vision benchmark | Deep residual training | High deployment cost |
+| Distillation | Compact model | Teacher-student transfer | Requires teacher model |
+| Ours | Same benchmark | **Adaptive routing** | Requires task labels |
+
+::notes::
+The matrix makes the research gap explicit before the method slide.
+
+<!-- Slide 29: method-pipeline -->
+---
+layout: method-pipeline
+title: Method Pipeline
+description: Separate data curation, efficient adaptation, and validation.
+activeStep: 2
+steps:
+  - title: Curate
+    description: Filter noisy examples and normalize task labels
+    detail: 12k samples
+  - title: Adapt
+    description: Learn lightweight routing before fine-tuning
+    detail: 3 ablations
+  - title: Validate
+    description: Compare accuracy, speed, and energy
+    detail: 5 seeds
+---
+
+Validation reports mean and standard deviation for each metric.
+
+<!-- Slide 30: result-highlight -->
+---
+layout: result-highlight
+title: Main Result
+heading: Accuracy improves without extra inference cost
+description: The routing stage improves downstream quality while preserving deployment efficiency.
+label: Accuracy
+metric: 94.7
+unit: "%"
+delta: +3.2 over baseline
+baseline: 5-seed average
+variant: success
+---
+
+- Improvement is consistent across all evaluated datasets.
+- Runtime remains within the same deployment budget.
+
+::evidence::
+- Dataset: AcademicBench
+- Baseline: optimized supervised model
+- Metrics: accuracy, throughput, energy
