@@ -99,5 +99,9 @@ $$a^2 + b^2 = c^2$$
 - [MetricGrid](./metric-grid.md) - 结果指标网格
 - [EvidenceBlock](./evidence-block.md) - 证据、来源和可信度说明
 - [EquationBlock](./equation-block.md) - 带标题、编号和说明的公式块
+- [DatasetCard](./dataset-card.md) - 数据集规模、划分、任务和来源摘要
+- [PaperCard](./paper-card.md) - 论文元数据和贡献摘要
+- [ContributionList](./contribution-list.md) - 带证据的贡献列表
+- [CaveatList](./caveat-list.md) - 局限性和缓解方案
 - [Cite](./cite.md) - 学术引用
 - [ThemePreview](./theme-preview.md) - 主题配色预览

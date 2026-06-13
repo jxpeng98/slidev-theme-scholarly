@@ -30,6 +30,30 @@ const componentIds = [
     slug: 'equation-block',
     snippet: 'Slidev Scholarly: EquationBlock',
   },
+  {
+    name: 'DatasetCard',
+    file: 'DatasetCard.vue',
+    slug: 'dataset-card',
+    snippet: 'Slidev Scholarly: DatasetCard',
+  },
+  {
+    name: 'PaperCard',
+    file: 'PaperCard.vue',
+    slug: 'paper-card',
+    snippet: 'Slidev Scholarly: PaperCard',
+  },
+  {
+    name: 'ContributionList',
+    file: 'ContributionList.vue',
+    slug: 'contribution-list',
+    snippet: 'Slidev Scholarly: ContributionList',
+  },
+  {
+    name: 'CaveatList',
+    file: 'CaveatList.vue',
+    slug: 'caveat-list',
+    snippet: 'Slidev Scholarly: CaveatList',
+  },
 ]
 
 const requiredTokens = [

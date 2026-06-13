@@ -162,6 +162,39 @@ The paper inserts a lightweight routing stage before task-specific fine-tuning.
 Accuracy improves by 3.2 points while keeping inference cost unchanged.
 
 ---
+layout: default
+title: Study Context
+subtitle: Paper and dataset summary
+---
+
+<!--
+SLIDE: Study Context
+LAYOUT: default
+COMPONENTS: <PaperCard>, <DatasetCard>
+PURPOSE: Summarize source paper and evaluation dataset before detailed evidence
+-->
+
+<PaperCard
+  title="Efficient Adaptation for Scientific Models"
+  :authors="['A. Smith', 'B. Lee']"
+  venue="ICML"
+  year="2026"
+  status="Accepted"
+  contribution="Introduces lightweight routing before task-specific fine-tuning."
+/>
+
+<DatasetCard
+  name="AcademicBench"
+  description="Curated benchmark for efficient scientific model adaptation."
+  task="Classification"
+  samples="12k"
+  features="128"
+  split="70 / 15 / 15"
+  source="Internal benchmark"
+  license="Research use"
+/>
+
+---
 layout: related-work-matrix
 title: Related Work
 description: Position our contribution against prior efficient learning approaches.
@@ -539,6 +572,30 @@ $$
 </EquationBlock>
 
 The routing term is active only during adaptation, so deployed inference cost stays unchanged.
+
+---
+layout: default
+title: Contributions and Caveats
+subtitle: Claim scope before discussion
+---
+
+<!--
+SLIDE: Contributions and Caveats
+LAYOUT: default
+COMPONENTS: <ContributionList>, <CaveatList>
+PURPOSE: State what the paper contributes and what boundaries remain
+-->
+
+<ContributionList title="Main Contributions" :items="[
+  { title: 'Efficient adaptation', description: 'Adds a lightweight routing stage before fine-tuning.', evidence: '+3.2 accuracy points' },
+  { title: 'Stable deployment cost', description: 'Keeps the base representation fixed at inference time.', evidence: 'Same throughput budget' },
+  { title: 'Reproducible evaluation', description: 'Reports five-seed averages across all experiments.', evidence: 'Appendix B' }
+]" compact />
+
+<CaveatList title="Boundary Conditions" :items="[
+  { title: 'Labeled tasks required', description: 'The method assumes labeled target examples are available.', mitigation: 'Report few-shot sensitivity separately.' },
+  { title: 'Severe shift remains hard', description: 'Large distribution shift still needs calibration.', mitigation: 'Use shifted-domain evaluation as a separate claim.' }
+]" compact />
 
 ---
 layout: two-cols

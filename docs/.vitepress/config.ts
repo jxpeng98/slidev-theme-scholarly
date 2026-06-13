@@ -63,6 +63,10 @@ const vitePressOptions = {
               { text: 'MetricGrid', link: '/en/components/metric-grid' },
               { text: 'EvidenceBlock', link: '/en/components/evidence-block' },
               { text: 'EquationBlock', link: '/en/components/equation-block' },
+              { text: 'DatasetCard', link: '/en/components/dataset-card' },
+              { text: 'PaperCard', link: '/en/components/paper-card' },
+              { text: 'ContributionList', link: '/en/components/contribution-list' },
+              { text: 'CaveatList', link: '/en/components/caveat-list' },
               { text: 'Cite', link: '/en/components/cite' },
               { text: 'ThemePreview', link: '/en/components/theme-preview' }
             ]
@@ -113,6 +117,10 @@ const vitePressOptions = {
               { text: 'MetricGrid', link: '/zh/components/metric-grid' },
               { text: 'EvidenceBlock', link: '/zh/components/evidence-block' },
               { text: 'EquationBlock', link: '/zh/components/equation-block' },
+              { text: 'DatasetCard', link: '/zh/components/dataset-card' },
+              { text: 'PaperCard', link: '/zh/components/paper-card' },
+              { text: 'ContributionList', link: '/zh/components/contribution-list' },
+              { text: 'CaveatList', link: '/zh/components/caveat-list' },
               { text: 'Cite', link: '/zh/components/cite' },
               { text: 'ThemePreview', link: '/zh/components/theme-preview' }
             ]

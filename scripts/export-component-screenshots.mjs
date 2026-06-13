@@ -29,7 +29,11 @@ const COMPONENTS = {
   10: 'metric-card',
   11: 'metric-grid',
   12: 'evidence-block',
-  13: 'equation-block'
+  13: 'equation-block',
+  14: 'dataset-card',
+  15: 'paper-card',
+  16: 'contribution-list',
+  17: 'caveat-list'
 }
 
 console.log('🎨 Generating component screenshots...')

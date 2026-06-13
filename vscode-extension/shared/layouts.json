@@ -67,6 +67,10 @@
         "MetricCard",
         "MetricGrid",
         "EvidenceBlock",
-        "EquationBlock"
+        "EquationBlock",
+        "DatasetCard",
+        "PaperCard",
+        "ContributionList",
+        "CaveatList"
     ]
 }

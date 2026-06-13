@@ -20,6 +20,10 @@ This theme provides several components for academic presentations.
 | [MetricGrid](./metric-grid) | Compact grid of result metrics |
 | [EvidenceBlock](./evidence-block) | Claim evidence, source, and confidence notes |
 | [EquationBlock](./equation-block) | Numbered equations with title and caption |
+| [DatasetCard](./dataset-card) | Dataset scale, split, task, and source summary |
+| [PaperCard](./paper-card) | Paper metadata and contribution summary |
+| [ContributionList](./contribution-list) | Numbered contribution claims with evidence |
+| [CaveatList](./caveat-list) | Limitations and mitigations |
 | [Cite](./cite) | Academic citations |
 | [ThemePreview](./theme-preview) | Preview a color theme inside a block |
 

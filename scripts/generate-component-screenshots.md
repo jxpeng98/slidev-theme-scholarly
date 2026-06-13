@@ -202,3 +202,62 @@ $$
 $$
 
 </EquationBlock>
+
+<!-- Slide 14: dataset-card -->
+---
+layout: default
+title: DatasetCard Component
+subtitle: Dataset scale and source summary
+---
+
+<DatasetCard
+  name="AcademicBench"
+  description="Curated benchmark for efficient scientific model adaptation."
+  task="Classification"
+  samples="12k"
+  features="128"
+  split="70 / 15 / 15"
+  source="Internal benchmark"
+  license="Research use"
+/>
+
+<!-- Slide 15: paper-card -->
+---
+layout: default
+title: PaperCard Component
+subtitle: Paper metadata and takeaway
+---
+
+<PaperCard
+  title="Efficient Adaptation for Scientific Models"
+  :authors="['A. Smith', 'B. Lee']"
+  venue="ICML"
+  year="2026"
+  status="Accepted"
+  contribution="Introduces lightweight routing before task-specific fine-tuning."
+/>
+
+<!-- Slide 16: contribution-list -->
+---
+layout: default
+title: ContributionList Component
+subtitle: Numbered claims with evidence
+---
+
+<ContributionList title="Main Contributions" :items="[
+  { title: 'Efficient adaptation', description: 'Adds a lightweight routing stage before fine-tuning.', evidence: '+3.2 accuracy points' },
+  { title: 'Stable deployment cost', description: 'Keeps the base representation fixed at inference time.', evidence: 'Same throughput budget' },
+  { title: 'Reproducible evaluation', description: 'Reports five-seed averages across all experiments.', evidence: 'Appendix B' }
+]" />
+
+<!-- Slide 17: caveat-list -->
+---
+layout: default
+title: CaveatList Component
+subtitle: Limitations with mitigations
+---
+
+<CaveatList title="Boundary Conditions" :items="[
+  { title: 'Labeled tasks required', description: 'The method assumes labeled target examples are available.', mitigation: 'Report few-shot sensitivity separately.' },
+  { title: 'Severe shift remains hard', description: 'Large distribution shift still needs calibration.', mitigation: 'Use shifted-domain evaluation as a separate claim.' }
+]" />

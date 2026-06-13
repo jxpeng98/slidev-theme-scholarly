@@ -220,6 +220,65 @@
     ],
     "description": "Insert EquationBlock component"
   },
+  "Slidev Scholarly: DatasetCard": {
+    "prefix": "ss-dataset-card",
+    "body": [
+      "<DatasetCard",
+      "  name=\"${1:AcademicBench}\"",
+      "  description=\"${2:Curated benchmark for efficient scientific model adaptation.}\"",
+      "  task=\"${3:Classification}\"",
+      "  samples=\"${4:12k}\"",
+      "  features=\"${5:128}\"",
+      "  split=\"${6:70 / 15 / 15}\"",
+      "  source=\"${7:Internal benchmark}\"",
+      "  license=\"${8:Research use}\"",
+      "/>",
+      "",
+      "$0"
+    ],
+    "description": "Insert DatasetCard component"
+  },
+  "Slidev Scholarly: PaperCard": {
+    "prefix": "ss-paper-card",
+    "body": [
+      "<PaperCard",
+      "  title=\"${1:Efficient Adaptation for Scientific Models}\"",
+      "  :authors=\"['${2:A. Smith}', '${3:B. Lee}']\"",
+      "  venue=\"${4:ICML}\"",
+      "  year=\"${5:2026}\"",
+      "  status=\"${6:Accepted}\"",
+      "  contribution=\"${7:Introduces lightweight routing before task-specific fine-tuning.}\"",
+      "/>",
+      "",
+      "$0"
+    ],
+    "description": "Insert PaperCard component"
+  },
+  "Slidev Scholarly: ContributionList": {
+    "prefix": "ss-contribution-list",
+    "body": [
+      "<ContributionList title=\"${1:Main Contributions}\" :items=\"[",
+      "  { title: '${2:Efficient adaptation}', description: '${3:Adds a lightweight routing stage before fine-tuning.}', evidence: '${4:+3.2 accuracy points}' },",
+      "  { title: '${5:Stable deployment cost}', description: '${6:Keeps the base representation fixed at inference time.}', evidence: '${7:Same throughput budget}' },",
+      "  { title: '${8:Reproducible evaluation}', description: '${9:Reports five-seed averages across all experiments.}', evidence: '${10:Appendix B}' }",
+      "]\" />",
+      "",
+      "$0"
+    ],
+    "description": "Insert ContributionList component"
+  },
+  "Slidev Scholarly: CaveatList": {
+    "prefix": "ss-caveat-list",
+    "body": [
+      "<CaveatList title=\"${1:Boundary Conditions}\" :items=\"[",
+      "  { title: '${2:Labeled tasks required}', description: '${3:The method assumes labeled target examples are available.}', mitigation: '${4:Report few-shot sensitivity separately.}' },",
+      "  { title: '${5:Severe shift remains hard}', description: '${6:Large distribution shift still needs calibration.}', mitigation: '${7:Use shifted-domain evaluation as a separate claim.}' }",
+      "]\" />",
+      "",
+      "$0"
+    ],
+    "description": "Insert CaveatList component"
+  },
   "Slidev Scholarly: Cite (Vue)": {
     "prefix": "ss-cite-comp",
     "body": [
