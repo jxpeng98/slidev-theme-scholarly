@@ -79,6 +79,9 @@ const requiredLayoutTokens = [
   '--scholarly-quote-fg',
   '--scholarly-quote-border',
   '--scholarly-table-rule',
+  '--scholarly-footer-fg',
+  '--scholarly-footer-fg-muted',
+  '--scholarly-footer-border',
 ]
 const requiredModeTokens = [...requiredLayoutTokens]
 
@@ -121,6 +124,10 @@ for (const token of requiredModeTokens) {
 for (const token of requiredLayoutTokens) {
   expectContains('layout.css', files.layout, token)
 }
+
+expectCssBlockContains('layout.css', files.layout, '.beamer-footer-left', 'var(--scholarly-footer-fg')
+expectCssBlockContains('layout.css', files.layout, '.beamer-footer-center', 'var(--scholarly-footer-fg-muted')
+expectCssBlockContains('layout.css', files.layout, '.beamer-footer-right', 'var(--scholarly-footer-fg')
 
 if (failures.length) {
   console.error('Color mode style checks failed:')

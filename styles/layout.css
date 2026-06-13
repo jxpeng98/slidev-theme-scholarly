@@ -510,7 +510,7 @@ footer {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: stretch;
   height: var(--scholarly-footer-height);
-  border-top: 1px solid color-mix(in srgb, var(--scholarly-chrome-fg) 10%, transparent);
+  border-top: 1px solid var(--scholarly-footer-border, color-mix(in srgb, var(--scholarly-chrome-fg) 10%, transparent));
 }
 
 .beamer-footer>* {
@@ -524,7 +524,7 @@ footer {
 
 .beamer-footer-left {
   background: var(--scholarly-footer-left-bg, var(--slidev-theme-primary, #1e3a5f));
-  color: var(--scholarly-chrome-fg);
+  color: var(--scholarly-footer-fg, var(--scholarly-chrome-fg));
   justify-content: flex-start;
   overflow: hidden;
   white-space: nowrap;
@@ -533,7 +533,7 @@ footer {
 
 .beamer-footer-center {
   background: var(--scholarly-footer-center-bg, var(--slidev-theme-primary, #1e3a5f));
-  color: color-mix(in srgb, var(--scholarly-chrome-fg) 92%, transparent);
+  color: var(--scholarly-footer-fg-muted, color-mix(in srgb, var(--scholarly-chrome-fg) 92%, transparent));
   justify-content: center;
   text-align: center;
   white-space: nowrap;
@@ -547,7 +547,7 @@ footer {
 
 .beamer-footer-right {
   background: var(--scholarly-footer-right-bg, var(--slidev-theme-primary, #1e3a5f));
-  color: var(--scholarly-chrome-fg);
+  color: var(--scholarly-footer-fg, var(--scholarly-chrome-fg));
   justify-content: flex-end;
   gap: 0.16rem;
   font-family: inherit;
@@ -581,7 +581,7 @@ footer {
   justify-items: center;
   height: 1.18rem;
   padding: 0 0.38rem 0 0.3rem;
-  border: 1px solid color-mix(in srgb, var(--scholarly-chrome-fg) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--scholarly-footer-fg, var(--scholarly-chrome-fg)) 14%, transparent);
   border-radius: 0.24rem;
   background: var(--scholarly-toolbar-chip, color-mix(in srgb, var(--scholarly-chrome-fg) 4%, transparent));
   white-space: nowrap;
@@ -592,7 +592,7 @@ footer {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--scholarly-chrome-fg) 6%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--scholarly-footer-fg, var(--scholarly-chrome-fg)) 8%, transparent),
     inset 0 0 0 1px color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 10%, transparent);
 }
 

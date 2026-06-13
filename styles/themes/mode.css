@@ -17,6 +17,9 @@
   --scholarly-chrome-fg: #fff;
   --scholarly-chrome-fg-muted: rgba(255, 255, 255, 0.9);
   --scholarly-chrome-border: rgba(255, 255, 255, 0.2);
+  --scholarly-footer-fg: #ffffff;
+  --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
+  --scholarly-footer-border: rgba(255, 255, 255, 0.18);
   --scholarly-toolbar-surface: linear-gradient(
     180deg,
     color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 58%, var(--slidev-theme-primary, #1e3a5f) 42%) 0%,
@@ -105,6 +108,9 @@
   --scholarly-chrome-fg: var(--scholarly-text-primary, #2d3748);
   --scholarly-chrome-fg-muted: rgba(45, 55, 72, 0.75);
   --scholarly-chrome-border: rgba(45, 55, 72, 0.15);
+  --scholarly-footer-fg: #ffffff;
+  --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
+  --scholarly-footer-border: rgba(255, 255, 255, 0.18);
   --scholarly-toolbar-surface: linear-gradient(
     180deg,
     color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 12%, white 88%) 0%,
@@ -183,4 +189,11 @@
   --scholarly-theorem-note-bg: color-mix(in srgb, #0ea5e9 10%, transparent);
   --scholarly-theorem-claim-accent: #f97316;
   --scholarly-theorem-claim-bg: color-mix(in srgb, #f97316 10%, transparent);
+}
+
+/* Princeton Orange needs dark footer text to keep contrast above 4.5:1. */
+:root[data-color-theme="princeton-orange"] {
+  --scholarly-footer-fg: #1f2937;
+  --scholarly-footer-fg-muted: rgba(31, 41, 55, 0.88);
+  --scholarly-footer-border: rgba(31, 41, 55, 0.2);
 }
