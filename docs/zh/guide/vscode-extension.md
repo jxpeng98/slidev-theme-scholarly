@@ -15,6 +15,7 @@ title: VS Code 插件
 - 🚀 **新建演示** - 创建带有预配置模板的新演示文稿
 - 🎨 **主题预设** - 在 Themes 面板中一键应用 `themeConfig.colorTheme` / `themeConfig.fontTheme`
 - 📚 **参考文献与锚点** - BibTeX 引用补全/悬浮预览、内部锚点补全、统一的 References 面板，以及命令面板里的锚点创建/引用插入
+- 🧭 **Citation 诊断** - 对缺失 bibliography 配置、未解析 cite key、重复 BibTeX key 和缺失 references 页提供编辑器内 warning 与 quick fix
 - 🧪 **Dev Mode** - 内置性能诊断，提供耗时日志与慢操作标记
 
 ## 安装方法
@@ -53,6 +54,18 @@ scholarly-cite # 插入引用
 - `ss-` / `scholarly-` -> 内置 snippet 候选
 
 如果没有自动弹出建议，可按 `Ctrl+Space`（macOS 也可使用 `Cmd+Space`，若未被系统占用）手动触发。
+
+### Citation 诊断与 Quick Fix
+
+当 Markdown deck 中出现 `@citekey` 或 `!@citekey` 时，插件会检查当前文件：
+
+- 是否缺少 `bibFile` frontmatter 或默认 `references.bib`
+- `.bib` 文件是否不存在
+- BibTeX key 是否重复
+- 引用 key 是否无法解析
+- 是否缺少 `layout: references` 页面
+
+Quick Fix 可以自动添加 `bibFile: ./references.bib`、创建缺失的 bibliography 文件、为未解析 key 追加 BibTeX stub，或添加 references slide。诊断复用与 `sch doctor` 相同的 shared citation parser，因此会忽略 Vue 事件处理器、邮箱、URL、inline code 和 fenced code block。
 
 ### 插入内部锚点
 
@@ -178,11 +191,14 @@ scholarly-cite # 插入引用
 | `ss-highlight` | 文本高亮 |
 | `ss-highlight-md` | 文本高亮（Markdown 语法糖） |
 | `ss-cite` | BibTeX 引用 `@citekey` |
+| `ss-cite-multi` | 分组 BibTeX 引用 |
+| `ss-cite-note` | 类注脚手动引用说明 |
 | `ss-anchor` | 独立内部锚点 `::anchor{#anchor-id}` |
 | `ss-cite-comp` | Cite 组件（非 BibTeX） |
 | `ss-cite-md` | Cite 组件（Markdown 语法糖） |
 | `ss-theme-preview` | ThemePreview 组件 |
-| `scholarly-bibliography` | 参考文献占位符 |
+| `ss-bibliography` | 参考文献占位符 |
+| `ss-references-slide` | 参考文献页面 |
 
 ### 主题预设片段
 

@@ -15,6 +15,7 @@ We provide a VS Code extension to boost your productivity when creating Slidev p
 - 🚀 **New Presentation** - Create a new presentation with pre-configured template
 - 🎨 **Theme Presets** - Apply `themeConfig.colorTheme` / `themeConfig.fontTheme` from the Themes view
 - 📚 **References & Anchors** - BibTeX completion/hover, internal-anchor completion, a unified References view, and command-palette insertion for both anchor definitions and references
+- 🧭 **Citation Diagnostics** - Inline warnings and quick fixes for missing bibliography setup, unresolved cite keys, duplicate BibTeX keys, and missing references slides
 - 🧪 **Dev Mode** - Built-in performance diagnostics with timing logs and slow-operation markers
 
 ## Installation
@@ -53,6 +54,18 @@ The extension also provides context-aware completion suggestions:
 - `ss-` / `scholarly-` -> built-in snippet candidates
 
 If suggestions are not shown automatically, use `Ctrl+Space` (or `Cmd+Space` on macOS if available).
+
+### Citation Diagnostics And Quick Fixes
+
+When a Markdown deck contains `@citekey` or `!@citekey`, the extension checks the active file for:
+
+- missing `bibFile` frontmatter or default `references.bib`
+- missing `.bib` files
+- duplicate BibTeX keys
+- unresolved citation keys
+- missing `layout: references` slide
+
+Quick Fix actions can add `bibFile: ./references.bib`, create the missing bibliography file, append a BibTeX stub for an unresolved key, or add a references slide. The diagnostics reuse the same shared citation parser as `sch doctor`, so Vue event handlers, emails, URLs, inline code, and fenced code blocks are ignored.
 
 ### Insert Internal Anchors
 
@@ -178,11 +191,14 @@ Note: if you enable `themeConfig.outlineToc: true` in frontmatter, the footer TO
 | `ss-highlight` | Text highlighting |
 | `ss-highlight-md` | Text highlighting (Markdown syntax sugar) |
 | `ss-cite` | BibTeX citation `@citekey` |
+| `ss-cite-multi` | Grouped BibTeX citations |
+| `ss-cite-note` | Footnote-like manual citation note |
 | `ss-anchor` | Standalone internal anchor `::anchor{#anchor-id}` |
 | `ss-cite-comp` | Cite component (non-BibTeX) |
 | `ss-cite-md` | Cite component (Markdown syntax sugar) |
 | `ss-theme-preview` | ThemePreview component |
-| `scholarly-bibliography` | Bibliography placeholder |
+| `ss-bibliography` | Bibliography placeholder |
+| `ss-references-slide` | References slide |
 
 ### Theme Preset Snippets
 

@@ -13,6 +13,7 @@ import {
   insertAnchorReference
 } from './commands';
 import { AnchorCompletionProvider, BibCompletionProvider, BibHoverProvider, BibTreeProvider } from './bibtex';
+import { registerCitationDiagnostics } from './citationDiagnostics';
 import { registerPreviewCommand, registerPreviewView } from './preview';
 import { ScholarlyCompletionProvider } from './snippetCompletion';
 import { DevModeController } from './devMode';
@@ -151,6 +152,8 @@ export function activate(context: vscode.ExtensionContext) {
       new BibHoverProvider()
     )
   );
+
+  registerCitationDiagnostics(context, context.extensionUri, output);
 
   // Register Preview Command
   context.subscriptions.push(registerPreviewView(context));
