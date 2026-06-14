@@ -17,6 +17,10 @@ const steps = [
     command: ['node', 'scripts/check-academic-components.mjs'],
   },
   {
+    name: 'Citation workflow contract',
+    command: ['node', 'scripts/check-citation-workflow.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

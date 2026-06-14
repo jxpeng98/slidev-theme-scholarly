@@ -43,8 +43,9 @@
 | P0.4 Release gate | Complete | `pnpm run check` runs token checks, docs build, CLI doctor, VS Code compile, and matrix dry-run |
 | P1.1 Academic layout pack | Complete | Eight layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 34 layout PNGs |
 | P1.2 Evidence components | Complete | Eight evidence components added; `pnpm run check` and `pnpm run export:component-screenshots` pass with 17 component PNGs |
+| P1.3 Citation workflow batch 1 | Complete | CLI doctor checks citation setup, bibliography files, duplicate/unresolved keys, and references slides; `pnpm run check:citations` and `pnpm run check` pass |
 
-Current decision: P0, P1.1, and P1.2 are complete. Continue with P1.3 citation/reference ergonomics unless component API feedback requires a follow-up.
+Current decision: P0, P1.1, P1.2, and the first P1.3 citation workflow batch are complete. Continue P1.3 with VS Code diagnostics/quick actions after the shared citation parser has settled.
 
 ---
 
@@ -429,16 +430,26 @@ feat(components): add academic evidence components
 
 **Steps:**
 
-- [ ] Add examples for inline citation, grouped citation, footnote-like citation, and references slide.
-- [ ] Verify the current citation plugin behavior for missing keys and duplicate keys.
-- [ ] Add a CLI doctor check for missing `bibFile`, missing `.bib`, and unresolved citation keys.
+- [x] Add examples for inline citation, grouped citation, footnote-like citation, and references slide.
+- [x] Verify the current citation plugin behavior for missing keys and duplicate keys.
+- [x] Add a CLI doctor check for missing `bibFile`, missing `.bib`, duplicate keys, unresolved citation keys, and missing references slides.
 - [ ] Add VS Code diagnostics or quick actions only after CLI doctor behavior is stable.
-- [ ] Run:
+- [x] Extract shared citation parsing into `shared/citations.mjs` so future VS Code diagnostics can reuse the CLI rules.
+- [x] Run:
 
 ```bash
 node cli/scholarly.mjs doctor
+pnpm run check:citations
 pnpm run docs:build
 pnpm run vscode:compile
+```
+
+Current verification:
+
+```bash
+pnpm run check:citations
+node cli/scholarly.mjs doctor
+pnpm run check
 ```
 
 **Acceptance Criteria:**

@@ -5,6 +5,7 @@ import path from 'node:path'
 import process from 'node:process'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { analyzeCitationProject } from '../shared/citations.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -289,6 +290,7 @@ Checks:
   - Slidev availability
   - Local project files (slides.md, package.json)
   - Theme dependency presence
+  - Citation setup, bibliography file, unresolved keys, and references slide
 `)
 }
 
@@ -1361,6 +1363,61 @@ function printDoctorLine(label, ok, details) {
   console.log(`- ${label}: [${status}] ${details}`)
 }
 
+function formatList(items, limit = 8) {
+  if (items.length <= limit)
+    return items.join(', ')
+
+  return `${items.slice(0, limit).join(', ')} (+${items.length - limit} more)`
+}
+
+function printCitationDoctorLines() {
+  const citation = analyzeCitationProject(process.cwd())
+
+  if (!citation.hasSlides) {
+    printDoctorLine('Citation setup', true, 'skipped (slides.md missing)')
+    return
+  }
+
+  if (citation.citationKeys.length === 0) {
+    printDoctorLine('Citation keys', true, 'no citations found')
+    return
+  }
+
+  if (citation.missingSetup) {
+    printDoctorLine('Citation setup', false, 'citations found but no bibFile or references.bib')
+    printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
+    return
+  }
+
+  printDoctorLine(
+    'Citation setup',
+    true,
+    citation.bibFileSource === 'frontmatter'
+      ? `bibFile configured: ${citation.bibFile}`
+      : 'using default references.bib',
+  )
+
+  if (!citation.bibFileExists) {
+    printDoctorLine('Citation bibliography', false, `missing .bib file: ${citation.bibFile}`)
+    printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
+    return
+  }
+
+  if (citation.duplicateKeys.length > 0) {
+    printDoctorLine('Citation bibliography', false, `duplicate BibTeX keys: ${formatList(citation.duplicateKeys)}`)
+  } else {
+    printDoctorLine('Citation bibliography', true, `${citation.bibEntryCount} entries loaded from ${citation.bibFile}`)
+  }
+
+  if (citation.unresolvedKeys.length > 0) {
+    printDoctorLine('Citation keys', false, `unresolved citation keys: ${formatList(citation.unresolvedKeys)}`)
+  } else {
+    printDoctorLine('Citation keys', true, `${citation.citationKeys.length} citation keys resolved`)
+  }
+
+  printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
+}
+
 function runDoctor() {
   const nodeVersion = process.versions.node
   const nodeMajor = Number(nodeVersion.split('.')[0] || 0)
@@ -1392,6 +1449,7 @@ function runDoctor() {
         ? 'found in package.json'
         : 'not found in package.json',
   )
+  printCitationDoctorLines()
 
   if (!nodeOk) {
     console.log('\nAction required: upgrade Node.js to version 20 or newer.')

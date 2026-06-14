@@ -56,6 +56,25 @@ Renders as: Vaswani et al. (2017) introduced the Transformer architecture.
 Recent advances @smith2023deep @wang2022attention have shown...
 ```
 
+### Grouped Citations
+
+Place multiple BibTeX keys in the same sentence when one claim is supported by several papers:
+
+```markdown
+Efficient adaptation is commonly evaluated with grouped evidence @smith2023deep @wang2022attention.
+```
+
+### Footnote-like Citation Note
+
+For a short manual note that behaves like a footnote or reading annotation, use `<Cite :inline="false">`.
+This is not connected to the BibTeX bibliography; it is for manual context.
+
+```markdown
+<Cite :inline="false" author="Smith et al." year="2026">
+Reports all primary metrics as five-seed averages with confidence intervals.
+</Cite>
+```
+
 ## Markdown Footnotes
 
 Standard Markdown footnotes work out of the box. No theme-specific syntax is required:
@@ -118,6 +137,30 @@ If the slide body is empty, or only contains headings/comments, the theme inject
 If you want custom placement inside a references slide, add `[[bibliography]]` exactly where the list should appear.
 
 Normal theme usage does not require a project-level `vite.config.ts`; Scholarly registers the citation hooks from the theme package itself.
+
+## Doctor Diagnostics
+
+Run the doctor when citations do not render as expected:
+
+```bash
+npx -y --package slidev-theme-scholarly sch doctor
+```
+
+The citation checks report:
+
+- `Citation setup`: whether citations have a `bibFile` or default `references.bib`
+- `Citation bibliography`: whether the `.bib` file exists and has duplicate keys
+- `Citation keys`: unresolved `@citekey` values used in slides
+- `References slide`: whether a `layout: references` slide exists
+
+Common warnings:
+
+```text
+- Citation setup: [WARN] citations found but no bibFile or references.bib
+- Citation bibliography: [WARN] missing .bib file: ./references.bib
+- Citation keys: [WARN] unresolved citation keys: missing2026
+- References slide: [WARN] missing; add layout: references
+```
 
 ## Internal Anchor Jumps
 

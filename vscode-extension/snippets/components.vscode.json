@@ -418,6 +418,19 @@
     ],
     "description": "Insert multiple citations"
   },
+  "Slidev Scholarly: Citation Note": {
+    "prefix": "ss-cite-note",
+    "body": [
+      "<Cite :inline=\"false\" author=\"${1:Smith et al.}\" year=\"${2:2026}\">",
+      "",
+      "${3:Short note about the cited work, dataset, or method.}",
+      "",
+      "</Cite>",
+      "",
+      "$0"
+    ],
+    "description": "Insert footnote-like manual citation note"
+  },
   "Slidev Scholarly: Bibliography Marker": {
     "prefix": "ss-bibliography",
     "body": [
@@ -426,6 +439,17 @@
       "$0"
     ],
     "description": "Insert bibliography marker"
+  },
+  "Slidev Scholarly: References Slide": {
+    "prefix": "ss-references-slide",
+    "body": [
+      "---",
+      "layout: references",
+      "---",
+      "",
+      "$0"
+    ],
+    "description": "Insert references slide"
   },
   "Slidev Scholarly: Math Inline": {
     "prefix": "ss-math-i",

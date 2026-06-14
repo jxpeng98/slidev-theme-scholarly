@@ -56,6 +56,25 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 最近的进展 @smith2023deep @wang2022attention 表明...
 ```
 
+### 分组引用
+
+当一个 claim 由多篇论文共同支持时，可以在同一句中连续写多个 BibTeX key：
+
+```markdown
+高效适配通常需要结合多篇工作的证据 @smith2023deep @wang2022attention。
+```
+
+### 类注脚引用说明
+
+如果需要一条简短的手动阅读注记或脚注式说明，可以使用 `<Cite :inline="false">`。
+它不会接入 BibTeX bibliography，适合补充上下文。
+
+```markdown
+<Cite :inline="false" author="Smith 等" year="2026">
+主要指标均报告 5 次随机种子平均值和置信区间。
+</Cite>
+```
+
 ## Markdown 注脚
 
 标准 Markdown 注脚开箱即用，不需要额外的主题语法：
@@ -118,6 +137,30 @@ layout: references
 如果你想精确控制 bibliography 在该页中的插入位置，可以显式写 `[[bibliography]]`。
 
 正常使用这个主题时，不需要额外维护项目级 `vite.config.ts`；Scholarly 会从主题包内部自动注册 citation 相关 hook。
+
+## Doctor 诊断
+
+当 citation 没有按预期渲染时，可以运行：
+
+```bash
+npx -y --package slidev-theme-scholarly sch doctor
+```
+
+citation 检查会报告：
+
+- `Citation setup`：是否存在 `bibFile` 或默认 `references.bib`
+- `Citation bibliography`：`.bib` 文件是否存在，以及是否有重复 key
+- `Citation keys`：slides 中使用但无法解析的 `@citekey`
+- `References slide`：是否存在 `layout: references` 页面
+
+常见 warning：
+
+```text
+- Citation setup: [WARN] citations found but no bibFile or references.bib
+- Citation bibliography: [WARN] missing .bib file: ./references.bib
+- Citation keys: [WARN] unresolved citation keys: missing2026
+- References slide: [WARN] missing; add layout: references
+```
 
 ## 内部锚点跳转
 

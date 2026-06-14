@@ -97,6 +97,11 @@ CITATIONS: Using @citekey syntax (Vue-style would be <Cite key="..." />)
 - Training costs have grown exponentially
 - Environmental impact is a growing concern
 - Need for more efficient approaches @smith2023deep
+- Prior adaptation work often combines grouped evidence @smith2023deep @wang2022attention
+
+<Cite :inline="false" author="Moore and Taylor" year="2026">
+Manual citation notes are useful for reading-group context that should not appear in the BibTeX bibliography.
+</Cite>
 
 ---
 layout: compare
