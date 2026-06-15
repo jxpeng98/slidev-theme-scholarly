@@ -36,7 +36,7 @@ title: Home
 
 A professional presentation theme for [Slidev](https://sli.dev), designed specifically for academic presentations with LaTeX Beamer-inspired styling.
 
-[Live Demo](https://scholarly.jxpeng.dev/) · [Quick Start](./guide/quick-start) · [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly)
+[Live Demo](https://scholarly.jxpeng.dev/) · [Academic Workflows](./guide/workflows/) · [Quick Start](./guide/quick-start) · [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly)
 
 > **Heads up: major upgrade in progress**
 >
@@ -49,13 +49,13 @@ A professional presentation theme for [Slidev](https://sli.dev), designed specif
 ### 🎓 Professional & Academic
 LaTeX Beamer-inspired design with Classic Academic Blue and modern typography. Perfect for conferences, lectures, and research presentations.
 
-### 📐 24 Specialized Layouts
+### 📐 34 Specialized Layouts
 Organized into four categories for easy discovery:
 
 - **Structure Layouts** (7) - Framework and organization
 - **Content Layouts** (6) - Information presentation
 - **Emphasis Layouts** (4) - Highlighting key messages
-- **Academic Layouts** (7) - Research-specific features
+- **Academic Layouts** (15) - Research-specific workflows and evidence slides
 
 ### 🧩 Rich Components
 Built-in academic components with simple syntax:
@@ -115,8 +115,10 @@ Subtitle or description
 ### Getting Started
 
 - [Quick Start](./guide/quick-start) - Get started in 5 minutes
+- [Academic Workflows](./guide/workflows/) - Choose the right starting path for a paper talk, defense, review, results talk, or lecture
 - [Features](./guide/features) - Overview of all features
 - [VS Code Extension](./guide/vscode-extension) - Install snippets and tools
+- [Theme Mode and Contrast](./guide/theme-mode-contrast) - Keep quote, Highlight, and semantic surfaces readable
 - [Color & Typography Themes](./guide/themes) - Explore theme options
 
 ### Layouts
@@ -135,6 +137,8 @@ Subtitle or description
 - [Keywords](./components/keywords) - Keyword tags
 - [Columns](./components/columns) - Multi-column layouts
 - [Highlight](./components/highlight) - Text highlighting
+- [MetricCard](./components/metric-card) - Key result metrics
+- [EvidenceBlock](./components/evidence-block) - Claims with evidence and sources
 
 ## 👥 Who is this for?
 

@@ -47,8 +47,9 @@
 | P2.1 Curated deck templates | Complete | Five workflow templates added; `node scripts/check-curated-templates.mjs` validates list metadata, aliases, init output, required layouts, and citation setup |
 | P2.2 Actionable CLI doctor | Complete | `node scripts/check-doctor-actionable.mjs` validates structured severities, `--json`, themeConfig warnings, citation actions, and automation-ready output |
 | P2.3 VS Code metadata/previews | Complete | `node scripts/check-vscode-metadata-previews.mjs` validates shared template/layout/component metadata, preview manifest freshness, and extension drift checks |
+| P2.4 Documentation IA | Complete | `node scripts/check-docs-workflows.mjs` validates workflow guides, homepage/nav entry points, contrast guidance, and cross-links to layouts/components/templates |
 
-Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, and P2.3 are complete. Continue with P2.4 documentation information architecture or P3.1 data-driven slide patterns.
+Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, P2.3, and P2.4 are complete. Continue with P3.1 data-driven slide patterns or P3.2 paper metadata and BibTeX utilities.
 
 ---
 
@@ -647,18 +648,19 @@ feat(vscode): sync scholarly metadata and previews
 
 **Steps:**
 
-- [ ] Add workflow pages:
+- [x] Add workflow pages:
   - paper talk.
   - thesis defense.
   - literature review.
   - results-heavy presentation.
   - course lecture.
-- [ ] Link each workflow to recommended layouts, components, snippets, and templates.
-- [ ] Add "theme mode and contrast" guidance based on the P0 token model.
-- [ ] Run:
+- [x] Link each workflow to recommended layouts, components, snippets, and templates.
+- [x] Add "theme mode and contrast" guidance based on the P0 token model.
+- [x] Run:
 
 ```bash
-pnpm run docs:build
+node scripts/check-docs-workflows.mjs
+./node_modules/.bin/vitepress build docs
 ```
 
 **Acceptance Criteria:**

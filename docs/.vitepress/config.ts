@@ -35,7 +35,9 @@ const vitePressOptions = {
               { text: 'Quick Start', link: '/en/guide/quick-start' },
               { text: 'Upgrade Notes', link: '/en/guide/upgrade' },
               { text: 'Features', link: '/en/guide/features' },
+              { text: 'Academic Workflows', link: '/en/guide/workflows/' },
               { text: 'Configurations', link: '/en/guide/configurations' },
+              { text: 'Theme Mode and Contrast', link: '/en/guide/theme-mode-contrast' },
               { text: 'Color & Typography Themes', link: '/en/guide/themes' }
             ]
           },
@@ -89,7 +91,9 @@ const vitePressOptions = {
               { text: '快速开始', link: '/zh/guide/quick-start' },
               { text: '重大升级说明', link: '/zh/guide/upgrade' },
               { text: '主要功能', link: '/zh/guide/features' },
+              { text: '学术工作流', link: '/zh/guide/workflows/' },
               { text: '配置', link: '/zh/guide/configurations' },
+              { text: '主题模式与对比度', link: '/zh/guide/theme-mode-contrast' },
               { text: '色彩与字体主题', link: '/zh/guide/themes' }
             ]
           },

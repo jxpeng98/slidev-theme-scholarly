@@ -36,7 +36,7 @@ title: 首页
 
 一个专为学术演示设计的 [Slidev](https://sli.dev) 专业主题，采用 LaTeX Beamer 风格的设计。
 
-[在线演示](https://scholarly.jxpeng.dev/) · [快速开始](./guide/quick-start) · [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly)
+[在线演示](https://scholarly.jxpeng.dev/) · [学术工作流](./guide/workflows/) · [快速开始](./guide/quick-start) · [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly)
 
 > **注意：即将发布重大升级**
 >
@@ -50,14 +50,14 @@ title: 首页
 
 LaTeX Beamer 风格设计，经典学术蓝配色和现代排版。完美适用于会议、讲座和研究演示。
 
-### 📐 24 种专业布局
+### 📐 34 种专业布局
 
 按功能分为四个类别，便于查找：
 
 - **结构布局** (7) - 框架和组织
 - **内容布局** (6) - 信息展示
 - **强调布局** (4) - 突出重点信息
-- **学术布局** (7) - 研究专用功能
+- **学术布局** (15) - 研究工作流与证据展示页面
 
 ### 🧩 丰富的组件
 
@@ -120,8 +120,10 @@ theme: scholarly
 ### 入门指南
 
 - [快速开始](./guide/quick-start) - 5 分钟上手
+- [学术工作流](./guide/workflows/) - 按论文报告、答辩、综述、结果报告或课程讲义选择起点
 - [主要功能](./guide/features) - 功能概览
 - [VS Code 扩展](./guide/vscode-extension) - 安装代码片段和工具
+- [主题模式与对比度](./guide/theme-mode-contrast) - 保证 quote、Highlight 和语义块在明暗模式下可读
 - [配色与字体主题](./guide/themes) - 探索主题选项
 
 ### 布局
@@ -140,6 +142,8 @@ theme: scholarly
 - [关键词 (Keywords)](./components/keywords) - 关键词标签
 - [多栏 (Columns)](./components/columns) - 多栏布局
 - [高亮 (Highlight)](./components/highlight) - 文本高亮
+- [MetricCard](./components/metric-card) - 关键结果指标
+- [EvidenceBlock](./components/evidence-block) - 结论、证据与来源
 
 ## 👥 适用人群
 

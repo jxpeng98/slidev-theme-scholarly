@@ -37,6 +37,8 @@ Curated academic workflows:
 | `conference-lightning` | Short conference talks focused on one result |
 | `zh` | Minimal Chinese starter |
 
+Not sure which template to choose? Start from the [academic workflow guide](./workflows/).
+
 Use a specific template:
 
 ```bash

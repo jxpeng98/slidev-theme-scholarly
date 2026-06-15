@@ -37,6 +37,8 @@ npx -y --package slidev-theme-scholarly sch template list
 | `conference-lightning` | 短会报告：聚焦一个核心结果 |
 | `zh` | 最小中文起步模板 |
 
+不确定该选哪个模板时，先看[学术工作流指南](./workflows/)。
+
 指定模板：
 
 ```bash
