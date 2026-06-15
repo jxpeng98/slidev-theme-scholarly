@@ -25,6 +25,10 @@ const steps = [
     command: ['node', 'scripts/check-vscode-citation-diagnostics.mjs'],
   },
   {
+    name: 'Curated template contract',
+    command: ['node', 'scripts/check-curated-templates.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

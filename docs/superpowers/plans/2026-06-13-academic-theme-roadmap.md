@@ -44,8 +44,9 @@
 | P1.1 Academic layout pack | Complete | Eight layouts added; `pnpm run check` and `pnpm run export:layout-screenshots` pass with 34 layout PNGs |
 | P1.2 Evidence components | Complete | Eight evidence components added; `pnpm run check` and `pnpm run export:component-screenshots` pass with 17 component PNGs |
 | P1.3 Citation workflow | Complete | CLI doctor and VS Code diagnostics check citation setup, bibliography files, duplicate/unresolved keys, and references slides; `pnpm run check:vscode-citations` and `pnpm run check` pass |
+| P2.1 Curated deck templates | Complete | Five workflow templates added; `node scripts/check-curated-templates.mjs` validates list metadata, aliases, init output, required layouts, and citation setup |
 
-Current decision: P0, P1.1, P1.2, and P1.3 are complete. Continue with P2.1 curated templates or P2.2 broader doctor JSON/actionability, depending on whether authoring workflow or automation support is the next priority.
+Current decision: P0, P1.1, P1.2, P1.3, and P2.1 are complete. Continue with P2.2 broader doctor JSON/actionability or P2.3 VS Code metadata/preview synchronization.
 
 ---
 
@@ -494,21 +495,31 @@ feat(citations): improve scholarly citation workflow
 
 **Steps:**
 
-- [ ] Add template folders with `package.json`, `README.md`, `slides.md`, optional `references.bib`, and `_gitignore`.
-- [ ] Add template metadata to `TEMPLATE_META`.
-- [ ] Add aliases only when they are unambiguous.
-- [ ] Test each template:
+- [x] Add template folders with `package.json`, `README.md`, `slides.md`, optional `references.bib`, and `_gitignore`.
+- [x] Add template metadata to `TEMPLATE_META`.
+- [x] Add aliases only when they are unambiguous.
+- [x] Test each template:
 
 ```bash
 node cli/scholarly.mjs init /private/tmp/scholarly-paper-talk --template paper-talk --force
 node cli/scholarly.mjs init /private/tmp/scholarly-defense --template thesis-defense --force
 ```
 
-- [ ] Run:
+- [x] Run:
 
 ```bash
 node cli/scholarly.mjs template list --json
+node scripts/check-curated-templates.mjs
 pnpm run docs:build
+```
+
+Current verification:
+
+```bash
+node scripts/check-curated-templates.mjs
+node cli/scholarly.mjs template list --json
+node cli/scholarly.mjs init /private/tmp/scholarly-paper-talk --template paper-talk --force
+node cli/scholarly.mjs init /private/tmp/scholarly-defense --template thesis-defense --force
 ```
 
 **Acceptance Criteria:**

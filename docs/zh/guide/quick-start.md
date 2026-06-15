@@ -24,10 +24,25 @@ npx -y --package slidev-theme-scholarly sts init my-talk
 npx -y --package slidev-theme-scholarly sch template list
 ```
 
+内置学术工作流模板：
+
+| 模板 | 适用场景 |
+|------|----------|
+| `basic` | 最小英文起步模板 |
+| `academic` | 带 BibTeX 的通用学术演示 |
+| `paper-talk` | 论文报告：摘要、方法、结果与参考文献 |
+| `seminar` | 学术研讨：议程、相关工作、方法与讨论 |
+| `thesis-defense` | 学位答辩：实验、局限、答辩问题与附录索引 |
+| `reading-group` | 读书会：论文批判与小组讨论 |
+| `conference-lightning` | 短会报告：聚焦一个核心结果 |
+| `zh` | 最小中文起步模板 |
+
 指定模板：
 
 ```bash
 npx -y --package slidev-theme-scholarly sch init my-talk --template academic
+npx -y --package slidev-theme-scholarly sch init paper-session --template paper-talk
+npx -y --package slidev-theme-scholarly sch init defense --template thesis-defense
 ```
 
 常用 CLI 命令：

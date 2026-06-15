@@ -24,10 +24,25 @@ Available templates:
 npx -y --package slidev-theme-scholarly sch template list
 ```
 
+Curated academic workflows:
+
+| Template | Best for |
+|----------|----------|
+| `basic` | Minimal English starter |
+| `academic` | General academic deck with BibTeX |
+| `paper-talk` | Paper presentations with summary, method, results, and references |
+| `seminar` | Research seminars with agenda, related work, method, and discussion |
+| `thesis-defense` | Defense decks with experiments, limitations, Q&A, and appendix map |
+| `reading-group` | Paper critique and group discussion |
+| `conference-lightning` | Short conference talks focused on one result |
+| `zh` | Minimal Chinese starter |
+
 Use a specific template:
 
 ```bash
 npx -y --package slidev-theme-scholarly sch init my-talk --template academic
+npx -y --package slidev-theme-scholarly sch init paper-session --template paper-talk
+npx -y --package slidev-theme-scholarly sch init defense --template thesis-defense
 ```
 
 Useful CLI commands:

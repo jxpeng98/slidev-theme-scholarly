@@ -21,6 +21,21 @@ const TEMPLATE_META = {
   academic: {
     description: 'Academic deck with BibTeX citations',
   },
+  'paper-talk': {
+    description: 'Paper presentation with summary, method, results, and references',
+  },
+  seminar: {
+    description: 'Research seminar deck with agenda, related work, method, and discussion',
+  },
+  'thesis-defense': {
+    description: 'Thesis defense deck with experiments, limitations, Q&A, and appendix map',
+  },
+  'reading-group': {
+    description: 'Reading group deck for paper critique and discussion',
+  },
+  'conference-lightning': {
+    description: 'Short conference talk focused on one claim and supporting evidence',
+  },
   zh: {
     description: 'Chinese starter deck',
   },
@@ -30,6 +45,12 @@ const TEMPLATE_ALIAS = {
   default: 'basic',
   en: 'basic',
   english: 'basic',
+  paper: 'paper-talk',
+  talk: 'paper-talk',
+  defense: 'thesis-defense',
+  thesis: 'thesis-defense',
+  reading: 'reading-group',
+  lightning: 'conference-lightning',
   cn: 'zh',
   chinese: 'zh',
 }
@@ -173,7 +194,7 @@ function printInitHelp() {
   ${cliName} init [dir] [--template <name>] [--force]
 
 Options:
-  -t, --template <name>  Template name (basic, academic, zh)
+  -t, --template <name>  Template name (basic, academic, paper-talk, seminar, thesis-defense, reading-group, conference-lightning, zh)
   -f, --force            Allow writing into non-empty directory
   -h, --help             Show help
 `)
