@@ -303,7 +303,7 @@ Notes:
 
 function printDoctorHelp() {
   console.log(`Usage:
-  ${cliName} doctor
+  ${cliName} doctor [--json]
 
 Checks:
   - Node.js version (must be >= 20)
@@ -311,7 +311,12 @@ Checks:
   - Slidev availability
   - Local project files (slides.md, package.json)
   - Theme dependency presence
+  - themeConfig values
   - Citation setup, bibliography file, unresolved keys, and references slide
+  - Playwright browser availability when export scripts are configured
+
+Options:
+  --json      Output structured diagnostics for automation
 `)
 }
 
@@ -440,6 +445,28 @@ function parseListArgs(args, helpPrinter) {
     }
 
     result.subcommand = arg
+  }
+
+  return result
+}
+
+function parseDoctorArgs(args) {
+  const result = {
+    json: false,
+  }
+
+  for (const arg of args) {
+    if (arg === '-h' || arg === '--help') {
+      printDoctorHelp()
+      process.exit(0)
+    }
+
+    if (arg === '--json') {
+      result.json = true
+      continue
+    }
+
+    throw new Error(`Unknown doctor option: ${arg}`)
   }
 
   return result
@@ -1379,11 +1406,6 @@ function hasThemeDependency(pkg) {
   return depGroups.some(group => Boolean(pkg[group] && pkg[group]['slidev-theme-scholarly']))
 }
 
-function printDoctorLine(label, ok, details) {
-  const status = ok ? 'OK' : 'WARN'
-  console.log(`- ${label}: [${status}] ${details}`)
-}
-
 function formatList(items, limit = 8) {
   if (items.length <= limit)
     return items.join(', ')
@@ -1391,55 +1413,287 @@ function formatList(items, limit = 8) {
   return `${items.slice(0, limit).join(', ')} (+${items.length - limit} more)`
 }
 
-function printCitationDoctorLines() {
+function createDoctorCheck(id, label, severity, summary, action, extra = {}) {
+  return {
+    id,
+    label,
+    severity,
+    summary,
+    action,
+    ...extra,
+  }
+}
+
+function collectCitationDoctorChecks() {
   const citation = analyzeCitationProject(process.cwd())
+  const checks = []
 
   if (!citation.hasSlides) {
-    printDoctorLine('Citation setup', true, 'skipped (slides.md missing)')
-    return
+    checks.push(createDoctorCheck(
+      'citation-setup',
+      'Citation setup',
+      'ok',
+      'skipped (slides.md missing)',
+      'Add citations after creating slides.md.',
+    ))
+    return checks
   }
 
   if (citation.citationKeys.length === 0) {
-    printDoctorLine('Citation keys', true, 'no citations found')
-    return
+    checks.push(createDoctorCheck(
+      'citation-keys',
+      'Citation keys',
+      'ok',
+      'no citations found',
+      'Add citations with @citekey when the deck needs a bibliography.',
+    ))
+    return checks
   }
 
   if (citation.missingSetup) {
-    printDoctorLine('Citation setup', false, 'citations found but no bibFile or references.bib')
-    printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
-    return
+    checks.push(createDoctorCheck(
+      'citation-setup',
+      'Citation setup',
+      'warn',
+      'citations found but no bibFile or references.bib',
+      'Add bibFile: ./references.bib to frontmatter or create references.bib next to slides.md.',
+    ))
+    checks.push(createDoctorCheck(
+      'references-slide',
+      'References slide',
+      citation.hasReferencesSlide ? 'ok' : 'warn',
+      citation.hasReferencesSlide ? 'found' : 'missing; add layout: references',
+      citation.hasReferencesSlide
+        ? 'Keep the references slide when citations are used.'
+        : 'Add a slide with layout: references.',
+    ))
+    return checks
   }
 
-  printDoctorLine(
+  checks.push(createDoctorCheck(
+    'citation-setup',
     'Citation setup',
-    true,
+    'ok',
     citation.bibFileSource === 'frontmatter'
       ? `bibFile configured: ${citation.bibFile}`
       : 'using default references.bib',
-  )
+    'Keep the bibliography file path valid.',
+  ))
 
   if (!citation.bibFileExists) {
-    printDoctorLine('Citation bibliography', false, `missing .bib file: ${citation.bibFile}`)
-    printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
-    return
+    checks.push(createDoctorCheck(
+      'citation-bibliography',
+      'Citation bibliography',
+      'warn',
+      `missing .bib file: ${citation.bibFile}`,
+      `Create ${citation.bibFile} or update bibFile in slides.md frontmatter.`,
+    ))
+    checks.push(createDoctorCheck(
+      'references-slide',
+      'References slide',
+      citation.hasReferencesSlide ? 'ok' : 'warn',
+      citation.hasReferencesSlide ? 'found' : 'missing; add layout: references',
+      citation.hasReferencesSlide
+        ? 'Keep the references slide when citations are used.'
+        : 'Add a slide with layout: references.',
+    ))
+    return checks
   }
 
   if (citation.duplicateKeys.length > 0) {
-    printDoctorLine('Citation bibliography', false, `duplicate BibTeX keys: ${formatList(citation.duplicateKeys)}`)
+    checks.push(createDoctorCheck(
+      'citation-bibliography',
+      'Citation bibliography',
+      'warn',
+      `duplicate BibTeX keys: ${formatList(citation.duplicateKeys)}`,
+      'Rename duplicate BibTeX keys so each entry has a unique cite key.',
+    ))
   } else {
-    printDoctorLine('Citation bibliography', true, `${citation.bibEntryCount} entries loaded from ${citation.bibFile}`)
+    checks.push(createDoctorCheck(
+      'citation-bibliography',
+      'Citation bibliography',
+      'ok',
+      `${citation.bibEntryCount} entries loaded from ${citation.bibFile}`,
+      'Keep references.bib in sync with slide citations.',
+    ))
   }
 
   if (citation.unresolvedKeys.length > 0) {
-    printDoctorLine('Citation keys', false, `unresolved citation keys: ${formatList(citation.unresolvedKeys)}`)
+    checks.push(createDoctorCheck(
+      'citation-keys',
+      'Citation keys',
+      'warn',
+      `unresolved citation keys: ${formatList(citation.unresolvedKeys)}`,
+      'Add missing BibTeX entries or correct the @citekey values in slides.md.',
+    ))
   } else {
-    printDoctorLine('Citation keys', true, `${citation.citationKeys.length} citation keys resolved`)
+    checks.push(createDoctorCheck(
+      'citation-keys',
+      'Citation keys',
+      'ok',
+      `${citation.citationKeys.length} citation keys resolved`,
+      'Keep citation keys aligned with the bibliography.',
+    ))
   }
 
-  printDoctorLine('References slide', citation.hasReferencesSlide, citation.hasReferencesSlide ? 'found' : 'missing; add layout: references')
+  checks.push(createDoctorCheck(
+    'references-slide',
+    'References slide',
+    citation.hasReferencesSlide ? 'ok' : 'warn',
+    citation.hasReferencesSlide ? 'found' : 'missing; add layout: references',
+    citation.hasReferencesSlide
+      ? 'Keep the references slide when citations are used.'
+      : 'Add a slide with layout: references.',
+  ))
+
+  return checks
 }
 
-function runDoctor() {
+function stripYamlValue(raw) {
+  return String(raw || '')
+    .split('#')[0]
+    .trim()
+    .replace(/^['"]|['"]$/g, '')
+}
+
+function extractThemeConfigValuesFromSlides() {
+  const slidesPath = path.resolve(process.cwd(), 'slides.md')
+  if (!fs.existsSync(slidesPath)) {
+    return {}
+  }
+
+  const source = fs.readFileSync(slidesPath, 'utf8')
+  const fm = extractFrontmatter(source)
+  if (!fm) {
+    return {}
+  }
+
+  const lines = fm.body.split(/\r?\n/)
+  const range = findNestedBlockRange(lines, 'themeConfig')
+  if (range.start < 0) {
+    return {}
+  }
+
+  const values = {}
+  for (let i = range.start + 1; i < range.end; i += 1) {
+    const line = lines[i]
+    if (countIndent(line) <= range.indent)
+      continue
+
+    const match = line.match(/^\s*(colorTheme|fontTheme|colorMode|sectionMode):\s*(.+?)\s*$/)
+    if (match)
+      values[match[1]] = stripYamlValue(match[2])
+  }
+
+  return values
+}
+
+function collectThemeConfigDoctorChecks(hasSlides) {
+  if (!hasSlides) {
+    return [
+      createDoctorCheck(
+        'theme-config',
+        'themeConfig',
+        'ok',
+        'skipped (slides.md missing)',
+        'Create slides.md before validating themeConfig.',
+      ),
+    ]
+  }
+
+  const values = extractThemeConfigValuesFromSlides()
+  const checks = []
+  const validators = [
+    {
+      key: 'colorTheme',
+      id: 'theme-config-color-theme',
+      label: 'themeConfig.colorTheme',
+      valid: COLOR_THEMES.map(item => item.id),
+    },
+    {
+      key: 'fontTheme',
+      id: 'theme-config-font-theme',
+      label: 'themeConfig.fontTheme',
+      valid: FONT_THEMES.map(item => item.id),
+    },
+    {
+      key: 'colorMode',
+      id: 'theme-config-color-mode',
+      label: 'themeConfig.colorMode',
+      valid: ['light', 'dark'],
+    },
+    {
+      key: 'sectionMode',
+      id: 'theme-config-section-mode',
+      label: 'themeConfig.sectionMode',
+      valid: ['light', 'dark'],
+    },
+  ]
+
+  for (const validator of validators) {
+    const value = values[validator.key]
+    if (!value)
+      continue
+
+    if (validator.valid.includes(value)) {
+      checks.push(createDoctorCheck(
+        validator.id,
+        validator.label,
+        'ok',
+        value,
+        `Keep ${validator.label} set to a supported value.`,
+      ))
+      continue
+    }
+
+    checks.push(createDoctorCheck(
+      validator.id,
+      validator.label,
+      'warn',
+      `unknown value: ${value}`,
+      `Use one of: ${formatList(validator.valid, 12)}.`,
+      { value, validValues: validator.valid },
+    ))
+  }
+
+  if (checks.length === 0) {
+    checks.push(createDoctorCheck(
+      'theme-config',
+      'themeConfig',
+      'ok',
+      'no explicit themeConfig values to validate',
+      'Optionally set themeConfig.colorTheme, fontTheme, colorMode, or sectionMode.',
+    ))
+  }
+
+  return checks
+}
+
+function hasExportWorkflow(pkg) {
+  if (!pkg || !pkg.scripts)
+    return false
+
+  return Object.entries(pkg.scripts).some(([name, command]) => {
+    const text = `${name} ${command}`
+    return /\b(export|screenshot|visual|theme:matrix)\b/.test(text)
+  })
+}
+
+function checkPlaywrightBrowserAvailable() {
+  const script = `
+    import fs from 'node:fs'
+    import { chromium } from 'playwright-chromium'
+    process.exit(fs.existsSync(chromium.executablePath()) ? 0 : 1)
+  `
+  const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], {
+    cwd: rootDir,
+    stdio: 'ignore',
+  })
+
+  return result.status === 0
+}
+
+function collectDoctorChecks() {
   const nodeVersion = process.versions.node
   const nodeMajor = Number(nodeVersion.split('.')[0] || 0)
   const nodeOk = Number.isFinite(nodeMajor) && nodeMajor >= 20
@@ -1450,32 +1704,116 @@ function runDoctor() {
   const hasSlides = fs.existsSync(path.resolve(process.cwd(), 'slides.md'))
   const isThemeRepo = Boolean(localPkg && localPkg.name === 'slidev-theme-scholarly')
   const hasTheme = isThemeRepo || hasThemeDependency(localPkg)
+  const checks = [
+    createDoctorCheck(
+      'node-version',
+      'Node.js',
+      nodeOk ? 'ok' : 'error',
+      `v${nodeVersion} (required >= 20)`,
+      'Use Node.js 20 or newer.',
+      { version: nodeVersion, required: '>=20' },
+    ),
+    createDoctorCheck(
+      'pnpm',
+      'pnpm',
+      pnpmCheck.ok ? 'ok' : 'warn',
+      pnpmCheck.ok ? pnpmCheck.version : 'not found',
+      pnpmCheck.ok ? 'Use pnpm install and pnpm run dev for generated projects.' : 'Install pnpm or use npm if your project is configured for npm.',
+    ),
+    createDoctorCheck(
+      'npm',
+      'npm',
+      npmCheck.ok ? 'ok' : 'warn',
+      npmCheck.ok ? npmCheck.version : 'not found',
+      npmCheck.ok ? 'npm is available for fallback commands.' : 'Install npm with Node.js.',
+    ),
+    createDoctorCheck(
+      'slidev-cli',
+      'Slidev CLI',
+      slidevCheck.ok ? 'ok' : 'warn',
+      slidevCheck.ok ? slidevCheck.version : 'not found in PATH (you can still use npx slidev)',
+      slidevCheck.ok ? 'Use slidev directly or through package scripts.' : 'Install @slidev/cli locally or run with npx slidev.',
+    ),
+    createDoctorCheck(
+      'slides-file',
+      'slides.md',
+      hasSlides ? 'ok' : 'warn',
+      hasSlides ? 'found' : 'missing in current directory',
+      hasSlides ? 'Open slides.md to edit the deck.' : 'Create slides.md or run sch init to generate a Scholarly deck.',
+    ),
+    createDoctorCheck(
+      'theme-dependency',
+      'slidev-theme-scholarly dependency',
+      hasTheme ? 'ok' : 'warn',
+      isThemeRepo
+        ? 'current repository is slidev-theme-scholarly'
+        : hasTheme
+          ? 'found in package.json'
+          : 'not found in package.json',
+      hasTheme ? 'Add slidev-theme-scholarly only for consumer projects.' : 'Run npm i -D slidev-theme-scholarly or pnpm add -D slidev-theme-scholarly.',
+    ),
+  ]
 
-  console.log('Scholarly Doctor')
-  printDoctorLine('Node.js', nodeOk, `v${nodeVersion} (required >= 20)`)
-  printDoctorLine('pnpm', pnpmCheck.ok, pnpmCheck.ok ? pnpmCheck.version : 'not found')
-  printDoctorLine('npm', npmCheck.ok, npmCheck.ok ? npmCheck.version : 'not found')
-  printDoctorLine(
-    'Slidev CLI',
-    slidevCheck.ok,
-    slidevCheck.ok ? slidevCheck.version : 'not found in PATH (you can still use npx slidev)',
-  )
-  printDoctorLine('slides.md', hasSlides, hasSlides ? 'found' : 'missing in current directory')
-  printDoctorLine(
-    'slidev-theme-scholarly dependency',
-    hasTheme,
-    isThemeRepo
-      ? 'current repository is slidev-theme-scholarly'
-      : hasTheme
-        ? 'found in package.json'
-        : 'not found in package.json',
-  )
-  printCitationDoctorLines()
+  checks.push(...collectThemeConfigDoctorChecks(hasSlides))
+  checks.push(...collectCitationDoctorChecks())
 
-  if (!nodeOk) {
-    console.log('\nAction required: upgrade Node.js to version 20 or newer.')
-    process.exit(1)
+  if (hasExportWorkflow(localPkg)) {
+    const hasBrowser = checkPlaywrightBrowserAvailable()
+    checks.push(createDoctorCheck(
+      'playwright-browser',
+      'Playwright browser',
+      hasBrowser ? 'ok' : 'warn',
+      hasBrowser ? 'Chromium available for export workflows' : 'Chromium not found for export workflows',
+      hasBrowser ? 'Use export and screenshot workflows normally.' : 'Run pnpm exec playwright install chromium before exporting PNG/PDF screenshots.',
+    ))
   }
+
+  return {
+    cwd: process.cwd(),
+    cliVersion: packageJson.version,
+    package: {
+      name: localPkg?.name || '',
+      hasPackageJson: Boolean(localPkg),
+      isThemeRepo,
+      hasThemeDependency: hasTheme,
+    },
+    checks,
+  }
+}
+
+function summarizeDoctorStatus(checks) {
+  if (checks.some(check => check.severity === 'error'))
+    return 'error'
+  if (checks.some(check => check.severity === 'warn'))
+    return 'warn'
+  return 'ok'
+}
+
+function renderDoctorJson(report) {
+  const status = summarizeDoctorStatus(report.checks)
+  console.log(JSON.stringify({ ...report, status }, null, 2))
+}
+
+function renderDoctorText(report) {
+  console.log('Scholarly Doctor')
+  for (const check of report.checks) {
+    console.log(`- ${check.label}: [${check.severity.toUpperCase()}] ${check.summary}`)
+    if (check.severity !== 'ok' && check.action)
+      console.log(`  Action: ${check.action}`)
+  }
+}
+
+function runDoctor(options = {}) {
+  const report = collectDoctorChecks()
+  const status = summarizeDoctorStatus(report.checks)
+
+  if (options.json)
+    renderDoctorJson(report)
+  else
+    renderDoctorText(report)
+
+  if (status === 'error')
+    process.exit(1)
 }
 
 function main() {
@@ -1643,11 +1981,8 @@ function main() {
   }
 
   if (command === 'doctor') {
-    if (args[1] === '-h' || args[1] === '--help') {
-      printDoctorHelp()
-      return
-    }
-    runDoctor()
+    const options = parseDoctorArgs(args.slice(1))
+    runDoctor(options)
     return
   }
 

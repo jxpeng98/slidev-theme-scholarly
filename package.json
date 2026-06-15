@@ -62,6 +62,7 @@
     "check:citations": "node scripts/check-citation-workflow.mjs",
     "check:vscode-citations": "node scripts/check-vscode-citation-diagnostics.mjs",
     "check:templates": "node scripts/check-curated-templates.mjs",
+    "check:doctor": "node scripts/check-doctor-actionable.mjs",
     "check:visual": "SCHOLARLY_FULL_VISUAL=1 node scripts/release-ready.mjs",
     "dev": "node scripts/slidev.mjs dev --open",
     "build": "node scripts/slidev.mjs build",

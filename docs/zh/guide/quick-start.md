@@ -72,6 +72,19 @@ npx sch workflow apply paper --file slides.md
 
 # 环境检查（包含 Scholarly 检查）
 npx sch doctor
+npx sch doctor --json
+```
+
+`sch doctor` 会用 `OK`、`WARN`、`ERROR` 报告检查结果，并给出可执行的下一步。
+如果要给 CI、脚本或编辑器集成消费同一份诊断，可以使用 `--json`。
+
+warning 示例：
+
+```text
+- themeConfig.colorTheme: [WARN] unknown value: mystery-blue
+  Action: Use one of: classic-blue, oxford-burgundy, cambridge-green...
+- Citation setup: [WARN] citations found but no bibFile or references.bib
+  Action: Add bibFile: ./references.bib to frontmatter or create references.bib next to slides.md.
 ```
 
 ## 第二步：安装依赖并启动

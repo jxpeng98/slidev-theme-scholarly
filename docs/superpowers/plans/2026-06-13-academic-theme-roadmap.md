@@ -45,8 +45,9 @@
 | P1.2 Evidence components | Complete | Eight evidence components added; `pnpm run check` and `pnpm run export:component-screenshots` pass with 17 component PNGs |
 | P1.3 Citation workflow | Complete | CLI doctor and VS Code diagnostics check citation setup, bibliography files, duplicate/unresolved keys, and references slides; `pnpm run check:vscode-citations` and `pnpm run check` pass |
 | P2.1 Curated deck templates | Complete | Five workflow templates added; `node scripts/check-curated-templates.mjs` validates list metadata, aliases, init output, required layouts, and citation setup |
+| P2.2 Actionable CLI doctor | Complete | `node scripts/check-doctor-actionable.mjs` validates structured severities, `--json`, themeConfig warnings, citation actions, and automation-ready output |
 
-Current decision: P0, P1.1, P1.2, P1.3, and P2.1 are complete. Continue with P2.2 broader doctor JSON/actionability or P2.3 VS Code metadata/preview synchronization.
+Current decision: P0, P1.1, P1.2, P1.3, P2.1, and P2.2 are complete. Continue with P2.3 VS Code metadata/preview synchronization or P2.4 documentation information architecture.
 
 ---
 
@@ -556,13 +557,21 @@ feat(cli): add curated academic deck templates
 
 **Steps:**
 
-- [ ] Factor doctor checks into small pure functions inside `cli/scholarly.mjs` or `cli/doctor.mjs`.
-- [ ] Return consistent severity: `ok`, `warn`, `error`.
-- [ ] Add `--json` output for automated tooling.
-- [ ] Add docs with example failure output.
-- [ ] Run:
+- [x] Factor doctor checks into small pure functions inside `cli/scholarly.mjs` or `cli/doctor.mjs`.
+- [x] Return consistent severity: `ok`, `warn`, `error`.
+- [x] Add `--json` output for automated tooling.
+- [x] Add docs with example failure output.
+- [x] Run:
 
 ```bash
+node cli/scholarly.mjs doctor
+node cli/scholarly.mjs doctor --json
+```
+
+Current verification:
+
+```bash
+node scripts/check-doctor-actionable.mjs
 node cli/scholarly.mjs doctor
 node cli/scholarly.mjs doctor --json
 ```

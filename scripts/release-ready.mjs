@@ -29,6 +29,10 @@ const steps = [
     command: ['node', 'scripts/check-curated-templates.mjs'],
   },
   {
+    name: 'CLI doctor actionability contract',
+    command: ['node', 'scripts/check-doctor-actionable.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

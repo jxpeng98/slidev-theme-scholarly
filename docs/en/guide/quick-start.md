@@ -72,6 +72,19 @@ npx sch workflow apply paper --file slides.md
 
 # environment checker (with Scholarly checks)
 npx sch doctor
+npx sch doctor --json
+```
+
+`sch doctor` reports `OK`, `WARN`, and `ERROR` checks with concrete next actions.
+Use `--json` when you want CI, scripts, or editor integrations to consume the same diagnostics.
+
+Example warning output:
+
+```text
+- themeConfig.colorTheme: [WARN] unknown value: mystery-blue
+  Action: Use one of: classic-blue, oxford-burgundy, cambridge-green...
+- Citation setup: [WARN] citations found but no bibFile or references.bib
+  Action: Add bibFile: ./references.bib to frontmatter or create references.bib next to slides.md.
 ```
 
 ## Step 2: Install dependencies and run

@@ -38,6 +38,35 @@ Before exporting PNGs, make sure the Playwright browser is available:
 pnpm exec playwright install chromium
 ```
 
+### CLI doctor diagnostics
+
+Use the Scholarly doctor before release or when a generated deck behaves unexpectedly:
+
+```bash
+node cli/scholarly.mjs doctor
+node cli/scholarly.mjs doctor --json
+```
+
+The text output is optimized for humans and includes concrete actions for warnings.
+The JSON output is intended for automation and editor integrations:
+
+```json
+{
+  "status": "warn",
+  "checks": [
+    {
+      "id": "theme-config-color-theme",
+      "label": "themeConfig.colorTheme",
+      "severity": "warn",
+      "summary": "unknown value: mystery-blue",
+      "action": "Use one of: classic-blue, oxford-burgundy, cambridge-green..."
+    }
+  ]
+}
+```
+
+Supported severities are `ok`, `warn`, and `error`. Only `error` should fail the command.
+
 ### 方法 1：使用 pnpm 脚本（推荐）
 
 ```bash
