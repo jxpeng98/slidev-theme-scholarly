@@ -57,6 +57,43 @@ Automatic bibliography generation from BibTeX files:
 - Auto-generates bibliography from all cited references
 - No additional configuration required!
 
+## 🧾 Paper Metadata Scaffolding
+
+Generate reading-group or paper-talk slides directly from a BibTeX key:
+
+```bash
+sch paper summary --bib references.bib --key sample2026
+```
+
+The command reads `title`, `author`, `year`, `doi`, `url`, and a venue field
+from BibTeX. Venue uses the first available field in this order: `journal`,
+`booktitle`, `publisher`, `school`, `institution`.
+
+Default output is a `paper-summary` slide:
+
+```markdown
+---
+layout: paper-summary
+paperTitle: Example Paper
+authors:
+  - Jane Doe
+year: 2026
+venue: Journal of Examples
+doi: 10.1234/example
+---
+```
+
+Use `--layout paper-card` when you want a `PaperCard` component instead:
+
+```bash
+sch paper summary --bib references.bib --key sample2026 --layout paper-card
+```
+
+Use `--json` for automation. JSON output contains `metadata`, `warnings`, and
+`markdown`. Missing `title`, `authors`, `year`, or `venue` fields are printed as
+warnings on stderr, but the generated Markdown still renders with safe fallback
+text.
+
 ## 🧩 Rich Components
 
 Built-in components for academic content:

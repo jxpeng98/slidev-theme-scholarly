@@ -1,5 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { parseBibEntries } from './bibtex.mjs'
+
+export { parseBibEntries } from './bibtex.mjs'
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---/
 const PROTECTED_BLOCKS_RE = /```[\s\S]*?```|`[^`]*`|<!--[\s\S]*?-->/g
@@ -79,72 +82,6 @@ export function collectCitationReferences(content) {
   }
 
   return references
-}
-
-export function parseBibEntries(content) {
-  const entries = []
-  const len = content.length
-  let i = 0
-
-  const isWhitespace = ch => /\s/.test(ch)
-  const skipWhitespace = () => {
-    while (i < len && isWhitespace(content[i])) i += 1
-  }
-  const readWord = () => {
-    const start = i
-    while (i < len && /[A-Za-z0-9_-]/.test(content[i])) i += 1
-    return content.slice(start, i)
-  }
-  const readUntil = stopChars => {
-    const start = i
-    while (i < len && !stopChars.has(content[i])) i += 1
-    return content.slice(start, i)
-  }
-  const skipEnclosedBlock = (open, close) => {
-    let depth = 1
-    while (i < len) {
-      const ch = content[i]
-      if (ch === open) depth += 1
-      else if (ch === close) depth -= 1
-      i += 1
-      if (depth === 0) break
-    }
-  }
-
-  while (i < len) {
-    const at = content.indexOf('@', i)
-    if (at === -1) break
-    i = at + 1
-
-    skipWhitespace()
-    const type = readWord().toLowerCase()
-    if (!type) {
-      i += 1
-      continue
-    }
-
-    skipWhitespace()
-    const open = content[i]
-    if (open !== '{' && open !== '(')
-      continue
-
-    const close = open === '{' ? '}' : ')'
-    i += 1
-
-    if (type === 'comment' || type === 'preamble' || type === 'string') {
-      skipEnclosedBlock(open, close)
-      continue
-    }
-
-    skipWhitespace()
-    const key = readUntil(new Set([',', close])).trim()
-    if (key)
-      entries.push({ key, type })
-
-    skipEnclosedBlock(open, close)
-  }
-
-  return entries
 }
 
 export function findDuplicateBibKeys(entries) {

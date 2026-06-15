@@ -21,6 +21,10 @@ const steps = [
     command: ['node', 'scripts/check-citation-workflow.mjs'],
   },
   {
+    name: 'Paper metadata and BibTeX contract',
+    command: ['node', 'scripts/check-paper-metadata.mjs'],
+  },
+  {
     name: 'VS Code citation diagnostics contract',
     command: ['node', 'scripts/check-vscode-citation-diagnostics.mjs'],
   },

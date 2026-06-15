@@ -57,6 +57,42 @@ title: 核心特性
 - 自动从所有引用生成参考文献列表
 - 无需额外配置！
 
+## 🧾 论文元数据脚手架
+
+可以直接从 BibTeX key 生成 reading group 或 paper-talk 幻灯片：
+
+```bash
+sch paper summary --bib references.bib --key sample2026
+```
+
+命令会读取 BibTeX 中的 `title`、`author`、`year`、`doi`、`url` 和 venue
+字段。venue 按以下优先级选择第一个可用字段：`journal`、`booktitle`、
+`publisher`、`school`、`institution`。
+
+默认输出是 `paper-summary` 布局：
+
+```markdown
+---
+layout: paper-summary
+paperTitle: Example Paper
+authors:
+  - Jane Doe
+year: 2026
+venue: Journal of Examples
+doi: 10.1234/example
+---
+```
+
+如果需要组件片段，可以使用 `--layout paper-card` 生成 `PaperCard`：
+
+```bash
+sch paper summary --bib references.bib --key sample2026 --layout paper-card
+```
+
+自动化场景可以加 `--json`。JSON 输出包含 `metadata`、`warnings` 和
+`markdown`。缺少 `title`、`authors`、`year` 或 `venue` 时，命令会把
+warnings 写到 stderr，但仍会生成可渲染的 Markdown fallback。
+
 ## 🧩 丰富的组件
 
 内置学术内容组件：

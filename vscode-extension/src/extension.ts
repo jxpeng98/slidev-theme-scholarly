@@ -10,7 +10,8 @@ import {
   runCliAction,
   openCliActionMenu,
   insertInternalAnchor,
-  insertAnchorReference
+  insertAnchorReference,
+  insertPaperSummary
 } from './commands';
 import { AnchorCompletionProvider, BibCompletionProvider, BibHoverProvider, BibTreeProvider } from './bibtex';
 import { registerCitationDiagnostics } from './citationDiagnostics';
@@ -186,6 +187,9 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand('slidev-scholarly.insertAnchorReference', () =>
       insertAnchorReference()
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.insertPaperSummary', (item) =>
+      insertPaperSummary(item)
     ),
     vscode.commands.registerCommand('slidev-scholarly.insertBibKey', (key: string) => {
       if (!key) {

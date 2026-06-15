@@ -6,14 +6,30 @@ import * as fs from 'fs';
 export interface BibEntry {
     key: string;
     type: string;
+    fields?: Record<string, string>;
     author?: string;
     title?: string;
     year?: string;
     journal?: string;
     booktitle?: string;
     publisher?: string;
+    school?: string;
+    institution?: string;
+    doi?: string;
+    url?: string;
     volume?: string;
     pages?: string;
+}
+
+export interface PaperMetadata {
+    key: string;
+    type: string;
+    title: string;
+    authors: string[];
+    year: string;
+    venue: string;
+    doi: string;
+    url: string;
 }
 
 export interface AnchorTarget {
@@ -28,6 +44,115 @@ const ANCHOR_SUGAR_RE = /^[ \t]*::anchor\{#([^\s}]+)\}[ \t]*$/gm;
 const HTML_ID_RE = /<([A-Za-z][\w:-]*)\b[^>]*\bid\s*=\s*["']([^"'<>]+)["'][^>]*>/gi;
 const NAMED_ANCHOR_RE = /<a\b[^>]*\bname\s*=\s*["']([^"'<>]+)["'][^>]*>/gi;
 const ANCHOR_COMPLETION_CONTEXT_RE = /(?:\]\(#|(?:href|to)\s*=\s*["']#)([\w-]*)$/;
+const VENUE_FIELDS = ['journal', 'booktitle', 'publisher', 'school', 'institution'];
+
+function normalizeWhitespace(value: string | undefined): string {
+    return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function cleanupBibValue(value: string | undefined): string {
+    return normalizeWhitespace(String(value || '').replace(/[{}]/g, ''));
+}
+
+function splitAuthors(value: string | undefined): string[] {
+    const text = cleanupBibValue(value);
+    if (!text)
+        return [];
+
+    return text.split(/\s+and\s+/i).map(author => {
+        const parts = author.split(',').map(part => normalizeWhitespace(part)).filter(Boolean);
+        if (parts.length >= 2)
+            return normalizeWhitespace(`${parts.slice(1).join(' ')} ${parts[0]}`);
+        return normalizeWhitespace(author);
+    }).filter(Boolean);
+}
+
+function escapeYamlScalar(value: string): string {
+    if (!value)
+        return '""';
+    if (/[:#\[\]{}&*!|>'"%@`]|^\s|\s$/.test(value))
+        return JSON.stringify(value);
+    return value;
+}
+
+function escapeVueAttribute(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+export function extractPaperMetadata(entry: BibEntry): PaperMetadata {
+    const fields = entry.fields || {};
+    const read = (name: string) => cleanupBibValue(fields[name] || (entry as any)[name]);
+    const venueField = VENUE_FIELDS.find(field => read(field));
+
+    return {
+        key: entry.key,
+        type: entry.type,
+        title: read('title'),
+        authors: splitAuthors(read('author') || read('editor')),
+        year: read('year') || read('date'),
+        venue: venueField ? read(venueField) : '',
+        doi: read('doi'),
+        url: read('url') || read('eprint')
+    };
+}
+
+export function renderPaperMarkdown(metadata: PaperMetadata, layout: 'paper-summary' | 'paper-card' = 'paper-summary'): string {
+    if (layout === 'paper-card') {
+        const attrs = [`title="${escapeVueAttribute(metadata.title || 'Untitled Paper')}"`];
+        if (metadata.authors.length)
+            attrs.push(`:authors='${JSON.stringify(metadata.authors).replace(/'/g, '&apos;')}'`);
+        if (metadata.venue)
+            attrs.push(`venue="${escapeVueAttribute(metadata.venue)}"`);
+        if (metadata.year)
+            attrs.push(`year="${escapeVueAttribute(metadata.year)}"`);
+        if (metadata.doi)
+            attrs.push(`doi="${escapeVueAttribute(metadata.doi)}"`);
+        if (metadata.url)
+            attrs.push(`url="${escapeVueAttribute(metadata.url)}"`);
+
+        return `<PaperCard\n  ${attrs.join('\n  ')}\n>\n\nAdd the main contribution or discussion notes.\n\n</PaperCard>\n`;
+    }
+
+    const lines = [
+        '---',
+        'layout: paper-summary',
+        `paperTitle: ${escapeYamlScalar(metadata.title || 'Untitled Paper')}`
+    ];
+
+    if (metadata.authors.length) {
+        lines.push('authors:');
+        for (const author of metadata.authors)
+            lines.push(`  - ${escapeYamlScalar(author)}`);
+    } else {
+        lines.push('authors: []');
+    }
+
+    lines.push(`year: ${escapeYamlScalar(metadata.year || '')}`);
+    lines.push(`venue: ${escapeYamlScalar(metadata.venue || '')}`);
+    if (metadata.doi)
+        lines.push(`doi: ${escapeYamlScalar(metadata.doi)}`);
+    if (metadata.url)
+        lines.push(`url: ${escapeYamlScalar(metadata.url)}`);
+    lines.push('---');
+    lines.push('');
+    lines.push('::problem');
+    lines.push('- Add the paper problem or research question.');
+    lines.push('::');
+    lines.push('');
+    lines.push('::method');
+    lines.push('- Add the method or study design.');
+    lines.push('::');
+    lines.push('');
+    lines.push('::finding');
+    lines.push('- Add the key result or takeaway.');
+    lines.push('::');
+
+    return `${lines.join('\n')}\n`;
+}
 
 function getAnchorSyntaxLabel(syntax: AnchorTarget['syntax']): string {
     switch (syntax) {
@@ -113,6 +238,7 @@ export function parseBibFile(content: string): BibEntry[] {
     const text = content;
     const len = text.length;
     let i = 0;
+    const macros = new Map<string, string>();
 
     const isWhitespace = (ch: string) => /\s/.test(ch);
     const skipWhitespace = () => {
@@ -176,7 +302,8 @@ export function parseBibFile(content: string): BibEntry[] {
         if (ch === '"') return parseQuotedValue();
 
         const raw = readUntil(new Set([',', '#', entryClose]));
-        return raw.trim();
+        const token = raw.trim();
+        return macros.get(token.toLowerCase()) || token;
     };
 
     const parseValue = (entryClose: string): string => {
@@ -188,6 +315,24 @@ export function parseBibFile(content: string): BibEntry[] {
             skipWhitespace();
         }
         return value.replace(/\s+/g, ' ').trim();
+    };
+
+    const parseStringMacro = (close: string) => {
+        skipWhitespace();
+        const name = readWord().toLowerCase();
+        skipWhitespace();
+        if (!name || text[i] !== '=') {
+            skipEnclosedBlock(close === '}' ? '{' : '(', close);
+            return;
+        }
+
+        i++;
+        const value = parseValue(close);
+        if (value)
+            macros.set(name, value);
+
+        while (i < len && text[i] !== close) i++;
+        if (text[i] === close) i++;
     };
 
     const skipEnclosedBlock = (open: string, close: string) => {
@@ -219,8 +364,13 @@ export function parseBibFile(content: string): BibEntry[] {
         const close = open === '{' ? '}' : ')';
         i++; // skip open
 
-        if (type === 'comment' || type === 'preamble' || type === 'string') {
+        if (type === 'comment' || type === 'preamble') {
             skipEnclosedBlock(open, close);
+            continue;
+        }
+
+        if (type === 'string') {
+            parseStringMacro(close);
             continue;
         }
 
@@ -229,7 +379,7 @@ export function parseBibFile(content: string): BibEntry[] {
 
         if (i < len && text[i] === ',') i++;
 
-        const entry: BibEntry = { key, type };
+        const entry: BibEntry = { key, type, fields: {} };
 
         while (i < len) {
             skipWhitespace();
@@ -260,6 +410,7 @@ export function parseBibFile(content: string): BibEntry[] {
             i++;
             const fieldValue = parseValue(close);
             if (fieldValue) {
+                entry.fields![fieldName] = fieldValue;
                 (entry as any)[fieldName] = fieldValue;
             }
         }

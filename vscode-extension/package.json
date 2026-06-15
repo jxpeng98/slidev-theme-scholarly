@@ -39,6 +39,7 @@
     "onCommand:slidev-scholarly.cliMenu",
     "onCommand:slidev-scholarly.toggleDevMode",
     "onCommand:slidev-scholarly.refreshReferences",
+    "onCommand:slidev-scholarly.insertPaperSummary",
     "onCommand:slidev-scholarly.insertInternalAnchor",
     "onCommand:slidev-scholarly.insertAnchorReference",
     "onCommand:slidev-scholarly.preview"
@@ -130,6 +131,11 @@
         "command": "slidev-scholarly.insertBibKey",
         "title": "Insert BibTeX Key",
         "icon": "$(add)"
+      },
+      {
+        "command": "slidev-scholarly.insertPaperSummary",
+        "title": "Insert Paper Summary",
+        "icon": "$(file-text)"
       },
       {
         "command": "slidev-scholarly.insertAnchorKey",
@@ -265,6 +271,11 @@
           "command": "slidev-scholarly.insertBibKey",
           "when": "view == scholarly-references && viewItem == referenceCitation",
           "group": "inline"
+        },
+        {
+          "command": "slidev-scholarly.insertPaperSummary",
+          "when": "view == scholarly-references && viewItem == referenceCitation",
+          "group": "inline@2"
         },
         {
           "command": "slidev-scholarly.insertAnchorKey",

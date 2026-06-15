@@ -6,6 +6,13 @@ import process from 'node:process'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
+import {
+  buildPaperMetadataWarnings,
+  extractPaperMetadata,
+  findBibEntry,
+  parseBibEntries,
+  renderPaperMarkdown,
+} from '../shared/bibtex.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -118,6 +125,7 @@ Usage:
   ${cliName} snippet append <name> [--file <slides.md>]
   ${cliName} workflow list [--json]
   ${cliName} workflow apply <name> [--file <slides.md>]
+  ${cliName} paper summary --bib <references.bib> --key <citekey> [--layout <paper-summary|paper-card>] [--json]
   ${cliName} dev [entry.md] [slidev options]
   ${cliName} build [entry.md] [slidev options]
   ${cliName} export [entry.md] [slidev options]
@@ -131,6 +139,7 @@ Commands:
   template list     Print available templates
   theme             List/apply Scholarly color and font themes
   workflow          Apply curated Scholarly slide structures
+  paper summary     Generate paper-summary or PaperCard Markdown from BibTeX
   layout list       List built-in Scholarly layouts
   component list    List built-in Scholarly components
   snippet           Show/append Scholarly snippet blocks
@@ -147,6 +156,7 @@ Examples:
   ${cliName} export slides.md --format pdf
   ${cliName} theme preset apply oxford --file slides.md
   ${cliName} workflow apply paper --file slides.md
+  ${cliName} paper summary --bib references.bib --key sample2026
   ${cliName} theme apply oxford-burgundy --font traditional
   ${cliName} snippet append theorem --file slides.md
   ${cliName} help init
@@ -281,6 +291,24 @@ Checks:
 
 Options:
   --json      Output structured diagnostics for automation
+`)
+}
+
+function printPaperHelp() {
+  console.log(`Usage:
+  ${cliName} paper summary --bib <references.bib> --key <citekey> [--layout <paper-summary|paper-card>] [--json]
+
+Options:
+  --bib <path>       BibTeX file to read
+  --key <citekey>    BibTeX entry key to render
+  --layout <layout>  Output layout (paper-summary, paper-card). Default: paper-summary
+  --json            Output metadata, warnings, and markdown as JSON
+  -h, --help        Show help
+
+Examples:
+  ${cliName} paper summary --bib references.bib --key sample2026
+  ${cliName} paper summary --bib references.bib --key sample2026 --layout paper-card
+  ${cliName} paper summary --bib references.bib --key sample2026 --json
 `)
 }
 
@@ -432,6 +460,97 @@ function parseDoctorArgs(args) {
 
     throw new Error(`Unknown doctor option: ${arg}`)
   }
+
+  return result
+}
+
+function parsePaperArgs(args) {
+  const subcommand = args[0] || ''
+
+  if (subcommand === '-h' || subcommand === '--help') {
+    printPaperHelp()
+    process.exit(0)
+  }
+
+  if (subcommand !== 'summary') {
+    throw new Error(`Unknown paper subcommand: ${subcommand || '(missing)'}`)
+  }
+
+  const result = {
+    subcommand,
+    bib: '',
+    key: '',
+    layout: 'paper-summary',
+    json: false,
+  }
+
+  for (let i = 1; i < args.length; i += 1) {
+    const arg = args[i]
+
+    if (arg === '-h' || arg === '--help') {
+      printPaperHelp()
+      process.exit(0)
+    }
+
+    if (arg === '--json') {
+      result.json = true
+      continue
+    }
+
+    if (arg === '--bib') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --bib.')
+      }
+      result.bib = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--bib=')) {
+      result.bib = arg.split('=', 2)[1] || ''
+      continue
+    }
+
+    if (arg === '--key') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --key.')
+      }
+      result.key = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--key=')) {
+      result.key = arg.split('=', 2)[1] || ''
+      continue
+    }
+
+    if (arg === '--layout') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --layout.')
+      }
+      result.layout = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--layout=')) {
+      result.layout = arg.split('=', 2)[1] || ''
+      continue
+    }
+
+    throw new Error(`Unknown paper option: ${arg}`)
+  }
+
+  if (!result.bib)
+    throw new Error('Missing required option --bib.')
+  if (!result.key)
+    throw new Error('Missing required option --key.')
+  if (result.layout !== 'paper-summary' && result.layout !== 'paper-card')
+    throw new Error('Invalid --layout value. Use "paper-summary" or "paper-card".')
 
   return result
 }
@@ -1281,6 +1400,38 @@ function applyWorkflow(name, file) {
   console.log(`Appended workflow "${workflow.id}" to ${targetFile}`)
 }
 
+function runPaperSummary(options) {
+  const bibPath = path.resolve(process.cwd(), options.bib)
+  if (!fs.existsSync(bibPath))
+    throw new Error(`BibTeX file not found: ${options.bib}`)
+
+  let entries
+  try {
+    entries = parseBibEntries(fs.readFileSync(bibPath, 'utf8'))
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    throw new Error(`Unable to read BibTeX file ${options.bib}: ${message}`)
+  }
+
+  const entry = findBibEntry(entries, options.key)
+  if (!entry)
+    throw new Error(`BibTeX key not found: ${options.key}`)
+
+  const metadata = extractPaperMetadata(entry)
+  const warnings = buildPaperMetadataWarnings(metadata)
+  const markdown = renderPaperMarkdown(metadata, { layout: options.layout })
+
+  for (const warning of warnings)
+    console.error(`Warning: ${warning}`)
+
+  if (options.json) {
+    console.log(JSON.stringify({ metadata, warnings, markdown }, null, 2))
+    return
+  }
+
+  console.log(markdown)
+}
+
 function resolveDefaultEntry() {
   const candidates = ['slides.md', 'slides/index.md', 'example.md']
   for (const candidate of candidates) {
@@ -1836,6 +1987,11 @@ function main() {
       return
     }
 
+    if (topic === 'paper') {
+      printPaperHelp()
+      return
+    }
+
     if (topic === 'dev' || topic === 'build' || topic === 'export') {
       printRunHelp(topic)
       return
@@ -1929,6 +2085,14 @@ function main() {
 
     if (options.subcommand === 'apply') {
       applyWorkflow(options.name, options.file)
+      return
+    }
+  }
+
+  if (command === 'paper') {
+    const options = parsePaperArgs(args.slice(1))
+    if (options.subcommand === 'summary') {
+      runPaperSummary(options)
       return
     }
   }

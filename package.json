@@ -64,6 +64,7 @@
     "check:layouts": "node scripts/check-academic-layout-pack.mjs",
     "check:components": "node scripts/check-academic-components.mjs",
     "check:citations": "node scripts/check-citation-workflow.mjs",
+    "check:paper-metadata": "node scripts/check-paper-metadata.mjs",
     "check:vscode-citations": "node scripts/check-vscode-citation-diagnostics.mjs",
     "check:vscode-sync": "node scripts/check-vscode-metadata-previews.mjs",
     "check:docs-workflows": "node scripts/check-docs-workflows.mjs",

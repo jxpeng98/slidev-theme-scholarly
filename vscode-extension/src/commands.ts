@@ -8,7 +8,14 @@ import {
   TEMPLATES,
   TEMPLATE_IDS
 } from './sharedData';
-import { parseAnchorTargets, type AnchorTarget } from './bibtex';
+import {
+  extractPaperMetadata,
+  loadBibEntries,
+  parseAnchorTargets,
+  renderPaperMarkdown,
+  type AnchorTarget,
+  type BibEntry
+} from './bibtex';
 
 type ThemeConfigUpdate = {
   colorTheme?: string
@@ -177,6 +184,65 @@ export async function insertAnchorReference(): Promise<void> {
     return;
 
   insertSnippet(`#${selected.anchor.id}`);
+}
+
+export async function insertPaperSummary(item?: { entry?: BibEntry } | BibEntry): Promise<void> {
+  const editor = getActiveMarkdownEditor();
+  if (!editor)
+    return;
+
+  const entries = await loadBibEntries(editor.document);
+  const providedEntry = item && 'key' in item ? item : item?.entry;
+  let entry = providedEntry && entries.find(candidate => candidate.key === providedEntry.key);
+
+  if (!entry) {
+    if (entries.length === 0) {
+      vscode.window.showInformationMessage('No BibTeX entries found for the active Markdown file');
+      return;
+    }
+
+    const selected = await vscode.window.showQuickPick(
+      entries.map(candidate => ({
+        label: candidate.key,
+        description: candidate.year || '',
+        detail: candidate.title || candidate.author || candidate.key,
+        entry: candidate
+      })),
+      {
+        placeHolder: 'Select a BibTeX entry to insert',
+        matchOnDescription: true,
+        matchOnDetail: true
+      }
+    );
+
+    if (!selected)
+      return;
+    entry = selected.entry;
+  }
+
+  const selectedLayout = await vscode.window.showQuickPick(
+    [
+      {
+        label: 'paper-summary',
+        description: 'Slide frontmatter layout',
+        value: 'paper-summary' as const
+      },
+      {
+        label: 'paper-card',
+        description: 'PaperCard component',
+        value: 'paper-card' as const
+      }
+    ],
+    {
+      placeHolder: 'Select Markdown output'
+    }
+  );
+
+  if (!selectedLayout)
+    return;
+
+  const metadata = extractPaperMetadata(entry);
+  insertSnippet(renderPaperMarkdown(metadata, selectedLayout.value));
 }
 
 export async function createNewPresentation(template?: string) {
