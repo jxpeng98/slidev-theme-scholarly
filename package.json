@@ -39,6 +39,10 @@
     ".": {
       "types": "./index.d.ts",
       "import": "./index.js"
+    },
+    "./utils/data": {
+      "types": "./utils/data.ts",
+      "import": "./utils/data.ts"
     }
   },
   "bin": {
@@ -65,6 +69,7 @@
     "check:docs-workflows": "node scripts/check-docs-workflows.mjs",
     "check:templates": "node scripts/check-curated-templates.mjs",
     "check:doctor": "node scripts/check-doctor-actionable.mjs",
+    "check:data": "node scripts/check-data-driven-results.mjs",
     "check:visual": "SCHOLARLY_FULL_VISUAL=1 node scripts/release-ready.mjs",
     "dev": "node scripts/slidev.mjs dev --open",
     "build": "node scripts/slidev.mjs build",

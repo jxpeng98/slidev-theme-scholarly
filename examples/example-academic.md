@@ -18,6 +18,22 @@ authors:
     email: mn.taylor@institute.edu
 ---
 
+<script setup>
+import { parseCsvTable, toMetricItems } from '../utils/data'
+
+const dataDrivenResultsCsv = `method,accuracy,latency,note
+Baseline,91.5,21 ms,Teacher tuned
+Ours,94.7,18 ms,Routing enabled
+Ours - routing,92.6,18 ms,Ablation`
+
+const dataDrivenResultRows = parseCsvTable(dataDrivenResultsCsv)
+const dataDrivenMetrics = toMetricItems([
+  { label: 'Accuracy', value: '94.7', unit: '%', delta: '+3.2', variant: 'success' },
+  { label: 'Latency', value: '18', unit: 'ms', delta: '-12%', variant: 'info' },
+  { label: 'Energy', value: '-28', unit: '%', delta: 'per sample', variant: 'primary' },
+])
+</script>
+
 # Efficient Deep Learning Models
 
 A Study on Reducing Computational Cost While Maintaining Accuracy
@@ -550,6 +566,34 @@ PURPOSE: Show compact evidence components for result-heavy academic slides
 - Throughput remains within the same deployment budget.
 
 </EvidenceBlock>
+
+---
+layout: default
+title: Data-Driven Results
+subtitle: Compact metrics and result table from small structured data
+---
+
+<!--
+SLIDE: Data-Driven Results
+LAYOUT: default
+COMPONENTS: <MetricGrid>, <ResultTable>
+PURPOSE: Show JSON-like metrics and CSV-backed result rows without charting dependencies
+-->
+
+<MetricGrid :columns="3" :metrics="dataDrivenMetrics" compact />
+
+<ResultTable
+  :rows="dataDrivenResultRows"
+  :columns="[
+    { key: 'method', label: 'Method' },
+    { key: 'accuracy', label: 'Accuracy', align: 'right' },
+    { key: 'latency', label: 'Latency', align: 'right' },
+    { key: 'note', label: 'Note' }
+  ]"
+  caption="Small result table parsed from CSV text; decks can also import './results.csv?raw'."
+  highlightColumn="accuracy"
+  compact
+/>
 
 ---
 layout: default

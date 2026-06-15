@@ -68,6 +68,56 @@ title: 核心特性
 - **Columns** - 灵活的多列布局
 - **Highlight** - 内联文本高亮
 
+## 📈 数据驱动结果页
+
+可以把小型结果摘要放在数据文件中，再交给现有学术组件渲染。Scholarly
+直接使用 Vite 和 Slidev 的 import 能力，不提供运行时 fetch loader，也没有
+charting dependency。
+
+### JSON import
+
+```ts
+import rows from './results.json'
+import { toMetricItems } from 'slidev-theme-scholarly/utils/data'
+
+const metrics = toMetricItems(rows)
+```
+
+```markdown
+<MetricGrid :metrics="metrics" compact />
+```
+
+### CSV `?raw` import
+
+```ts
+import csv from './results.csv?raw'
+import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
+
+const rows = parseCsvTable(csv)
+```
+
+```markdown
+<ResultTable
+  :rows="rows"
+  :columns="[
+    { key: 'method', label: 'Method' },
+    { key: 'accuracy', label: 'Accuracy', align: 'right' },
+    { key: 'latency', label: 'Latency', align: 'right' }
+  ]"
+  highlightColumn="accuracy"
+  compact
+/>
+```
+
+如果只是单页临时结果，static Markdown table 仍然是最轻量的 fallback：
+
+```markdown
+| Method | Accuracy | Latency |
+| --- | ---: | ---: |
+| Baseline | 91.5 | 21 ms |
+| Ours | **94.7** | 18 ms |
+```
+
 ## 📝 Markdown 语法糖
 
 使用简单的 Markdown 指令代替 HTML：

@@ -41,6 +41,10 @@ const steps = [
     command: ['node', 'scripts/check-docs-workflows.mjs'],
   },
   {
+    name: 'Data-driven result contract',
+    command: ['node', 'scripts/check-data-driven-results.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

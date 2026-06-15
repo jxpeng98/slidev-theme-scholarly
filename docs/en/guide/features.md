@@ -68,6 +68,56 @@ Built-in components for academic content:
 - **Columns** - Flexible multi-column layouts
 - **Highlight** - Inline text highlighting
 
+## 📈 Data-Driven Results
+
+Keep small result summaries in data files and render them with the existing
+academic components. Scholarly uses Vite and Slidev imports directly, so there is
+no runtime fetch loader and no charting dependency.
+
+### JSON import
+
+```ts
+import rows from './results.json'
+import { toMetricItems } from 'slidev-theme-scholarly/utils/data'
+
+const metrics = toMetricItems(rows)
+```
+
+```markdown
+<MetricGrid :metrics="metrics" compact />
+```
+
+### CSV `?raw` import
+
+```ts
+import csv from './results.csv?raw'
+import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
+
+const rows = parseCsvTable(csv)
+```
+
+```markdown
+<ResultTable
+  :rows="rows"
+  :columns="[
+    { key: 'method', label: 'Method' },
+    { key: 'accuracy', label: 'Accuracy', align: 'right' },
+    { key: 'latency', label: 'Latency', align: 'right' }
+  ]"
+  highlightColumn="accuracy"
+  compact
+/>
+```
+
+For one-off slides, a static Markdown table is still the best fallback:
+
+```markdown
+| Method | Accuracy | Latency |
+| --- | ---: | ---: |
+| Baseline | 91.5 | 21 ms |
+| Ours | **94.7** | 18 ms |
+```
+
 ## 📝 Markdown Syntax Sugar
 
 Use simple Markdown directives instead of HTML:
