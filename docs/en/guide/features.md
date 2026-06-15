@@ -155,6 +155,19 @@ For one-off slides, a static Markdown table is still the best fallback:
 | Ours | **94.7** | 18 ms |
 ```
 
+## 🧱 Base Theme and Addon Boundary
+
+Scholarly keeps no-network academic helpers in the base theme. Built-in
+citations, footnote previews, references slides, lightweight data imports, and
+BibTeX summary scaffolding remain included because they add no extra setup and
+do not introduce charting engines, runtime fetch loaders, or remote APIs.
+
+Features that require network access, large parsers, charting engines, large
+asset bundles, or broader integration APIs should ship as optional addons
+instead. The base theme stays the stable install path; optional packages such as
+`slidev-addon-scholarly-data` or `slidev-addon-scholarly-citations` should be
+installed explicitly only when a deck needs those heavier capabilities.
+
 ## 📝 Markdown Syntax Sugar
 
 Use simple Markdown directives instead of HTML:

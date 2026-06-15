@@ -32,7 +32,7 @@
 - Follow-up P0 visual verification repaired the local Playwright headless shell cache, completed the full theme matrix PNG export, and added footer-specific contrast tokens.
 - P1.1 academic layout work is complete with all eight planned layouts: `paper-summary`, `related-work-matrix`, `method-pipeline`, `result-highlight`, `experiment-grid`, `limitation`, `defense-question`, and `appendix-index`.
 
-## Status Snapshot: 2026-06-13
+## Status Snapshot: 2026-06-15
 
 | Area | Status | Evidence |
 |------|--------|----------|
@@ -48,8 +48,11 @@
 | P2.2 Actionable CLI doctor | Complete | `node scripts/check-doctor-actionable.mjs` validates structured severities, `--json`, themeConfig warnings, citation actions, and automation-ready output |
 | P2.3 VS Code metadata/previews | Complete | `node scripts/check-vscode-metadata-previews.mjs` validates shared template/layout/component metadata, preview manifest freshness, and extension drift checks |
 | P2.4 Documentation IA | Complete | `node scripts/check-docs-workflows.mjs` validates workflow guides, homepage/nav entry points, contrast guidance, and cross-links to layouts/components/templates |
+| P3.1 Data-driven result helpers | Complete | `node scripts/check-data-driven-results.mjs`, `node scripts/slidev.mjs build`, and docs build validate `utils/data.ts`, `ResultTable`, examples, and no charting dependency |
+| P3.2 Paper metadata and BibTeX utilities | Complete | `node scripts/check-paper-metadata.mjs`, `node scripts/check-citation-workflow.mjs`, and `npm --prefix vscode-extension run compile` validate parser, CLI output, warnings, and VS Code insertion |
+| P3.3 Addon boundary decision | Complete | `npm pack --dry-run --json --cache /private/tmp/scholarly-npm-cache` measured 103,935 bytes tarball / 495,176 bytes unpacked; feature docs describe base-vs-addon criteria |
 
-Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, P2.3, and P2.4 are complete. Continue with P3.1 data-driven slide patterns or P3.2 paper metadata and BibTeX utilities.
+Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, P2.3, P2.4, P3.1, P3.2, and P3.3 are complete. Keep dependency-free, no-network scholarly helpers in the base theme; split future charting, network lookup, large parsing, or broad integration APIs into optional addons.
 
 ---
 
@@ -693,15 +696,16 @@ docs: add academic workflow guides
 
 **Steps:**
 
-- [ ] Add lightweight CSV/JSON loading helpers only if Slidev/Vite patterns support them cleanly.
-- [ ] Support a narrow use case first: metrics and result tables.
-- [ ] Avoid bundling a charting dependency until there is a proven component API.
-- [ ] Add docs for static Markdown fallback.
-- [ ] Run:
+- [x] Add lightweight CSV/JSON loading helpers only if Slidev/Vite patterns support them cleanly.
+- [x] Support a narrow use case first: metrics and result tables.
+- [x] Avoid bundling a charting dependency until there is a proven component API.
+- [x] Add docs for static Markdown fallback.
+- [x] Run:
 
 ```bash
-pnpm run build
-pnpm run docs:build
+node scripts/check-data-driven-results.mjs
+node scripts/slidev.mjs build
+./node_modules/.bin/vitepress build docs
 ```
 
 **Acceptance Criteria:**
@@ -730,20 +734,21 @@ feat(data): add lightweight academic result helpers
 
 **Steps:**
 
-- [ ] Add a parser utility that extracts title, authors, year, venue, DOI, and URL from BibTeX entries.
-- [ ] Add CLI command:
+- [x] Add a parser utility that extracts title, authors, year, venue, DOI, and URL from BibTeX entries.
+- [x] Add CLI command:
 
 ```bash
 node cli/scholarly.mjs paper summary --bib references.bib --key sample2026
 ```
 
-- [ ] Output Markdown suitable for `PaperCard` and `paper-summary`.
-- [ ] Add VS Code command only after CLI output is stable.
-- [ ] Run:
+- [x] Output Markdown suitable for `PaperCard` and `paper-summary`.
+- [x] Add VS Code command only after CLI output is stable.
+- [x] Run:
 
 ```bash
-node cli/scholarly.mjs paper summary --bib references.bib --key sample2026
-pnpm run vscode:compile
+node scripts/check-paper-metadata.mjs
+node scripts/check-citation-workflow.mjs
+npm --prefix vscode-extension run compile
 ```
 
 **Acceptance Criteria:**
@@ -777,11 +782,11 @@ feat(cli): scaffold paper summaries from bibtex
 
 **Steps:**
 
-- [ ] Measure current package size.
-- [ ] List dependencies required by P3 features.
-- [ ] Keep no-network, style-only features in the theme.
-- [ ] Move heavy parsing or charting features into addons only if they add dependencies or broad API surface.
-- [ ] Document the decision in `docs/en/guide/features.md` and `docs/zh/guide/features.md`.
+- [x] Measure current package size.
+- [x] List dependencies required by P3 features.
+- [x] Keep no-network, style-only features in the theme.
+- [x] Move heavy parsing or charting features into addons only if they add dependencies or broad API surface.
+- [x] Document the decision in `docs/en/guide/features.md` and `docs/zh/guide/features.md`.
 
 **Acceptance Criteria:**
 

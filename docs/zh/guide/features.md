@@ -154,6 +154,17 @@ const rows = parseCsvTable(csv)
 | Ours | **94.7** | 18 ms |
 ```
 
+## 🧱 基础主题与 addon 边界
+
+Scholarly 会把无网络依赖的学术辅助能力保留在基础主题中。内置引用、注脚预览、
+参考文献页、轻量数据导入和 BibTeX 摘要脚手架仍随主题提供，因为它们不需要
+额外安装，也不会引入图表引擎、运行时 fetch loader 或远程 API。
+
+需要网络访问、大型解析器、图表引擎、大型资源包或更宽集成 API 的能力，未来应
+作为可选 addon 发布。基础主题保持稳定安装路径；例如
+`slidev-addon-scholarly-data` 或 `slidev-addon-scholarly-citations` 这类可选包，
+只应在 deck 需要更重能力时显式安装。
+
 ## 📝 Markdown 语法糖
 
 使用简单的 Markdown 指令代替 HTML：
