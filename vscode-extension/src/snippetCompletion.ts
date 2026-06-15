@@ -18,7 +18,7 @@ type SnippetDefinition = {
 
 const BIB_STYLES = ['apa', 'harvard1', 'vancouver', 'ieee', 'mla', 'chicago-author-date'];
 
-const COMPONENT_SNIPPETS: Array<{
+const LEGACY_COMPONENT_SNIPPETS: Array<{
   name: string;
   description: string;
   insertBody: string;
@@ -65,7 +65,7 @@ const COMPONENT_SNIPPETS: Array<{
     }
   ];
 
-const DIRECTIVE_SNIPPETS: Array<{
+const LEGACY_DIRECTIVE_SNIPPETS: Array<{
   name: string;
   description: string;
   insertBody: string;
@@ -107,6 +107,12 @@ const DIRECTIVE_SNIPPETS: Array<{
     }
   ];
 
+type SnippetCompletionDefinition = {
+  name: string;
+  description: string;
+  insertBody: string;
+};
+
 function toBodyString(body: string | string[]): string {
   return Array.isArray(body) ? body.join('\n') : body;
 }
@@ -147,6 +153,46 @@ function readSnippetDefinitions(filePath: string): SnippetDefinition[] {
   }
 }
 
+function createComponentCompletions(definitions: SnippetDefinition[]): SnippetCompletionDefinition[] {
+  const seen = new Set<string>();
+  const completions: SnippetCompletionDefinition[] = [];
+
+  for (const definition of definitions) {
+    const body = definition.body.trim();
+    const match = body.match(/^<([A-Z][A-Za-z0-9]*)\b/);
+    if (!match || seen.has(match[1])) continue;
+
+    seen.add(match[1]);
+    completions.push({
+      name: match[1],
+      description: definition.description,
+      insertBody: definition.body
+    });
+  }
+
+  return completions;
+}
+
+function createDirectiveCompletions(definitions: SnippetDefinition[]): SnippetCompletionDefinition[] {
+  const seen = new Set<string>();
+  const completions: SnippetCompletionDefinition[] = [];
+
+  for (const definition of definitions) {
+    const body = definition.body.trim();
+    const match = body.match(/^:::([a-z][a-z0-9-]*)\b/);
+    if (!match || seen.has(match[1])) continue;
+
+    seen.add(match[1]);
+    completions.push({
+      name: match[1],
+      description: definition.description,
+      insertBody: definition.body
+    });
+  }
+
+  return completions;
+}
+
 function asRange(position: vscode.Position, startCharacter: number): vscode.Range {
   return new vscode.Range(position.line, startCharacter, position.line, position.character);
 }
@@ -171,13 +217,19 @@ function createValueItems(
 
 export class ScholarlyCompletionProvider implements vscode.CompletionItemProvider {
   private readonly snippets: SnippetDefinition[];
+  private readonly componentCompletions: SnippetCompletionDefinition[];
+  private readonly directiveCompletions: SnippetCompletionDefinition[];
 
   constructor(extensionUri: vscode.Uri) {
     const snippetDir = path.join(extensionUri.fsPath, 'snippets');
+    const layoutDefinitions = readSnippetDefinitions(path.join(snippetDir, 'layouts.json'));
+    const componentDefinitions = readSnippetDefinitions(path.join(snippetDir, 'components.json'));
     this.snippets = [
-      ...readSnippetDefinitions(path.join(snippetDir, 'layouts.json')),
-      ...readSnippetDefinitions(path.join(snippetDir, 'components.json'))
+      ...layoutDefinitions,
+      ...componentDefinitions
     ];
+    this.componentCompletions = createComponentCompletions(componentDefinitions);
+    this.directiveCompletions = createDirectiveCompletions(componentDefinitions);
   }
 
   provideCompletionItems(
@@ -241,7 +293,7 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
       const partial = componentMatch[1] ?? '';
       const normalized = partial.toLowerCase();
       const range = asRange(position, linePrefix.length - partial.length);
-      for (const component of COMPONENT_SNIPPETS) {
+      for (const component of this.componentCompletions) {
         if (!component.name.toLowerCase().startsWith(normalized)) continue;
 
         const item = new vscode.CompletionItem(component.name, vscode.CompletionItemKind.Class);
@@ -260,7 +312,7 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
       const partial = directiveMatch[1] ?? '';
       const normalized = partial.toLowerCase();
       const range = asRange(position, linePrefix.length - partial.length);
-      for (const directive of DIRECTIVE_SNIPPETS) {
+      for (const directive of this.directiveCompletions) {
         if (!directive.name.startsWith(normalized)) continue;
 
         const item = new vscode.CompletionItem(directive.name, vscode.CompletionItemKind.Snippet);

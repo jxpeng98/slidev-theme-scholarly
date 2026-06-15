@@ -4,7 +4,9 @@ import {
   FONT_THEMES,
   COLOR_MODES,
   THEME_PRESETS,
-  THEME_PRESET_IDS
+  THEME_PRESET_IDS,
+  TEMPLATES,
+  TEMPLATE_IDS
 } from './sharedData';
 import { parseAnchorTargets, type AnchorTarget } from './bibtex';
 
@@ -40,7 +42,6 @@ type ThemePreset = {
 }
 
 const CLI_COMMAND_PREFIX = ['npx', '-y', '--package', 'slidev-theme-scholarly', 'sch'];
-const CLI_TEMPLATES = ['basic', 'academic', 'zh'] as const;
 const CLI_SNIPPETS = ['theorem', 'block', 'cite', 'cover', 'section', 'methodology', 'results', 'references'] as const;
 const CLI_WORKFLOWS = ['paper', 'seminar', 'quick'] as const;
 let scholarlyCliTerminal: vscode.Terminal | undefined;
@@ -179,6 +180,11 @@ export async function insertAnchorReference(): Promise<void> {
 }
 
 export async function createNewPresentation(template?: string) {
+  if (template && TEMPLATE_IDS.includes(template)) {
+    await createPresentationFromCliTemplate(template);
+    return;
+  }
+
   const workspaceFolders = vscode.workspace.workspaceFolders;
 
   const fileName = await vscode.window.showInputBox({
@@ -217,6 +223,22 @@ export async function createNewPresentation(template?: string) {
     const message = error instanceof Error ? error.message : String(error);
     vscode.window.showErrorMessage(`Failed to create presentation: ${message}`);
   }
+}
+
+async function createPresentationFromCliTemplate(template: string): Promise<void> {
+  const meta = TEMPLATES.find(item => item.id === template);
+  const targetDir = await vscode.window.showInputBox({
+    prompt: `Target directory for ${meta?.label ?? template}`,
+    value: template === 'basic' ? 'my-talk' : template,
+    validateInput: (value) => {
+      const trimmed = value.trim();
+      if (!trimmed) return 'Directory cannot be empty';
+      return null;
+    }
+  });
+
+  if (!targetDir) return;
+  await runCliArgs(['init', targetDir, '--template', template], `init ${targetDir}`);
 }
 
 function getAcademicTemplate(): string {
@@ -522,10 +544,11 @@ async function runInitPresentationAction(): Promise<void> {
   if (!targetDir) return;
 
   const template = await vscode.window.showQuickPick(
-    CLI_TEMPLATES.map(t => ({
-      label: t,
-      description: `scholarly template: ${t}`,
-      value: t
+    TEMPLATES.map(t => ({
+      label: t.label,
+      description: t.id,
+      detail: t.description,
+      value: t.id
     })),
     {
       placeHolder: 'Select a template'

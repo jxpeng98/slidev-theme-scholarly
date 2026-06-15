@@ -25,6 +25,10 @@ const steps = [
     command: ['node', 'scripts/check-vscode-citation-diagnostics.mjs'],
   },
   {
+    name: 'VS Code metadata and preview sync contract',
+    command: ['node', 'scripts/check-vscode-metadata-previews.mjs'],
+  },
+  {
     name: 'Curated template contract',
     command: ['node', 'scripts/check-curated-templates.mjs'],
   },

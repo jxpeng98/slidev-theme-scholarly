@@ -46,8 +46,9 @@
 | P1.3 Citation workflow | Complete | CLI doctor and VS Code diagnostics check citation setup, bibliography files, duplicate/unresolved keys, and references slides; `pnpm run check:vscode-citations` and `pnpm run check` pass |
 | P2.1 Curated deck templates | Complete | Five workflow templates added; `node scripts/check-curated-templates.mjs` validates list metadata, aliases, init output, required layouts, and citation setup |
 | P2.2 Actionable CLI doctor | Complete | `node scripts/check-doctor-actionable.mjs` validates structured severities, `--json`, themeConfig warnings, citation actions, and automation-ready output |
+| P2.3 VS Code metadata/previews | Complete | `node scripts/check-vscode-metadata-previews.mjs` validates shared template/layout/component metadata, preview manifest freshness, and extension drift checks |
 
-Current decision: P0, P1.1, P1.2, P1.3, P2.1, and P2.2 are complete. Continue with P2.3 VS Code metadata/preview synchronization or P2.4 documentation information architecture.
+Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, and P2.3 are complete. Continue with P2.4 documentation information architecture or P3.1 data-driven slide patterns.
 
 ---
 
@@ -604,16 +605,18 @@ feat(cli): make scholarly doctor actionable
 
 **Steps:**
 
-- [ ] Ensure extension views read generated `vscode-extension/shared/*.json` rather than duplicating labels.
-- [ ] Add preview freshness checks comparing source image mtimes or hashes.
-- [ ] Add commands for new templates and P1 components.
-- [ ] Run:
+- [x] Ensure extension views read generated `vscode-extension/shared/*.json` rather than duplicating labels.
+- [x] Add preview freshness checks comparing source image mtimes or hashes.
+- [x] Add commands for new templates and P1 components.
+- [x] Run:
 
 ```bash
 node vscode-extension/scripts/sync-shared-data.mjs
 node vscode-extension/scripts/sync-snippets.mjs
 node vscode-extension/scripts/sync-previews.mjs
-pnpm run vscode:compile
+npm --prefix vscode-extension run compile
+node scripts/check-vscode-metadata-previews.mjs
+node vscode-extension/scripts/sync-previews.mjs --check
 ```
 
 **Acceptance Criteria:**

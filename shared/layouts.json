@@ -2,6 +2,9 @@
     "layoutGroups": [
         {
             "name": "structure",
+            "label": "Structure",
+            "description": "Title, sections, and endings",
+            "icon": "symbol-structure",
             "items": [
                 "cover",
                 "default",
@@ -16,6 +19,9 @@
         },
         {
             "name": "content",
+            "label": "Content",
+            "description": "Images, columns, and lists",
+            "icon": "symbol-file",
             "items": [
                 "two-cols",
                 "image-left",
@@ -27,6 +33,9 @@
         },
         {
             "name": "emphasis",
+            "label": "Emphasis",
+            "description": "Quotes, facts, and statements",
+            "icon": "megaphone",
             "items": [
                 "quote",
                 "fact",
@@ -36,6 +45,9 @@
         },
         {
             "name": "academic",
+            "label": "Academic",
+            "description": "Research workflows, evidence, and references",
+            "icon": "mortar-board",
             "items": [
                 "paper-summary",
                 "related-work-matrix",

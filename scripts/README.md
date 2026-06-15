@@ -67,6 +67,27 @@ The JSON output is intended for automation and editor integrations:
 
 Supported severities are `ok`, `warn`, and `error`. Only `error` should fail the command.
 
+### VS Code metadata and preview sync
+
+The VS Code extension consumes generated shared metadata and compressed previews.
+Run these commands after changing templates, layouts, components, themes, or
+source screenshots:
+
+```bash
+node vscode-extension/scripts/sync-shared-data.mjs
+node vscode-extension/scripts/sync-snippets.mjs
+node vscode-extension/scripts/sync-previews.mjs
+node scripts/check-vscode-metadata-previews.mjs
+```
+
+`sync-previews.mjs` writes `vscode-extension/media/previews/manifest.json` with
+source and output SHA-256 hashes. Use the read-only freshness check in CI or
+before release:
+
+```bash
+node vscode-extension/scripts/sync-previews.mjs --check
+```
+
 ### 方法 1：使用 pnpm 脚本（推荐）
 
 ```bash

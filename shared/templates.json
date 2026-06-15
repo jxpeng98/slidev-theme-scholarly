@@ -1,0 +1,57 @@
+{
+    "templates": [
+        {
+            "id": "basic",
+            "label": "Basic",
+            "description": "Minimal English starter deck"
+        },
+        {
+            "id": "academic",
+            "label": "Academic",
+            "description": "Academic deck with BibTeX citations"
+        },
+        {
+            "id": "paper-talk",
+            "label": "Paper Talk",
+            "description": "Paper presentation with summary, method, results, and references"
+        },
+        {
+            "id": "seminar",
+            "label": "Seminar",
+            "description": "Research seminar deck with agenda, related work, method, and discussion"
+        },
+        {
+            "id": "thesis-defense",
+            "label": "Thesis Defense",
+            "description": "Thesis defense deck with experiments, limitations, Q&A, and appendix map"
+        },
+        {
+            "id": "reading-group",
+            "label": "Reading Group",
+            "description": "Reading group deck for paper critique and discussion"
+        },
+        {
+            "id": "conference-lightning",
+            "label": "Conference Lightning",
+            "description": "Short conference talk focused on one claim and supporting evidence"
+        },
+        {
+            "id": "zh",
+            "label": "Chinese Starter",
+            "description": "Chinese starter deck"
+        }
+    ],
+    "aliases": {
+        "default": "basic",
+        "en": "basic",
+        "english": "basic",
+        "paper": "paper-talk",
+        "talk": "paper-talk",
+        "defense": "thesis-defense",
+        "thesis": "thesis-defense",
+        "reading": "reading-group",
+        "lightning": "conference-lightning",
+        "cn": "zh",
+        "chinese": "zh"
+    }
+}

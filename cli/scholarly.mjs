@@ -14,57 +14,21 @@ const packageJsonPath = path.join(rootDir, 'package.json')
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
 const cliName = path.parse(path.basename(process.argv[1] || 'scholarly')).name
 
-const TEMPLATE_META = {
-  basic: {
-    description: 'Minimal English starter deck',
-  },
-  academic: {
-    description: 'Academic deck with BibTeX citations',
-  },
-  'paper-talk': {
-    description: 'Paper presentation with summary, method, results, and references',
-  },
-  seminar: {
-    description: 'Research seminar deck with agenda, related work, method, and discussion',
-  },
-  'thesis-defense': {
-    description: 'Thesis defense deck with experiments, limitations, Q&A, and appendix map',
-  },
-  'reading-group': {
-    description: 'Reading group deck for paper critique and discussion',
-  },
-  'conference-lightning': {
-    description: 'Short conference talk focused on one claim and supporting evidence',
-  },
-  zh: {
-    description: 'Chinese starter deck',
-  },
-}
-
-const TEMPLATE_ALIAS = {
-  default: 'basic',
-  en: 'basic',
-  english: 'basic',
-  paper: 'paper-talk',
-  talk: 'paper-talk',
-  defense: 'thesis-defense',
-  thesis: 'thesis-defense',
-  reading: 'reading-group',
-  lightning: 'conference-lightning',
-  cn: 'zh',
-  chinese: 'zh',
-}
-
 // ── Shared data (Single Source of Truth) ────────────────────────────────────
 const __sharedDir = path.resolve(__dirname, '..', 'shared')
 const __themesData = JSON.parse(fs.readFileSync(path.join(__sharedDir, 'themes.json'), 'utf8'))
 const __layoutsData = JSON.parse(fs.readFileSync(path.join(__sharedDir, 'layouts.json'), 'utf8'))
+const __templatesData = JSON.parse(fs.readFileSync(path.join(__sharedDir, 'templates.json'), 'utf8'))
 
 const COLOR_THEMES = __themesData.colorThemes.map(t => ({ id: t.id, label: t.label }))
 const FONT_THEMES = __themesData.fontThemes.map(t => ({ id: t.id, label: t.label }))
 const THEME_PRESETS = __themesData.themePresets
 const LAYOUT_GROUPS = __layoutsData.layoutGroups
 const COMPONENT_LIST = __layoutsData.componentNames
+const TEMPLATE_META = Object.fromEntries(
+  __templatesData.templates.map(template => [template.id, { description: template.description }]),
+)
+const TEMPLATE_ALIAS = __templatesData.aliases
 
 const SNIPPETS = {
   theorem: `<Theorem type="theorem" title="Sample Theorem">

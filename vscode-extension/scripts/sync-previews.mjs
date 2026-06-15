@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +18,8 @@ const destRoot = path.join(extensionRoot, 'media', 'previews');
 const destLayouts = path.join(destRoot, 'layouts');
 const destThemes = path.join(destRoot, 'themes');
 const destComponents = path.join(destRoot, 'components');
+const manifestPath = path.join(destRoot, 'manifest.json');
+const checkMode = process.argv.includes('--check');
 
 async function ensureDir(dir) {
   await fs.mkdir(dir, { recursive: true });
@@ -43,6 +46,19 @@ async function getFiles(dir, ext = '.png') {
     }
   }
   return files;
+}
+
+async function hashFile(file) {
+  const buffer = await fs.readFile(file);
+  return createHash('sha256').update(buffer).digest('hex');
+}
+
+function toRootRelative(file) {
+  return path.relative(repoRoot, file).split(path.sep).join('/');
+}
+
+function getPreviewKind(file) {
+  return path.relative(path.join(repoRoot, 'docs', 'public', 'images'), file).split(path.sep)[0];
 }
 
 function hasPngquant() {
@@ -78,7 +94,115 @@ async function compressAndCopy(src, dest) {
   }
 }
 
+async function createManifestEntry(src, dest) {
+  const relativeToKind = path.relative(path.join(repoRoot, 'docs', 'public', 'images'), src);
+  return {
+    kind: getPreviewKind(src),
+    id: relativeToKind.replace(/\.png$/, '').split(path.sep).join('/'),
+    source: toRootRelative(src),
+    output: toRootRelative(dest),
+    sourceSha256: await hashFile(src),
+    outputSha256: await hashFile(dest),
+    bytes: (await fs.stat(dest)).size
+  };
+}
+
+async function collectSourceImages() {
+  const groups = [
+    { source: srcLayouts, dest: destLayouts },
+    { source: srcThemes, dest: destThemes },
+    { source: srcComponents, dest: destComponents }
+  ];
+
+  const images = [];
+  for (const group of groups) {
+    if (!(await exists(group.source)))
+      continue;
+
+    const files = await getFiles(group.source);
+    for (const file of files) {
+      images.push({
+        source: file,
+        dest: path.join(group.dest, path.relative(group.source, file))
+      });
+    }
+  }
+
+  return images.sort((a, b) => toRootRelative(a.source).localeCompare(toRootRelative(b.source)));
+}
+
+async function writeManifest(entries) {
+  const manifest = {
+    version: 1,
+    sourceRoot: 'docs/public/images',
+    outputRoot: 'vscode-extension/media/previews',
+    entries: entries.sort((a, b) => a.source.localeCompare(b.source))
+  };
+
+  await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+}
+
+async function checkManifest() {
+  const failures = [];
+  const images = await collectSourceImages();
+  let manifest;
+
+  try {
+    manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
+  } catch (error) {
+    failures.push(`Missing or invalid preview manifest: ${error.message}`);
+    manifest = { entries: [] };
+  }
+
+  if (manifest.version !== 1)
+    failures.push('Preview manifest version should be 1');
+
+  const entries = Array.isArray(manifest.entries) ? manifest.entries : [];
+  if (entries.length !== images.length)
+    failures.push(`Preview manifest should list ${images.length} images, found ${entries.length}`);
+
+  const entriesBySource = new Map(entries.map(entry => [entry.source, entry]));
+  for (const image of images) {
+    const sourceRelative = toRootRelative(image.source);
+    const outputRelative = toRootRelative(image.dest);
+    const entry = entriesBySource.get(sourceRelative);
+    if (!entry) {
+      failures.push(`Preview manifest missing source ${sourceRelative}`);
+      continue;
+    }
+
+    if (entry.output !== outputRelative)
+      failures.push(`Preview manifest output mismatch for ${sourceRelative}`);
+
+    if (!(await exists(image.dest))) {
+      failures.push(`Missing preview output ${outputRelative}`);
+      continue;
+    }
+
+    const sourceHash = await hashFile(image.source);
+    const outputHash = await hashFile(image.dest);
+    if (entry.sourceSha256 !== sourceHash)
+      failures.push(`Source image changed without preview sync: ${sourceRelative}`);
+    if (entry.outputSha256 !== outputHash)
+      failures.push(`Preview output changed without manifest update: ${outputRelative}`);
+  }
+
+  if (failures.length) {
+    console.error('Preview freshness check failed:');
+    for (const failure of failures)
+      console.error(`- ${failure}`);
+    process.exit(1);
+  }
+
+  console.log(`Preview freshness check passed (${images.length} images).`);
+}
+
 async function main() {
+  if (checkMode) {
+    await checkManifest();
+    return;
+  }
+
   console.log('Syncing preview images...\n');
 
   if (!(await exists(srcLayouts))) {
@@ -103,59 +227,27 @@ async function main() {
   let totalCompressed = 0;
   let fileCount = 0;
 
-  // Process layouts
-  if (await exists(srcLayouts)) {
-    const layoutFiles = await getFiles(srcLayouts);
-    for (const file of layoutFiles) {
-      const relativePath = path.relative(srcLayouts, file);
-      const destPath = path.join(destLayouts, relativePath);
+  const images = await collectSourceImages();
+  const entries = [];
+  const counts = new Map();
 
-      const originalSize = (await fs.stat(file)).size;
-      await compressAndCopy(file, destPath);
-      const compressedSize = (await fs.stat(destPath)).size;
+  for (const image of images) {
+    const originalSize = (await fs.stat(image.source)).size;
+    await compressAndCopy(image.source, image.dest);
+    const compressedSize = (await fs.stat(image.dest)).size;
 
-      totalOriginal += originalSize;
-      totalCompressed += compressedSize;
-      fileCount++;
-    }
-    console.log(`Layouts: ${layoutFiles.length} files processed`);
+    totalOriginal += originalSize;
+    totalCompressed += compressedSize;
+    fileCount++;
+    counts.set(getPreviewKind(image.source), (counts.get(getPreviewKind(image.source)) || 0) + 1);
+    entries.push(await createManifestEntry(image.source, image.dest));
   }
 
-  // Process themes
-  if (await exists(srcThemes)) {
-    const themeFiles = await getFiles(srcThemes);
-    for (const file of themeFiles) {
-      const relativePath = path.relative(srcThemes, file);
-      const destPath = path.join(destThemes, relativePath);
+  await writeManifest(entries);
 
-      const originalSize = (await fs.stat(file)).size;
-      await compressAndCopy(file, destPath);
-      const compressedSize = (await fs.stat(destPath)).size;
-
-      totalOriginal += originalSize;
-      totalCompressed += compressedSize;
-      fileCount++;
-    }
-    console.log(`Themes: ${themeFiles.length} files processed`);
-  }
-
-  // Process components
-  if (await exists(srcComponents)) {
-    const componentFiles = await getFiles(srcComponents);
-    for (const file of componentFiles) {
-      const relativePath = path.relative(srcComponents, file);
-      const destPath = path.join(destComponents, relativePath);
-
-      const originalSize = (await fs.stat(file)).size;
-      await compressAndCopy(file, destPath);
-      const compressedSize = (await fs.stat(destPath)).size;
-
-      totalOriginal += originalSize;
-      totalCompressed += compressedSize;
-      fileCount++;
-    }
-    console.log(`Components: ${componentFiles.length} files processed`);
-  }
+  console.log(`Layouts: ${counts.get('layouts') || 0} files processed`);
+  console.log(`Themes: ${counts.get('themes') || 0} files processed`);
+  console.log(`Components: ${counts.get('components') || 0} files processed`);
 
   console.log(`\nTotal: ${fileCount} files`);
 
@@ -169,6 +261,7 @@ async function main() {
   }
 
   console.log(`\nOutput: ${path.relative(extensionRoot, destRoot)}/`);
+  console.log(`Manifest: ${path.relative(extensionRoot, manifestPath)}`);
 
   if (!pngquantAvailable) {
     console.log('\nTip: Install pngquant for better compression:');

@@ -1,4 +1,8 @@
 import * as vscode from 'vscode';
+import {
+  COLOR_THEME_PREVIEW_DIRS,
+  COMPONENT_PREVIEW_FILES
+} from './sharedData';
 
 export type PreviewKind = 'layout' | 'component' | 'colorTheme' | 'fontTheme' | 'preset';
 
@@ -12,7 +16,7 @@ export interface PreviewRequest {
   fontTheme?: string;
 }
 
-const COMPONENT_ID_TO_FILE: Record<string, string> = {
+const COMPONENT_PREVIEW_ALIASES: Record<string, string> = {
   'Block (Vue)': 'block',
   'Block (Syntax Sugar)': 'block',
   'Theorem (Vue)': 'theorem',
@@ -38,23 +42,14 @@ const COMPONENT_ID_TO_FILE: Record<string, string> = {
 };
 
 export function getComponentPreviewFile(componentLabel: string): string | undefined {
-  return COMPONENT_ID_TO_FILE[componentLabel];
+  const baseLabel = componentLabel.replace(/\s+\(.+?\)$/, '');
+  return COMPONENT_PREVIEW_ALIASES[componentLabel]
+    ?? COMPONENT_PREVIEW_FILES[componentLabel]
+    ?? COMPONENT_PREVIEW_FILES[baseLabel];
 }
 
-const COLOR_THEME_TO_DIR: Record<string, string> = {
-  'classic-blue': 'classic-blue',
-  'oxford-burgundy': 'oxford',
-  'cambridge-green': 'cambridge',
-  'yale-blue': 'yale',
-  'princeton-orange': 'princeton',
-  'nordic-blue': 'nordic',
-  'warm-sepia': 'sepia',
-  monochrome: 'monochrome',
-  'high-contrast': 'high-contrast'
-};
-
 export function getColorThemePreviewDir(colorThemeId: string): string | undefined {
-  return COLOR_THEME_TO_DIR[colorThemeId];
+  return COLOR_THEME_PREVIEW_DIRS[colorThemeId];
 }
 
 function escapeHtml(str: string): string {

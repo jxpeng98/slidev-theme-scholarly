@@ -9,7 +9,7 @@ const extensionRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(extensionRoot, '..');
 const sourceDir = path.join(repoRoot, 'shared');
 const destDir = path.join(extensionRoot, 'shared');
-const files = ['themes.json', 'layouts.json', 'citations.mjs'];
+const files = ['themes.json', 'layouts.json', 'templates.json', 'citations.mjs'];
 
 async function main() {
   await fs.mkdir(destDir, { recursive: true });
