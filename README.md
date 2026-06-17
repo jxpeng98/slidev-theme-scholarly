@@ -50,8 +50,8 @@ A professional presentation theme for [Slidev](https://sli.dev), designed specif
 | Feature | Description |
 |---------|-------------|
 | 🎓 **Professional Design** | LaTeX Beamer-inspired with academic styling |
-| 📐 **26 Layouts** | Structure, Content, Emphasis, and Academic categories |
-| 🧩 **Rich Components** | Theorem, Block, Citations, Steps, Keywords, Columns, Highlight |
+| 📐 **34 Layouts** | Structure, Content, Emphasis, and Academic categories |
+| 🧩 **Rich Components** | Theorem, Block, Citations, Metrics, Evidence, Paper Cards, Lists |
 | 🎨 **9 Color Themes** | Classic Blue, Oxford, Cambridge, Yale, Princeton, Nordic, Monochrome, Sepia, High Contrast |
 | 📚 **Citations & Footnotes** | BibTeX bibliography plus academic Markdown footnotes with inline preview |
 | 📝 **Syntax Sugar** | Simplified Markdown directives for components |

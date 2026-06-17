@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-06-17
+
+### Added
+
+- **Academic layout pack**: Added research-focused layouts for paper summaries, related work matrices, method pipelines, highlighted results, experiment grids, limitations, defense questions, and appendix indexes.
+- **Academic evidence components**: Added MetricCard, MetricGrid, EvidenceBlock, EquationBlock, DatasetCard, PaperCard, ContributionList, and CaveatList for result-heavy academic decks.
+- **Curated starter templates**: Added paper talk, seminar, thesis defense, reading group, and conference lightning templates with BibTeX examples.
+- **CLI workflows**: Added paper summary scaffolding from BibTeX, data-driven result helpers, actionable doctor diagnostics, and release readiness checks.
+- **VS Code support**: Added citation diagnostics plus synchronized metadata, snippets, and preview assets for the expanded layout/component set.
+
+### Changed
+
+- **Documentation**: Expanded English and Chinese docs for academic workflows, configuration, layouts, components, and theme contrast guidance.
+- **Footer outline**: Reworked the footer TOC into a compact section-grouped panel with current/last-section jumps and long-deck navigation support.
+- **Preview assets**: Regenerated layout and component screenshots for docs and the VS Code extension.
+
+### Fixed
+
+- **Heading anchors**: Hide trailing Markdown heading IDs such as `{#sec-foundations}` from rendered TOC and footer outline labels.
+- **Color modes**: Improved light/dark semantic token coverage and footer contrast.
+- **Scrollable content**: Avoid showing vertical scrollbars on non-overflowing slide content while preserving scrolling when content exceeds its container.
+
 ## [1.3.2] - 2026-04-20
 
 ### Fixed

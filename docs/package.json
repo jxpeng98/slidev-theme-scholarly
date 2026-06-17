@@ -1,6 +1,6 @@
 {
     "name": "slidev-theme-scholarly-docs",
-    "version": "1.3.3",
+    "version": "1.4.0",
     "description": "Documentation for Slidev Theme Scholarly",
     "main": "index.js",
     "scripts": {

@@ -57,6 +57,14 @@
   background-color: var(--scholarly-bg-warm);
 }
 
+.slidev-layout [data-scholarly-scrollable="false"] {
+  overflow-y: hidden !important;
+}
+
+.slidev-layout [data-scholarly-scrollable="true"] {
+  overflow-y: auto !important;
+}
+
 /* Global smart list styling */
 .slidev-layout ul,
 .slidev-layout ol {

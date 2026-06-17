@@ -16,6 +16,7 @@ import {
   rebuildInternalAnchorTargets,
   resolvePendingInternalAnchorNavigation,
 } from '../utils/internalAnchorNavigation'
+import { hasVerticalOverflow, isVerticalScrollOverflowMode } from '../utils/scrollArea'
 import { invalidateTheoremNumberMap, resetOccurrenceTracker } from '../utils/theorem'
 
 const DEFAULT_FONT_SIZE = '1rem'
@@ -219,6 +220,7 @@ type FootnotePopoverState = {
 type FootnotePopoverWindow = Window & typeof globalThis & {
   __scholarlyFootnotePopoverCleanup?: () => void
   __scholarlyFootnoteLayoutCleanup?: () => void
+  __scholarlyScrollAreaCleanup?: () => void
 }
 
 const footnotePopoverState: FootnotePopoverState = {
@@ -233,6 +235,11 @@ const footnotePopoverState: FootnotePopoverState = {
 
 let footnoteLayoutObserver: MutationObserver | null = null
 let footnoteLayoutSyncRaf: number | null = null
+let scrollAreaObserver: MutationObserver | null = null
+let scrollAreaSyncRaf: number | null = null
+
+const SCROLL_AREA_SCOPE_SELECTOR = '.slidev-layout'
+const SCROLL_AREA_STATE_ATTR = 'data-scholarly-scrollable'
 
 const normalizeFootnoteDisplay = (value: unknown): FootnoteDisplayMode => {
   if (typeof value !== 'string')
@@ -412,6 +419,91 @@ const observeFootnoteLayout = () => {
   }
 
   scheduleFootnoteLayoutSync()
+}
+
+const isVerticalScrollCandidate = (element: HTMLElement): boolean => {
+  if (element.hasAttribute(SCROLL_AREA_STATE_ATTR))
+    return true
+
+  const overflowY = window.getComputedStyle(element).overflowY
+  return isVerticalScrollOverflowMode(overflowY)
+}
+
+const syncScrollAreaState = () => {
+  if (typeof document === 'undefined')
+    return
+
+  document.querySelectorAll<HTMLElement>(`${SCROLL_AREA_SCOPE_SELECTOR} *`).forEach((element) => {
+    if (!isVerticalScrollCandidate(element))
+      return
+
+    const overflowY = window.getComputedStyle(element).overflowY
+    if (!isVerticalScrollOverflowMode(overflowY)) {
+      element.removeAttribute(SCROLL_AREA_STATE_ATTR)
+      return
+    }
+
+    const isScrollable = hasVerticalOverflow({
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    })
+    const nextState = isScrollable ? 'true' : 'false'
+    if (element.getAttribute(SCROLL_AREA_STATE_ATTR) !== nextState)
+      element.setAttribute(SCROLL_AREA_STATE_ATTR, nextState)
+  })
+}
+
+const cancelScrollAreaSync = () => {
+  if (scrollAreaSyncRaf !== null) {
+    window.cancelAnimationFrame(scrollAreaSyncRaf)
+    scrollAreaSyncRaf = null
+  }
+}
+
+const scheduleScrollAreaSync = () => {
+  if (typeof window === 'undefined' || scrollAreaSyncRaf !== null)
+    return
+
+  scrollAreaSyncRaf = window.requestAnimationFrame(() => {
+    scrollAreaSyncRaf = null
+    syncScrollAreaState()
+  })
+}
+
+const observeScrollAreas = () => {
+  if (typeof window === 'undefined')
+    return
+
+  const globalWindow = window as FootnotePopoverWindow
+  globalWindow.__scholarlyScrollAreaCleanup?.()
+
+  const scope = document.querySelector<HTMLElement>(SCROLL_AREA_SCOPE_SELECTOR) ?? document.body
+
+  if (typeof MutationObserver !== 'undefined') {
+    scrollAreaObserver = new MutationObserver(() => scheduleScrollAreaSync())
+    scrollAreaObserver.observe(scope, {
+      attributes: true,
+      attributeFilter: ['class', 'style', SCROLL_AREA_STATE_ATTR],
+      childList: true,
+      subtree: true,
+      characterData: true,
+    })
+  }
+
+  const handleViewportChange = () => scheduleScrollAreaSync()
+  window.addEventListener('resize', handleViewportChange)
+
+  globalWindow.__scholarlyScrollAreaCleanup = () => {
+    cancelScrollAreaSync()
+    scrollAreaObserver?.disconnect()
+    scrollAreaObserver = null
+    window.removeEventListener('resize', handleViewportChange)
+    document.querySelectorAll<HTMLElement>(`[${SCROLL_AREA_STATE_ATTR}]`).forEach((element) => {
+      element.removeAttribute(SCROLL_AREA_STATE_ATTR)
+    })
+  }
+
+  scheduleScrollAreaSync()
 }
 
 const getFootnoteItemForAnchor = (anchor: HTMLAnchorElement): HTMLElement | null => {
@@ -865,11 +957,13 @@ export default defineAppSetup(({ app, router }) => {
   initializeFootnotePopovers()
   initializeInternalAnchorNavigation(router)
   observeFootnoteLayout()
+  observeScrollAreas()
 
   if (typeof window !== 'undefined') {
     window.requestAnimationFrame(() => {
       enhanceFootnoteTriggers()
       scheduleFootnoteLayoutSync()
+      scheduleScrollAreaSync()
       rebuildInternalAnchorTargets()
       void resolvePendingInternalAnchorNavigation(router.currentRoute.value)
     })
@@ -925,6 +1019,7 @@ export default defineAppSetup(({ app, router }) => {
     updateFontSize(to)
     applyFootnoteDisplay(to)
     observeFootnoteLayout()
+    observeScrollAreas()
     rebuildInternalAnchorTargets()
     resetOccurrenceTracker()
     hideFootnotePopover()
@@ -933,6 +1028,7 @@ export default defineAppSetup(({ app, router }) => {
       window.requestAnimationFrame(() => {
         enhanceFootnoteTriggers()
         scheduleFootnoteLayoutSync()
+        scheduleScrollAreaSync()
         void resolvePendingInternalAnchorNavigation(to)
       })
     }
