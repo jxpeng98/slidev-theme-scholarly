@@ -51,21 +51,47 @@
             <div class="footer-toc-panel-title">{{ labels.title }}</div>
             <div class="footer-toc-panel-subtitle">{{ labels.subtitle }}</div>
           </div>
-          <button
-            type="button"
-            class="footer-toc-panel-close"
-            :aria-label="labels.close"
-            @click="closePanel"
-          >
-            <svg
-              class="footer-toc-panel-close-icon"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
+          <div class="footer-toc-panel-actions">
+            <button
+              type="button"
+              class="footer-toc-panel-action"
+              :title="labels.current"
+              :aria-label="labels.current"
+              @click="jumpToCurrentOutlineItem"
             >
-              <path d="M5 5L11 11" />
-              <path d="M11 5L5 11" />
-            </svg>
-          </button>
+              <span class="footer-toc-panel-action-dot" aria-hidden="true" />
+              <span class="footer-toc-panel-action-label">{{ labels.current }}</span>
+            </button>
+            <button
+              type="button"
+              class="footer-toc-panel-action"
+              :title="labels.last"
+              :aria-label="labels.last"
+              @click="jumpToLastSection"
+            >
+              <svg class="footer-toc-panel-action-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 3V12" />
+                <path d="M4.5 8.5L8 12L11.5 8.5" />
+                <path d="M4 13H12" />
+              </svg>
+              <span class="footer-toc-panel-action-label">{{ labels.last }}</span>
+            </button>
+            <button
+              type="button"
+              class="footer-toc-panel-close"
+              :aria-label="labels.close"
+              @click="closePanel"
+            >
+              <svg
+                class="footer-toc-panel-close-icon"
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+              >
+                <path d="M5 5L11 11" />
+                <path d="M11 5L5 11" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div
@@ -86,20 +112,42 @@
               class="footer-toc-section"
               :class="{ 'is-active': section.active }"
             >
-              <button
-                type="button"
+              <div
                 class="footer-toc-section-header"
-                :data-preview-no="section.no"
-                @mouseenter="setPreviewTarget(section.no, $event)"
-                @focus="setPreviewTarget(section.no, $event)"
-                @click="navigateToSlide(section.no)"
+                :class="{ 'is-collapsed': compactOutline && !isSectionExpanded(section) }"
               >
-                <span class="footer-toc-section-index">{{ section.no }}</span>
-                <span class="footer-toc-section-title">{{ section.title }}</span>
-              </button>
+                <button
+                  type="button"
+                  class="footer-toc-section-jump"
+                  :data-preview-no="section.no"
+                  @mouseenter="setPreviewTarget(section.no, $event)"
+                  @focus="setPreviewTarget(section.no, $event)"
+                  @click="navigateToSlide(section.no)"
+                >
+                  <span class="footer-toc-section-index">{{ section.no }}</span>
+                  <span class="footer-toc-section-copy">
+                    <span class="footer-toc-section-title">{{ section.title }}</span>
+                    <span class="footer-toc-section-meta">
+                      {{ section.range }} · {{ section.slideCountLabel }}
+                    </span>
+                  </span>
+                </button>
+                <button
+                  v-if="compactOutline && section.slides.length > 0"
+                  type="button"
+                  class="footer-toc-section-toggle"
+                  :aria-expanded="isSectionExpanded(section) ? 'true' : 'false'"
+                  :aria-label="`${isSectionExpanded(section) ? labels.collapseSection : labels.expandSection}: ${section.title}`"
+                  @click="toggleSectionExpanded(section.no)"
+                >
+                  <svg class="footer-toc-section-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M5.5 6.5L8 9L10.5 6.5" />
+                  </svg>
+                </button>
+              </div>
 
               <div
-                v-if="section.slides.length > 0"
+                v-if="section.slides.length > 0 && isSectionExpanded(section)"
                 class="footer-toc-slides"
               >
                 <button
@@ -139,6 +187,14 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { slideAspect, useSlideContext } from '@slidev/client'
 import { isInteractiveSlideRoute } from '../utils/presentationMode'
 import { CLICKS_MAX, createFixedClicks } from '../utils/fixedClicks'
+import { sanitizeMarkdownHeadingTitle } from '../utils/outlineTitle'
+import {
+  formatSectionRange,
+  formatSlideCount,
+  shouldUseCompactOutline,
+  type FooterTocSectionGroup,
+  type FooterTocSlideItem,
+} from '../utils/footerToc'
 import FooterTocPreviewCard from './FooterTocPreviewCard.vue'
 
 interface PreviewAnchorRect {
@@ -150,17 +206,11 @@ interface PreviewAnchorRect {
   height: number
 }
 
-interface TocSlideItem {
-  no: number
-  title: string
-  active: boolean
-}
+type TocSlideItem = FooterTocSlideItem
 
-interface TocSectionGroup {
-  no: number
-  title: string
-  active: boolean
-  slides: TocSlideItem[]
+interface TocSectionGroup extends FooterTocSectionGroup {
+  range: string
+  slideCountLabel: string
 }
 
 const panelOpen = ref<boolean | null>(null)
@@ -169,6 +219,8 @@ const previewVisible = ref(false)
 const previewTargetNo = ref<number | null>(null)
 const previewAnchorRect = ref<PreviewAnchorRect | null>(null)
 const previewAnchorEl = ref<HTMLElement | null>(null)
+const expandedSectionNos = ref<Set<number>>(new Set())
+const lastCompactMode = ref(false)
 
 const { $slidev } = useSlideContext()
 const slidevConfigs = computed(() => ($slidev.configs as any) || {})
@@ -215,6 +267,12 @@ const labels = computed(() => {
       close: '关闭目录面板',
       empty: '当前没有可显示的目录项。请使用 section 页，或为幻灯片添加标题。',
       ungrouped: '开场',
+      current: '当前',
+      last: '末尾',
+      expandSection: '展开 section',
+      collapseSection: '折叠 section',
+      slideSingular: '页',
+      slidePlural: '页',
     }
   }
 
@@ -225,6 +283,12 @@ const labels = computed(() => {
     close: 'Close outline panel',
     empty: 'No outline items available. Add section slides or slide titles.',
     ungrouped: 'Opening',
+    current: 'Current',
+    last: 'Last',
+    expandSection: 'Expand section',
+    collapseSection: 'Collapse section',
+    slideSingular: 'slide',
+    slidePlural: 'slides',
   }
 })
 
@@ -246,13 +310,16 @@ const getSlideTitle = (slide: any, fallback: string) => {
     || slide?.title
     || frontmatter.title
 
-  if (typeof title === 'string' && title.trim())
-    return title.trim()
+  if (typeof title === 'string' && title.trim()) {
+    const sanitizedTitle = sanitizeMarkdownHeadingTitle(title)
+    if (sanitizedTitle)
+      return sanitizedTitle
+  }
 
   const rawContent = getSlideRawContent(slide)
   const h1Match = rawContent.match(/^#\s+(.+)$/m)
   if (h1Match?.[1]?.trim())
-    return h1Match[1].trim()
+    return sanitizeMarkdownHeadingTitle(h1Match[1])
 
   return fallback
 }
@@ -268,6 +335,8 @@ const sectionGroups = computed<TocSectionGroup[]>(() => {
         title: labels.value.ungrouped,
         active: false,
         slides: [],
+        range: '',
+        slideCountLabel: '',
       }
       groups.push(currentGroup)
     }
@@ -290,6 +359,8 @@ const sectionGroups = computed<TocSectionGroup[]>(() => {
         title: getSlideTitle(slide, `Section ${groups.length + 1}`),
         active: false,
         slides: [],
+        range: '',
+        slideCountLabel: '',
       }
       groups.push(currentGroup)
       continue
@@ -317,8 +388,72 @@ const sectionGroups = computed<TocSectionGroup[]>(() => {
     group.active = inCurrentRange || group.slides.some(slide => slide.active)
   }
 
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i]
+    const nextGroup = groups[i + 1]
+    group.range = formatSectionRange(group, nextGroup, allSlides.value.length)
+    group.slideCountLabel = formatSlideCount(
+      group.slides.length,
+      labels.value.slideSingular,
+      labels.value.slidePlural,
+    )
+  }
+
   return groups
 })
+
+const compactOutline = computed(() => shouldUseCompactOutline(sectionGroups.value))
+
+const activeSectionNo = computed(() => {
+  return sectionGroups.value.find(section => section.active)?.no ?? null
+})
+
+const lastSectionNo = computed(() => {
+  return sectionGroups.value.at(-1)?.no ?? null
+})
+
+const isSectionExpanded = (section: TocSectionGroup) => {
+  return !compactOutline.value || expandedSectionNos.value.has(section.no)
+}
+
+const setSectionExpanded = (sectionNo: number, expanded: boolean) => {
+  const next = new Set(expandedSectionNos.value)
+  if (expanded)
+    next.add(sectionNo)
+  else
+    next.delete(sectionNo)
+  expandedSectionNos.value = next
+}
+
+const toggleSectionExpanded = (sectionNo: number) => {
+  setSectionExpanded(sectionNo, !expandedSectionNos.value.has(sectionNo))
+}
+
+const ensureSectionExpanded = (sectionNo: number | null) => {
+  if (!sectionNo)
+    return
+  setSectionExpanded(sectionNo, true)
+}
+
+watch(
+  [compactOutline, activeSectionNo],
+  ([compact, activeNo]) => {
+    if (!compact) {
+      expandedSectionNos.value = new Set()
+      lastCompactMode.value = false
+      return
+    }
+
+    if (!lastCompactMode.value) {
+      expandedSectionNos.value = new Set(activeNo ? [activeNo] : [])
+      lastCompactMode.value = true
+      return
+    }
+
+    ensureSectionExpanded(activeNo)
+  },
+  { immediate: true },
+)
 
 const previewableSlideNos = computed(() => {
   const slideNos: number[] = []
@@ -330,14 +465,18 @@ const previewableSlideNos = computed(() => {
   return slideNos
 })
 
-const fallbackPreviewTargetNo = computed(() => {
-  if (previewableSlideNos.value.length === 0)
-    return null
-
+const currentOutlineTargetNo = computed(() => {
   if (previewableSlideNos.value.includes(currentPage.value))
     return currentPage.value
 
-  return previewableSlideNos.value[0]
+  if (activeSectionNo.value)
+    return activeSectionNo.value
+
+  return previewableSlideNos.value[0] ?? null
+})
+
+const fallbackPreviewTargetNo = computed(() => {
+  return currentOutlineTargetNo.value
 })
 
 const previewRoute = computed<SlideRoute | null>(() => {
@@ -500,19 +639,25 @@ const closePanel = () => {
   previewAnchorRect.value = null
 }
 
-const scrollToActiveItem = async () => {
+const scrollToPreviewNo = async (slideNo: number | null, block: ScrollLogicalPosition = 'center') => {
   await nextTick()
-  if (!panelRef.value) return
-  const body = panelRef.value.querySelector('.footer-toc-panel-body')
-  if (!body) return
+  if (!slideNo || !panelRef.value)
+    return
 
-  // Prefer active slide, fall back to active section
-  const activeEl =
-    body.querySelector<HTMLElement>('.footer-toc-slide.is-active')
-    || body.querySelector<HTMLElement>('.footer-toc-section.is-active')
-  if (activeEl) {
-    activeEl.scrollIntoView({ block: 'center', behavior: 'instant' })
+  const body = panelRef.value.querySelector('.footer-toc-panel-body')
+  if (!body)
+    return
+
+  const target = body.querySelector<HTMLElement>(`[data-preview-no="${slideNo}"]`)
+  if (target) {
+    target.scrollIntoView({ block, behavior: 'smooth' })
+    await syncPreviewToTargetNo(slideNo)
   }
+}
+
+const scrollToActiveItem = async () => {
+  ensureSectionExpanded(activeSectionNo.value)
+  await scrollToPreviewNo(currentOutlineTargetNo.value, 'center')
 }
 
 const togglePanel = async () => {
@@ -520,6 +665,16 @@ const togglePanel = async () => {
   if (panelOpen.value) {
     await scrollToActiveItem()
   }
+}
+
+const jumpToCurrentOutlineItem = async () => {
+  ensureSectionExpanded(activeSectionNo.value)
+  await scrollToPreviewNo(currentOutlineTargetNo.value, 'center')
+}
+
+const jumpToLastSection = async () => {
+  ensureSectionExpanded(lastSectionNo.value)
+  await scrollToPreviewNo(lastSectionNo.value, 'end')
 }
 
 const navigateToSlide = async (slideNo: number) => {
@@ -641,6 +796,48 @@ onUnmounted(() => {
   min-width: 0;
 }
 
+.footer-toc-panel-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+  flex-shrink: 0;
+}
+
+.footer-toc-panel-action {
+  height: 1.24rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0 0.34rem;
+  border: 1px solid rgba(30, 58, 95, 0.1);
+  border-radius: 999px;
+  background: rgba(30, 58, 95, 0.06);
+  color: var(--slidev-theme-primary, #1e3a5f);
+  font-family: var(--scholarly-font-sans);
+  font-size: 0.52rem;
+  font-weight: 650;
+  line-height: 1;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.footer-toc-panel-action-dot {
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.footer-toc-panel-action-icon {
+  width: 0.58rem;
+  height: 0.58rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .footer-toc-panel-title {
   font-family: var(--scholarly-font-sans);
   font-size: 0.75rem;
@@ -716,6 +913,20 @@ onUnmounted(() => {
 .footer-toc-section-header {
   width: 100%;
   display: flex;
+  align-items: stretch;
+  gap: 0.2rem;
+  border-radius: 0.52rem;
+  background: transparent;
+}
+
+.footer-toc-section.is-active .footer-toc-section-header {
+  background: rgba(30, 58, 95, 0.07);
+}
+
+.footer-toc-section-jump {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   align-items: center;
   gap: 0.36rem;
   padding: 0.28rem 0.3rem;
@@ -726,8 +937,44 @@ onUnmounted(() => {
   text-align: left;
 }
 
-.footer-toc-section.is-active .footer-toc-section-header {
-  background: rgba(30, 58, 95, 0.07);
+.footer-toc-section-copy {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.08rem;
+}
+
+.footer-toc-section-meta {
+  font-size: 0.52rem;
+  line-height: 1.12;
+  color: rgba(45, 55, 72, 0.64);
+}
+
+.footer-toc-section-toggle {
+  width: 1.32rem;
+  min-height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.52rem;
+  background: transparent;
+  color: rgba(30, 58, 95, 0.76);
+}
+
+.footer-toc-section-toggle-icon {
+  width: 0.68rem;
+  height: 0.68rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 140ms ease;
+}
+
+.footer-toc-section-toggle[aria-expanded='true'] .footer-toc-section-toggle-icon {
+  transform: rotate(180deg);
 }
 
 .footer-toc-section-index,
@@ -780,14 +1027,20 @@ onUnmounted(() => {
 
 .footer-toc-slide:hover,
 .footer-toc-slide:focus-visible,
-.footer-toc-section-header:hover,
-.footer-toc-section-header:focus-visible,
+.footer-toc-section-jump:hover,
+.footer-toc-section-jump:focus-visible,
+.footer-toc-section-toggle:hover,
+.footer-toc-section-toggle:focus-visible,
+.footer-toc-panel-action:hover,
+.footer-toc-panel-action:focus-visible,
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   outline: none;
   background: rgba(30, 58, 95, 0.12);
 }
 
+.footer-toc-panel-action:hover,
+.footer-toc-panel-action:focus-visible,
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   border-color: rgba(30, 58, 95, 0.18);

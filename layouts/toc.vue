@@ -56,6 +56,7 @@ import { useSlideContext } from '@slidev/client'
 import ScholarlyFooter from '../components/ScholarlyFooter.vue'
 import { useAutoFontSize } from '../utils/useAutoFontSize'
 import { useFontSizeStyles } from '../utils/useFontSizeStyles'
+import { sanitizeMarkdownHeadingTitle } from '../utils/outlineTitle'
 
 interface TocSection {
   title: string
@@ -119,13 +120,16 @@ const getSlideTitle = (slide: any, fallback: string) => {
   const frontmatter = getSlideFrontmatter(slide)
   const title = getSlideMeta(slide)?.title || slide?.title || frontmatter.title
 
-  if (typeof title === 'string' && title.trim())
-    return title.trim()
+  if (typeof title === 'string' && title.trim()) {
+    const sanitizedTitle = sanitizeMarkdownHeadingTitle(title)
+    if (sanitizedTitle)
+      return sanitizedTitle
+  }
 
   const rawContent = getSlideRawContent(slide)
   const h1Match = rawContent.match(/^#\s+(.+)$/m)
   if (h1Match?.[1]?.trim())
-    return h1Match[1].trim()
+    return sanitizeMarkdownHeadingTitle(h1Match[1])
 
   return fallback
 }
@@ -133,11 +137,14 @@ const getSlideTitle = (slide: any, fallback: string) => {
 // Extract sections from slides with layout: section
 const tocSections = computed<TocSection[]>(() => {
   if (props.sections && props.sections.length > 0) {
-    return props.sections.map((title, idx) => ({
-      title,
-      slideNo: idx + 1,
-      isActive: false
-    }))
+    return props.sections.map((title, idx) => {
+      const sanitizedTitle = sanitizeMarkdownHeadingTitle(title)
+      return {
+        title: sanitizedTitle || title.trim() || `Section ${idx + 1}`,
+        slideNo: idx + 1,
+        isActive: false
+      }
+    })
   }
 
   const sections: TocSection[] = []
@@ -152,7 +159,10 @@ const tocSections = computed<TocSection[]>(() => {
       const rawContent = getSlideRawContent(slide)
       const title = getSlideTitle(slide, `Section ${sections.length + 1}`)
       const subtitleMatch = rawContent.match(/^#\s+.+\n+(?:##\s+)?(.+)$/m)
-      const subtitle = subtitleMatch ? subtitleMatch[1].trim() : frontmatter.subtitle
+      const rawSubtitle = subtitleMatch ? subtitleMatch[1] : frontmatter.subtitle
+      const subtitle = typeof rawSubtitle === 'string'
+        ? sanitizeMarkdownHeadingTitle(rawSubtitle)
+        : rawSubtitle
 
       sections.push({
         title,

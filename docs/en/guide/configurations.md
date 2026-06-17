@@ -97,8 +97,9 @@ Notes:
 - The buttons appear only in the live slide player.
 - They are automatically hidden in overview, embedded, and print/export views.
 - The TOC panel is grouped by `layout: section` and lists jump targets inside each section.
+- For long decks, the footer TOC automatically switches to a compact section-first view with expandable sections and quick jumps to the current and final section.
 - In desktop play mode, if the device supports hover and the viewport is wide enough, hovering or keyboard-focusing a TOC item shows a slide preview card to the left of the panel.
-- When the TOC opens, it previews the current slide by default. If the current slide is hidden with `hideInToc: true`, it falls back to the first visible TOC item.
+- When the TOC opens, it previews the current slide by default. If the current slide is hidden with `hideInToc: true`, it falls back to the active section, then to the first visible TOC item.
 - Slides with `hideInToc: true` are hidden automatically.
 - The legacy `outlineSidebar` / `outlineSidebarOpen` keys still work, but `outlineToc` / `outlineTocOpen` are the preferred names now.
 
