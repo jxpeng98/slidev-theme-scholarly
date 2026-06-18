@@ -119,7 +119,7 @@ withProject({
     name: 'missing-slides',
     private: true,
     devDependencies: {
-      'slidev-theme-scholarly': '^1.4.0',
+      'slidev-theme-scholarly': '^1.4.0-beta.1',
     },
   }, null, 2),
 }, (dir) => {
