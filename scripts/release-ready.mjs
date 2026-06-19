@@ -33,6 +33,10 @@ const steps = [
     command: ['node', 'scripts/check-vscode-metadata-previews.mjs'],
   },
   {
+    name: 'VS Code preview prompt contract',
+    command: ['node', 'scripts/check-vscode-preview-prompts.mjs'],
+  },
+  {
     name: 'Curated template contract',
     command: ['node', 'scripts/check-curated-templates.mjs'],
   },

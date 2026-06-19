@@ -1,92 +1,111 @@
 # Versioning & Release Tags
 
-本仓库包含两个可发布产物，**版本号独立管理**：
-1) **Slidev 主题（npm）**：`slidev-theme-scholarly`  
-2) **VS Code 插件（Marketplace / VSIX）**：`slidev-scholarly-snippets`
+本仓库包含两个可发布产物，但现在采用同一条 release train：
 
-This repo contains two independently versioned deliverables:
+1. **Slidev 主题（npm）**：`slidev-theme-scholarly`
+2. **VS Code 插件（Marketplace / VSIX）**：`slidev-scholarly-snippets`
+
+The repo contains two deliverables on one release train:
 
 1. **Slidev Theme (npm)**: `slidev-theme-scholarly`
 2. **VS Code Extension (Marketplace / VSIX)**: `slidev-scholarly-snippets`
 
-They are related, but **do not share the same version number** anymore.
+## Policy
 
-## 1) Slidev Theme (npm)
+- **唯一版本真源 / Source of truth**: root `package.json`
+- `docs/package.json` always follows the root theme version.
+- Stable releases use the same `X.Y.Z` version for the theme and VS Code extension.
+- Theme pre-releases may use npm semver suffixes such as `1.4.0-beta.1`.
+- VS Code Marketplace versions must be plain `X.Y.Z`; pre-release channel builds use an explicit mapped version and must not reuse the future stable base version.
 
-- **版本号真源**：仓库根目录 `package.json`
-- **Tag 格式**：`vX.Y.Z`（例如 `v1.2.3`、`v1.2.3-beta.1`）
-- **CI**：`.github/workflows/release.yml`
-  - 稳定版（不含 `-<pre>`）：发布到 npm（`latest`）
-  - 预发布（含 `-<pre>`）：发布到 npm（`next`）
+Example:
 
-- **Version source of truth**: `package.json` at repo root
-- **Tag format**: `vX.Y.Z` (e.g. `v1.2.3`, `v1.2.3-beta.1`)
-- **CI**: `.github/workflows/release.yml`
-  - Stable tag (no `-<pre>`): publishes to npm (`latest`)
-  - Pre-release tag (with `-<pre>`): publishes to npm (`next`)
+| Release | Theme version | VS Code extension version | Channel |
+| --- | --- | --- | --- |
+| Beta | `1.4.0-beta.1` | `1.3.3` | npm `next`, VS Code pre-release |
+| Stable | `1.4.0` | `1.4.0` | npm `latest`, VS Code stable |
 
-### Commands
+The beta mapping is intentionally not a literal version match. It avoids consuming `1.4.0` in the VS Code Marketplace before the stable extension release.
 
-- 发布前检查：
-  - `pnpm run check`
-- 完整视觉检查（需要 Playwright Chromium）：
-  - `pnpm run check:visual`
-- 主题版本 bump（同时更新 docs）：
-  - `pnpm bump patch|minor|major|X.Y.Z[-pre]`
-- 将主题版本同步到 docs：
-  - `pnpm version:sync`
+## Commands
 
-- Release readiness:
-  - `pnpm run check`
-- Full visual readiness (requires Playwright Chromium):
-  - `pnpm run check:visual`
-- Bump theme (and docs) version:
-  - `pnpm bump patch|minor|major|X.Y.Z[-pre]`
-- Sync docs version from theme:
-  - `pnpm version:sync`
+### Stable release preparation
 
-### Release Checklist
+```bash
+pnpm bump patch
+pnpm bump minor
+pnpm bump major
+pnpm bump 1.4.0
+```
 
-Before creating a theme release tag:
+Stable bumps update:
+
+- `package.json`
+- `docs/package.json`
+- `vscode-extension/package.json`
+
+### Theme pre-release preparation
+
+For npm-only theme pre-releases:
+
+```bash
+pnpm bump 1.4.0-beta.1
+```
+
+This updates the root theme and docs versions, but keeps `vscode-extension/package.json` unchanged.
+
+For a paired VS Code Marketplace pre-release:
+
+```bash
+pnpm bump 1.4.0-beta.1 -- --vscode-prerelease-version 1.3.3
+```
+
+The mapped VS Code version must be plain `X.Y.Z` and must not equal the future stable base version (`1.4.0` in this example).
+
+### Sync after manual edits
+
+```bash
+pnpm version:sync
+pnpm version:sync -- --vscode-prerelease-version 1.3.3
+```
+
+`pnpm version:sync` copies the root version to docs and, for stable root versions, to the VS Code extension. For root pre-release versions, pass `--vscode-prerelease-version` only when intentionally preparing a VS Code pre-release build.
+
+## Tags
+
+### Theme tags
+
+- Stable npm release: `vX.Y.Z`
+- npm pre-release: `vX.Y.Z-beta.N`
+
+Theme tags trigger `.github/workflows/release.yml`:
+
+- Stable tags publish npm `latest`.
+- Pre-release tags publish npm `next`.
+
+### VS Code tags
+
+- Stable VSIX release: `vscode-vX.Y.Z`
+- Pre-release VSIX release: `vscode-pre-vX.Y.Z`
+
+VS Code tags trigger `.github/workflows/vscode-release.yml`.
+
+Use the VS Code package version for these tags:
+
+```bash
+pnpm run tag:vscode
+pnpm run tag:vscode:pre
+```
+
+## Release Checklist
+
+Before creating release tags:
 
 1. Run `pnpm run check`.
 2. If the release changes styles, layouts, components, screenshots, or color tokens, run `pnpm run check:visual`.
-3. Inspect generated visual output under `/private/tmp/scholarly-theme-matrix/` when the visual check is enabled.
-4. Run `pnpm version:sync` after changing the root package version.
-5. Confirm `vscode-extension/package.json` is only changed when the VS Code extension itself is being released.
+3. Inspect generated visual output under `/private/tmp/scholarly-theme-matrix/` when visual checks are enabled.
+4. Run `pnpm version:sync` after manual root version edits.
+5. For theme pre-releases, decide whether this is npm-only or paired with a VS Code pre-release.
+6. For paired VS Code pre-releases, choose a plain mapped version that does not equal the future stable base version.
 
-## 2) VS Code Extension (Marketplace / VSIX)
-
-Marketplace 的插件版本号必须是**纯 `X.Y.Z`**（不允许 `-beta.1`）。beta 请通过 Marketplace 的 **pre-release 渠道**发布。
-
-Marketplace extension versions must be **plain `X.Y.Z`** (no `-beta.1` suffix). Use the Marketplace **pre-release channel** to publish beta builds.
-
-- **版本号真源**：`vscode-extension/package.json`
-- **Tag 格式**：
-  - 稳定 VSIX：`vscode-vX.Y.Z`
-  - 预发布 VSIX：`vscode-pre-vX.Y.Z`
-- **CI**：`.github/workflows/vscode-release.yml`
-
-- **Version source of truth**: `vscode-extension/package.json`
-- **Tag formats**:
-  - Stable VSIX GitHub release: `vscode-vX.Y.Z`
-  - Pre-release VSIX GitHub release: `vscode-pre-vX.Y.Z`
-- **CI**: `.github/workflows/vscode-release.yml`
-
-### Commands
-
-- 插件版本 bump：
-  - `pnpm bump:vscode patch|minor|major|X.Y.Z`
-- 打包 VSIX：
-  - `pnpm vscode:package`
-- 发布（在 `vscode-extension/` 下执行）：
-  - 稳定：`pnpm run publish`
-  - 预发布：`pnpm run publish:pre`
-
-- Bump extension version:
-  - `pnpm bump:vscode patch|minor|major|X.Y.Z`
-- Package VSIX:
-  - `pnpm vscode:package`
-- Publish (from `vscode-extension/`):
-  - Stable: `pnpm run publish`
-  - Pre-release: `pnpm run publish:pre`
+There is no separate `bump:vscode` workflow anymore. Stable VS Code versions move with the root theme version; pre-release VS Code versions are explicit mappings in the shared release process.

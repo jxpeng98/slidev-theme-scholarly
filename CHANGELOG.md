@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0-beta.1] - 2026-06-18
+## [1.4.0-beta.1] - 2026-06-19
 
 ### Added
 
@@ -13,13 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Academic evidence components**: Added MetricCard, MetricGrid, EvidenceBlock, EquationBlock, DatasetCard, PaperCard, ContributionList, and CaveatList for result-heavy academic decks.
 - **Curated starter templates**: Added paper talk, seminar, thesis defense, reading group, and conference lightning templates with BibTeX examples.
 - **CLI workflows**: Added paper summary scaffolding from BibTeX, data-driven result helpers, actionable doctor diagnostics, and release readiness checks.
-- **VS Code support**: Added citation diagnostics plus synchronized metadata, snippets, and preview assets for the expanded layout/component set.
+- **VS Code support**: Added citation diagnostics, the GUI Builder, and synchronized metadata, snippets, and preview assets for the expanded layout/component set.
 
 ### Changed
 
 - **Documentation**: Expanded English and Chinese docs for academic workflows, configuration, layouts, components, and theme contrast guidance.
 - **Footer outline**: Reworked the footer TOC into a compact section-grouped panel with current/last-section jumps and long-deck navigation support.
 - **Preview assets**: Regenerated layout and component screenshots for docs and the VS Code extension.
+- **Release process**: Aligned stable theme and VS Code versions while keeping VS Code pre-releases on explicit Marketplace-compatible version mappings.
 
 ### Fixed
 

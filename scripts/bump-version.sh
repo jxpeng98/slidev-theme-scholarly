@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Bump THEME version across root package.json and docs/package.json.
+# Bump the theme version and sync release-train package versions.
 #
 # Usage:
 #   ./scripts/bump-version.sh <patch|minor|major|new-version>
+#   ./scripts/bump-version.sh <new-prerelease> --vscode-prerelease-version <x.y.z>
 #
 # Examples:
 #   ./scripts/bump-version.sh patch           # 1.0.3 → 1.0.4
@@ -13,15 +14,39 @@ set -euo pipefail
 #   ./scripts/bump-version.sh 2.0.0-beta.1    # → 2.0.0-beta.1
 #   ./scripts/bump-version.sh 1.1.0-rc.2      # → 1.1.0-rc.2
 #
-# NOTE:
-#   The VS Code extension has its own versioning. Use:
-#     ./scripts/bump-vscode-version.sh <patch|minor|major|new-version>
+# Notes:
+#   - Stable theme releases sync the same x.y.z version into the VS Code extension.
+#   - Theme prereleases cannot be copied directly to the VS Code extension because
+#     Marketplace versions must be plain x.y.z. Pass --vscode-prerelease-version
+#     when preparing a Marketplace prerelease build.
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 INPUT="${1:-}"
+VSCODE_PRERELEASE_VERSION=""
+
+if [[ "$#" -gt 0 ]]; then
+  shift
+fi
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --vscode-prerelease-version)
+      VSCODE_PRERELEASE_VERSION="${2:-}"
+      if [[ -z "$VSCODE_PRERELEASE_VERSION" ]]; then
+        echo "Error: --vscode-prerelease-version requires a value" >&2
+        exit 2
+      fi
+      shift 2
+      ;;
+    *)
+      echo "Error: unknown option: $1" >&2
+      exit 2
+      ;;
+  esac
+done
 
 if [[ -z "$INPUT" ]]; then
-  echo "Usage: $0 <patch|minor|major|new-version>"
+  echo "Usage: $0 <patch|minor|major|new-version> [--vscode-prerelease-version x.y.z]"
   echo ""
   echo "  Semver keywords:"
   echo "    patch           1.0.3 → 1.0.4"
@@ -31,6 +56,9 @@ if [[ -z "$INPUT" ]]; then
   echo "  Explicit version:"
   echo "    2.0.0-beta.1    → 2.0.0-beta.1"
   echo "    1.1.0-rc.2      → 1.1.0-rc.2"
+  echo ""
+  echo "  VS Code prerelease mapping:"
+  echo "    1.4.0-beta.1 --vscode-prerelease-version 1.3.3"
   exit 2
 fi
 
@@ -72,43 +100,34 @@ case "$INPUT" in
     ;;
 esac
 
-# --- Target files ---
-TARGETS=(
-  "${ROOT_DIR}/package.json"
-  "${ROOT_DIR}/docs/package.json"
-)
+OLD_ROOT_VERSION=$(node -p "require('${ROOT_PKG}').version")
+node -e "
+  const fs = require('fs');
+  const content = fs.readFileSync('${ROOT_PKG}', 'utf8');
+  const pkg = JSON.parse(content);
+  pkg.version = '${NEW_VERSION}';
+  const match = content.match(/^([ \\t]+)\\\"/m);
+  const indent = match ? match[1].length : 2;
+  fs.writeFileSync('${ROOT_PKG}', JSON.stringify(pkg, null, indent) + '\\n');
+"
+echo "  ✓  package.json: ${OLD_ROOT_VERSION} → ${NEW_VERSION}"
 
-# --- Update each package.json ---
-for TARGET in "${TARGETS[@]}"; do
-  REL_PATH="${TARGET#${ROOT_DIR}/}"
+SYNC_ARGS=()
+if [[ -n "$VSCODE_PRERELEASE_VERSION" ]]; then
+  SYNC_ARGS+=(--vscode-prerelease-version "$VSCODE_PRERELEASE_VERSION")
+fi
 
-  if [[ ! -f "$TARGET" ]]; then
-    echo "  ⚠  Skipped (not found): ${REL_PATH}"
-    continue
-  fi
-
-  OLD_VERSION=$(node -p "require('${TARGET}').version")
-
-  # Use node to safely update JSON (preserves formatting better than sed)
-  node -e "
-    const fs = require('fs');
-    const content = fs.readFileSync('${TARGET}', 'utf8');
-    const pkg = JSON.parse(content);
-    pkg.version = '${NEW_VERSION}';
-    // Detect indent from original file
-    const match = content.match(/^([ \t]+)\"/m);
-    const indent = match ? match[1].length : 2;
-    fs.writeFileSync('${TARGET}', JSON.stringify(pkg, null, indent) + '\\n');
-  "
-
-  echo "  ✓  ${REL_PATH}: ${OLD_VERSION} → ${NEW_VERSION}"
-done
+node "${ROOT_DIR}/scripts/sync-version.mjs" "${SYNC_ARGS[@]}"
 
 echo ""
 echo "[bump-version] Updated to ${NEW_VERSION}"
 echo ""
 echo "Next steps:"
-echo "  git add package.json docs/package.json"
+if [[ "$NEW_VERSION" == *-* && -z "$VSCODE_PRERELEASE_VERSION" ]]; then
+  echo "  Optional VS Code prerelease mapping:"
+  echo "    pnpm version:sync -- --vscode-prerelease-version <x.y.z>"
+fi
+echo "  git add package.json docs/package.json vscode-extension/package.json"
 echo "  git commit -m 'chore: bump version to ${NEW_VERSION}'"
 echo "  git tag v${NEW_VERSION}"
 echo "  git push origin main --tags"
