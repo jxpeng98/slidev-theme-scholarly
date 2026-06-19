@@ -56,6 +56,18 @@ You can also type `ss-anchor` to insert a standalone anchor snippet.
 
 The extension now features a dedicated Preview panel. Simply click the eye icon (👁️) next to any Layout, Component, or Theme in the sidebar to view a high-quality visualization of how it looks in the rendered slides.
 
+### 🧩 GUI Builder (New)
+
+For users who prefer a low-code workflow, run `Open GUI Builder` from the Command Palette or from the Templates view title. The builder opens a VS Code webview where you can:
+
+- drag Scholarly layouts into a slide list
+- reorder or delete generated slides
+- edit common fields such as title, body, bullets, image path, and caption
+- choose color and font themes
+- generate a new Markdown deck or insert the generated Markdown into the active editor
+
+The builder intentionally outputs regular Slidev Markdown, so advanced users can continue refining the deck in VS Code after the GUI creates the first draft.
+
 ### 🧪 Dev Mode (Performance Testing)
 
 For extension performance diagnostics, enable dev mode:
