@@ -54,30 +54,6 @@
           <div class="footer-toc-panel-actions">
             <button
               type="button"
-              class="footer-toc-panel-action"
-              :title="labels.current"
-              :aria-label="labels.current"
-              @click="jumpToCurrentOutlineItem"
-            >
-              <span class="footer-toc-panel-action-dot" aria-hidden="true" />
-              <span class="footer-toc-panel-action-label">{{ labels.current }}</span>
-            </button>
-            <button
-              type="button"
-              class="footer-toc-panel-action"
-              :title="labels.last"
-              :aria-label="labels.last"
-              @click="jumpToLastSection"
-            >
-              <svg class="footer-toc-panel-action-icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M8 3V12" />
-                <path d="M4.5 8.5L8 12L11.5 8.5" />
-                <path d="M4 13H12" />
-              </svg>
-              <span class="footer-toc-panel-action-label">{{ labels.last }}</span>
-            </button>
-            <button
-              type="button"
               class="footer-toc-panel-close"
               :aria-label="labels.close"
               @click="closePanel"
@@ -138,16 +114,12 @@
                   class="footer-toc-section-toggle"
                   :aria-expanded="isSectionExpanded(section) ? 'true' : 'false'"
                   :aria-label="`${isSectionExpanded(section) ? labels.collapseSection : labels.expandSection}: ${section.title}`"
+                  :title="`${isSectionExpanded(section) ? labels.collapseSection : labels.expandSection}: ${section.title}`"
                   @click="toggleSectionExpanded(section.no)"
                 >
-                  <span class="footer-toc-section-toggle-hitbox">
-                    <svg class="footer-toc-section-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
-                      <path d="M5.5 6.5L8 9L10.5 6.5" />
-                    </svg>
-                    <span class="footer-toc-section-toggle-label">
-                      {{ isSectionExpanded(section) ? labels.expanded : labels.collapsed }}
-                    </span>
-                  </span>
+                  <svg class="footer-toc-section-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M5.5 6.5L8 9L10.5 6.5" />
+                  </svg>
                 </button>
               </div>
 
@@ -272,12 +244,8 @@ const labels = computed(() => {
       close: '关闭目录面板',
       empty: '当前没有可显示的目录项。请使用 section 页，或为幻灯片添加标题。',
       ungrouped: '开场',
-      current: '当前',
-      last: '末尾',
       expandSection: '展开 section',
       collapseSection: '折叠 section',
-      expanded: '已展开',
-      collapsed: '已折叠',
       slideSingular: '页',
       slidePlural: '页',
     }
@@ -290,12 +258,8 @@ const labels = computed(() => {
     close: 'Close outline panel',
     empty: 'No outline items available. Add section slides or slide titles.',
     ungrouped: 'Opening',
-    current: 'Current',
-    last: 'Last',
     expandSection: 'Expand section',
     collapseSection: 'Collapse section',
-    expanded: 'Expanded',
-    collapsed: 'Collapsed',
     slideSingular: 'slide',
     slidePlural: 'slides',
   }
@@ -415,10 +379,6 @@ const compactOutline = computed(() => shouldUseCompactOutline(sectionGroups.valu
 
 const activeSectionNo = computed(() => {
   return sectionGroups.value.find(section => section.active)?.no ?? null
-})
-
-const lastSectionNo = computed(() => {
-  return sectionGroups.value.at(-1)?.no ?? null
 })
 
 const isSectionExpanded = (section: TocSectionGroup) => {
@@ -676,16 +636,6 @@ const togglePanel = async () => {
   }
 }
 
-const jumpToCurrentOutlineItem = async () => {
-  ensureSectionExpanded(activeSectionNo.value)
-  await scrollToPreviewNo(currentOutlineTargetNo.value, 'center')
-}
-
-const jumpToLastSection = async () => {
-  ensureSectionExpanded(lastSectionNo.value)
-  await scrollToPreviewNo(lastSectionNo.value, 'end')
-}
-
 const navigateToSlide = async (slideNo: number) => {
   if (slideNo <= 0)
     return
@@ -794,6 +744,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ============================================================================
+   FooterTocControl — Dark Liquid Glass Outline Panel
+   Matches the scholarly theme's dark chrome toolbar aesthetic.
+   Uses layered translucent gradients, backdrop-filter blur, and gold accents.
+   ============================================================================ */
+
 .footer-toc-control {
   position: relative;
   display: inline-flex;
@@ -802,13 +758,55 @@ onUnmounted(() => {
   margin-right: 0.02rem;
 }
 
+/* -- Trigger button -------------------------------------------------------- */
+
+.beamer-nav-button-toc {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--scholarly-toolbar-divider, rgba(255, 255, 255, 0.22)) 78%, transparent);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04)),
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 18%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0.18rem 0.42rem rgba(5, 18, 36, 0.12);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+}
+
+.beamer-nav-button-toc::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 55%);
+  opacity: 0.56;
+}
+
+.beamer-nav-button-toc:hover:not(:disabled),
+.beamer-nav-button-toc:focus-visible,
+.beamer-nav-button-toc.is-active {
+  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, rgba(255, 255, 255, 0.16) 64%);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.06)),
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 26%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0.22rem 0.56rem rgba(5, 18, 36, 0.18);
+}
+
+/* -- Backdrop overlay ------------------------------------------------------ */
+
 .footer-toc-backdrop {
   position: fixed;
   inset: 0;
   z-index: 54;
   border: 0;
-  background: transparent;
+  background: rgba(10, 22, 40, 0.12);
 }
+
+/* -- Panel container — dark liquid glass ----------------------------------- */
 
 .footer-toc-panel {
   position: fixed;
@@ -820,24 +818,49 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--scholarly-content-border, rgba(30, 58, 95, 0.14));
-  border-radius: 0.5rem;
+
+  /* Glass border — subtle luminous edge */
+  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 28%, rgba(255, 255, 255, 0.12) 72%);
+  border-radius: 0.62rem;
+
+  /* Dark translucent glass surface */
   background:
-    linear-gradient(180deg, var(--scholarly-content-surface, #ffffff), var(--scholarly-content-surface-muted, #f8fafc));
-  color: var(--scholarly-text-primary, #2d3748);
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 18%, rgba(255, 255, 255, 0.06) 82%) 0%,
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 90%, #0d1f38 10%),
+      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 82%, #0a1628 18%) 50%,
+      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, #111b2e 12%)
+    );
+  color: rgba(255, 255, 255, 0.92);
+
+  /* Layered shadows: specular highlight + depth + colored halo */
   box-shadow:
-    0 18px 44px rgba(15, 23, 42, 0.16),
-    0 5px 16px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(14px);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 1.2rem 3rem rgba(10, 22, 40, 0.42),
+    0 0.35rem 1.1rem rgba(10, 22, 40, 0.22),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
 }
+
+/* -- Panel header — frosted dark strip ------------------------------------- */
 
 .footer-toc-panel-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.58rem 0.62rem 0.5rem;
-  border-bottom: 1px solid var(--scholarly-content-border, rgba(30, 58, 95, 0.12));
+  padding: 0.62rem 0.66rem 0.52rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 80%),
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 30%, transparent);
 }
 
 .footer-toc-panel-heading {
@@ -847,43 +870,7 @@ onUnmounted(() => {
 .footer-toc-panel-actions {
   display: inline-flex;
   align-items: center;
-  gap: 0.24rem;
   flex-shrink: 0;
-}
-
-.footer-toc-panel-action {
-  height: 1.24rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  padding: 0 0.34rem;
-  border: 1px solid rgba(30, 58, 95, 0.1);
-  border-radius: 0.34rem;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 7%, transparent);
-  color: var(--slidev-theme-primary, #1e3a5f);
-  font-family: var(--scholarly-font-sans);
-  font-size: 0.52rem;
-  font-weight: 650;
-  line-height: 1;
-  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
-}
-
-.footer-toc-panel-action-dot {
-  width: 0.36rem;
-  height: 0.36rem;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.footer-toc-panel-action-icon {
-  width: 0.58rem;
-  height: 0.58rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.75;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .footer-toc-panel-title {
@@ -891,16 +878,20 @@ onUnmounted(() => {
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: 0;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 
 .footer-toc-panel-subtitle {
-  margin-top: 0.08rem;
-  font-size: 0.58rem;
+  margin-top: 0.1rem;
+  font-size: 0.56rem;
   line-height: 1.28;
-  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.72));
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.55);
 }
+
+/* -- Close button — dark glass mini-button --------------------------------- */
 
 .footer-toc-panel-close {
   width: 1.24rem;
@@ -908,11 +899,16 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(30, 58, 95, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.34rem;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
-  color: var(--slidev-theme-primary, #1e3a5f);
-  transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 32%, transparent);
+  color: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0.12rem 0.36rem rgba(0, 0, 0, 0.12);
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
 }
 
 .footer-toc-panel-close-icon {
@@ -926,12 +922,16 @@ onUnmounted(() => {
   stroke-linejoin: round;
 }
 
+/* -- Panel body — scrollable area ------------------------------------------ */
+
 .footer-toc-panel-body {
   flex: 1;
   overflow: auto;
-  padding: 0.34rem;
+  padding: 0.38rem;
+  background: transparent;
   scrollbar-width: thin;
   scrollbar-gutter: stable;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
 }
 
 .footer-toc-empty {
@@ -939,37 +939,55 @@ onUnmounted(() => {
   padding: 0.42rem;
   font-size: 0.68rem;
   line-height: 1.38;
-  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.76));
+  color: rgba(255, 255, 255, 0.5);
 }
 
+/* -- Section cards — dark glass tiles -------------------------------------- */
+
 .footer-toc-section + .footer-toc-section {
-  margin-top: 0.24rem;
+  margin-top: 0.22rem;
 }
 
 .footer-toc-section {
-  padding: 0.16rem;
-  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, rgba(30, 58, 95, 0.12)) 82%, transparent);
-  border-radius: 0.44rem;
-  background: color-mix(in srgb, var(--scholarly-content-surface, #ffffff) 76%, transparent);
+  padding: 0.14rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.46rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 14%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0.1rem 0.32rem rgba(0, 0, 0, 0.08);
+  transition: border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
 }
 
+/* Active section — scholarly gold accent */
 .footer-toc-section.is-active {
-  border-color: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 28%, var(--scholarly-content-border, rgba(30, 58, 95, 0.12)) 72%);
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 6%, var(--scholarly-content-surface, #ffffff) 94%);
+  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 32%, rgba(255, 255, 255, 0.1) 68%);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 18%, transparent) 92%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 2px 0 0 color-mix(in srgb, var(--scholarly-accent, #b8860b) 62%, transparent),
+    0 0.14rem 0.5rem rgba(0, 0, 0, 0.1),
+    0 0 0.6rem color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, transparent);
 }
 
 .footer-toc-section-header {
   width: 100%;
   display: flex;
-  align-items: stretch;
-  gap: 0.24rem;
-  border-radius: 0.34rem;
+  align-items: center;
+  gap: 0.18rem;
+  border-radius: 0.36rem;
   background: transparent;
 }
 
 .footer-toc-section.is-active .footer-toc-section-header {
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
+  background: rgba(255, 255, 255, 0.04);
 }
+
+/* -- Section jump button --------------------------------------------------- */
 
 .footer-toc-section-jump {
   flex: 1;
@@ -977,12 +995,15 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.36rem;
-  padding: 0.34rem 0.36rem;
+  min-height: 1.68rem;
+  padding: 0.28rem 0.34rem;
   border: 0;
-  border-radius: 0.34rem;
+  border-radius: 0.36rem;
   background: transparent;
   color: inherit;
   text-align: left;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
 
 .footer-toc-section-copy {
@@ -995,58 +1016,46 @@ onUnmounted(() => {
 .footer-toc-section-meta {
   font-size: 0.52rem;
   line-height: 1.12;
-  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.64));
+  color: rgba(255, 255, 255, 0.42);
 }
 
+/* -- Section toggle — dark glass expand/collapse --------------------------- */
+
 .footer-toc-section-toggle {
-  width: 3.25rem;
-  min-height: 100%;
+  width: 1.34rem;
+  min-width: 1.34rem;
+  height: 1.34rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.34rem;
-  background: transparent;
-  color: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 78%, var(--scholarly-text-primary, #2d3748) 22%);
-}
-
-.footer-toc-section-toggle-hitbox {
-  width: 100%;
-  min-height: 1.72rem;
-  display: inline-grid;
-  place-items: center;
-  gap: 0.08rem;
-  padding: 0.18rem 0.22rem;
-  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 14%, transparent);
-  border-radius: 0.32rem;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 5%, transparent);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 20%, transparent);
+  color: rgba(255, 255, 255, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0.08rem 0.28rem rgba(0, 0, 0, 0.1);
+  transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease, color 200ms ease;
 }
 
 .footer-toc-section-toggle-icon {
-  width: 0.68rem;
-  height: 0.68rem;
+  width: 0.58rem;
+  height: 0.58rem;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 140ms ease;
+  transition: transform 180ms ease;
 }
 
 .footer-toc-section-toggle[aria-expanded='true'] .footer-toc-section-toggle-icon {
   transform: rotate(180deg);
 }
 
-.footer-toc-section-toggle-label {
-  max-width: 100%;
-  overflow: hidden;
-  font-family: var(--scholarly-font-sans);
-  font-size: 0.46rem;
-  font-weight: 650;
-  line-height: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+/* -- Index badges ---------------------------------------------------------- */
 
 .footer-toc-section-index,
 .footer-toc-slide-index {
@@ -1062,9 +1071,15 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
 }
 
+/* Section badge — luminous accent pill */
 .footer-toc-section-index {
-  background: var(--slidev-theme-primary, #1e3a5f);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.14), transparent 60%),
+    color-mix(in srgb, var(--scholarly-accent, #b8860b) 72%, var(--slidev-theme-primary, #1e3a5f) 28%);
   color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0.08rem 0.24rem rgba(0, 0, 0, 0.14);
 }
 
 .footer-toc-section-title {
@@ -1074,9 +1089,12 @@ onUnmounted(() => {
   font-size: 0.66rem;
   font-weight: 700;
   line-height: 1.22;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.94);
   overflow-wrap: anywhere;
 }
+
+/* -- Slide items ----------------------------------------------------------- */
 
 .footer-toc-slides {
   margin-top: 0.1rem;
@@ -1094,42 +1112,76 @@ onUnmounted(() => {
   background: transparent;
   color: inherit;
   text-align: left;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
+
+/* -- Hover & focus states — glass brightening ------------------------------ */
 
 .footer-toc-slide:hover,
 .footer-toc-slide:focus-visible,
 .footer-toc-section-jump:hover,
+.footer-toc-section-jump:focus-visible {
+  outline: none;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .footer-toc-section-jump:focus-visible,
+.footer-toc-slide:focus-visible {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1.5px color-mix(in srgb, var(--scholarly-accent, #b8860b) 42%, transparent);
+}
+
 .footer-toc-section-toggle:hover,
 .footer-toc-section-toggle:focus-visible,
-.footer-toc-panel-action:hover,
-.footer-toc-panel-action:focus-visible,
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   outline: none;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 12%, transparent);
+  border-color: rgba(255, 255, 255, 0.2);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
+    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 36%, transparent);
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0.14rem 0.4rem rgba(0, 0, 0, 0.14);
 }
 
-.footer-toc-panel-action:hover,
-.footer-toc-panel-action:focus-visible,
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
-  border-color: rgba(30, 58, 95, 0.18);
   transform: translateY(-0.5px);
 }
 
-.footer-toc-slide-index {
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
-  color: var(--slidev-theme-primary, #1e3a5f);
+.footer-toc-section-toggle:hover,
+.footer-toc-section-toggle:focus-visible {
+  transform: translateY(-0.5px);
 }
 
+/* Slide index badge — translucent pill on dark */
+.footer-toc-slide-index {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Active slide — subtle accent glow */
 .footer-toc-slide.is-active {
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 10%, transparent);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), transparent),
+    color-mix(in srgb, var(--scholarly-accent, #b8860b) 10%, transparent);
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-index {
-  background: var(--slidev-theme-primary, #1e3a5f);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), transparent 60%),
+    color-mix(in srgb, var(--scholarly-accent, #b8860b) 68%, var(--slidev-theme-primary, #1e3a5f) 32%);
   color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0.06rem 0.2rem rgba(0, 0, 0, 0.12);
 }
 
 .footer-toc-slide-title {
@@ -1137,29 +1189,38 @@ onUnmounted(() => {
   min-width: 0;
   font-size: 0.63rem;
   line-height: 1.24;
+  color: rgba(255, 255, 255, 0.76);
   overflow-wrap: anywhere;
 }
 
+.footer-toc-slide.is-active .footer-toc-slide-title {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* -- Panel transitions — spring-like entrance ------------------------------ */
+
 .footer-toc-panel-enter-active,
 .footer-toc-panel-leave-active {
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition: opacity 240ms cubic-bezier(0.22, 0.68, 0.35, 1), transform 240ms cubic-bezier(0.22, 0.68, 0.35, 1);
 }
 
 .footer-toc-panel-enter-from,
 .footer-toc-panel-leave-to {
   opacity: 0;
-  transform: translateY(0.35rem) scale(0.98);
+  transform: translateY(0.55rem) scale(0.96);
 }
 
 .footer-toc-backdrop-enter-active,
 .footer-toc-backdrop-leave-active {
-  transition: opacity 160ms ease;
+  transition: opacity 200ms ease;
 }
 
 .footer-toc-backdrop-enter-from,
 .footer-toc-backdrop-leave-to {
   opacity: 0;
 }
+
+/* -- Responsive ------------------------------------------------------------ */
 
 @media (max-width: 900px) {
   .footer-toc-panel {
@@ -1168,13 +1229,24 @@ onUnmounted(() => {
   }
 
   .footer-toc-section-toggle {
-    width: 2.1rem;
-  }
-
-  .footer-toc-section-toggle-label {
-    display: none;
+    width: 1.22rem;
+    min-width: 1.22rem;
+    height: 1.22rem;
   }
 }
+
+/* -- Reduced motion -------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-toc-panel-enter-active,
+  .footer-toc-panel-leave-active,
+  .footer-toc-backdrop-enter-active,
+  .footer-toc-backdrop-leave-active {
+    transition: none;
+  }
+}
+
+/* -- Print ----------------------------------------------------------------- */
 
 @media print {
   .footer-toc-control,
