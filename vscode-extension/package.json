@@ -331,15 +331,16 @@
     "watch": "npm run sync-shared-data && npm run sync-snippets && tsc -watch -p ./",
     "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext ts",
-    "package": "npx @vscode/vsce package",
-    "publish": "npx @vscode/vsce publish",
-    "publish:pre": "npx @vscode/vsce publish --pre-release"
+    "package": "vsce package",
+    "publish": "vsce publish --azure-credential",
+    "publish:pre": "vsce publish --azure-credential --pre-release"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
     "@types/vscode": "1.106.0",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
     "@typescript-eslint/parser": "^8.61.1",
+    "@vscode/vsce": "3.9.2",
     "eslint": "^10.5.0",
     "typescript": "^6.0.3"
   },

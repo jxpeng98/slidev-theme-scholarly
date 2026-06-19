@@ -160,7 +160,11 @@ jobs:
         id: package
         working-directory: vscode-extension
         run: |
-          pnpm run package
+          if [ "${{ needs.check.outputs.is_prerelease }}" = "true" ]; then
+            pnpm exec vsce package --pre-release
+          else
+            pnpm run package
+          fi
           VSIX_FILE=$(ls *.vsix)
           echo "vsix_name=$VSIX_FILE" >> "$GITHUB_OUTPUT"
 
@@ -175,16 +179,45 @@ jobs:
     needs: [check, build]
     if: needs.check.outputs.is_stable == 'true'
     runs-on: ubuntu-latest
+    environment: vscode-marketplace
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: vscode-extension/pnpm-lock.yaml
+
+      - name: Install extension dependencies
+        working-directory: vscode-extension
+        run: pnpm install --frozen-lockfile
 
       - name: Download VSIX artifact
         uses: actions/download-artifact@v4
         with:
           name: slidev-scholarly-snippets-${{ needs.check.outputs.version }}
           path: ./vsix
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Publish to VS Code Marketplace
+        working-directory: vscode-extension
+        run: pnpm exec vsce publish --azure-credential --packagePath ../vsix/${{ needs.build.outputs.vsix_name }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -202,16 +235,45 @@ jobs:
     needs: [check, build]
     if: needs.check.outputs.is_prerelease == 'true'
     runs-on: ubuntu-latest
+    environment: vscode-marketplace
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: vscode-extension/pnpm-lock.yaml
+
+      - name: Install extension dependencies
+        working-directory: vscode-extension
+        run: pnpm install --frozen-lockfile
 
       - name: Download VSIX artifact
         uses: actions/download-artifact@v4
         with:
           name: slidev-scholarly-snippets-${{ needs.check.outputs.version }}
           path: ./vsix
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Publish to VS Code Marketplace pre-release
+        working-directory: vscode-extension
+        run: pnpm exec vsce publish --azure-credential --pre-release --packagePath ../vsix/${{ needs.build.outputs.vsix_name }}
 
       - name: Create GitHub Pre-release
         uses: softprops/action-gh-release@v1

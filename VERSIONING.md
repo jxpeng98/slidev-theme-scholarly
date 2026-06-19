@@ -97,6 +97,29 @@ pnpm run tag:vscode
 pnpm run tag:vscode:pre
 ```
 
+## VS Code Marketplace Authentication
+
+VS Code Marketplace publishing uses Microsoft Entra ID through GitHub Actions OIDC.
+Do not use `VSCE_PAT` for automated publishing.
+
+One-time setup:
+
+1. Create or select a Microsoft Entra workload identity that can be used from GitHub Actions.
+2. Add a federated credential for the GitHub environment subject:
+   `repo:jxpeng98/slidev-theme-scholarly:environment:vscode-marketplace`.
+3. Add the identity to the Visual Studio Marketplace publisher `jxpeng98` with the Contributor role.
+4. Configure these GitHub Actions secrets:
+
+| Secret | Value |
+| --- | --- |
+| `AZURE_CLIENT_ID` | Service principal or user-assigned managed identity client ID |
+| `AZURE_TENANT_ID` | Microsoft Entra tenant ID |
+| `AZURE_SUBSCRIPTION_ID` | Azure subscription ID |
+
+The workflow logs in with `azure/login@v3`, grants `id-token: write` only on the
+stable and pre-release publish jobs, runs those jobs in the `vscode-marketplace`
+GitHub environment, and publishes the built VSIX with `vsce publish --azure-credential`.
+
 ## Release Checklist
 
 Before creating release tags:
@@ -107,5 +130,6 @@ Before creating release tags:
 4. Run `pnpm version:sync` after manual root version edits.
 5. For theme pre-releases, decide whether this is npm-only or paired with a VS Code pre-release.
 6. For paired VS Code pre-releases, choose a plain mapped version that does not equal the future stable base version.
+7. Confirm the VS Code Marketplace Entra ID secrets are configured before pushing `vscode-v*` or `vscode-pre-v*` tags.
 
 There is no separate `bump:vscode` workflow anymore. Stable VS Code versions move with the root theme version; pre-release VS Code versions are explicit mappings in the shared release process.
