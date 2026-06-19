@@ -9,6 +9,8 @@ const INTERNAL_LINK_SELECTOR = '.slidev-layout a[href*="#"]'
 const INTERNAL_TARGET_ATTR = 'data-scholarly-anchor-target'
 const TEMP_TABINDEX_ATTR = 'data-scholarly-temp-tabindex'
 const ANCHOR_MARKER_CLASS = 'scholarly-anchor-marker'
+const ANCHOR_RETURN_POPOVER_CLASS = 'scholarly-anchor-return-popover'
+const ANCHOR_RETURN_POPOVER_VISIBLE_CLASS = 'is-visible'
 const DISPLAY_TARGET_PARENT_TAGS = new Set([
   'H1',
   'H2',
@@ -66,6 +68,8 @@ type AnchorNavigationState = {
   initialized: boolean
   pending: PendingAnchorFocus | null
   registry: Map<string, string | number>
+  returnPopover: HTMLButtonElement | null
+  returnPopoverTarget: HTMLElement | null
   router: Router | null
 }
 
@@ -75,6 +79,8 @@ const state: AnchorNavigationState = {
   initialized: false,
   pending: null,
   registry: new Map(),
+  returnPopover: null,
+  returnPopoverTarget: null,
   router: null,
 }
 
@@ -399,6 +405,7 @@ const highlightElement = (element: HTMLElement) => {
     inline: 'nearest',
   })
   element.focus({ preventScroll: true })
+  showReturnPopoverNearElement(element)
 
   state.highlightTimer = window.setTimeout(() => {
     element.removeAttribute(INTERNAL_TARGET_ATTR)
@@ -492,6 +499,110 @@ const createSnapshot = (
 
 const updateReturnButton = () => {
   internalAnchorReturnAvailableState.value = state.history.length > 0
+  if (state.history.length === 0)
+    hideReturnPopover()
+}
+
+const getReturnPopoverLabel = (): string => {
+  if (typeof document === 'undefined')
+    return 'Back to source'
+
+  const lang = `${document.documentElement.lang || document.body?.getAttribute('lang') || ''}`.toLowerCase()
+  return lang.startsWith('zh') ? '返回来源' : 'Back to source'
+}
+
+const positionReturnPopover = () => {
+  if (typeof window === 'undefined' || !state.returnPopover || !state.returnPopoverTarget)
+    return
+
+  if (!document.contains(state.returnPopoverTarget)) {
+    hideReturnPopover()
+    return
+  }
+
+  const targetRect = state.returnPopoverTarget.getBoundingClientRect()
+  const viewportPadding = 12
+  const gap = 10
+
+  state.returnPopover.style.left = `${viewportPadding}px`
+  state.returnPopover.style.top = `${viewportPadding}px`
+
+  const popoverRect = state.returnPopover.getBoundingClientRect()
+  const placeAbove = targetRect.top - popoverRect.height - gap >= viewportPadding
+  let top = placeAbove
+    ? targetRect.top - popoverRect.height - gap
+    : targetRect.bottom + gap
+
+  if (top < viewportPadding)
+    top = viewportPadding
+  if (top + popoverRect.height > window.innerHeight - viewportPadding)
+    top = Math.max(viewportPadding, window.innerHeight - popoverRect.height - viewportPadding)
+
+  let left = targetRect.left + targetRect.width / 2 - popoverRect.width / 2
+  if (left < viewportPadding)
+    left = viewportPadding
+  if (left + popoverRect.width > window.innerWidth - viewportPadding)
+    left = Math.max(viewportPadding, window.innerWidth - popoverRect.width - viewportPadding)
+
+  state.returnPopover.dataset.placement = placeAbove ? 'top' : 'bottom'
+  state.returnPopover.style.left = `${Math.round(left)}px`
+  state.returnPopover.style.top = `${Math.round(top)}px`
+}
+
+const hideReturnPopover = () => {
+  if (!state.returnPopover)
+    return
+
+  state.returnPopover.classList.remove(ANCHOR_RETURN_POPOVER_VISIBLE_CLASS)
+  state.returnPopover.setAttribute('aria-hidden', 'true')
+  state.returnPopoverTarget = null
+}
+
+const ensureReturnPopover = (): HTMLButtonElement | null => {
+  if (typeof document === 'undefined')
+    return null
+
+  if (state.returnPopover)
+    return state.returnPopover
+
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.className = ANCHOR_RETURN_POPOVER_CLASS
+  button.setAttribute('aria-hidden', 'true')
+  button.addEventListener('click', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    hideReturnPopover()
+    void goBackToAnchorSource()
+  })
+
+  document.body.appendChild(button)
+  state.returnPopover = button
+  return button
+}
+
+const showReturnPopoverNearElement = (element: HTMLElement) => {
+  if (state.history.length === 0)
+    return
+
+  const popover = ensureReturnPopover()
+  if (!popover)
+    return
+
+  const label = getReturnPopoverLabel()
+  popover.textContent = label
+  popover.setAttribute('aria-label', label)
+  popover.setAttribute('aria-hidden', 'false')
+  popover.classList.add(ANCHOR_RETURN_POPOVER_VISIBLE_CLASS)
+  state.returnPopoverTarget = element
+  positionReturnPopover()
+}
+
+const cleanupReturnPopover = () => {
+  hideReturnPopover()
+  state.returnPopover?.remove()
+  state.returnPopover = null
+  state.returnPopoverTarget = null
 }
 
 const setPendingFromSnapshot = (snapshot: AnchorSnapshot) => {
@@ -634,6 +745,7 @@ export const goBackToAnchorSource = async () => {
   const router = state.router
   const snapshot = state.history.pop()
   updateReturnButton()
+  hideReturnPopover()
 
   if (!router || !snapshot)
     return
@@ -770,9 +882,16 @@ export const initializeInternalAnchorNavigation = (router: Router) => {
     void navigateToInternalTarget(anchor, router)
   }
 
+  const handleViewportChange = () => {
+    positionReturnPopover()
+  }
+
   const cleanup = () => {
     document.removeEventListener('click', handleClick, true)
+    document.removeEventListener('scroll', handleViewportChange, true)
+    window.removeEventListener('resize', handleViewportChange)
     clearHighlight()
+    cleanupReturnPopover()
     state.history = []
     state.pending = null
     state.registry.clear()
@@ -782,6 +901,8 @@ export const initializeInternalAnchorNavigation = (router: Router) => {
   }
 
   document.addEventListener('click', handleClick, true)
+  document.addEventListener('scroll', handleViewportChange, true)
+  window.addEventListener('resize', handleViewportChange)
 
   globalWindow.__scholarlyAnchorNavigationCleanup = cleanup
   state.initialized = true

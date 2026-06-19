@@ -42,6 +42,87 @@ type ThemeColorConfig = {
   footerRightBg?: string
 }
 
+type ThemeColorPreset = Pick<ThemeColorConfig, 'primary' | 'primaryLight' | 'accent' | 'bgWarm' | 'textPrimary'>
+
+const DEFAULT_COLOR_THEME = 'classic-blue'
+const COLOR_THEME_PRESETS: Record<string, ThemeColorPreset> = {
+  'classic-blue': {
+    primary: '#1e3a5f',
+    primaryLight: '#2c5282',
+    accent: '#b8860b',
+    bgWarm: '#fdfbf7',
+    textPrimary: '#2d3748',
+  },
+  'oxford-burgundy': {
+    primary: '#862633',
+    primaryLight: '#a23648',
+    accent: '#c5a572',
+    bgWarm: '#faf8f5',
+    textPrimary: '#2d1b1e',
+  },
+  'cambridge-green': {
+    primary: '#00543c',
+    primaryLight: '#006b4a',
+    accent: '#d4af37',
+    bgWarm: '#f8faf7',
+    textPrimary: '#1a2f1a',
+  },
+  'princeton-orange': {
+    primary: '#e87722',
+    primaryLight: '#f08f42',
+    accent: '#1c1c1c',
+    bgWarm: '#fffbf5',
+    textPrimary: '#2d2d2d',
+  },
+  'yale-blue': {
+    primary: '#0f4d92',
+    primaryLight: '#286fb4',
+    accent: '#d4af37',
+    bgWarm: '#f7f9fc',
+    textPrimary: '#1a2332',
+  },
+  'monochrome': {
+    primary: '#2d3748',
+    primaryLight: '#4a5568',
+    accent: '#718096',
+    bgWarm: '#ffffff',
+    textPrimary: '#1a202c',
+  },
+  'warm-sepia': {
+    primary: '#5d4037',
+    primaryLight: '#795548',
+    accent: '#d4a574',
+    bgWarm: '#faf6f1',
+    textPrimary: '#3e2723',
+  },
+  'nordic-blue': {
+    primary: '#2e5266',
+    primaryLight: '#4a7c9c',
+    accent: '#d4a762',
+    bgWarm: '#f5f8fa',
+    textPrimary: '#1e3a4a',
+  },
+  'high-contrast': {
+    primary: '#000000',
+    primaryLight: '#333333',
+    accent: '#0066cc',
+    bgWarm: '#ffffff',
+    textPrimary: '#000000',
+  },
+}
+
+const THEME_COLOR_VARIABLES: Array<[keyof ThemeColorConfig, string]> = [
+  ['primary', '--slidev-theme-primary'],
+  ['primaryLight', '--slidev-theme-primary-light'],
+  ['accent', '--scholarly-accent'],
+  ['bgWarm', '--scholarly-bg-warm'],
+  ['textPrimary', '--scholarly-text-primary'],
+  ['headerBg', '--scholarly-header-bg'],
+  ['footerLeftBg', '--scholarly-footer-left-bg'],
+  ['footerCenterBg', '--scholarly-footer-center-bg'],
+  ['footerRightBg', '--scholarly-footer-right-bg'],
+]
+
 type ThemeConfig = {
   colorTheme?: string
   fontTheme?: string
@@ -141,28 +222,49 @@ const applyFontSizes = (
   }
 }
 
-const applyThemeColors = (config: ThemeColorConfig | null | undefined) => {
-  if (typeof window === 'undefined') return
-  const root = document.documentElement
-  const setVar = (name: string, value: string | null | undefined) => {
-    if (typeof value === 'string' && value.trim())
-      root.style.setProperty(name, value)
-    else
-      root.style.removeProperty(name)
-  }
+const getThemeColorTargets = (): HTMLElement[] => {
+  if (typeof document === 'undefined')
+    return []
 
-  setVar('--slidev-theme-primary', config?.primary)
-  setVar('--slidev-theme-primary-light', config?.primaryLight)
-  setVar('--scholarly-accent', config?.accent)
-  setVar('--scholarly-bg-warm', config?.bgWarm)
-  setVar('--scholarly-text-primary', config?.textPrimary)
-  setVar('--scholarly-header-bg', config?.headerBg)
-  setVar('--scholarly-footer-left-bg', config?.footerLeftBg)
-  setVar('--scholarly-footer-center-bg', config?.footerCenterBg)
-  setVar('--scholarly-footer-right-bg', config?.footerRightBg)
+  return [document.documentElement, document.body].filter(Boolean) as HTMLElement[]
 }
 
-const applyThemePresets = (config: ThemeConfig | null | undefined) => {
+const normalizeThemeColorValue = (value: string | null | undefined): string | null => {
+  return typeof value === 'string' && value.trim() ? value.trim() : null
+}
+
+const applyThemePresetColors = (
+  colorTheme: string | null | undefined,
+  customColors?: ThemeColorConfig | null,
+) => {
+  if (typeof window === 'undefined') return
+
+  const preset = COLOR_THEME_PRESETS[colorTheme || DEFAULT_COLOR_THEME] ?? COLOR_THEME_PRESETS[DEFAULT_COLOR_THEME]
+  const presetColors = preset as Partial<ThemeColorConfig>
+  const targets = getThemeColorTargets()
+
+  for (const target of targets) {
+    for (const [key, cssVar] of THEME_COLOR_VARIABLES) {
+      const value = normalizeThemeColorValue(customColors?.[key] ?? presetColors[key])
+      if (value)
+        target.style.setProperty(cssVar, value)
+      else
+        target.style.removeProperty(cssVar)
+    }
+  }
+}
+
+const applyThemeColors = (
+  config: ThemeColorConfig | null | undefined,
+  themeConfig?: ThemeConfig | null,
+) => {
+  applyThemePresetColors(themeConfig?.colorTheme ?? DEFAULT_COLOR_THEME, config)
+}
+
+const applyThemePresets = (
+  config: ThemeConfig | null | undefined,
+  colorConfig?: ThemeColorConfig | null,
+) => {
   if (typeof window === 'undefined') return
   const root = document.documentElement
   const setAttr = (name: string, value: string | null | undefined) => {
@@ -172,8 +274,10 @@ const applyThemePresets = (config: ThemeConfig | null | undefined) => {
       root.removeAttribute(name)
   }
 
-  setAttr('data-color-theme', config?.colorTheme)
+  const colorTheme = config?.colorTheme || DEFAULT_COLOR_THEME
+  setAttr('data-color-theme', colorTheme)
   setAttr('data-font-theme', config?.fontTheme)
+  applyThemePresetColors(colorTheme, colorConfig)
 
   // Only force color mode if explicitly configured
   // Otherwise, sync with Slidev's built-in dark mode toggle (html.dark class)
@@ -951,8 +1055,7 @@ export default defineAppSetup(({ app, router }) => {
   applyFootnoteDisplay(router.currentRoute.value)
 
   // Apply theme colors and theme presets
-  applyThemeColors(getThemeColorConfig())
-  applyThemePresets(getThemeConfig())
+  applyThemePresets(getThemeConfig(), getThemeColorConfig())
   setupDarkModeSync(getThemeConfig())
   initializeFootnotePopovers()
   initializeInternalAnchorNavigation(router)
@@ -995,14 +1098,14 @@ export default defineAppSetup(({ app, router }) => {
 
   watch(
     () => (configs as any)?.themeColors as ThemeColorConfig | undefined,
-    (newConfig) => applyThemeColors(newConfig),
+    (newConfig) => applyThemeColors(newConfig, getThemeConfig()),
     { deep: true, immediate: true }
   )
 
   watch(
     () => (configs as any)?.themeConfig as ThemeConfig | undefined,
     (newConfig) => {
-      applyThemePresets(newConfig)
+      applyThemePresets(newConfig, getThemeColorConfig())
       setupDarkModeSync(newConfig)
       applyFootnoteDisplay(router.currentRoute.value)
     },

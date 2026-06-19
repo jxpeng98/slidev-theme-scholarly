@@ -505,7 +505,7 @@ themeColors:
 ---
 ```
 
-Note: avoid setting `themeConfig.primary` if you want `themeConfig.colorTheme` presets to take effect, as Slidev maps it to `--slidev-theme-primary` on `<body>` and it will override the preset.
+Use `themeColors` for custom colors. Scholarly promotes the selected `themeConfig.colorTheme` preset to both `<html>` and `<body>`, so Slidev's default body-level color token will not mask the preset.
 
 ## Live Examples
 

@@ -140,9 +140,14 @@
                   :aria-label="`${isSectionExpanded(section) ? labels.collapseSection : labels.expandSection}: ${section.title}`"
                   @click="toggleSectionExpanded(section.no)"
                 >
-                  <svg class="footer-toc-section-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M5.5 6.5L8 9L10.5 6.5" />
-                  </svg>
+                  <span class="footer-toc-section-toggle-hitbox">
+                    <svg class="footer-toc-section-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M5.5 6.5L8 9L10.5 6.5" />
+                    </svg>
+                    <span class="footer-toc-section-toggle-label">
+                      {{ isSectionExpanded(section) ? labels.expanded : labels.collapsed }}
+                    </span>
+                  </span>
                 </button>
               </div>
 
@@ -271,6 +276,8 @@ const labels = computed(() => {
       last: '末尾',
       expandSection: '展开 section',
       collapseSection: '折叠 section',
+      expanded: '已展开',
+      collapsed: '已折叠',
       slideSingular: '页',
       slidePlural: '页',
     }
@@ -287,6 +294,8 @@ const labels = computed(() => {
     last: 'Last',
     expandSection: 'Expand section',
     collapseSection: 'Collapse section',
+    expanded: 'Expanded',
+    collapsed: 'Collapsed',
     slideSingular: 'slide',
     slidePlural: 'slides',
   }
@@ -683,6 +692,43 @@ const navigateToSlide = async (slideNo: number) => {
 
   await $slidev.nav.go(slideNo)
   closePanel()
+  await restorePresentationFocus()
+}
+
+const restorePresentationFocus = async () => {
+  if (typeof window === 'undefined')
+    return
+
+  await nextTick()
+
+  window.requestAnimationFrame(() => {
+    const activeElement = document.activeElement
+    if (activeElement instanceof HTMLElement)
+      activeElement.blur()
+
+    const currentSlide = document.querySelector<HTMLElement>(`.slidev-page[data-slidev-no="${currentPage.value}"]`)
+    const focusTarget = currentSlide?.querySelector<HTMLElement>('.slidev-layout')
+      ?? currentSlide
+      ?? document.body
+
+    if (!focusTarget)
+      return
+
+    const hadTabIndex = focusTarget.hasAttribute('tabindex')
+    if (!hadTabIndex)
+      focusTarget.setAttribute('tabindex', '-1')
+
+    focusTarget.dataset.scholarlyTocFocusTarget = 'true'
+    focusTarget.focus({ preventScroll: true })
+
+    const cleanup = () => {
+      delete focusTarget.dataset.scholarlyTocFocusTarget
+      if (!hadTabIndex)
+        focusTarget.removeAttribute('tabindex')
+      focusTarget.removeEventListener('blur', cleanup)
+    }
+    focusTarget.addEventListener('blur', cleanup, { once: true })
+  })
 }
 
 const clampValue = (value: number, min: number, max: number) => {
@@ -769,17 +815,19 @@ onUnmounted(() => {
   right: 0.9rem;
   bottom: calc(var(--scholarly-footer-height) + 0.4rem);
   z-index: 55;
-  width: min(13.9rem, calc(100vw - 1.4rem));
+  width: min(16.2rem, calc(100vw - 1.4rem));
   max-height: min(18.5rem, calc(100vh - var(--scholarly-header-height) - var(--scholarly-footer-height) - 1.05rem));
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(30, 58, 95, 0.12);
-  border-radius: 0.88rem;
-  background: rgba(253, 251, 247, 0.98);
-  background: color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 94%, white);
+  border: 1px solid var(--scholarly-content-border, rgba(30, 58, 95, 0.14));
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(180deg, var(--scholarly-content-surface, #ffffff), var(--scholarly-content-surface-muted, #f8fafc));
   color: var(--scholarly-text-primary, #2d3748);
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(15, 23, 42, 0.07);
+  box-shadow:
+    0 18px 44px rgba(15, 23, 42, 0.16),
+    0 5px 16px rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(14px);
 }
 
@@ -788,8 +836,8 @@ onUnmounted(() => {
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 0.58rem 0.42rem;
-  border-bottom: 1px solid rgba(30, 58, 95, 0.08);
+  padding: 0.58rem 0.62rem 0.5rem;
+  border-bottom: 1px solid var(--scholarly-content-border, rgba(30, 58, 95, 0.12));
 }
 
 .footer-toc-panel-heading {
@@ -811,8 +859,8 @@ onUnmounted(() => {
   gap: 0.2rem;
   padding: 0 0.34rem;
   border: 1px solid rgba(30, 58, 95, 0.1);
-  border-radius: 999px;
-  background: rgba(30, 58, 95, 0.06);
+  border-radius: 0.34rem;
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 7%, transparent);
   color: var(--slidev-theme-primary, #1e3a5f);
   font-family: var(--scholarly-font-sans);
   font-size: 0.52rem;
@@ -843,7 +891,7 @@ onUnmounted(() => {
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: 0.005em;
+  letter-spacing: 0;
   color: var(--slidev-theme-primary, #1e3a5f);
 }
 
@@ -851,7 +899,7 @@ onUnmounted(() => {
   margin-top: 0.08rem;
   font-size: 0.58rem;
   line-height: 1.28;
-  color: rgba(45, 55, 72, 0.72);
+  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.72));
 }
 
 .footer-toc-panel-close {
@@ -861,8 +909,8 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(30, 58, 95, 0.1);
-  border-radius: 999px;
-  background: rgba(30, 58, 95, 0.08);
+  border-radius: 0.34rem;
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
   color: var(--slidev-theme-primary, #1e3a5f);
   transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
 }
@@ -881,7 +929,7 @@ onUnmounted(() => {
 .footer-toc-panel-body {
   flex: 1;
   overflow: auto;
-  padding: 0.28rem 0.28rem 0.38rem;
+  padding: 0.34rem;
   scrollbar-width: thin;
   scrollbar-gutter: stable;
 }
@@ -891,7 +939,7 @@ onUnmounted(() => {
   padding: 0.42rem;
   font-size: 0.68rem;
   line-height: 1.38;
-  color: rgba(45, 55, 72, 0.76);
+  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.76));
 }
 
 .footer-toc-section + .footer-toc-section {
@@ -899,28 +947,28 @@ onUnmounted(() => {
 }
 
 .footer-toc-section {
-  padding: 0.14rem;
-  border: 1px solid rgba(30, 58, 95, 0.08);
-  border-radius: 0.68rem;
-  background: rgba(255, 255, 255, 0.4);
+  padding: 0.16rem;
+  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, rgba(30, 58, 95, 0.12)) 82%, transparent);
+  border-radius: 0.44rem;
+  background: color-mix(in srgb, var(--scholarly-content-surface, #ffffff) 76%, transparent);
 }
 
 .footer-toc-section.is-active {
-  border-color: rgba(30, 58, 95, 0.16);
-  background: rgba(255, 255, 255, 0.54);
+  border-color: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 28%, var(--scholarly-content-border, rgba(30, 58, 95, 0.12)) 72%);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 6%, var(--scholarly-content-surface, #ffffff) 94%);
 }
 
 .footer-toc-section-header {
   width: 100%;
   display: flex;
   align-items: stretch;
-  gap: 0.2rem;
-  border-radius: 0.52rem;
+  gap: 0.24rem;
+  border-radius: 0.34rem;
   background: transparent;
 }
 
 .footer-toc-section.is-active .footer-toc-section-header {
-  background: rgba(30, 58, 95, 0.07);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
 }
 
 .footer-toc-section-jump {
@@ -929,9 +977,9 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.36rem;
-  padding: 0.28rem 0.3rem;
+  padding: 0.34rem 0.36rem;
   border: 0;
-  border-radius: 0.52rem;
+  border-radius: 0.34rem;
   background: transparent;
   color: inherit;
   text-align: left;
@@ -947,19 +995,31 @@ onUnmounted(() => {
 .footer-toc-section-meta {
   font-size: 0.52rem;
   line-height: 1.12;
-  color: rgba(45, 55, 72, 0.64);
+  color: var(--scholarly-content-fg-muted, rgba(45, 55, 72, 0.64));
 }
 
 .footer-toc-section-toggle {
-  width: 1.32rem;
+  width: 3.25rem;
   min-height: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 0;
-  border-radius: 0.52rem;
+  border-radius: 0.34rem;
   background: transparent;
-  color: rgba(30, 58, 95, 0.76);
+  color: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 78%, var(--scholarly-text-primary, #2d3748) 22%);
+}
+
+.footer-toc-section-toggle-hitbox {
+  width: 100%;
+  min-height: 1.72rem;
+  display: inline-grid;
+  place-items: center;
+  gap: 0.08rem;
+  padding: 0.18rem 0.22rem;
+  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 14%, transparent);
+  border-radius: 0.32rem;
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 5%, transparent);
 }
 
 .footer-toc-section-toggle-icon {
@@ -977,6 +1037,17 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
+.footer-toc-section-toggle-label {
+  max-width: 100%;
+  overflow: hidden;
+  font-family: var(--scholarly-font-sans);
+  font-size: 0.46rem;
+  font-weight: 650;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .footer-toc-section-index,
 .footer-toc-slide-index {
   min-width: 1.02rem;
@@ -984,7 +1055,7 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: 0.34rem;
   font-family: var(--scholarly-font-sans);
   font-size: 0.52rem;
   font-weight: 600;
@@ -1008,8 +1079,8 @@ onUnmounted(() => {
 }
 
 .footer-toc-slides {
-  margin-top: 0.04rem;
-  padding-left: 0.1rem;
+  margin-top: 0.1rem;
+  padding: 0.04rem 0 0.02rem 0.12rem;
 }
 
 .footer-toc-slide {
@@ -1017,9 +1088,9 @@ onUnmounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 0.32rem;
-  padding: 0.16rem 0.26rem;
+  padding: 0.2rem 0.28rem;
   border: 0;
-  border-radius: 0.46rem;
+  border-radius: 0.34rem;
   background: transparent;
   color: inherit;
   text-align: left;
@@ -1036,7 +1107,7 @@ onUnmounted(() => {
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   outline: none;
-  background: rgba(30, 58, 95, 0.12);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 12%, transparent);
 }
 
 .footer-toc-panel-action:hover,
@@ -1048,12 +1119,12 @@ onUnmounted(() => {
 }
 
 .footer-toc-slide-index {
-  background: rgba(30, 58, 95, 0.08);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 8%, transparent);
   color: var(--slidev-theme-primary, #1e3a5f);
 }
 
 .footer-toc-slide.is-active {
-  background: rgba(30, 58, 95, 0.1);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 10%, transparent);
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-index {
@@ -1093,7 +1164,15 @@ onUnmounted(() => {
 @media (max-width: 900px) {
   .footer-toc-panel {
     right: 0.5rem;
-    width: min(13rem, calc(100vw - 1rem));
+    width: min(15rem, calc(100vw - 1rem));
+  }
+
+  .footer-toc-section-toggle {
+    width: 2.1rem;
+  }
+
+  .footer-toc-section-toggle-label {
+    display: none;
   }
 }
 

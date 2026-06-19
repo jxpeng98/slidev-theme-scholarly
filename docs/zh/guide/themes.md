@@ -505,7 +505,7 @@ themeColors:
 ---
 ```
 
-注意：如果你希望 `themeConfig.colorTheme` 预设生效，请避免设置 `themeConfig.primary`，因为 Slidev 会将它映射为 `<body>` 上的 `--slidev-theme-primary`，从而覆盖预设配色。
+如果要自定义颜色，请使用 `themeColors`。Scholarly 会把选中的 `themeConfig.colorTheme` 预设同步到 `<html>` 和 `<body>`，因此 Slidev 默认写在 body 上的颜色 token 不会再遮住预设配色。
 
 ## 实时示例
 
