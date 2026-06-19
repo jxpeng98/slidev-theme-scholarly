@@ -11,6 +11,10 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "types": [
+      "node",
+      "vscode"
+    ],
     "resolveJsonModule": true
   },
   "exclude": [

@@ -17,8 +17,8 @@
     "author": "Jiaxin Peng",
     "license": "MIT",
     "devDependencies": {
-        "vitepress": "^2.0.0-alpha.15",
-        "vitepress-sidebar": "^1.33.1",
-        "vue": "^3.5.27"
+        "vitepress": "2.0.0-alpha.17",
+        "vitepress-sidebar": "^1.36.1",
+        "vue": "^3.5.38"
     }
 }

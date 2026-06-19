@@ -59,11 +59,8 @@ interface TemplatesData {
 
 const sharedDir = path.resolve(__dirname, '..', 'shared');
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const themesData: ThemesData = require(path.join(sharedDir, 'themes.json'));
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const layoutsData: LayoutsData = require(path.join(sharedDir, 'layouts.json'));
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const templatesData: TemplatesData = require(path.join(sharedDir, 'templates.json'));
 
 function toKebabCase(value: string): string {

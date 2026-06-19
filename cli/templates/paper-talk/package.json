@@ -9,7 +9,7 @@
     "export": "slidev export slides.md"
   },
   "devDependencies": {
-    "@slidev/cli": "^52.11.3",
+    "@slidev/cli": "^52.16.0",
     "slidev-theme-scholarly": "__SCHOLARLY_VERSION__"
   }
 }

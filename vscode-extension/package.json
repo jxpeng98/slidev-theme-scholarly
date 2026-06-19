@@ -324,12 +324,12 @@
     "publish:pre": "npx @vscode/vsce publish --pre-release"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
-    "@types/node": "^20.x",
-    "typescript": "^5.3.0",
-    "@typescript-eslint/eslint-plugin": "^6.x",
-    "@typescript-eslint/parser": "^6.x",
-    "eslint": "^8.x"
+    "@types/node": "^26.0.0",
+    "@types/vscode": "^1.125.0",
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3"
   },
   "repository": {
     "type": "git",

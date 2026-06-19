@@ -1,0 +1,4 @@
+allowBuilds:
+  citation-js: true
+  esbuild: true
+  playwright-chromium: true
