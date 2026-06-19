@@ -35,6 +35,7 @@
     "onCommand:slidev-scholarly.setFontTheme",
     "onCommand:slidev-scholarly.setColorMode",
     "onCommand:slidev-scholarly.openSidebar",
+    "onCommand:slidev-scholarly.openGuiBuilder",
     "onCommand:slidev-scholarly.cliAction",
     "onCommand:slidev-scholarly.cliMenu",
     "onCommand:slidev-scholarly.toggleDevMode",
@@ -168,6 +169,11 @@
         "icon": "$(layout-sidebar-left)"
       },
       {
+        "command": "slidev-scholarly.openGuiBuilder",
+        "title": "Open GUI Builder",
+        "icon": "$(layout)"
+      },
+      {
         "command": "slidev-scholarly.refreshReferences",
         "title": "Refresh References",
         "icon": "$(refresh)"
@@ -228,6 +234,11 @@
         {
           "command": "slidev-scholarly.setColorMode",
           "when": "view == scholarly-themes",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev-scholarly.openGuiBuilder",
+          "when": "view == scholarly-templates",
           "group": "navigation"
         },
         {
@@ -318,6 +329,7 @@
     "vscode:prepublish": "npm run sync-previews && npm run sync-snippets && npm run compile",
     "compile": "npm run sync-shared-data && npm run sync-snippets && tsc -p ./",
     "watch": "npm run sync-shared-data && npm run sync-snippets && tsc -watch -p ./",
+    "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext ts",
     "package": "npx @vscode/vsce package",
     "publish": "npx @vscode/vsce publish",

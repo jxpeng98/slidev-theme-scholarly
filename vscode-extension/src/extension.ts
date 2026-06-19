@@ -18,6 +18,7 @@ import { registerCitationDiagnostics } from './citationDiagnostics';
 import { registerPreviewCommand, registerPreviewView } from './preview';
 import { ScholarlyCompletionProvider } from './snippetCompletion';
 import { DevModeController } from './devMode';
+import { openGuiBuilder } from './guiBuilder';
 
 export function activate(context: vscode.ExtensionContext) {
   const activationStarted = process.hrtime.bigint();
@@ -217,6 +218,9 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('slidev-scholarly.openSidebar', async () => {
       await vscode.commands.executeCommand('workbench.view.extension.slidev-scholarly');
     }),
+    vscode.commands.registerCommand('slidev-scholarly.openGuiBuilder', () =>
+      openGuiBuilder(context)
+    ),
     vscode.commands.registerCommand('slidev-scholarly.applyThemePreset', (preset?: any) =>
       applyThemePreset(preset)
     ),
