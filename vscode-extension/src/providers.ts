@@ -2,6 +2,14 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getColorThemePreviewDir, getComponentPreviewFile } from './preview';
+import {
+  COLOR_THEMES_SIMPLE as COLOR_THEMES,
+  FONT_THEMES_SIMPLE as FONT_THEMES,
+  THEME_PRESETS,
+  LAYOUT_GROUPS,
+  COMPONENT_NAMES,
+  TEMPLATES
+} from './sharedData';
 import type { CliActionId } from './commands';
 
 export interface SnippetItem {
@@ -324,16 +332,6 @@ type ThemePresetItem = {
   colorTheme: string;
   fontTheme: string;
 };
-
-// Theme data imported from shared definitions (Single Source of Truth)
-import {
-  COLOR_THEMES_SIMPLE as COLOR_THEMES,
-  FONT_THEMES_SIMPLE as FONT_THEMES,
-  THEME_PRESETS,
-  LAYOUT_GROUPS,
-  COMPONENT_NAMES,
-  TEMPLATES
-} from './sharedData';
 
 class ThemeGroupTreeItem extends vscode.TreeItem {
   constructor(
