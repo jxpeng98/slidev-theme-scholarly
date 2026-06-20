@@ -14,11 +14,15 @@ test('outline navigation restores presentation focus after closing the panel', (
   assert.match(files.footerToc, /await \$slidev\.nav\.go\(slideNo\)[\s\S]*restorePresentationFocus\(\)/)
 })
 
-test('outline collapse control uses an integrated hit area with explicit state text', () => {
-  assert.match(files.footerToc, /class="footer-toc-section-toggle-hitbox"/)
-  assert.match(files.footerToc, /class="footer-toc-section-toggle-label"/)
-  assert.match(files.footerToc, /labels\.expanded/)
-  assert.match(files.footerToc, /labels\.collapsed/)
+test('outline collapse control uses an icon-only toggle with accessible state', () => {
+  assert.match(files.footerToc, /class="footer-toc-section-toggle"/)
+  assert.match(files.footerToc, /class="footer-toc-section-toggle-icon"/)
+  assert.match(files.footerToc, /:aria-expanded="isSectionExpanded\(section\) \? 'true' : 'false'"/)
+  assert.match(files.footerToc, /labels\.collapseSection : labels\.expandSection/)
+  assert.doesNotMatch(files.footerToc, /footer-toc-section-toggle-hitbox/)
+  assert.doesNotMatch(files.footerToc, /footer-toc-section-toggle-label/)
+  assert.doesNotMatch(files.footerToc, /labels\.expanded/)
+  assert.doesNotMatch(files.footerToc, /labels\.collapsed/)
 })
 
 test('reference navigation provides a local return popover near highlighted targets', () => {

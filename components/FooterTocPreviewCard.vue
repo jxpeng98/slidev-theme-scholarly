@@ -74,8 +74,8 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
 
 <style scoped>
 /* ============================================================================
-   FooterTocPreviewCard — Dark Liquid Glass Frame
-   Matches the outline panel's dark chrome aesthetic.
+   FooterTocPreviewCard — Academic Index Card Preview
+   Warm paper frame matching the outline panel's aesthetic.
    ============================================================================ */
 
 .footer-toc-preview {
@@ -88,66 +88,60 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
 .footer-toc-preview-surface {
   position: relative;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 24%, rgba(255, 255, 255, 0.1) 76%);
-  border-radius: 0.92rem;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 50%),
-    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 86%, #0d1f38 14%);
+  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 68%, var(--scholarly-accent, #b8860b) 6%, #c4b998 26%);
+  border-radius: 0.56rem;
+  background: var(--scholarly-bg-warm, #fdfbf7);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 1.2rem 2.8rem rgba(10, 22, 40, 0.38),
-    0 0.4rem 1.2rem rgba(10, 22, 40, 0.18),
-    0 0 0 0.5px rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(1.5);
-  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    0 0.8rem 2rem rgba(45, 55, 72, 0.1),
+    0 0.2rem 0.6rem rgba(45, 55, 72, 0.06),
+    0 0 0 0.5px rgba(45, 55, 72, 0.04);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .footer-toc-preview-stage {
   width: 15.5rem;
   height: v-bind(previewHeight);
   overflow: hidden;
-  margin: 0.22rem;
-  border-radius: 0.72rem;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 4%, var(--scholarly-bg-warm, #fdfbf7));
+  margin: 0.2rem;
+  border-radius: 0.44rem;
+  background: var(--scholarly-bg-warm, #fdfbf7);
+  box-shadow: inset 0 0 0 1px rgba(45, 55, 72, 0.06);
 }
 
 .footer-toc-preview-badge {
   position: absolute;
-  top: 0.46rem;
-  right: 0.46rem;
-  min-width: 1.44rem;
-  height: 1.44rem;
+  top: 0.4rem;
+  right: 0.4rem;
+  min-width: 1.4rem;
+  height: 1.4rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0 0.32rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: 999px;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 72%, rgba(0, 0, 0, 0.2) 28%);
-  color: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 86%, var(--scholarly-accent, #b8860b) 14%);
+  color: #fff;
   font-family: var(--scholarly-font-sans);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0.16rem 0.5rem rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0.08rem 0.24rem rgba(45, 55, 72, 0.12);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .footer-toc-preview-enter-active,
 .footer-toc-preview-leave-active {
-  transition: opacity 200ms cubic-bezier(0.22, 0.68, 0.35, 1), transform 200ms cubic-bezier(0.22, 0.68, 0.35, 1);
+  transition: opacity 150ms ease, transform 150ms ease;
 }
 
 .footer-toc-preview-enter-from,
 .footer-toc-preview-leave-to {
   opacity: 0;
-  transform: translateX(0.24rem) scale(0.98);
+  transform: translateX(0.16rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

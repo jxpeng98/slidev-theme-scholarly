@@ -745,9 +745,9 @@ onUnmounted(() => {
 
 <style scoped>
 /* ============================================================================
-   FooterTocControl — Dark Liquid Glass Outline Panel
-   Matches the scholarly theme's dark chrome toolbar aesthetic.
-   Uses layered translucent gradients, backdrop-filter blur, and gold accents.
+   FooterTocControl — Academic Index Card Outline Panel
+   Warm paper aesthetic: matte off-white, soft layered shadows,
+   typography-driven hierarchy, gold accent. No glass effects.
    ============================================================================ */
 
 .footer-toc-control {
@@ -758,42 +758,28 @@ onUnmounted(() => {
   margin-right: 0.02rem;
 }
 
-/* -- Trigger button -------------------------------------------------------- */
+/* -- Trigger button — refined toolbar button -------------------------------- */
 
 .beamer-nav-button-toc {
   position: relative;
   overflow: hidden;
-  border-color: color-mix(in srgb, var(--scholarly-toolbar-divider, rgba(255, 255, 255, 0.22)) 78%, transparent);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04)),
-    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 18%, transparent);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0.18rem 0.42rem rgba(5, 18, 36, 0.12);
-  backdrop-filter: blur(18px) saturate(1.35);
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  border-color: color-mix(in srgb, var(--scholarly-toolbar-divider, rgba(255, 255, 255, 0.22)) 52%, transparent);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .beamer-nav-button-toc::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 55%);
-  opacity: 0.56;
+  display: none;
 }
 
 .beamer-nav-button-toc:hover:not(:disabled),
 .beamer-nav-button-toc:focus-visible,
 .beamer-nav-button-toc.is-active {
-  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, rgba(255, 255, 255, 0.16) 64%);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.06)),
-    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 26%, transparent);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 0.22rem 0.56rem rgba(5, 18, 36, 0.18);
+  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 52%, rgba(255, 255, 255, 0.18) 48%);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 14%, rgba(255, 255, 255, 0.06) 86%);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--scholarly-accent, #b8860b) 18%, transparent);
 }
 
 /* -- Backdrop overlay ------------------------------------------------------ */
@@ -803,10 +789,10 @@ onUnmounted(() => {
   inset: 0;
   z-index: 54;
   border: 0;
-  background: rgba(10, 22, 40, 0.12);
+  background: rgba(10, 22, 40, 0.08);
 }
 
-/* -- Panel container — dark liquid glass ----------------------------------- */
+/* -- Panel container — warm paper index card ------------------------------- */
 
 .footer-toc-panel {
   position: fixed;
@@ -819,48 +805,52 @@ onUnmounted(() => {
   flex-direction: column;
   overflow: hidden;
 
-  /* Glass border — subtle luminous edge */
-  border: 1px solid color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 28%, rgba(255, 255, 255, 0.12) 72%);
-  border-radius: 0.62rem;
+  /* Warm paper border */
+  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
+  border-radius: 0.5rem;
 
-  /* Dark translucent glass surface */
+  /* Matte warm paper surface */
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 18%, rgba(255, 255, 255, 0.06) 82%) 0%,
-      transparent 40%
-    ),
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 90%, #0d1f38 10%),
-      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 82%, #0a1628 18%) 50%,
-      color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, #111b2e 12%)
+      var(--scholarly-bg-warm, #fdfbf7) 0%,
+      color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 97%, #f5f0e8 3%) 100%
     );
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--scholarly-text-primary, #2d3748);
 
-  /* Layered shadows: specular highlight + depth + colored halo */
+  /* Soft layered paper-card shadows */
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
-    0 1.2rem 3rem rgba(10, 22, 40, 0.42),
-    0 0.35rem 1.1rem rgba(10, 22, 40, 0.22),
-    0 0 0 0.5px rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(28px) saturate(1.6);
-  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+    0 0.4rem 1.6rem rgba(45, 55, 72, 0.09),
+    0 0.12rem 0.4rem rgba(45, 55, 72, 0.06),
+    0 0 0 0.5px rgba(45, 55, 72, 0.04);
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-/* -- Panel header — frosted dark strip ------------------------------------- */
+/* Subtle paper grain overlay */
+.footer-toc-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* -- Panel header — clean academic strip ----------------------------------- */
 
 .footer-toc-panel-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.62rem 0.66rem 0.52rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 80%),
-    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 30%, transparent);
+  padding: 0.72rem 0.75rem 0.56rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 62%, transparent);
+  background: transparent;
 }
 
 .footer-toc-panel-heading {
@@ -874,41 +864,37 @@ onUnmounted(() => {
 }
 
 .footer-toc-panel-title {
-  font-family: var(--scholarly-font-sans);
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: var(--scholarly-font-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.02em;
-  color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  letter-spacing: 0.01em;
+  color: var(--scholarly-text-primary, #2d3748);
+  text-shadow: none;
 }
 
 .footer-toc-panel-subtitle {
-  margin-top: 0.1rem;
-  font-size: 0.56rem;
+  margin-top: 0.08rem;
+  font-size: 0.54rem;
   line-height: 1.28;
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.55);
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 50%, transparent);
 }
 
-/* -- Close button — dark glass mini-button --------------------------------- */
+/* -- Close button — minimal ------------------------------------------------ */
 
 .footer-toc-panel-close {
-  width: 1.24rem;
-  height: 1.24rem;
+  width: 1.28rem;
+  height: 1.28rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.34rem;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 32%, transparent);
-  color: rgba(255, 255, 255, 0.72);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0.12rem 0.36rem rgba(0, 0, 0, 0.12);
-  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
+  border: 1px solid transparent;
+  border-radius: 0.28rem;
+  background: transparent;
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 42%, transparent);
+  box-shadow: none;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
 .footer-toc-panel-close-icon {
@@ -927,11 +913,11 @@ onUnmounted(() => {
 .footer-toc-panel-body {
   flex: 1;
   overflow: auto;
-  padding: 0.38rem;
+  padding: 0.44rem;
   background: transparent;
   scrollbar-width: thin;
   scrollbar-gutter: stable;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 16%, transparent) transparent;
 }
 
 .footer-toc-empty {
@@ -939,10 +925,10 @@ onUnmounted(() => {
   padding: 0.42rem;
   font-size: 0.68rem;
   line-height: 1.38;
-  color: rgba(255, 255, 255, 0.5);
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 48%, transparent);
 }
 
-/* -- Section cards — dark glass tiles -------------------------------------- */
+/* -- Section cards — paper tiles ------------------------------------------- */
 
 .footer-toc-section + .footer-toc-section {
   margin-top: 0.22rem;
@@ -950,28 +936,20 @@ onUnmounted(() => {
 
 .footer-toc-section {
   padding: 0.14rem;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 0.46rem;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 14%, transparent);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0.1rem 0.32rem rgba(0, 0, 0, 0.08);
+  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 52%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 96%, var(--scholarly-accent, #b8860b) 0.6%, #f5f0e8 3.4%);
+  box-shadow: 0 0.06rem 0.16rem rgba(45, 55, 72, 0.04);
   transition: border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
 }
 
-/* Active section — scholarly gold accent */
+/* Active section — gold left-bar accent */
 .footer-toc-section.is-active {
-  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 32%, rgba(255, 255, 255, 0.1) 68%);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
-    color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 18%, transparent) 92%);
+  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-content-border, #dbe3ec) 64%);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 5%, var(--scholarly-bg-warm, #fdfbf7) 92%, #faf5eb 3%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 2px 0 0 color-mix(in srgb, var(--scholarly-accent, #b8860b) 62%, transparent),
-    0 0.14rem 0.5rem rgba(0, 0, 0, 0.1),
-    0 0 0.6rem color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, transparent);
+    0 0.08rem 0.24rem rgba(45, 55, 72, 0.06),
+    inset 3px 0 0 color-mix(in srgb, var(--scholarly-accent, #b8860b) 72%, transparent);
 }
 
 .footer-toc-section-header {
@@ -979,12 +957,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.18rem;
-  border-radius: 0.36rem;
+  border-radius: 0.32rem;
   background: transparent;
 }
 
 .footer-toc-section.is-active .footer-toc-section-header {
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
 }
 
 /* -- Section jump button --------------------------------------------------- */
@@ -994,32 +972,33 @@ onUnmounted(() => {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 0.36rem;
+  gap: 0.4rem;
   min-height: 1.68rem;
   padding: 0.28rem 0.34rem;
   border: 0;
-  border-radius: 0.36rem;
+  border-radius: 0.32rem;
   background: transparent;
   color: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  transition: background 150ms ease;
 }
 
 .footer-toc-section-copy {
   flex: 1;
   min-width: 0;
   display: grid;
-  gap: 0.08rem;
+  gap: 0.06rem;
 }
 
 .footer-toc-section-meta {
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   line-height: 1.12;
-  color: rgba(255, 255, 255, 0.42);
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 42%, transparent);
+  font-family: var(--scholarly-font-sans);
 }
 
-/* -- Section toggle — dark glass expand/collapse --------------------------- */
+/* -- Section toggle — minimal expand/collapse ------------------------------ */
 
 .footer-toc-section-toggle {
   width: 1.34rem;
@@ -1028,16 +1007,12 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.34rem;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 20%, transparent);
-  color: rgba(255, 255, 255, 0.62);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0.08rem 0.28rem rgba(0, 0, 0, 0.1);
-  transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease, color 200ms ease;
+  border: 1px solid transparent;
+  border-radius: 0.28rem;
+  background: transparent;
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 36%, transparent);
+  box-shadow: none;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .footer-toc-section-toggle-icon {
@@ -1055,42 +1030,38 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
-/* -- Index badges ---------------------------------------------------------- */
+/* -- Index badges — matte academic pills ----------------------------------- */
 
 .footer-toc-section-index,
 .footer-toc-slide-index {
-  min-width: 1.02rem;
-  height: 1.02rem;
+  min-width: 1.08rem;
+  height: 1.08rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.34rem;
+  border-radius: 0.28rem;
   font-family: var(--scholarly-font-sans);
-  font-size: 0.52rem;
+  font-size: 0.54rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
-/* Section badge — luminous accent pill */
+/* Section badge — primary-color matte pill */
 .footer-toc-section-index {
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.14), transparent 60%),
-    color-mix(in srgb, var(--scholarly-accent, #b8860b) 72%, var(--slidev-theme-primary, #1e3a5f) 28%);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, var(--scholarly-accent, #b8860b) 12%);
   color: #fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 0.08rem 0.24rem rgba(0, 0, 0, 0.14);
+  box-shadow: none;
 }
 
 .footer-toc-section-title {
   flex: 1;
   min-width: 0;
-  font-family: var(--scholarly-font-sans);
-  font-size: 0.66rem;
-  font-weight: 700;
+  font-family: var(--scholarly-font-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
   line-height: 1.22;
   letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.94);
+  color: var(--scholarly-text-primary, #2d3748);
   overflow-wrap: anywhere;
 }
 
@@ -1098,7 +1069,9 @@ onUnmounted(() => {
 
 .footer-toc-slides {
   margin-top: 0.1rem;
-  padding: 0.04rem 0 0.02rem 0.12rem;
+  padding: 0.04rem 0 0.02rem 0.24rem;
+  border-left: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 40%, transparent);
+  margin-left: 0.54rem;
 }
 
 .footer-toc-slide {
@@ -1108,32 +1081,27 @@ onUnmounted(() => {
   gap: 0.32rem;
   padding: 0.2rem 0.28rem;
   border: 0;
-  border-radius: 0.34rem;
+  border-radius: 0.28rem;
   background: transparent;
   color: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  transition: background 150ms ease;
 }
 
-/* -- Hover & focus states — glass brightening ------------------------------ */
+/* -- Hover & focus states — warm highlight --------------------------------- */
 
 .footer-toc-slide:hover,
 .footer-toc-slide:focus-visible,
 .footer-toc-section-jump:hover,
 .footer-toc-section-jump:focus-visible {
   outline: none;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
-    rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, var(--scholarly-bg-warm, #fdfbf7) 92%);
 }
 
 .footer-toc-section-jump:focus-visible,
 .footer-toc-slide:focus-visible {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0 0 1.5px color-mix(in srgb, var(--scholarly-accent, #b8860b) 42%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--scholarly-accent, #b8860b) 32%, transparent);
 }
 
 .footer-toc-section-toggle:hover,
@@ -1141,47 +1109,31 @@ onUnmounted(() => {
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.2);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
-    color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 36%, transparent);
-  color: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 0.14rem 0.4rem rgba(0, 0, 0, 0.14);
+  background: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 8%, transparent);
+  color: var(--scholarly-text-primary, #2d3748);
 }
 
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
-  transform: translateY(-0.5px);
+  border-color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 14%, transparent);
 }
 
-.footer-toc-section-toggle:hover,
-.footer-toc-section-toggle:focus-visible {
-  transform: translateY(-0.5px);
-}
-
-/* Slide index badge — translucent pill on dark */
+/* Slide index badge — subtle matte pill */
 .footer-toc-slide-index {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 7%, transparent);
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 54%, transparent);
+  border: none;
 }
 
-/* Active slide — subtle accent glow */
+/* Active slide — warm accent highlight */
 .footer-toc-slide.is-active {
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.06), transparent),
-    color-mix(in srgb, var(--scholarly-accent, #b8860b) 10%, transparent);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 10%, var(--scholarly-bg-warm, #fdfbf7) 90%);
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-index {
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.12), transparent 60%),
-    color-mix(in srgb, var(--scholarly-accent, #b8860b) 68%, var(--slidev-theme-primary, #1e3a5f) 32%);
+  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 82%, var(--scholarly-accent, #b8860b) 18%);
   color: #fff;
-  border-color: transparent;
-  box-shadow: 0 0.06rem 0.2rem rgba(0, 0, 0, 0.12);
+  box-shadow: none;
 }
 
 .footer-toc-slide-title {
@@ -1189,30 +1141,30 @@ onUnmounted(() => {
   min-width: 0;
   font-size: 0.63rem;
   line-height: 1.24;
-  color: rgba(255, 255, 255, 0.76);
+  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 74%, transparent);
   overflow-wrap: anywhere;
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-title {
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--scholarly-text-primary, #2d3748);
 }
 
-/* -- Panel transitions — spring-like entrance ------------------------------ */
+/* -- Panel transitions — clean fade ---------------------------------------- */
 
 .footer-toc-panel-enter-active,
 .footer-toc-panel-leave-active {
-  transition: opacity 240ms cubic-bezier(0.22, 0.68, 0.35, 1), transform 240ms cubic-bezier(0.22, 0.68, 0.35, 1);
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .footer-toc-panel-enter-from,
 .footer-toc-panel-leave-to {
   opacity: 0;
-  transform: translateY(0.55rem) scale(0.96);
+  transform: translateY(0.35rem);
 }
 
 .footer-toc-backdrop-enter-active,
 .footer-toc-backdrop-leave-active {
-  transition: opacity 200ms ease;
+  transition: opacity 150ms ease;
 }
 
 .footer-toc-backdrop-enter-from,
