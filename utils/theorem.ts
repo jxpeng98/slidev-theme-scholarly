@@ -209,7 +209,13 @@ export const lookupTheoremNumber = (
   if (!numbers?.length)
     return 0
 
-  return numbers[occurrenceIndex] ?? numbers[numbers.length - 1] ?? 0
+  if (occurrenceIndex < 0)
+    return 0
+
+  // Slidev can mount the same slide more than once for previews, export, or HMR.
+  // Keep each render pass on the slide's own occurrence sequence instead of
+  // falling through to the final number after the first pass.
+  return numbers[occurrenceIndex % numbers.length] ?? 0
 }
 
 export function getTheoremNumber(slides: SlideLike[], slideNo: number, type: TheoremType): number

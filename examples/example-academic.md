@@ -605,12 +605,13 @@ subtitle: Equation evidence
 SLIDE: Equation Evidence
 LAYOUT: default
 COMPONENT: <EquationBlock>
-PURPOSE: Connect a method equation to the result claim
+PURPOSE: Connect method equations to the result claim and check consecutive references
 -->
 
 <EquationBlock
   title="Training Objective"
   reference="1"
+  compact
   caption="Weighted supervised and routing losses used across all ablations."
 >
 
@@ -620,7 +621,31 @@ $$
 
 </EquationBlock>
 
-The routing term is active only during adaptation, so deployed inference cost stays unchanged.
+<EquationBlock
+  title="Routing Score"
+  reference="2"
+  compact
+  caption="Sparse routing keeps the adapter path bounded."
+>
+
+$$
+s_i = \operatorname{softmax}(W_r h_i)
+$$
+
+</EquationBlock>
+
+<EquationBlock
+  title="Adapter Update"
+  reference="3"
+  compact
+  caption="Only the lightweight adapter receives the routing gradient."
+>
+
+$$
+\theta_a^{t+1} = \theta_a^t - \alpha \nabla_{\theta_a}\mathcal{L}
+$$
+
+</EquationBlock>
 
 ---
 layout: default

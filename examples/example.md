@@ -388,6 +388,38 @@ All continuous functions on a closed interval are uniformly continuous.
 
 ---
 layout: default
+title: Consecutive Equation Number Check
+subtitle: Regression guard for repeated renders
+---
+
+<!--
+COMPONENT: <Theorem>
+PURPOSE: Check that consecutive equation-bearing statements keep auto numbers stable
+REGRESSION: Guards against repeated slide renders turning a sequence into duplicate final numbers
+-->
+
+## Consecutive Equation Number Check
+
+These equation-bearing statements intentionally share one slide. Their headers should continue from the previous theorem slide as Theorem 3, Theorem 4, and Theorem 5.
+
+<Theorem type="theorem" title="Energy Bound" :compact="true">
+
+$$E_{t+1} \leq \rho E_t + \eta_t$$
+
+</Theorem>
+
+<Theorem type="theorem" title="Gradient Bound" :compact="true">
+
+$$\|\nabla f(x_t)\|^2 \leq \frac{2}{\alpha}\left(f(x_t) - f^\star\right)$$
+
+</Theorem>
+
+:::theorem{type="theorem" title="Residual Bound"}
+$$r_{t+1} \leq \gamma r_t + \epsilon_t$$
+:::
+
+---
+layout: default
 title: Definitions and Examples
 ---
 
