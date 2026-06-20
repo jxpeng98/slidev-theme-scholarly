@@ -1,8 +1,10 @@
 import { spawnSync } from 'node:child_process'
-import { access, cp, mkdir, readdir, rm } from 'node:fs/promises'
+import { access, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { createSlideRangeMapping, replaceMappedScreenshots } from './screenshot-export-utils.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -23,15 +25,18 @@ const themes = [
 
 const range = process.env.SLIDEV_EXPORT_RANGE || '1-4'
 const extraArgs = process.argv.slice(2)
+const rangeMapping = createSlideRangeMapping(range)
 
 await access(slidevCli)
 
 for (const theme of themes) {
   const entry = path.join(root, theme.entry)
   const outDir = path.join(root, theme.outDir)
+  const tempOutDir = path.join(tmpdir(), `slidev-theme-scholarly-${theme.name}-theme-screenshots`)
   await access(entry)
 
   console.log(`\n[slidev-theme-scholarly] Exporting ${theme.name} (${range}) -> ${theme.outDir}\n`)
+  await rm(tempOutDir, { recursive: true, force: true })
 
   const result = spawnSync(
     process.execPath,
@@ -44,7 +49,7 @@ for (const theme of themes) {
       '--range',
       range,
       '--output',
-      outDir,
+      tempOutDir,
       ...extraArgs,
     ],
     { stdio: 'inherit', cwd: root },
@@ -54,18 +59,19 @@ for (const theme of themes) {
     process.exit(result.status ?? 1)
 
   const docsOutDir = path.join(root, 'docs', 'public', theme.outDir)
-  await mkdir(docsOutDir, { recursive: true })
+  const rootResult = await replaceMappedScreenshots({
+    tempOutDir,
+    docsOutDir: outDir,
+    mapping: rangeMapping,
+    label: `${theme.name} theme`,
+  })
+  await replaceMappedScreenshots({
+    tempOutDir,
+    docsOutDir,
+    mapping: rangeMapping,
+    label: `${theme.name} docs theme`,
+  })
+  await rm(tempOutDir, { recursive: true, force: true })
 
-  const exportedPngs = (await readdir(outDir)).filter(name => name.endsWith('.png'))
-  const existingPngs = (await readdir(docsOutDir)).filter(name => name.endsWith('.png'))
-
-  await Promise.all(exportedPngs.map(name => cp(
-    path.join(outDir, name),
-    path.join(docsOutDir, name),
-    { force: true },
-  )))
-
-  await Promise.all(existingPngs
-    .filter(name => !exportedPngs.includes(name))
-    .map(name => rm(path.join(docsOutDir, name), { force: true })))
+  console.log(`[slidev-theme-scholarly] Generated ${rootResult.successCount}/${Object.keys(rangeMapping).length} screenshots for ${theme.name}`)
 }

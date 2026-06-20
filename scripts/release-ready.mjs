@@ -53,6 +53,14 @@ const steps = [
     command: ['node', 'scripts/check-data-driven-results.mjs'],
   },
   {
+    name: 'Theorem numbering regression contract',
+    command: ['node', '--test', 'tests/theoremNumbering.test.mjs'],
+  },
+  {
+    name: 'Screenshot export safety contract',
+    command: ['node', '--test', 'tests/screenshotExport.test.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

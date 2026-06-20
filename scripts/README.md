@@ -4,7 +4,7 @@
 
 ## 文件说明
 
-- `generate-layout-screenshots.md` - 包含所有 24 个布局示例的 Slidev 演示文稿
+- `generate-layout-screenshots.md` - 包含所有 34 个布局示例的 Slidev 演示文稿
 - `export-layout-screenshots.mjs` - 自动化导出脚本（推荐）
 - `generate-screenshots.js` - 备选 Node.js 脚本
 - `generate-screenshots.sh` - 备选 Bash 脚本
@@ -97,7 +97,7 @@ pnpm run export:layout-screenshots
 
 这个命令会：
 
-1. 导出所有 24 个布局为 PNG 图片
+1. 导出所有 34 个布局为 PNG 图片
 2. 自动重命名为对应的布局名称
 3. 保存到 `docs/public/images/layouts/` 目录
 
