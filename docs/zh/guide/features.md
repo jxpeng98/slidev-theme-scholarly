@@ -1,116 +1,46 @@
 ---
-title: 核心特性
+title: 主要功能
 ---
 
-# 核心特性
+# 主要功能
 
-## 🎨 专业设计
+Scholarly 将 Slidev 扩展为面向学术演示的写作环境：结构化布局、可复用研究组件、BibTeX 引用、可读主题预设和编辑器工具。
 
-- 简洁的学术美学, 灵感来自 LaTeX Beamer
-- 所有幻灯片自动添加页眉和页脚
-- 整个演示文稿样式一致
+## 学术演示结构
 
-## 👥 多作者支持
+- 34 个布局预览，覆盖封面、章节、正文、图片、对比、方法、结果、时间线、附录、答辩和参考文献页。
+- 自动页眉和页脚样式，支持作者、会议信息、页码和可选的 beamer 风格导航。
+- 面向长演示的页脚大纲 TOC，按 `layout: section` 分组。
 
-优雅地显示一位, 两位或整个研究团队：
+如果你已经知道页面需要承载什么内容，先从[布局](../layouts/)开始。
 
-- 1 位作者："张三"
-- 2 位作者："张三 & 李四"  
-- 3 位作者："张三, 李四, 王五"
-- 4+ 位作者："张三等"
+## 研究组件
 
-## 🔢 智能定理编号
+用组件承载重复出现的学术内容，避免在每页手写样式：
 
-插入定理, 引理, 定义并自动编号：
+| 组件类型 | 组件 |
+| --- | --- |
+| 陈述 | `Theorem`、`Block`、`Highlight`、`Keywords` |
+| 结构 | `Steps`、`Columns` |
+| 证据 | `MetricCard`、`MetricGrid`、`EvidenceBlock`、`EquationBlock`、`ResultTable` |
+| 论文上下文 | `DatasetCard`、`PaperCard`、`ContributionList`、`CaveatList` |
+| 引用 | `Cite`、参考文献布局、注脚预览 |
 
-- 每种类型（定理, 引理等）都有自己的计数器
-- 支持中文和英文
-- 可自定义编号格式
+定理类陈述支持中文和英文标签、自动编号、手动编号和自定义编号格式。
 
-## 📐 18 种布局选项
+## 引用和注脚
 
-针对不同需求的不同布局：
+- 使用 `@citekey` 写括号引用。
+- 使用 `!@citekey` 写叙述性引用。
+- 使用标准 Markdown 注脚，并继承 Scholarly 的显示样式。
+- 桌面端悬停注脚标记可预览内容，点击可固定浮窗。
+- 从 BibTeX 生成 APA、Harvard、Vancouver、IEEE、MLA 或 Chicago 样式参考文献。
 
-- **基础**: cover, default, intro, section, center
-- **内容**: quote, fact, statement, two-cols
-- **图片**: image-left, image-right
-- **高级 (v2.0)**: focus, compare, bullets, figure, references, end, auto-center, auto-size
+常规引用只需要在 frontmatter 中设置 `bibFile` 和 `bibStyle`。
 
-## 📊 学术样式 (v0.1.2)
+## 数据驱动结果页
 
-专业的学术演示 CSS 样式：
-
-- **三线表** - 去除垂直线，仅保留水平线
-- **代码块** - 浅灰背景配等宽字体
-- **引用样式** - 缩小字号和灰色字体形成层次感
-- **引用块** - 左边框配斜体样式
-
-## 📚 内置引用支持
-
-从 BibTeX 文件自动生成参考文献：
-
-- 使用 `@citekey` 进行括号引用
-- 使用 `!@citekey` 进行叙述性引用
-- 使用标准 Markdown 注脚并继承学术化样式
-- 桌面端悬停注脚标记可预览内容，点击可固定浮窗
-- 支持 APA、Harvard、Vancouver、IEEE、MLA、Chicago 样式
-- 自动从所有引用生成参考文献列表
-- 无需额外配置！
-
-## 🧾 论文元数据脚手架
-
-可以直接从 BibTeX key 生成 reading group 或 paper-talk 幻灯片：
-
-```bash
-sch paper summary --bib references.bib --key sample2026
-```
-
-命令会读取 BibTeX 中的 `title`、`author`、`year`、`doi`、`url` 和 venue
-字段。venue 按以下优先级选择第一个可用字段：`journal`、`booktitle`、
-`publisher`、`school`、`institution`。
-
-默认输出是 `paper-summary` 布局：
-
-```markdown
----
-layout: paper-summary
-paperTitle: Example Paper
-authors:
-  - Jane Doe
-year: 2026
-venue: Journal of Examples
-doi: 10.1234/example
----
-```
-
-如果需要组件片段，可以使用 `--layout paper-card` 生成 `PaperCard`：
-
-```bash
-sch paper summary --bib references.bib --key sample2026 --layout paper-card
-```
-
-自动化场景可以加 `--json`。JSON 输出包含 `metadata`、`warnings` 和
-`markdown`。缺少 `title`、`authors`、`year` 或 `venue` 时，命令会把
-warnings 写到 stderr，但仍会生成可渲染的 Markdown fallback。
-
-## 🧩 丰富的组件
-
-内置学术内容组件：
-
-- **Theorem** - 定理、引理、定义，自动编号
-- **Block** - Beamer 风格彩色块
-- **Steps** - 工作流程/步骤可视化
-- **Keywords** - 关键词标签
-- **Columns** - 灵活的多列布局
-- **Highlight** - 内联文本高亮
-
-## 📈 数据驱动结果页
-
-可以把小型结果摘要放在数据文件中，再交给现有学术组件渲染。Scholarly
-直接使用 Vite 和 Slidev 的 import 能力，不提供运行时 fetch loader，也没有
-charting dependency。
-
-### JSON import
+小型结果摘要可以放在 JSON 或 CSV 中，再通过主题组件渲染。Scholarly 直接使用 Vite 和 Slidev 的 import 能力，不提供运行时 fetch loader，也不引入 charting dependency。
 
 ```ts
 import rows from './results.json'
@@ -123,7 +53,7 @@ const metrics = toMetricItems(rows)
 <MetricGrid :metrics="metrics" compact />
 ```
 
-### CSV `?raw` import
+CSV 可以使用 `?raw`：
 
 ```ts
 import csv from './results.csv?raw'
@@ -132,69 +62,33 @@ import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
 const rows = parseCsvTable(csv)
 ```
 
-```markdown
-<ResultTable
-  :rows="rows"
-  :columns="[
-    { key: 'method', label: 'Method' },
-    { key: 'accuracy', label: 'Accuracy', align: 'right' },
-    { key: 'latency', label: 'Latency', align: 'right' }
-  ]"
-  highlightColumn="accuracy"
-  compact
-/>
+如果只是单页临时结果，静态 Markdown table 通常更轻。
+
+## 论文元数据脚手架
+
+从 BibTeX key 生成论文摘要：
+
+```bash
+sch paper summary --bib references.bib --key sample2026
 ```
 
-如果只是单页临时结果，static Markdown table 仍然是最轻量的 fallback：
+命令会读取 title、authors、year、DOI、URL 和 venue 字段，并输出 `paper-summary` 幻灯片。使用 `--layout paper-card` 可以生成组件片段，使用 `--json` 可以给脚本消费结构化输出。缺少关键字段时，命令会返回 `warnings`，但仍输出可渲染的 fallback Markdown。
 
-```markdown
-| Method | Accuracy | Latency |
-| --- | ---: | ---: |
-| Baseline | 91.5 | 21 ms |
-| Ours | **94.7** | 18 ms |
-```
+## 主题预设
 
-## 🧱 基础主题与 addon 边界
+Scholarly 提供适合学术演示的颜色和字体预设，包括 classic blue、Oxford burgundy、Cambridge green、Yale blue、Princeton orange、Nordic blue、warm sepia、monochrome 和 high contrast。
 
-Scholarly 会把无网络依赖的学术辅助能力保留在基础主题中。内置引用、注脚预览、
-参考文献页、轻量数据导入和 BibTeX 摘要脚手架仍随主题提供，因为它们不需要
-额外安装，也不会引入图表引擎、运行时 fetch loader 或远程 API。
+先在[色彩与字体主题](./themes.md)中做视觉选择，再到[主题模式与对比度](./theme-mode-contrast.md)调整模式和可读性。
 
-需要网络访问、大型解析器、图表引擎、大型资源包或更宽集成 API 的能力，未来应
-作为可选 addon 发布。基础主题保持稳定安装路径；例如
-`slidev-addon-scholarly-data` 或 `slidev-addon-scholarly-citations` 这类可选包，
-只应在 deck 需要更重能力时显式安装。
+## 写作工具
 
-## 📝 Markdown 语法糖
+- CLI 模板和工作流可以生成完整起步演示。
+- `sch doctor` 会报告配置问题并给出可执行修复建议。
+- VS Code 代码片段可插入布局和组件。
+- VS Code 预览与文档站使用同一批生成截图。
 
-使用简单的 Markdown 指令代替 HTML：
+编辑器设置见 [VS Code 插件](./vscode-extension.md)。
 
-```markdown
-:::block{type="info" title="提示"}
-这里是内容
-:::
+## 基础主题边界
 
-:::theorem{type="theorem" title="结果"}
-数学内容
-:::
-
-:::columns{columns="2"}
-左列
-+++
-右列
-:::
-```
-
-## 🌍 多语言支持
-
-支持中文和英文的数学内容。
-
-## 🆕 v0.1.2 新功能
-
-| 功能 | 描述 |
-|------|------|
-| `quote` 布局 | 新增 `author` 和 `source` 属性 |
-| `bullets` 布局 | 新增 `icon` 属性自定义项目符号 |
-| `fact` 布局 | 新增 `purple` 紫色变体 |
-| 三线表 | 学术风格表格样式 |
-| 代码块 | 增强样式 |
+Scholarly 会把不需要网络的学术辅助能力保留在基础主题中：引用、注脚预览、参考文献页、轻量数据导入和 BibTeX 摘要脚手架。需要网络访问、大型解析器、图表引擎、大型资源包或广泛集成 API 的能力，应放在可选 addon 中。

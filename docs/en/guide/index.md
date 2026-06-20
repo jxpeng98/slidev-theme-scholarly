@@ -4,34 +4,44 @@ title: Guide
 
 # Guide
 
-Welcome to the Slidev Theme Scholarly documentation! This guide will help you create beautiful academic presentations.
+Use this guide when you want to build a Scholarly deck, choose the right
+template, and tune the theme without reading every reference page first.
 
-## Getting Started
+## Start
 
-<div class="tip custom-block" style="padding-top: 8px">
+New deck:
 
-New to Slidev? Start with [Quick Start](./quick-start.md) to get up and running in minutes.
+- [Quick Start](./quick-start.md): create a deck, pick a template, run it locally.
+- [Academic Workflows](./workflows/): choose a paper talk, thesis defense,
+  reading group, course lecture, or results-heavy path.
 
-</div>
+Existing Slidev deck:
 
-## What's in this Guide
+- [Quick Start](./quick-start.md#manual-setup-for-an-existing-slidev-project):
+  add the theme and enable references.
+- [Upgrade Notes](./upgrade.md): check compatibility notes before moving an old
+  deck forward.
 
-### [Quick Start](./quick-start.md)
-Get started with your first presentation in just a few steps.
+## Choose Building Blocks
 
-### [Features](./features.md)
-Explore the key features that make this theme perfect for academic presentations.
+- [Layouts](../layouts/): pick page structures for title, content, methods,
+  results, references, appendix, and Q&A slides.
+- [Components](../components/): add theorems, blocks, citations, metrics,
+  equations, datasets, paper summaries, and caveats.
+- [Syntax Sugar](../syntax-sugar.md): write common components with Markdown
+  directives instead of Vue tags.
 
-### [Configurations](./configurations.md)
-Learn how to customize fonts, colors, authors, and more.
+## Customize
 
-### [VS Code Extension](./vscode-extension.md)
-Boost your productivity with our VS Code extension for snippets and quick insertion.
+- [Configuration](./configurations.md): authors, footer, colors, fonts,
+  theorem numbering, footnotes, and per-slide overrides.
+- [Color & Typography Themes](./themes.md): preview and choose presets.
+- [Theme Mode and Contrast](./theme-mode-contrast.md): keep light/dark mode and
+  contrast readable.
 
-## Next Steps
+## Work Faster
 
-Once you've mastered the basics, explore:
-
-- **[Layouts](../layouts/)** - Different slide layouts for various content types
-- **[Components](../components/)** - Built-in components like Theorem, Block, Steps
-- **[Syntax Sugar](../syntax-sugar.md)** - Simplified Markdown syntax for components
+- [VS Code Extension](./vscode-extension.md): snippets, previews, BibTeX
+  helpers, and deck metadata support.
+- [Examples](../examples.md): inspect complete examples after you know which
+  pattern you need.

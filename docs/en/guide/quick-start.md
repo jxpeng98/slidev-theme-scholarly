@@ -4,114 +4,91 @@ title: Quick Start
 
 # Quick Start
 
-## Prerequisites
+## Requirements
 
-Make sure you have [Node.js](https://nodejs.org/) installed.
+Install Node.js 20 or newer. The generated projects use `pnpm`.
 
-## Step 1: Create a presentation with CLI (Recommended)
+## Create A Deck
+
+Use the CLI without a global install:
 
 ```bash
-# One-time usage (no global install needed)
 npx -y --package slidev-theme-scholarly sch init my-talk
-
-# Alternative short alias
-npx -y --package slidev-theme-scholarly sts init my-talk
+cd my-talk
+pnpm install
+pnpm run dev
 ```
 
-Available templates:
+The browser opens with a live Slidev preview. Edit `slides.md` to start writing.
+
+## Pick A Template
+
+List available templates:
 
 ```bash
 npx -y --package slidev-theme-scholarly sch template list
 ```
 
-Curated academic workflows:
+Common choices:
 
-| Template | Best for |
-|----------|----------|
+| Template | Use it for |
+| --- | --- |
 | `basic` | Minimal English starter |
 | `academic` | General academic deck with BibTeX |
 | `paper-talk` | Paper presentations with summary, method, results, and references |
 | `seminar` | Research seminars with agenda, related work, method, and discussion |
 | `thesis-defense` | Defense decks with experiments, limitations, Q&A, and appendix map |
 | `reading-group` | Paper critique and group discussion |
-| `conference-lightning` | Short conference talks focused on one result |
+| `conference-lightning` | Short talks focused on one result |
 | `zh` | Minimal Chinese starter |
 
-Not sure which template to choose? Start from the [academic workflow guide](./workflows/).
-
-Use a specific template:
+Create from a specific template:
 
 ```bash
-npx -y --package slidev-theme-scholarly sch init my-talk --template academic
 npx -y --package slidev-theme-scholarly sch init paper-session --template paper-talk
 npx -y --package slidev-theme-scholarly sch init defense --template thesis-defense
 ```
 
-Useful CLI commands:
+If you are unsure, start with the [academic workflow guide](./workflows/).
+
+## Useful CLI Commands
+
+Discover what the theme provides:
 
 ```bash
-# help
-npx sch help
-npx sch help theme
-
-# theme-specific discovery
 npx sch theme list
 npx sch layout list
 npx sch component list
 npx sch snippet list
+```
 
-# apply a Scholarly preset to frontmatter
-npx sch theme apply cambridge-green --font elegant --file slides.md
+Apply a theme preset or append common content:
+
+```bash
 npx sch theme preset apply cambridge --file slides.md
-
-# insert Scholarly snippet blocks
 npx sch snippet append theorem --file slides.md
-npx sch snippet append methodology --file slides.md
-
-# append a full academic workflow skeleton
-npx sch workflow list
 npx sch workflow apply paper --file slides.md
+```
 
-# environment checker (with Scholarly checks)
+Check the project setup:
+
+```bash
 npx sch doctor
 npx sch doctor --json
 ```
 
-`sch doctor` reports `OK`, `WARN`, and `ERROR` checks with concrete next actions.
-Use `--json` when you want CI, scripts, or editor integrations to consume the same diagnostics.
+`sch doctor` reports `OK`, `WARN`, and `ERROR` items with concrete next actions.
+Use `--json` for CI, scripts, or editor integrations.
 
-Example warning output:
+## Manual Setup For An Existing Slidev Project
 
-```text
-- themeConfig.colorTheme: [WARN] unknown value: mystery-blue
-  Action: Use one of: classic-blue, oxford-burgundy, cambridge-green...
-- Citation setup: [WARN] citations found but no bibFile or references.bib
-  Action: Add bibFile: ./references.bib to frontmatter or create references.bib next to slides.md.
-```
-
-## Step 2: Install dependencies and run
-
-```bash
-cd my-talk
-pnpm install
-pnpm run dev
-```
-
-Your browser will open automatically with live preview.
-
-## Step 3: Edit `slides.md`
-
-The generated project already includes a ready-to-use `slides.md`.
-
-## Manual setup (if you already have a Slidev project)
-
-Install theme dependency:
+Install the theme:
 
 ```bash
 npm i -D slidev-theme-scholarly
 ```
 
-Set your Slidev frontmatter:
+Set the frontmatter in `slides.md`:
 
 ```markdown
 ---
@@ -121,15 +98,16 @@ bibStyle: apa
 ---
 ```
 
-Then run:
+Run Slidev:
 
 ```bash
 npx slidev
 ```
 
-Scholarly registers its citation hooks from the theme package itself, so normal usage does not need a project-level `vite.config.ts`.
+Scholarly registers its citation hooks from the theme package. Normal usage does
+not require a project-level `vite.config.ts`.
 
-Add a bibliography slide with the built-in references layout:
+Add a references slide:
 
 ```markdown
 ---
@@ -137,4 +115,5 @@ layout: references
 ---
 ```
 
-If you need custom placement inside that slide, add `[[bibliography]]` explicitly where the list should appear.
+Use `[[bibliography]]` only when you need to choose the exact bibliography
+position inside that slide.

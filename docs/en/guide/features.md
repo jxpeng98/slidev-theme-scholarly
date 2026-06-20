@@ -4,114 +4,52 @@ title: Key Features
 
 # Key Features
 
-## 🎨 Professional Design
+Scholarly turns Slidev into an academic deck authoring environment: structured
+layouts, reusable research components, BibTeX citations, readable theme presets,
+and editor tooling.
 
-- Clean, academic aesthetic inspired by LaTeX Beamer
-- Automatic header and footer on all slides
-- Consistent styling throughout your presentation
+## Academic Deck Structure
 
-## 👥 Multi-Author Support
+- 34 layout previews covering covers, sections, content slides, figures,
+  comparisons, methods, results, timelines, appendices, defenses, and references.
+- Automatic header and footer styling with author names, conference text, page
+  numbers, and optional beamer-style navigation.
+- Footer outline TOC for long decks, grouped by `layout: section`.
 
-Display one author, two authors, or entire research teams elegantly:
+Start with [Layouts](../layouts/) when you know the slide shape you need.
 
-- 1 author: "Jane Smith"
-- 2 authors: "Jane Smith & John Doe"  
-- 3 authors: "Jane Smith, John Doe, Alice Brown"
-- 4+ authors: "Jane Smith et al."
+## Research Components
 
-## 🔢 Smart Theorem Numbering
+Use components for recurring academic content instead of rebuilding styles on
+each slide:
 
-Insert theorems, lemmas, definitions with automatic numbering:
+| Component area | Components |
+| --- | --- |
+| Statements | `Theorem`, `Block`, `Highlight`, `Keywords` |
+| Structure | `Steps`, `Columns` |
+| Evidence | `MetricCard`, `MetricGrid`, `EvidenceBlock`, `EquationBlock`, `ResultTable` |
+| Paper context | `DatasetCard`, `PaperCard`, `ContributionList`, `CaveatList` |
+| References | `Cite`, references layout, footnote previews |
 
-- Each type (theorem, lemma, etc.) has its own counter
-- Supports both English and Chinese
-- Customizable number format
+Theorem-like statements support English and Chinese labels, automatic numbering,
+manual numbers, and custom number formats.
 
-## 📐 18 Layout Options
+## Citations And Footnotes
 
-Different layouts for different needs:
+- Use `@citekey` for parenthetical citations.
+- Use `!@citekey` for narrative citations.
+- Use standard Markdown footnotes with Scholarly styling.
+- Hover footnote markers on desktop to preview notes, or click to pin them.
+- Generate references from BibTeX with APA, Harvard, Vancouver, IEEE, MLA, or
+  Chicago styles.
 
-- **Basic**: cover, default, intro, section, center
-- **Content**: quote, fact, statement, two-cols
-- **Image**: image-left, image-right
-- **Advanced (v2.0)**: focus, compare, bullets, figure, references, end, auto-center, auto-size
+Normal citation usage needs only `bibFile` and `bibStyle` in frontmatter.
 
-## 📊 Academic Styling (v0.1.2)
+## Data-Driven Result Slides
 
-Professional CSS styling for academic presentations:
-
-- **Booktabs Tables** - Three-line table style (no vertical lines)
-- **Code Blocks** - Light gray background with monospace fonts
-- **Citation Styling** - Smaller font size with gray color for hierarchy
-- **Blockquotes** - Left border with italic styling
-
-## 📚 Built-in Citation Support
-
-Automatic bibliography generation from BibTeX files:
-
-- Use `@citekey` for parenthetical citations
-- Use `!@citekey` for narrative citations
-- Use standard Markdown footnotes with academic styling
-- Hover footnote markers on desktop to preview notes, or click to pin them
-- Supports APA, Harvard, Vancouver, IEEE, MLA, Chicago styles
-- Auto-generates bibliography from all cited references
-- No additional configuration required!
-
-## 🧾 Paper Metadata Scaffolding
-
-Generate reading-group or paper-talk slides directly from a BibTeX key:
-
-```bash
-sch paper summary --bib references.bib --key sample2026
-```
-
-The command reads `title`, `author`, `year`, `doi`, `url`, and a venue field
-from BibTeX. Venue uses the first available field in this order: `journal`,
-`booktitle`, `publisher`, `school`, `institution`.
-
-Default output is a `paper-summary` slide:
-
-```markdown
----
-layout: paper-summary
-paperTitle: Example Paper
-authors:
-  - Jane Doe
-year: 2026
-venue: Journal of Examples
-doi: 10.1234/example
----
-```
-
-Use `--layout paper-card` when you want a `PaperCard` component instead:
-
-```bash
-sch paper summary --bib references.bib --key sample2026 --layout paper-card
-```
-
-Use `--json` for automation. JSON output contains `metadata`, `warnings`, and
-`markdown`. Missing `title`, `authors`, `year`, or `venue` fields are printed as
-warnings on stderr, but the generated Markdown still renders with safe fallback
-text.
-
-## 🧩 Rich Components
-
-Built-in components for academic content:
-
-- **Theorem** - Theorems, lemmas, definitions with auto-numbering
-- **Block** - Beamer-style colored blocks
-- **Steps** - Workflow/process visualization
-- **Keywords** - Keyword tags
-- **Columns** - Flexible multi-column layouts
-- **Highlight** - Inline text highlighting
-
-## 📈 Data-Driven Results
-
-Keep small result summaries in data files and render them with the existing
-academic components. Scholarly uses Vite and Slidev imports directly, so there is
-no runtime fetch loader and no charting dependency.
-
-### JSON import
+Small result summaries can live in JSON or CSV and render through theme
+components. Scholarly uses Vite and Slidev imports directly; there is no runtime
+fetch loader or charting dependency.
 
 ```ts
 import rows from './results.json'
@@ -124,7 +62,7 @@ const metrics = toMetricItems(rows)
 <MetricGrid :metrics="metrics" compact />
 ```
 
-### CSV `?raw` import
+CSV works with `?raw`:
 
 ```ts
 import csv from './results.csv?raw'
@@ -133,71 +71,44 @@ import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
 const rows = parseCsvTable(csv)
 ```
 
-```markdown
-<ResultTable
-  :rows="rows"
-  :columns="[
-    { key: 'method', label: 'Method' },
-    { key: 'accuracy', label: 'Accuracy', align: 'right' },
-    { key: 'latency', label: 'Latency', align: 'right' }
-  ]"
-  highlightColumn="accuracy"
-  compact
-/>
+Use static Markdown tables for one-off slides where a data file would be heavier
+than the content.
+
+## Paper Metadata Scaffolding
+
+Generate a paper summary from a BibTeX key:
+
+```bash
+sch paper summary --bib references.bib --key sample2026
 ```
 
-For one-off slides, a static Markdown table is still the best fallback:
+The command reads title, authors, year, DOI, URL, and venue fields, then emits a
+`paper-summary` slide. Use `--layout paper-card` for a component snippet, or
+`--json` when scripts need structured output.
+When required fields are missing, the CLI reports `warnings` and still emits
+renderable fallback Markdown.
 
-```markdown
-| Method | Accuracy | Latency |
-| --- | ---: | ---: |
-| Baseline | 91.5 | 21 ms |
-| Ours | **94.7** | 18 ms |
-```
+## Theme Presets
 
-## 🧱 Base Theme and Addon Boundary
+Scholarly ships readable color and font presets for academic decks, including
+classic blue, Oxford burgundy, Cambridge green, Yale blue, Princeton orange,
+Nordic blue, warm sepia, monochrome, and high contrast.
 
-Scholarly keeps no-network academic helpers in the base theme. Built-in
-citations, footnote previews, references slides, lightweight data imports, and
-BibTeX summary scaffolding remain included because they add no extra setup and
-do not introduce charting engines, runtime fetch loaders, or remote APIs.
+Use [Color & Typography Themes](./themes.md) for visual selection, then tune
+mode and contrast in [Theme Mode and Contrast](./theme-mode-contrast.md).
 
-Features that require network access, large parsers, charting engines, large
-asset bundles, or broader integration APIs should ship as optional addons
-instead. The base theme stays the stable install path; optional packages such as
-`slidev-addon-scholarly-data` or `slidev-addon-scholarly-citations` should be
-installed explicitly only when a deck needs those heavier capabilities.
+## Authoring Tools
 
-## 📝 Markdown Syntax Sugar
+- CLI templates and workflows create complete starter decks.
+- `sch doctor` reports setup problems with actionable fixes.
+- VS Code snippets insert layouts and components.
+- VS Code previews show the same generated screenshots used by the docs.
 
-Use simple Markdown directives instead of HTML:
+See [VS Code Extension](./vscode-extension.md) for editor setup.
 
-```markdown
-:::block{type="info" title="Note"}
-Content here
-:::
+## Base Theme Boundary
 
-:::theorem{type="theorem" title="Result"}
-Mathematical content
-:::
-
-:::columns{columns="2"}
-Left column
-+++
-Right column
-:::
-```
-
-## 🌍 Multi-Language
-
-Supports English and Chinese (中文) for mathematical content.
-
-## 🆕 New in v0.1.2
-
-| Feature | Description |
-|---------|-------------|
-| `quote` layout | New `author` and `source` props |
-| `bullets` layout | New `icon` prop for custom bullets |
-| `fact` layout | New `purple` color variant |
-| Booktabs tables | Academic three-line tables |
-| Code blocks | Enhanced styling |
+Scholarly keeps no-network academic helpers in the base theme: citations,
+footnote previews, references slides, lightweight data imports, and BibTeX
+summary scaffolding. Features that need network access, large parsers, charting
+engines, large assets, or broad integration APIs should stay in optional addons.
