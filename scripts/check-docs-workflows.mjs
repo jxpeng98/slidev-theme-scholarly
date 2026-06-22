@@ -80,7 +80,8 @@ async function checkLocale(locale, config) {
   expectWorkflowLinks(locale, workflowsIndex)
   expectIncludes(`${locale} workflows index`, workflowsIndex, '../theme-mode-contrast')
 
-  expectIncludes(`${locale} contrast guide`, contrast, 'colorMode')
+  expectIncludes(`${locale} contrast guide`, contrast, 'contentMode')
+  expectIncludes(`${locale} contrast guide`, contrast, 'chromeMode')
   expectIncludes(`${locale} contrast guide`, contrast, 'sectionMode')
   expectIncludes(`${locale} contrast guide`, contrast, 'high-contrast')
   expectIncludes(`${locale} contrast guide`, contrast, 'quote')
@@ -96,6 +97,8 @@ async function checkLocale(locale, config) {
     expectIncludes(name, text, config.labels.usefulSnippets)
     expectIncludes(name, text, config.labels.themeMode)
     expectIncludes(name, text, '../theme-mode-contrast')
+    expectIncludes(name, text, 'contentMode')
+    expect(!/`colorMode:\s*(light|dark)`/.test(text), `${name} should not recommend colorMode as the primary mode`)
     expectIncludes(name, text, '../../layouts/')
     expectIncludes(name, text, '../../components/')
     expect(/sch (init|snippet|workflow)/.test(text), `${name} should include a Scholarly CLI command`)

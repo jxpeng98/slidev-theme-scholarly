@@ -25,14 +25,20 @@ const requestedModes = (process.env.SCHOLARLY_THEME_MATRIX_MODES || '')
 
 const colorThemes = themesData.colorThemes
   .filter(theme => requestedThemes.length === 0 || requestedThemes.includes(theme.id))
-const colorModes = themesData.colorModes
+const surfaceModes = themesData.colorModes
   .filter(mode => requestedModes.length === 0 || requestedModes.includes(mode.id))
+  .map(mode => ({
+    ...mode,
+    contentMode: mode.id,
+    chromeMode: 'match',
+    sectionMode: 'match',
+  }))
 
 if (!colorThemes.length)
   throw new Error('No color themes selected for theme matrix export.')
 
-if (!colorModes.length)
-  throw new Error('No color modes selected for theme matrix export.')
+if (!surfaceModes.length)
+  throw new Error('No surface modes selected for theme matrix export.')
 
 const renderDeck = ({ theme, mode }) => `---
 theme: ${root}
@@ -40,8 +46,9 @@ title: Scholarly Theme Matrix - ${theme.label} / ${mode.label}
 themeConfig:
   colorTheme: ${theme.id}
   fontTheme: classic
-  colorMode: ${mode.id}
-  sectionMode: ${mode.id}
+  contentMode: ${mode.contentMode}
+  chromeMode: ${mode.chromeMode}
+  sectionMode: ${mode.sectionMode}
 footerMiddle: Theme Matrix
 ---
 
@@ -61,7 +68,7 @@ layout: default
 
 # Quote, Code, and Table
 
-> A readable quote should keep enough contrast in every color mode and theme.
+> A readable quote should keep enough contrast in every content mode and theme.
 
 ~~~ts
 const readable = 'semantic tokens';
@@ -81,7 +88,7 @@ layout: default
 # Blocks and Theorems
 
 <Block type="info" title="Information">
-The block content surface must remain readable on light and dark color modes.
+The block content surface must remain readable on light and dark content modes.
 </Block>
 
 <Block type="warning" title="Warning">
@@ -104,7 +111,7 @@ Section slides should follow sectionMode without leaking unreadable content colo
 await mkdir(workRoot, { recursive: true })
 
 for (const theme of colorThemes) {
-  for (const mode of colorModes) {
+  for (const mode of surfaceModes) {
     const deckPath = path.join(workRoot, `${theme.id}-${mode.id}.md`)
     const outDir = path.join(outputRoot, theme.id, mode.id)
 

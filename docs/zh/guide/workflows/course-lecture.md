@@ -38,5 +38,6 @@ sch snippet append section --file slides.md
 
 ## 主题模式与对比度
 
-课程页通常需要远距离阅读。讲解页保持 `colorMode: light`，章节页可使用
-`sectionMode: dark`，避免低对比 quote 或 Highlight 组合。详见[主题模式与对比度](../theme-mode-contrast)。
+课程页通常需要远距离阅读。讲解页保持 `contentMode: light` 并搭配
+`chromeMode: match`，章节页可使用 `sectionMode: dark`，避免低对比 quote 或
+Highlight 组合。详见[主题模式与对比度](../theme-mode-contrast)。

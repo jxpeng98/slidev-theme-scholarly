@@ -39,6 +39,7 @@ visible before export.
 
 ## Theme mode and contrast
 
-Literature reviews are citation dense. Prefer `colorMode: light`, avoid dark
-backgrounds behind long quote blocks, and use muted Highlight variants sparingly.
-See [theme mode and contrast](../theme-mode-contrast).
+Literature reviews are citation dense. Prefer `contentMode: light` with
+`chromeMode: match`, avoid dark backgrounds behind long quote blocks, and use
+muted Highlight variants sparingly. See
+[theme mode and contrast](../theme-mode-contrast).

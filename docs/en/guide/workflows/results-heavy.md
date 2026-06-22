@@ -39,6 +39,7 @@ duplicating ad-hoc boxes.
 
 ## Theme mode and contrast
 
-Results slides need high figure and table contrast. Prefer `colorMode: light`,
-test charts against the chosen color theme, and use `high-contrast` when
-projected charts lose detail. See [theme mode and contrast](../theme-mode-contrast).
+Results slides need high figure and table contrast. Prefer `contentMode: light`
+with `chromeMode: match`, test charts against the chosen color theme, and use
+`high-contrast` when projected charts lose detail. See
+[theme mode and contrast](../theme-mode-contrast).

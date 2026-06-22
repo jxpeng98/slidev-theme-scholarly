@@ -1,11 +1,12 @@
 ---
 theme: ../
 aspectRatio: 4/3
-colorMode: light
 layout: cover
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
+  contentMode: light
+  chromeMode: match
   sectionMode: dark
 title: Layout Screenshots Generator
 authors:

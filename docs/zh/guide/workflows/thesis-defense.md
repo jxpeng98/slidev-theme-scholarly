@@ -40,4 +40,5 @@ sch snippet append references --file slides.md
 ## 主题模式与对比度
 
 答辩环境的投影条件不稳定。优先使用 `high-contrast` 或 `classic-blue`，
-密集证据页保持 `colorMode: light`，章节页再使用深色。详见[主题模式与对比度](../theme-mode-contrast)。
+密集证据页保持 `contentMode: light` 并搭配 `chromeMode: match`，章节页再使用
+`sectionMode: dark`。详见[主题模式与对比度](../theme-mode-contrast)。

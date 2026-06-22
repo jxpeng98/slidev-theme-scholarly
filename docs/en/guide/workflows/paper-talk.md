@@ -41,6 +41,7 @@ layout or a component.
 ## Theme mode and contrast
 
 Paper talks often mix dense text, equations, and result highlights. Prefer
-`colorMode: light` for citation-heavy slides, use `sectionMode: dark` only for
-section breaks, and check [theme mode and contrast](../theme-mode-contrast)
-before using quote or Highlight blocks on light slides.
+`contentMode: light` with `chromeMode: match` for citation-heavy slides, use
+`sectionMode: dark` only for section breaks, and check
+[theme mode and contrast](../theme-mode-contrast) before using quote or
+Highlight blocks on light slides.

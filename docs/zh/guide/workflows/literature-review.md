@@ -37,5 +37,5 @@ sch workflow apply seminar --file slides.md
 
 ## 主题模式与对比度
 
-文献综述通常引用密集。建议使用 `colorMode: light`，避免在浅色页面上放大面积深色 quote，
-Highlight 只用于短语。详见[主题模式与对比度](../theme-mode-contrast)。
+文献综述通常引用密集。建议使用 `contentMode: light` 搭配 `chromeMode: match`，
+避免在浅色页面上放大面积深色 quote，Highlight 只用于短语。详见[主题模式与对比度](../theme-mode-contrast)。

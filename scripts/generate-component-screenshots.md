@@ -1,11 +1,13 @@
 ---
 theme: ../
 aspectRatio: 4/3
-colorMode: light
 layout: default
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
+  contentMode: light
+  chromeMode: match
+  sectionMode: match
 title: Block Component
 subtitle: Beamer-style blocks
 authors:

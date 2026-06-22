@@ -39,5 +39,5 @@ sch snippet append results --file slides.md
 ## 主题模式与对比度
 
 论文报告通常有密集文字、公式和结果高亮。引用密集页面建议使用
-`colorMode: light`，章节分隔页再使用 `sectionMode: dark`。使用 quote 或
-Highlight 前先检查[主题模式与对比度](../theme-mode-contrast)。
+`contentMode: light` 搭配 `chromeMode: match`，章节分隔页再使用
+`sectionMode: dark`。使用 quote 或 Highlight 前先检查[主题模式与对比度](../theme-mode-contrast)。

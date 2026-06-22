@@ -37,5 +37,5 @@ sch snippet append block --file slides.md
 
 ## 主题模式与对比度
 
-结果页需要图表和表格保持高对比。建议使用 `colorMode: light`，投影图表细节不足时使用
-`high-contrast`。详见[主题模式与对比度](../theme-mode-contrast)。
+结果页需要图表和表格保持高对比。建议使用 `contentMode: light` 搭配
+`chromeMode: match`，投影图表细节不足时使用 `high-contrast`。详见[主题模式与对比度](../theme-mode-contrast)。

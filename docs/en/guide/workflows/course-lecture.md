@@ -40,5 +40,6 @@ Use examples early and move optional derivations to appendix or backup slides.
 ## Theme mode and contrast
 
 Lecture slides are often read from the back of a room. Keep explanatory slides
-in `colorMode: light`, use `sectionMode: dark` for separation, and avoid low
-contrast quote or Highlight combinations. See [theme mode and contrast](../theme-mode-contrast).
+in `contentMode: light` with `chromeMode: match`, use `sectionMode: dark` for
+separation, and avoid low contrast quote or Highlight combinations. See
+[theme mode and contrast](../theme-mode-contrast).

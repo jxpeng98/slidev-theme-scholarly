@@ -42,5 +42,6 @@ Keep appendix slides short and link them from the main deck with clear labels.
 
 Defense decks are usually viewed in rooms with unpredictable lighting. Use
 `high-contrast` or `classic-blue` when readability matters more than branding,
-keep dense evidence slides in `colorMode: light`, and reserve dark sections for
-chapter transitions. See [theme mode and contrast](../theme-mode-contrast).
+keep dense evidence slides in `contentMode: light` with `chromeMode: match`,
+and reserve `sectionMode: dark` for chapter transitions. See
+[theme mode and contrast](../theme-mode-contrast).
