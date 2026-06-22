@@ -24,6 +24,16 @@ test('resolves explicit contentMode before legacy colorMode and Slidev dark stat
   )
 })
 
+test('ignores legacy colorMode for chrome when contentMode is explicit', () => {
+  assert.deepEqual(
+    modes.resolveScholarlyModes({
+      themeConfig: { contentMode: 'dark', colorMode: 'light' },
+      slidevDark: false,
+    }),
+    { contentMode: 'dark', chromeMode: 'dark', sectionMode: 'dark', source: 'contentMode' },
+  )
+})
+
 test('uses legacy colorMode for content and chrome when new modes are absent', () => {
   assert.deepEqual(
     modes.resolveScholarlyModes({
@@ -62,5 +72,16 @@ test('per-slide sectionMode overrides the global section mode', () => {
       contentMode: 'light',
     }),
     'dark',
+  )
+})
+
+test('invalid per-slide sectionMode falls back to valid global section mode', () => {
+  assert.equal(
+    modes.resolveScholarlySectionMode({
+      localSectionMode: 'auto',
+      globalSectionMode: 'light',
+      contentMode: 'dark',
+    }),
+    'light',
   )
 })
