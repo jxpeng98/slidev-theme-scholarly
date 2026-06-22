@@ -88,7 +88,7 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
 .footer-toc-preview-surface {
   position: relative;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 68%, var(--scholarly-accent, #b8860b) 6%, #c4b998 26%);
+  border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 68%, var(--scholarly-accent, #b8860b) 6%, #c4b998 26%);
   border-radius: 0.56rem;
   background: var(--scholarly-bg-warm, #fdfbf7);
   box-shadow:

@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 const files = {
   block: await readFile(new URL('../components/Block.vue', import.meta.url), 'utf8'),
   footerToc: await readFile(new URL('../components/FooterTocControl.vue', import.meta.url), 'utf8'),
+  footerTocPreview: await readFile(new URL('../components/FooterTocPreviewCard.vue', import.meta.url), 'utf8'),
   highlight: await readFile(new URL('../components/Highlight.vue', import.meta.url), 'utf8'),
   theorem: await readFile(new URL('../components/Theorem.vue', import.meta.url), 'utf8'),
   appendixIndex: await readFile(new URL('../layouts/appendix-index.vue', import.meta.url), 'utf8'),
@@ -61,6 +62,7 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
 for (const [name, text] of Object.entries({
   block: files.block,
   footerToc: files.footerToc,
+  footerTocPreview: files.footerTocPreview,
   highlight: files.highlight,
   theorem: files.theorem,
   appendixIndex: files.appendixIndex,
@@ -72,7 +74,12 @@ for (const [name, text] of Object.entries({
   expectNotContains(name, text, 'html.dark')
 }
 
-expectNotContains('FooterTocControl.vue', files.footerToc, '--scholarly-content-border')
+for (const [name, text] of Object.entries({
+  'FooterTocControl.vue': files.footerToc,
+  'FooterTocPreviewCard.vue': files.footerTocPreview,
+})) {
+  expectNotContains(name, text, '--scholarly-content-border')
+}
 
 for (const [name, text] of Object.entries({
   'appendix-index.vue': files.appendixIndex,
