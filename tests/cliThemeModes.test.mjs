@@ -23,6 +23,20 @@ function makeTempSlides(name = 'slides.md') {
   return { dir, file }
 }
 
+function makeLegacyTempSlides(themeConfigLines, name = 'slides.md') {
+  const dir = mkdtempSync(path.join(tmpdir(), 'scholarly-cli-theme-'))
+  const file = path.join(dir, name)
+  writeFileSync(file, `---
+theme: scholarly
+themeConfig:
+${themeConfigLines}
+---
+
+# Legacy Test
+`, 'utf8')
+  return { dir, file }
+}
+
 test('theme apply writes explicit content, chrome, and section modes without colorMode', () => {
   const { file } = makeTempSlides()
 
@@ -95,10 +109,7 @@ test('--mode=value maps to contentMode and removes existing colorMode', () => {
 })
 
 test('theme apply migrates existing colorMode when no mode flags are supplied', () => {
-  const { file } = makeTempSlides()
-  let slides = readFileSync(file, 'utf8')
-  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dark\n')
-  writeFileSync(file, slides, 'utf8')
+  const { file } = makeLegacyTempSlides('  colorMode: dark\n')
 
   const result = runCli([
     'theme',
@@ -116,10 +127,7 @@ test('theme apply migrates existing colorMode when no mode flags are supplied', 
 })
 
 test('theme apply migrates existing colorMode when only chrome mode is supplied', () => {
-  const { file } = makeTempSlides()
-  let slides = readFileSync(file, 'utf8')
-  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dark\n')
-  writeFileSync(file, slides, 'utf8')
+  const { file } = makeLegacyTempSlides('  colorMode: dark\n')
 
   const result = runCli([
     'theme',
@@ -140,10 +148,7 @@ test('theme apply migrates existing colorMode when only chrome mode is supplied'
 })
 
 test('theme apply removes invalid existing colorMode without migrating it', () => {
-  const { file } = makeTempSlides()
-  let slides = readFileSync(file, 'utf8')
-  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dim\n')
-  writeFileSync(file, slides, 'utf8')
+  const { file } = makeLegacyTempSlides('  colorMode: dim\n')
 
   const result = runCli([
     'theme',
@@ -161,10 +166,7 @@ test('theme apply removes invalid existing colorMode without migrating it', () =
 })
 
 test('theme apply replaces invalid contentMode with valid legacy colorMode', () => {
-  const { file } = makeTempSlides()
-  let slides = readFileSync(file, 'utf8')
-  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  contentMode: dim\n  colorMode: dark\n')
-  writeFileSync(file, slides, 'utf8')
+  const { file } = makeLegacyTempSlides('  contentMode: dim\n  colorMode: dark\n')
 
   const result = runCli([
     'theme',
