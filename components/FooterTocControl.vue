@@ -149,6 +149,7 @@
     </Transition>
 
     <FooterTocPreviewCard
+      v-if="previewVisible"
       :visible="previewVisible"
       :route="previewRoute"
       :slide-no="previewTargetNo"
@@ -160,7 +161,7 @@
 
 <script setup lang="ts">
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { slideAspect, useSlideContext } from '@slidev/client'
 import { isInteractiveSlideRoute } from '../utils/presentationMode'
 import { CLICKS_MAX, createFixedClicks } from '../utils/fixedClicks'
@@ -172,7 +173,8 @@ import {
   type FooterTocSectionGroup,
   type FooterTocSlideItem,
 } from '../utils/footerToc'
-import FooterTocPreviewCard from './FooterTocPreviewCard.vue'
+
+const FooterTocPreviewCard = defineAsyncComponent(() => import('./FooterTocPreviewCard.vue'))
 
 interface PreviewAnchorRect {
   top: number

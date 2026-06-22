@@ -427,7 +427,9 @@ themeConfig:
 
 ## 颜色模式
 
-独立控制主题“外壳”（页眉/页脚背景 + 文字颜色）的外观，不依赖 Slidev 的暗黑模式。
+控制主题“外壳”（页眉/页脚背景 + 文字颜色）的外观。显式设置 `colorMode` 时，
+Scholarly 也会同步 Slidev 的 `html.dark` class 和浏览器 `color-scheme`；未设置时，
+主题继续跟随 Slidev 当前的浅色/深色状态。
 
 ### 全局默认值
 
@@ -444,7 +446,7 @@ themeConfig:
 ### 优先级链
 
 ```
-全局 themeConfig.colorMode > 'dark'（默认）
+全局 themeConfig.colorMode > Slidev 当前浅色/深色状态
 ```
 
 | 值 | 描述 |

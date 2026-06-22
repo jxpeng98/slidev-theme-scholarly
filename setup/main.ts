@@ -16,6 +16,7 @@ import {
   rebuildInternalAnchorTargets,
   resolvePendingInternalAnchorNavigation,
 } from '../utils/internalAnchorNavigation'
+import { applyRootColorMode, resolveScholarlyColorMode } from '../utils/colorMode'
 import { hasVerticalOverflow, isVerticalScrollOverflowMode } from '../utils/scrollArea'
 import { invalidateTheoremNumberMap, resetOccurrenceTracker } from '../utils/theorem'
 
@@ -278,23 +279,17 @@ const applyThemePresets = (
   setAttr('data-color-theme', colorTheme)
   setAttr('data-font-theme', config?.fontTheme)
   applyThemePresetColors(colorTheme, colorConfig)
-
-  // Only force color mode if explicitly configured
-  // Otherwise, sync with Slidev's built-in dark mode toggle (html.dark class)
-  if (config?.colorMode) {
-    setAttr('data-color-mode', config.colorMode)
-  } else {
-    // Sync with Slidev's dark class
-    syncColorModeWithDark()
-  }
+  syncColorModeWithDark(config)
 }
 
-// Sync data-color-mode with html.dark class (Slidev's built-in toggle)
-const syncColorModeWithDark = () => {
+// Explicit Scholarly colorMode is authoritative; otherwise follow Slidev's dark class.
+const syncColorModeWithDark = (config?: ThemeConfig | null) => {
   if (typeof window === 'undefined') return
   const root = document.documentElement
-  const isDark = root.classList.contains('dark')
-  root.setAttribute('data-color-mode', isDark ? 'dark' : 'light')
+  applyRootColorMode(
+    root,
+    resolveScholarlyColorMode(config?.colorMode, root.classList.contains('dark')),
+  )
 }
 
 // Watch for Slidev's dark mode toggle (class changes on html element)
@@ -954,9 +949,6 @@ const initializeFootnotePopovers = () => {
 const setupDarkModeSync = (config: ThemeConfig | null | undefined) => {
   if (typeof window === 'undefined') return
 
-  // If colorMode is explicitly set, don't sync with Slidev's toggle
-  if (config?.colorMode) return
-
   // Clean up existing observer
   if (darkModeObserver) {
     darkModeObserver.disconnect()
@@ -964,13 +956,14 @@ const setupDarkModeSync = (config: ThemeConfig | null | undefined) => {
   }
 
   // Initial sync
-  syncColorModeWithDark()
+  syncColorModeWithDark(config)
 
-  // Watch for class changes on html element
+  // Watch for class changes on html element. With an explicit colorMode, this
+  // immediately restores the configured mode if Slidev/system dark mode changes.
   darkModeObserver = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        syncColorModeWithDark()
+        syncColorModeWithDark(config)
       }
     }
   })
@@ -1123,7 +1116,6 @@ export default defineAppSetup(({ app, router }) => {
     applyFootnoteDisplay(to)
     observeFootnoteLayout()
     observeScrollAreas()
-    rebuildInternalAnchorTargets()
     resetOccurrenceTracker()
     hideFootnotePopover()
 

@@ -97,6 +97,10 @@ themeConfig:
 
 Slidev 的 `colorSchema` 控制播放器层面的浅色/深色切换。Scholarly 的 `themeConfig.colorMode` 控制主题语义 token：页眉、页脚、highlight、引用、代码、表格、Block 和 Theorem 表面颜色。
 
+显式设置 `themeConfig.colorMode` 时，它就是权威模式：Scholarly 会同步 Slidev 的
+`html.dark` class 和浏览器 `color-scheme`，避免系统深色模式把深色播放器样式和浅色主题
+token 混在一起。未设置时，Scholarly 继续跟随 Slidev 当前的浅色/深色状态。
+
 ```yaml
 colorSchema: both
 themeConfig:

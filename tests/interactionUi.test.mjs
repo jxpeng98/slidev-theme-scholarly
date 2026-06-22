@@ -49,3 +49,22 @@ test('theme color presets are promoted at runtime so Slidev body tokens cannot m
   assert.match(files.mainSetup, /applyThemePresetColors/)
   assert.match(files.mainSetup, /document\.body/)
 })
+
+test('route navigation does not rebuild the full internal anchor registry', () => {
+  const afterEachMatch = files.mainSetup.match(/router\.afterEach\(\(to\) => \{([\s\S]*?)\n  \}\)/)
+  assert.ok(afterEachMatch, 'Expected setup/main.ts to register router.afterEach')
+  assert.doesNotMatch(afterEachMatch[1], /rebuildInternalAnchorTargets\(\)/)
+})
+
+test('footer outline slide previews are lazy loaded', () => {
+  assert.match(files.footerToc, /defineAsyncComponent/)
+  assert.match(files.footerToc, /import\('\.\/FooterTocPreviewCard\.vue'\)/)
+  assert.match(files.footerToc, /v-if="previewVisible"/)
+  assert.doesNotMatch(files.footerToc, /import FooterTocPreviewCard from '\.\/FooterTocPreviewCard\.vue'/)
+})
+
+test('explicit theme color mode still syncs the Slidev dark class', () => {
+  assert.match(files.mainSetup, /applyRootColorMode/)
+  assert.match(files.mainSetup, /resolveScholarlyColorMode/)
+  assert.doesNotMatch(files.mainSetup, /if \(config\?\.colorMode\) return/)
+})

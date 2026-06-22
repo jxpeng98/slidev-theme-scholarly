@@ -427,7 +427,10 @@ themeConfig:
 
 ## Color Mode
 
-Control the appearance of the theme “chrome” (header/footer background + text color) independently from Slidev’s dark mode.
+Control the appearance of the theme “chrome” (header/footer background + text
+color). If `colorMode` is set explicitly, Scholarly also syncs Slidev's
+`html.dark` class and browser `color-scheme` to that mode. If it is omitted, the
+theme follows Slidev's current light/dark state.
 
 ### Global Default
 
@@ -444,7 +447,7 @@ themeConfig:
 ### Priority Chain
 
 ```
-Global themeConfig.colorMode > 'dark' (default)
+Global themeConfig.colorMode > Slidev light/dark state
 ```
 
 | Value | Description |

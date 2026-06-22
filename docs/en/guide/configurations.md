@@ -101,6 +101,11 @@ Slidev `colorSchema` controls the player-level light/dark toggle. Scholarly
 `themeConfig.colorMode` controls this theme's semantic tokens: header, footer,
 highlights, quotes, code, tables, blocks, and theorem surfaces.
 
+When `themeConfig.colorMode` is set explicitly, it is authoritative: Scholarly
+syncs Slidev's `html.dark` class and browser `color-scheme` to the configured
+mode so system dark mode cannot mix dark player styles with light theme tokens.
+When it is omitted, Scholarly follows Slidev's current light/dark state.
+
 ```yaml
 colorSchema: both
 themeConfig:
