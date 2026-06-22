@@ -116,8 +116,9 @@ splits theme surfaces into explicit controls:
 
 `contentMode` accepts `light` and `dark`. `chromeMode` accepts `light`, `dark`,
 `match`, and `inverse`. Legacy `colorMode` is still supported as an alias for
-`contentMode`, and also preserves old chrome behavior when no explicit
-`contentMode` is set, but new decks should use `contentMode` and `chromeMode`.
+`contentMode`, and also preserves old chrome behavior when neither
+`contentMode` nor `chromeMode` is set, but new decks should use `contentMode`
+and `chromeMode`.
 
 ```yaml
 colorSchema: both

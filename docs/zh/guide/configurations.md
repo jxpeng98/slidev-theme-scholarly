@@ -113,8 +113,8 @@ Slidev 的 `colorSchema` 控制播放器层面的浅色/深色切换。Scholarly
 
 `contentMode` 可取 `light` 和 `dark`。`chromeMode` 可取 `light`、`dark`、`match`
 和 `inverse`。旧配置 `colorMode` 仍作为 `contentMode` 的兼容别名保留；未显式设置
-`contentMode` 时，它也会保留旧的外壳模式行为。新演示应使用 `contentMode` 和
-`chromeMode`。
+`contentMode` 且未显式设置 `chromeMode` 时，它也会保留旧的外壳模式行为。新演示应使用
+`contentMode` 和 `chromeMode`。
 
 ```yaml
 colorSchema: both
