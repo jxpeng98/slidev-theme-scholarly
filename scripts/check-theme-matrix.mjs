@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process'
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -12,7 +13,7 @@ const themesData = JSON.parse(await readFile(path.join(root, 'shared', 'themes.j
 const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run') || process.env.SCHOLARLY_THEME_MATRIX_DRY_RUN === '1'
 const passthroughArgs = args.filter(arg => arg !== '--dry-run' && arg !== '--')
-const outputRoot = process.env.SCHOLARLY_THEME_MATRIX_OUT || '/private/tmp/scholarly-theme-matrix'
+const outputRoot = process.env.SCHOLARLY_THEME_MATRIX_OUT || path.join(os.tmpdir(), 'scholarly-theme-matrix')
 const workRoot = path.join(outputRoot, '_work')
 const requestedThemes = (process.env.SCHOLARLY_THEME_MATRIX_THEMES || '')
   .split(',')

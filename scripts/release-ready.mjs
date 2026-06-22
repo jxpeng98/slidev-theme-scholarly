@@ -69,8 +69,8 @@ const steps = [
     command: ['node', '--test', 'tests/cliThemeModes.test.mjs'],
   },
   {
-    name: 'VS Code extension test suite',
-    command: ['pnpm', '--dir', 'vscode-extension', 'run', 'test'],
+    name: 'VS Code extension compile',
+    command: ['pnpm', 'run', 'vscode:compile'],
   },
   {
     name: 'Documentation build',
@@ -81,8 +81,8 @@ const steps = [
     command: ['node', 'cli/scholarly.mjs', 'doctor'],
   },
   {
-    name: 'VS Code extension compile',
-    command: ['pnpm', 'run', 'vscode:compile'],
+    name: 'VS Code extension test suite',
+    command: ['pnpm', '--dir', 'vscode-extension', 'run', 'test'],
   },
 ]
 
