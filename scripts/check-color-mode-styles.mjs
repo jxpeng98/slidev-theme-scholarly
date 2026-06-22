@@ -2,8 +2,12 @@ import { readFile } from 'node:fs/promises'
 
 const files = {
   block: await readFile(new URL('../components/Block.vue', import.meta.url), 'utf8'),
+  footerToc: await readFile(new URL('../components/FooterTocControl.vue', import.meta.url), 'utf8'),
   highlight: await readFile(new URL('../components/Highlight.vue', import.meta.url), 'utf8'),
   theorem: await readFile(new URL('../components/Theorem.vue', import.meta.url), 'utf8'),
+  appendixIndex: await readFile(new URL('../layouts/appendix-index.vue', import.meta.url), 'utf8'),
+  experimentGrid: await readFile(new URL('../layouts/experiment-grid.vue', import.meta.url), 'utf8'),
+  methodPipeline: await readFile(new URL('../layouts/method-pipeline.vue', import.meta.url), 'utf8'),
   mode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
   contentMode: await readFile(new URL('../styles/themes/content-mode.css', import.meta.url), 'utf8'),
   chromeMode: await readFile(new URL('../styles/themes/chrome-mode.css', import.meta.url), 'utf8'),
@@ -20,6 +24,11 @@ const expectContains = (name, text, needle) => {
 const expectNotContains = (name, text, needle) => {
   if (text.includes(needle))
     failures.push(`${name} should not contain ${needle}`)
+}
+
+const expectNotMatch = (name, text, pattern, description) => {
+  if (pattern.test(text))
+    failures.push(`${name} should not contain ${description}`)
 }
 
 const expectTokenInBlock = (name, block, token) => {
@@ -51,12 +60,27 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
 
 for (const [name, text] of Object.entries({
   block: files.block,
+  footerToc: files.footerToc,
   highlight: files.highlight,
   theorem: files.theorem,
+  appendixIndex: files.appendixIndex,
+  experimentGrid: files.experimentGrid,
+  methodPipeline: files.methodPipeline,
   layout: files.layout,
 })) {
   expectNotContains(name, text, ':root.dark')
   expectNotContains(name, text, 'html.dark')
+}
+
+expectNotContains('FooterTocControl.vue', files.footerToc, '--scholarly-content-border')
+
+for (const [name, text] of Object.entries({
+  'appendix-index.vue': files.appendixIndex,
+  'experiment-grid.vue': files.experimentGrid,
+  'method-pipeline.vue': files.methodPipeline,
+})) {
+  expectNotMatch(name, text, /--scholarly-footer-(?!height\b)[a-z-]+/, 'footer chrome tokens')
+  expectNotMatch(name, text, /--scholarly-chrome-[a-z-]+/, 'chrome tokens')
 }
 
 expectContains('mode.css', files.mode, "@import './content-mode.css';")

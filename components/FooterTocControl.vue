@@ -808,7 +808,7 @@ onUnmounted(() => {
   overflow: hidden;
 
   /* Warm paper border */
-  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
+  border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
   border-radius: 0.5rem;
 
   /* Matte warm paper surface */
@@ -851,7 +851,7 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.72rem 0.75rem 0.56rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 62%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 62%, transparent);
   background: transparent;
 }
 
@@ -938,7 +938,7 @@ onUnmounted(() => {
 
 .footer-toc-section {
   padding: 0.14rem;
-  border: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 52%, transparent);
+  border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 52%, transparent);
   border-radius: 0.4rem;
   background: color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 96%, var(--scholarly-accent, #b8860b) 0.6%, #f5f0e8 3.4%);
   box-shadow: 0 0.06rem 0.16rem rgba(45, 55, 72, 0.04);
@@ -947,7 +947,7 @@ onUnmounted(() => {
 
 /* Active section — gold left-bar accent */
 .footer-toc-section.is-active {
-  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-content-border, #dbe3ec) 64%);
+  border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-chrome-border, #dbe3ec) 64%);
   background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 5%, var(--scholarly-bg-warm, #fdfbf7) 92%, #faf5eb 3%);
   box-shadow:
     0 0.08rem 0.24rem rgba(45, 55, 72, 0.06),
@@ -1072,7 +1072,7 @@ onUnmounted(() => {
 .footer-toc-slides {
   margin-top: 0.1rem;
   padding: 0.04rem 0 0.02rem 0.24rem;
-  border-left: 1px solid color-mix(in srgb, var(--scholarly-content-border, #dbe3ec) 40%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 40%, transparent);
   margin-left: 0.54rem;
 }
 
