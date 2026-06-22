@@ -59,6 +59,18 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
     failures.push(`${name} selector ${selector} should not contain ${needle}`)
 }
 
+const backgroundSurfaceColorTokenPattern = /--scholarly-(?:canvas-bg|content-surface(?:-muted)?|chrome-bg|toc-surface(?:-muted)?|toolbar-surface)\b/
+
+const expectNoBackgroundSurfaceColorDeclarations = (name, text) => {
+  const declarationPattern = /(^|[;{\n])\s*([-\w]+)\s*:\s*([^;{}]+);/gm
+  for (const match of text.matchAll(declarationPattern)) {
+    const property = match[2].trim()
+    const value = match[3].trim()
+    if (property === 'color' && backgroundSurfaceColorTokenPattern.test(value))
+      failures.push(`${name} should not use background or surface tokens in color declarations: color: ${value}`)
+  }
+}
+
 for (const [name, text] of Object.entries({
   block: files.block,
   footerToc: files.footerToc,
@@ -72,6 +84,7 @@ for (const [name, text] of Object.entries({
 })) {
   expectNotContains(name, text, ':root.dark')
   expectNotContains(name, text, 'html.dark')
+  expectNoBackgroundSurfaceColorDeclarations(name, text)
 }
 
 for (const [name, text] of Object.entries({
@@ -91,12 +104,6 @@ for (const [name, text] of Object.entries({
 })) {
   expectNotMatch(name, text, /--scholarly-footer-(?!height\b)[a-z-]+/, 'footer chrome tokens')
   expectNotMatch(name, text, /--scholarly-chrome-[a-z-]+/, 'chrome tokens')
-  expectNotMatch(
-    name,
-    text,
-    /color\s*:\s*[^;]*var\(--scholarly-(?:canvas-bg|content-surface(?:-muted)?|chrome-bg|toc-surface(?:-muted)?|toolbar-surface)\b[^;]*;/,
-    'background or surface tokens in color declarations',
-  )
 }
 
 expectCssBlockContains('appendix-index.vue', files.appendixIndex, '.appendix-index-code', 'color: var(--scholarly-content-on-primary)')
@@ -124,6 +131,8 @@ if (!darkChromeBlockMatch)
   failures.push('chrome-mode.css should contain the default/dark chrome-mode token block')
 if (!lightChromeBlockMatch)
   failures.push('chrome-mode.css should contain the light chrome-mode token block')
+
+expectContains('chrome-mode.css light chrome block', lightChromeBlock, '--scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 72%')
 
 const requiredContentTokens = [
   '--scholarly-canvas-bg',
@@ -249,11 +258,11 @@ expectCssBlockContains('layout.css', files.layout, '.beamer-footer-left', 'var(-
 expectCssBlockContains('layout.css', files.layout, '.beamer-footer-center', 'var(--scholarly-footer-fg-muted')
 expectCssBlockContains('layout.css', files.layout, '.beamer-footer-right', 'var(--scholarly-footer-fg')
 
-const forbiddenContentTokenPattern = /--scholarly-(chrome|toolbar|footer)/
+const forbiddenContentTokenPattern = /--scholarly-(chrome|toolbar|footer|toc)/
 const forbiddenChromeTokenPattern = /--scholarly-(content|code|quote|highlight|block|theorem)/
 
 if (forbiddenContentTokenPattern.test(files.contentMode))
-  failures.push('content-mode.css should not contain chrome, toolbar, or footer tokens')
+  failures.push('content-mode.css should not contain chrome, toolbar, footer, or TOC tokens')
 if (forbiddenChromeTokenPattern.test(files.chromeMode))
   failures.push('chrome-mode.css should not contain content, code, quote, highlight, block, or theorem tokens')
 

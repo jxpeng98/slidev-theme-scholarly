@@ -13,6 +13,7 @@
   --scholarly-footer-fg: #ffffff;
   --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
   --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  /* TOC role tokens keep outline chrome independent from content surfaces. */
   --scholarly-toc-surface: linear-gradient(
     180deg,
     color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 44%, #0f172a 56%) 0%,
@@ -22,7 +23,7 @@
   --scholarly-toc-fg: #ffffff;
   --scholarly-toc-fg-muted: rgba(255, 255, 255, 0.62);
   --scholarly-toc-slide-fg: rgba(255, 255, 255, 0.78);
-  --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66);
+  --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.72);
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 76%, var(--scholarly-accent, #b8860b) 12%, transparent);
   --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 62%, transparent);
   --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 52%, transparent);
@@ -52,6 +53,7 @@
   --scholarly-footer-fg: #ffffff;
   --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
   --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  /* TOC role tokens keep outline chrome independent from content surfaces. */
   --scholarly-toc-surface: linear-gradient(
     180deg,
     var(--scholarly-chrome-bg, #fdfbf7) 0%,
@@ -61,7 +63,7 @@
   --scholarly-toc-fg: var(--scholarly-chrome-fg, #2d3748);
   --scholarly-toc-fg-muted: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 52%, transparent);
   --scholarly-toc-slide-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 74%, transparent);
-  --scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 62%, transparent);
+  --scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 72%, transparent);
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
   --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 62%, transparent);
   --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 52%, transparent);
