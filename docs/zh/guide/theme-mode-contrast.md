@@ -5,7 +5,8 @@ title: 主题模式与对比度
 # 主题模式与对比度
 
 Scholarly 将配色身份和可读性 token 分开处理。用 `colorTheme` 控制品牌感，
-用 `colorMode` 控制普通页面背景，用 `sectionMode` 控制章节分隔页。
+用 `contentMode` 控制普通页面背景，用 `chromeMode` 控制页眉、页脚、导航、TOC
+和工具栏表面，用 `sectionMode` 控制章节分隔页。
 
 ## 推荐默认值
 
@@ -13,12 +14,15 @@ Scholarly 将配色身份和可读性 token 分开处理。用 `colorTheme` 控�
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ```
 
-- 引用、正文、图表密集的页面优先使用 `colorMode: light`。
+- 引用、正文、图表密集的页面优先使用 `contentMode: light`。
+- 需要 Beamer 风格导航和页脚对比度时使用 `chromeMode: dark`。
 - 章节分隔页可以使用 `sectionMode: dark`，前提是文字足够大。
+- 全浅色或全深色演示可使用 `sectionMode: match`；需要和内容表面形成对比时使用 `sectionMode: inverse`。
 - 明亮会议室或投影效果不稳定时使用 `high-contrast`。
 - 截图、图表或代码应成为视觉主体时可使用 `monochrome`。
 

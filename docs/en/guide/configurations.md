@@ -22,7 +22,8 @@ authors:
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ---
 ```
@@ -68,7 +69,8 @@ Use `themeConfig` for visual and player behavior:
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   beamerNav: false
   outlineToc: true
@@ -77,14 +79,22 @@ themeConfig:
 
 | Option | Purpose | Default |
 | --- | --- | --- |
-| `colorTheme` | Color preset id | `classic-blue` |
 | `fontTheme` | Font preset id | `classic` |
-| `colorMode` | Scholarly semantic token mode for content and chrome | follows Slidev dark mode, defaulting to dark chrome |
-| `sectionMode` | Default mode for `layout: section` slides | `dark` |
 | `beamerNav` | Footer navigation buttons in play mode | `true` |
 | `outlineToc` | Footer TOC button and outline panel | `false` |
 | `outlineTocOpen` | Open the outline panel on load | `false` |
 | `footnoteDisplay` | `both`, `hover-only`, or `notes-only` | `both` |
+
+Color and surface controls:
+
+| Option | Controls | Default |
+| --- | --- | --- |
+| `colorTheme` | Brand palette: primary, accent, paper tone, and base text color | `classic-blue` |
+| `contentMode` | Ordinary slide canvas, readable content surfaces, quote, code, table, footnotes, Highlight, Block, and Theorem | Follows `colorMode`, then Slidev dark state |
+| `chromeMode` | Header, footer, page number, navigation buttons, TOC, and toolbar surfaces | `dark` |
+| `sectionMode` | Default appearance for `layout: section` slides | `dark` |
+| `colorMode` | Legacy alias for `contentMode` | Deprecated |
+| `themeColors` | Advanced CSS variable overrides for brand and footer colors | unset |
 
 Notes:
 
@@ -95,22 +105,26 @@ Notes:
 - Legacy `outlineSidebar` and `outlineSidebarOpen` still work; prefer
   `outlineToc` and `outlineTocOpen` for new decks.
 
-## Color Mode
+## Color Surface Modes
 
 Slidev `colorSchema` controls the player-level light/dark toggle. Scholarly
-`themeConfig.colorMode` controls this theme's semantic tokens: header, footer,
-highlights, quotes, code, tables, blocks, and theorem surfaces.
+splits theme surfaces into explicit controls:
 
-When `themeConfig.colorMode` is set explicitly, it is authoritative: Scholarly
-syncs Slidev's `html.dark` class and browser `color-scheme` to the configured
-mode so system dark mode cannot mix dark player styles with light theme tokens.
-When it is omitted, Scholarly follows Slidev's current light/dark state.
+- `contentMode` controls the ordinary slide canvas and readable content surfaces.
+- `chromeMode` controls headers, footers, page numbers, navigation, TOC, and toolbar surfaces.
+- `sectionMode` controls `layout: section` slides and accepts `light`, `dark`, `match`, and `inverse`.
+
+`contentMode` accepts `light` and `dark`. `chromeMode` accepts `light`, `dark`,
+`match`, and `inverse`. Legacy `colorMode` is still supported as an alias for
+`contentMode`, and also preserves old chrome behavior when no explicit
+`contentMode` is set, but new decks should use `contentMode` and `chromeMode`.
 
 ```yaml
 colorSchema: both
 themeConfig:
   colorTheme: high-contrast
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ```
 
@@ -118,9 +132,10 @@ Common patterns:
 
 | Goal | Configuration |
 | --- | --- |
-| Light academic content with dark section dividers | `colorMode: light`, `sectionMode: dark` |
-| Dark chrome with readable content accents | `colorMode: dark` |
-| Accessibility-first deck | `colorTheme: high-contrast` and explicit `colorMode` |
+| Light academic content with dark chrome and section dividers | `contentMode: light`, `chromeMode: dark`, `sectionMode: dark` |
+| All-light deck | `contentMode: light`, `chromeMode: match`, `sectionMode: match` |
+| All-dark deck | `contentMode: dark`, `chromeMode: match`, `sectionMode: match` |
+| Accessibility-first deck | `colorTheme: high-contrast` and explicit surface modes |
 
 ## Theorem Numbering
 

@@ -420,16 +420,60 @@ theme: scholarly
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  colorMode: dark    # 可选：页眉/页脚样式（默认 'dark'）
-  sectionMode: light  # 可选：设置 section 布局的默认外观
+  contentMode: light # 普通幻灯片和可读内容表面
+  chromeMode: dark   # 页眉、页脚、TOC 和工具栏表面
+  sectionMode: dark  # 章节页外观
 ---
 ```
 
-## 颜色模式
+## 表面模式
 
-控制主题“外壳”（页眉/页脚背景 + 文字颜色）的外观。显式设置 `colorMode` 时，
-Scholarly 也会同步 Slidev 的 `html.dark` class 和浏览器 `color-scheme`；未设置时，
-主题继续跟随 Slidev 当前的浅色/深色状态。
+分别控制可读内容表面、播放器外壳和章节分隔页：
+
+| 选项 | 控制范围 | 可选值 |
+|-------|----------|--------|
+| `contentMode` | 普通幻灯片画布、引用、代码、表格、注脚、Highlight、Block 和 Theorem | `light`、`dark` |
+| `chromeMode` | 页眉、页脚、页码、导航按钮、TOC 和工具栏表面 | `light`、`dark`、`match`、`inverse` |
+| `sectionMode` | 默认章节页外观 | `light`、`dark`、`match`、`inverse` |
+
+旧配置 `colorMode` 仍作为 `contentMode` 的废弃别名保留。未设置 `contentMode`
+时，Scholarly 会先读取 `colorMode`，再跟随 Slidev 当前的浅色/深色状态。为了兼容旧
+演示，未设置 `contentMode` 和 `chromeMode` 时，`colorMode` 也会继续驱动外壳模式。
+
+### 迁移示例
+
+```yaml
+# 迁移前
+themeConfig:
+  colorTheme: classic-blue
+  colorMode: dark
+  sectionMode: dark
+
+# 迁移后
+themeConfig:
+  colorTheme: classic-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
+```
+
+```yaml
+# 全浅色演示
+themeConfig:
+  colorTheme: high-contrast
+  contentMode: light
+  chromeMode: match
+  sectionMode: match
+```
+
+```yaml
+# 全深色演示
+themeConfig:
+  colorTheme: nordic-blue
+  contentMode: dark
+  chromeMode: match
+  sectionMode: match
+```
 
 ### 全局默认值
 
@@ -439,20 +483,26 @@ Scholarly 也会同步 Slidev 的 `html.dark` class 和浏览器 `color-scheme`�
 ---
 theme: scholarly
 themeConfig:
-  colorMode: light # 或 'dark'（默认）
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ---
 ```
 
 ### 优先级链
 
 ```
-全局 themeConfig.colorMode > Slidev 当前浅色/深色状态
+contentMode > 旧配置 colorMode > Slidev 当前浅色/深色状态
+chromeMode > 未设置 contentMode 时的旧配置 colorMode > 'dark'
+sectionMode > 'dark'
 ```
 
 | 值 | 描述 |
 |-------|-------------|
-| `dark` | 深色渐变外壳配浅色文字（默认） |
-| `light` | 浅色外壳背景配深色文字 |
+| `light` | 浅色表面配深色文字 |
+| `dark` | 深色表面配浅色文字 |
+| `match` | 跟随 `contentMode` |
+| `inverse` | 与 `contentMode` 相反；适用于 `chromeMode` 和 `sectionMode` |
 
 ## 章节模式
 
@@ -466,7 +516,7 @@ themeConfig:
 ---
 theme: scholarly
 themeConfig:
-  sectionMode: light  # 或 'dark'（默认）
+  sectionMode: inverse  # light、dark、match 或 inverse
 ---
 ```
 
@@ -477,7 +527,7 @@ themeConfig:
 ```yaml
 ---
 layout: section
-sectionMode: dark  # 覆盖全局的 'light' 设置
+sectionMode: dark  # light、dark、match 或 inverse
 ---
 
 # 此章节使用深色模式
@@ -493,6 +543,8 @@ sectionMode: dark  # 覆盖全局的 'light' 设置
 |-------|-------------|
 | `dark` | 深色渐变背景配浅色文字（默认） |
 | `light` | 浅色背景配深色文字 |
+| `match` | 使用解析后的 `contentMode` |
+| `inverse` | 使用与解析后 `contentMode` 相反的模式 |
 
 ## 自定义颜色
 
@@ -533,7 +585,11 @@ themeColors:
 
 - 色彩主题使用 `[data-color-theme="theme-name"]`
 - 字体主题使用 `[data-font-theme="theme-name"]`
-- 颜色模式使用 `[data-color-mode="dark/light"]`（控制页眉/页脚“外壳”）
+- 内容模式使用 `[data-content-mode="dark/light"]`
+- 外壳模式使用 `[data-chrome-mode="dark/light"]`
+- 章节模式使用 `[data-section-mode="dark/light"]`
+
+`data-color-mode` 保留为 `data-content-mode` 的旧镜像。
 
 这允许无缝切换主题，无需重新加载演示文稿。
 

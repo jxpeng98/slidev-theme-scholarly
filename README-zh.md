@@ -53,6 +53,7 @@
 | 📐 **34 种布局** | 结构、内容、强调、学术四大类别 |
 | 🧩 **丰富组件** | 定理、信息块、引用、指标、证据、论文卡片、列表 |
 | 🎨 **9 种配色主题** | 经典蓝、牛津、剑桥、耶鲁、普林斯顿、北欧、单色、棕褐、高对比度 |
+| 🌓 **显式表面模式** | 分别控制 `contentMode`、`chromeMode` 和 `sectionMode` |
 | 📚 **引用与注脚** | 支持 BibTeX 参考文献，以及带内联预览的学术化 Markdown 注脚 |
 | 📝 **语法糖** | 简化的 Markdown 指令语法 |
 | 🔧 **VS Code 扩展** | 代码片段、预览、BibTeX 集成 |
@@ -124,6 +125,11 @@ theme: scholarly
 authors:
   - name: 你的名字
     institution: 你的大学
+themeConfig:
+  colorTheme: classic-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 footerMiddle: 2026 年会议
 ---
 

@@ -21,7 +21,8 @@ authors:
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ---
 ```
@@ -67,7 +68,8 @@ authors:
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   beamerNav: false
   outlineToc: true
@@ -76,14 +78,22 @@ themeConfig:
 
 | 选项 | 作用 | 默认值 |
 | --- | --- | --- |
-| `colorTheme` | 配色预设 id | `classic-blue` |
 | `fontTheme` | 字体预设 id | `classic` |
-| `colorMode` | Scholarly 语义 token 模式，影响正文和外壳 | 跟随 Slidev 深色模式，默认深色外壳 |
-| `sectionMode` | `layout: section` 页默认模式 | `dark` |
 | `beamerNav` | 放映模式页脚导航按钮 | `true` |
 | `outlineToc` | 页脚 TOC 按钮和大纲面板 | `false` |
 | `outlineTocOpen` | 加载后默认打开大纲面板 | `false` |
 | `footnoteDisplay` | `both`、`hover-only` 或 `notes-only` | `both` |
+
+色彩和表面控制：
+
+| 选项 | 控制范围 | 默认值 |
+| --- | --- | --- |
+| `colorTheme` | 品牌调色板：主色、强调色、纸张色调和基础文字色 | `classic-blue` |
+| `contentMode` | 普通幻灯片画布、可读内容表面、引用、代码、表格、注脚、Highlight、Block 和 Theorem | 先跟随 `colorMode`，再跟随 Slidev 深色状态 |
+| `chromeMode` | 页眉、页脚、页码、导航按钮、TOC 和工具栏表面 | `dark` |
+| `sectionMode` | `layout: section` 幻灯片的默认外观 | `dark` |
+| `colorMode` | `contentMode` 的旧别名 | 已废弃 |
+| `themeColors` | 品牌色和页脚颜色的高级 CSS 变量覆盖 | 未设置 |
 
 说明：
 
@@ -93,19 +103,25 @@ themeConfig:
 - 设置了 `hideInToc: true` 的页面不会出现在 TOC 中。
 - 旧配置 `outlineSidebar` 和 `outlineSidebarOpen` 仍兼容；新演示建议使用 `outlineToc` 和 `outlineTocOpen`。
 
-## 色彩模式
+## 色彩表面模式
 
-Slidev 的 `colorSchema` 控制播放器层面的浅色/深色切换。Scholarly 的 `themeConfig.colorMode` 控制主题语义 token：页眉、页脚、highlight、引用、代码、表格、Block 和 Theorem 表面颜色。
+Slidev 的 `colorSchema` 控制播放器层面的浅色/深色切换。Scholarly 将主题表面拆成显式控制项：
 
-显式设置 `themeConfig.colorMode` 时，它就是权威模式：Scholarly 会同步 Slidev 的
-`html.dark` class 和浏览器 `color-scheme`，避免系统深色模式把深色播放器样式和浅色主题
-token 混在一起。未设置时，Scholarly 继续跟随 Slidev 当前的浅色/深色状态。
+- `contentMode` 控制普通幻灯片画布和可读内容表面。
+- `chromeMode` 控制页眉、页脚、页码、导航、TOC 和工具栏表面。
+- `sectionMode` 控制 `layout: section` 幻灯片，可取 `light`、`dark`、`match` 和 `inverse`。
+
+`contentMode` 可取 `light` 和 `dark`。`chromeMode` 可取 `light`、`dark`、`match`
+和 `inverse`。旧配置 `colorMode` 仍作为 `contentMode` 的兼容别名保留；未显式设置
+`contentMode` 时，它也会保留旧的外壳模式行为。新演示应使用 `contentMode` 和
+`chromeMode`。
 
 ```yaml
 colorSchema: both
 themeConfig:
   colorTheme: high-contrast
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ```
 
@@ -113,9 +129,10 @@ themeConfig:
 
 | 目标 | 配置 |
 | --- | --- |
-| 浅色学术内容配深色章节页 | `colorMode: light`、`sectionMode: dark` |
-| 深色外壳并保持内容强调可读 | `colorMode: dark` |
-| 优先保证可访问性 | `colorTheme: high-contrast` 并显式设置 `colorMode` |
+| 浅色学术内容配深色外壳和章节页 | `contentMode: light`、`chromeMode: dark`、`sectionMode: dark` |
+| 全浅色演示 | `contentMode: light`、`chromeMode: match`、`sectionMode: match` |
+| 全深色演示 | `contentMode: dark`、`chromeMode: match`、`sectionMode: match` |
+| 优先保证可访问性 | `colorTheme: high-contrast` 并显式设置各表面模式 |
 
 ## 定理编号
 

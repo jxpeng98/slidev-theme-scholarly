@@ -420,19 +420,63 @@ theme: scholarly
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  colorMode: dark    # Optional: header/footer style ('dark' default)
-  sectionMode: light  # Optional: set default section appearance
+  contentMode: light # Ordinary slide and readable content surfaces
+  chromeMode: dark   # Header, footer, TOC, and toolbar surfaces
+  sectionMode: dark  # Section slide appearance
 ---
 ```
 
-## Color Mode
+## Surface Modes
 
-Control the appearance of the theme “chrome” (header/footer background + text
-color). If `colorMode` is set explicitly, Scholarly also syncs Slidev's
-`html.dark` class and browser `color-scheme` to that mode. If it is omitted, the
-theme follows Slidev's current light/dark state.
+Control readable slide surfaces, player chrome, and section dividers separately:
 
-### Global Default
+| Option | Controls | Values |
+|-------|----------|--------|
+| `contentMode` | Ordinary slide canvas, quote, code, table, footnotes, Highlight, Block, and Theorem | `light`, `dark` |
+| `chromeMode` | Header, footer, page number, navigation buttons, TOC, and toolbar surfaces | `light`, `dark`, `match`, `inverse` |
+| `sectionMode` | Default section slide appearance | `light`, `dark`, `match`, `inverse` |
+
+Legacy `colorMode` remains a deprecated alias for `contentMode`. When
+`contentMode` is omitted, Scholarly first checks `colorMode`, then follows
+Slidev's current light/dark state. For compatibility, legacy `colorMode` also
+drives `chromeMode` when neither `contentMode` nor `chromeMode` is set.
+
+### Migration Examples
+
+```yaml
+# Before
+themeConfig:
+  colorTheme: classic-blue
+  colorMode: dark
+  sectionMode: dark
+
+# After
+themeConfig:
+  colorTheme: classic-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
+```
+
+```yaml
+# All-light deck
+themeConfig:
+  colorTheme: high-contrast
+  contentMode: light
+  chromeMode: match
+  sectionMode: match
+```
+
+```yaml
+# All-dark deck
+themeConfig:
+  colorTheme: nordic-blue
+  contentMode: dark
+  chromeMode: match
+  sectionMode: match
+```
+
+### Global Defaults
 
 Set it in headmatter:
 
@@ -440,20 +484,26 @@ Set it in headmatter:
 ---
 theme: scholarly
 themeConfig:
-  colorMode: light # or 'dark' (default)
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ---
 ```
 
 ### Priority Chain
 
 ```
-Global themeConfig.colorMode > Slidev light/dark state
+contentMode > legacy colorMode > Slidev light/dark state
+chromeMode > legacy colorMode when contentMode is absent > 'dark'
+sectionMode > 'dark'
 ```
 
 | Value | Description |
 |-------|-------------|
-| `dark` | Dark gradient chrome with light text (default) |
-| `light` | Light chrome background with dark text |
+| `light` | Light surfaces with dark text |
+| `dark` | Dark surfaces with light text |
+| `match` | Follow `contentMode` |
+| `inverse` | Invert `contentMode`; available for `chromeMode` and `sectionMode` |
 
 ## Section Mode
 
@@ -467,7 +517,7 @@ Set a default for all section slides in your headmatter:
 ---
 theme: scholarly
 themeConfig:
-  sectionMode: light  # or 'dark' (default)
+  sectionMode: inverse  # light, dark, match, or inverse
 ---
 ```
 
@@ -478,7 +528,7 @@ Override the global setting on individual section slides:
 ```yaml
 ---
 layout: section
-sectionMode: dark  # Override global 'light' setting
+sectionMode: dark  # light, dark, match, or inverse
 ---
 
 # This Section Uses Dark Mode
@@ -494,6 +544,8 @@ Per-slide sectionMode > Global themeConfig.sectionMode > 'dark' (default)
 |-------|-------------|
 | `dark` | Dark gradient background with light text (default) |
 | `light` | Light background with dark text |
+| `match` | Use the resolved `contentMode` |
+| `inverse` | Use the opposite of the resolved `contentMode` |
 
 ## Custom Colors
 
@@ -534,7 +586,11 @@ Themes are applied using CSS custom properties and data attributes:
 
 - Color themes use `[data-color-theme="theme-name"]`
 - Font themes use `[data-font-theme="theme-name"]`
-- Color mode uses `[data-color-mode="dark/light"]` (controls header/footer “chrome”)
+- Content mode uses `[data-content-mode="dark/light"]`
+- Chrome mode uses `[data-chrome-mode="dark/light"]`
+- Section mode uses `[data-section-mode="dark/light"]`
+
+`data-color-mode` is kept as a legacy mirror of `data-content-mode`.
 
 This allows for seamless theme switching without reloading the presentation.
 

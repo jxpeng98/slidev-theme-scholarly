@@ -5,7 +5,8 @@ title: Theme Mode and Contrast
 # Theme Mode and Contrast
 
 Scholarly separates palette choice from readable foreground/background tokens.
-Use `colorTheme` for identity, `colorMode` for the normal slide surface, and
+Use `colorTheme` for identity, `contentMode` for the normal slide surface,
+`chromeMode` for headers, footers, navigation, TOC, and toolbar surfaces, and
 `sectionMode` for section dividers.
 
 ## Recommended defaults
@@ -14,12 +15,15 @@ Use `colorTheme` for identity, `colorMode` for the normal slide surface, and
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
 ```
 
-- Use `colorMode: light` for citation-heavy, text-heavy, or figure-heavy slides.
+- Use `contentMode: light` for citation-heavy, text-heavy, or figure-heavy slides.
+- Use `chromeMode: dark` when you want Beamer-like navigation and footer contrast.
 - Use `sectionMode: dark` for chapter breaks where large text dominates.
+- Use `sectionMode: match` for all-light or all-dark decks, and `sectionMode: inverse` for contrast against the content surface.
 - Use `high-contrast` when the deck will be projected in bright rooms.
 - Use `monochrome` when screenshots, charts, or code should dominate the palette.
 
