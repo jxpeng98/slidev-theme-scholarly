@@ -1,0 +1,53 @@
+/* ==========================================================================
+ * Chrome Mode
+ * Controls header, footer, toolbar, TOC, navigation, and chrome interactions.
+ * Content surfaces and semantic components must not depend on this file.
+ * ========================================================================== */
+
+:root,
+:root[data-chrome-mode="dark"] {
+  --scholarly-chrome-bg: linear-gradient(135deg, var(--slidev-theme-primary, #1e3a5f) 0%, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 100%);
+  --scholarly-chrome-fg: #fff;
+  --scholarly-chrome-fg-muted: rgba(255, 255, 255, 0.9);
+  --scholarly-chrome-border: rgba(255, 255, 255, 0.2);
+  --scholarly-footer-fg: #ffffff;
+  --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
+  --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  --scholarly-toolbar-surface: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 58%, var(--slidev-theme-primary, #1e3a5f) 42%) 0%,
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 74%, #11243c 26%) 100%
+  );
+  --scholarly-toolbar-fg: color-mix(in srgb, var(--scholarly-chrome-fg) 92%, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 8%);
+  --scholarly-toolbar-border: color-mix(in srgb, var(--scholarly-chrome-fg) 12%, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 34%);
+  --scholarly-toolbar-hover: color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 34%, var(--scholarly-chrome-fg) 10%);
+  --scholarly-toolbar-divider: color-mix(in srgb, var(--scholarly-chrome-fg) 12%, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 34%);
+  --scholarly-toolbar-chip: color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 26%, transparent);
+}
+
+:root[data-chrome-mode="light"] {
+  --scholarly-chrome-bg: var(--scholarly-bg-warm, #fdfbf7);
+  --scholarly-chrome-fg: var(--scholarly-text-primary, #2d3748);
+  --scholarly-chrome-fg-muted: rgba(45, 55, 72, 0.75);
+  --scholarly-chrome-border: rgba(45, 55, 72, 0.15);
+  --scholarly-footer-fg: #ffffff;
+  --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
+  --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  --scholarly-toolbar-surface: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 12%, white 88%) 0%,
+    color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 16%, var(--scholarly-bg-warm, #fdfbf7) 84%) 100%
+  );
+  --scholarly-toolbar-fg: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 42%, var(--scholarly-text-primary, #2d3748) 58%);
+  --scholarly-toolbar-border: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 18%, #cbd5e0 82%);
+  --scholarly-toolbar-hover: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 16%, #edf2f7 84%);
+  --scholarly-toolbar-divider: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 22%, #cbd5e0 78%);
+  --scholarly-toolbar-chip: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 10%, transparent);
+}
+
+/* Princeton Orange needs dark footer text to keep contrast above 4.5:1. */
+:root[data-color-theme="princeton-orange"] {
+  --scholarly-footer-fg: #1f2937;
+  --scholarly-footer-fg-muted: rgba(31, 41, 55, 0.88);
+  --scholarly-footer-border: rgba(31, 41, 55, 0.2);
+}

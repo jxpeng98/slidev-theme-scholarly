@@ -6,6 +6,8 @@
 /* -------------------------------------------------------------------------- */
 /* Default: Dark Section                                                      */
 /* -------------------------------------------------------------------------- */
+:root,
+:root[data-section-mode="dark"],
 .slidev-layout.section,
 .slidev-layout.section[data-section-mode="dark"] {
   --scholarly-section-bg: linear-gradient(135deg, var(--slidev-theme-primary, #1e3a5f) 0%, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 100%);
@@ -17,6 +19,7 @@
 /* -------------------------------------------------------------------------- */
 /* Light Section                                                              */
 /* -------------------------------------------------------------------------- */
+:root[data-section-mode="light"],
 .slidev-layout.section[data-section-mode="light"] {
   --scholarly-section-bg: var(--scholarly-bg-warm, #fdfbf7);
   --scholarly-section-fg: var(--scholarly-text-primary, #2d3748);

@@ -7,6 +7,8 @@ const files = {
   internalAnchors: await readFile(new URL('../utils/internalAnchorNavigation.ts', import.meta.url), 'utf8'),
   mainSetup: await readFile(new URL('../setup/main.ts', import.meta.url), 'utf8'),
   layout: await readFile(new URL('../styles/layout.css', import.meta.url), 'utf8'),
+  sectionLayout: await readFile(new URL('../layouts/section.vue', import.meta.url), 'utf8'),
+  themeMode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
 }
 
 test('outline navigation restores presentation focus after closing the panel', () => {
@@ -70,4 +72,23 @@ test('explicit theme modes sync content chrome and section attributes', () => {
   assert.match(files.mainSetup, /data-section-mode/)
   assert.match(files.mainSetup, /data-color-mode/)
   assert.doesNotMatch(files.mainSetup, /if \(config\?\.colorMode\) return/)
+})
+
+test('mode compatibility entrypoint imports split content and chrome token files', () => {
+  assert.match(files.themeMode, /@import '\.\/content-mode\.css';/)
+  assert.match(files.themeMode, /@import '\.\/chrome-mode\.css';/)
+  assert.doesNotMatch(files.themeMode, /--scholarly-content-surface:/)
+  assert.doesNotMatch(files.themeMode, /--scholarly-chrome-bg:/)
+})
+
+test('base layout consumes resolved canvas mode tokens', () => {
+  assert.match(files.layout, /color:\s*var\(--scholarly-canvas-fg,\s*var\(--scholarly-text-primary\)\)/)
+  assert.match(files.layout, /background-color:\s*var\(--scholarly-canvas-bg,\s*var\(--scholarly-bg-warm\)\)/)
+})
+
+test('section layout resolves surface mode through shared theme mode helpers', () => {
+  assert.match(files.sectionLayout, /resolveScholarlySectionMode/)
+  assert.match(files.sectionLayout, /resolveScholarlyModes/)
+  assert.match(files.sectionLayout, /document\.documentElement\.classList\.contains\('dark'\)/)
+  assert.doesNotMatch(files.sectionLayout, /localMode === 'light' \|\| localMode === 'dark'/)
 })

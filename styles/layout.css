@@ -53,8 +53,8 @@
 .slidev-layout {
   font-size: var(--scholarly-font-size, 1rem);
   font-family: var(--scholarly-font-body);
-  color: var(--scholarly-text-primary);
-  background-color: var(--scholarly-bg-warm);
+  color: var(--scholarly-canvas-fg, var(--scholarly-text-primary));
+  background-color: var(--scholarly-canvas-bg, var(--scholarly-bg-warm));
 }
 
 .slidev-layout [data-scholarly-scrollable="false"] {

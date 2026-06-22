@@ -14,26 +14,26 @@
 import { computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
 import CenteredLayout from '../components/CenteredLayout.vue'
+import { resolveScholarlyModes, resolveScholarlySectionMode } from '../utils/themeModes'
 
 const { $slidev, $frontmatter } = useSlideContext()
 
-// Global themeConfig from headmatter (first slide)
-const globalSectionMode = computed(() => {
-  return ($slidev.configs as any)?.themeConfig?.sectionMode as 'light' | 'dark' | undefined
+const themeConfig = computed<Record<string, unknown>>(() => {
+  return (($slidev.configs as any)?.themeConfig ?? {}) as Record<string, unknown>
 })
 
-// Resolve sectionMode: per-slide > global themeConfig > 'dark'
 const resolvedSectionMode = computed<'dark' | 'light'>(() => {
-  // Per-slide frontmatter takes priority
-  const localMode = $frontmatter.value?.sectionMode
-  if (localMode === 'light' || localMode === 'dark') {
-    return localMode
-  }
-  // Fallback to global themeConfig.sectionMode
-  if (globalSectionMode.value === 'light' || globalSectionMode.value === 'dark') {
-    return globalSectionMode.value
-  }
-  // Default to dark
-  return 'dark'
+  const resolvedModes = resolveScholarlyModes({
+    themeConfig: themeConfig.value,
+    slidevDark: typeof document !== 'undefined'
+      ? document.documentElement.classList.contains('dark')
+      : false,
+  })
+
+  return resolveScholarlySectionMode({
+    localSectionMode: $frontmatter.value?.sectionMode,
+    globalSectionMode: themeConfig.value.sectionMode,
+    contentMode: resolvedModes.contentMode,
+  })
 })
 </script>
