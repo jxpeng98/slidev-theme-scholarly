@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: yale-blue
   fontTheme: modern
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

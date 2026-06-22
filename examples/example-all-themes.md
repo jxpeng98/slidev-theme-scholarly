@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

@@ -9,7 +9,9 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: contemporary
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
 authors:

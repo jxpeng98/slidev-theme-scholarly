@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: princeton-orange
   fontTheme: contemporary
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

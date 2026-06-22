@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: high-contrast
   fontTheme: technical
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

@@ -8,6 +8,9 @@ lang: en
 themeConfig:
   colorTheme: high-contrast
   fontTheme: sans
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: false
 bibFile: ./references.bib
 bibStyle: apa

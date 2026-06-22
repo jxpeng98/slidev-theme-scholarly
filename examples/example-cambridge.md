@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: cambridge-green
   fontTheme: elegant
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: nordic-blue
   fontTheme: humanist
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

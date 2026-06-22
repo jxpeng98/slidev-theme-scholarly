@@ -3,7 +3,8 @@ theme: ../
 footerMiddle: Academic Conference 2025
 lang: en
 themeConfig:
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

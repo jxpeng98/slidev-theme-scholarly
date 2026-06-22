@@ -8,7 +8,9 @@ lang: zh-CN
 themeConfig:
   colorTheme: cambridge-green
   fontTheme: academic
-  colorMode: light
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
 authors:

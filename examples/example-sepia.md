@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: warm-sepia
   fontTheme: traditional
-  colorMode: light
+  contentMode: light
+  chromeMode: match
   sectionMode: light
   outlineToc: true
   outlineTocOpen: false

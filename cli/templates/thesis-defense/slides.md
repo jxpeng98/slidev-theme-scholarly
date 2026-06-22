@@ -8,6 +8,9 @@ lang: en
 themeConfig:
   colorTheme: yale-blue
   fontTheme: traditional
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
 bibFile: ./references.bib

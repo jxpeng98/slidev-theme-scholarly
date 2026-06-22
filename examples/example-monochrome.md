@@ -6,7 +6,8 @@ lang: en
 themeConfig:
   colorTheme: monochrome
   fontTheme: sans-default
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false

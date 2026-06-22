@@ -7,7 +7,8 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
@@ -55,6 +56,9 @@ The default theme inspired by traditional academic institutions.
 ```yaml
 themeConfig:
   colorTheme: classic-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -80,6 +84,9 @@ Rich burgundy inspired by Oxford University.
 ```yaml
 themeConfig:
   colorTheme: oxford-burgundy
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -104,6 +111,9 @@ Classic green reminiscent of Cambridge University.
 ```yaml
 themeConfig:
   colorTheme: cambridge-green
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -122,6 +132,9 @@ Vibrant orange from Princeton University.
 ```yaml
 themeConfig:
   colorTheme: princeton-orange
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -140,6 +153,9 @@ Traditional Yale blue for a polished look.
 ```yaml
 themeConfig:
   colorTheme: yale-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -158,6 +174,9 @@ Clean, professional grayscale palette.
 ```yaml
 themeConfig:
   colorTheme: monochrome
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -176,6 +195,9 @@ Warm, inviting sepia tones for a vintage feel.
 ```yaml
 themeConfig:
   colorTheme: warm-sepia
+  contentMode: light
+  chromeMode: match
+  sectionMode: light
 ```
 
 **Colors:**
@@ -194,6 +216,9 @@ Calm, Scandinavian-inspired blue palette.
 ```yaml
 themeConfig:
   colorTheme: nordic-blue
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**
@@ -212,6 +237,9 @@ Maximum contrast for accessibility needs.
 ```yaml
 themeConfig:
   colorTheme: high-contrast
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
 ```
 
 **Colors:**

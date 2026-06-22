@@ -7,7 +7,8 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: contemporary
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
@@ -42,8 +43,8 @@ This example demonstrates the full set of 26 layouts and features of the Scholar
 THEME CUSTOMIZATION:
 - 9 Color Themes: classic-blue, oxford-burgundy, cambridge-green, yale-blue, princeton-orange, nordic-gray, monochrome, high-contrast, sepia
 - 7 Font Themes: classic, modern, minimal, elegant, tech, academic, contemporary
-- Color Mode: light/dark support
-- Section Mode: Independent light/dark section dividers
+- Surface Modes: Independent content, chrome, and section surfaces
+- Section Mode: Per-slide light/dark section dividers
 -->
 
 ---
@@ -63,7 +64,7 @@ Slidev Theme Scholarly brings LaTeX Beamer aesthetics to modern presentations:
 - 🎨 **9 Color Themes** - Classic Blue, Oxford Burgundy, Cambridge Green, and more
 - ✍️ **7 Font Themes** - From classic serifs to contemporary sans-serifs
 - 🧩 **Rich Components** - Theorems, Blocks, Citations, Steps, Keywords
-- 🌓 **Dual Mode Support** - Light and dark color modes
+- 🌓 **Surface Mode Support** - Light content with configurable chrome and section surfaces
 - 📊 **Academic Features** - BibTeX citations, booktabs tables, theorem numbering
 
 <br/>
@@ -110,7 +111,7 @@ sectionMode: light
 <!--
 LAYOUT: section with sectionMode: light
 PURPOSE: Demonstrate per-slide sectionMode override
-NOTE: This section uses light mode, overriding the global dark setting
+NOTE: This section uses light section mode, overriding the global section setting
 -->
 
 # Light Section Demo

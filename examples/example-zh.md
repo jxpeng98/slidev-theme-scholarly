@@ -5,7 +5,8 @@ description: 面向学术工作者的演示幻灯片
 aspectRatio: 4/3
 lang: zh
 themeConfig:
-  colorMode: dark
+  contentMode: light
+  chromeMode: dark
   sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
