@@ -1,6 +1,10 @@
-export type ScholarlyColorMode = 'light' | 'dark'
+export type ScholarlyMode = 'light' | 'dark'
 
-export type ScholarlySectionMode = 'light' | 'dark'
+export type ScholarlySurfaceMode = ScholarlyMode | 'match' | 'inverse'
+
+export type ScholarlyColorMode = ScholarlyMode
+
+export type ScholarlySectionMode = ScholarlySurfaceMode
 
 export type ScholarlyFootnoteDisplay = 'both' | 'hover-only' | 'notes-only'
 
@@ -25,6 +29,9 @@ export interface ScholarlyThemeColors {
 export interface ScholarlyThemeConfig {
   colorTheme?: string
   fontTheme?: string
+  contentMode?: ScholarlyMode
+  chromeMode?: ScholarlySurfaceMode
+  /** @deprecated Use contentMode, and chromeMode when frame styling differs from content. */
   colorMode?: ScholarlyColorMode
   sectionMode?: ScholarlySectionMode
   beamerNav?: boolean

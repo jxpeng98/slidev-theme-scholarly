@@ -118,16 +118,50 @@
             "fontTheme": "sans-default"
         }
     ],
-    "colorModes": [
+    "contentModes": [
+        {
+            "id": "light",
+            "label": "Light Content",
+            "description": "Light slide canvas with dark readable text"
+        },
+        {
+            "id": "dark",
+            "label": "Dark Content",
+            "description": "Dark slide canvas with light readable text"
+        }
+    ],
+    "surfaceModes": [
         {
             "id": "dark",
             "label": "Dark",
-            "description": "Dark background with light text (default)"
+            "description": "Dark surface with light text"
         },
         {
             "id": "light",
             "label": "Light",
-            "description": "Light background with dark text"
+            "description": "Light surface with dark text"
+        },
+        {
+            "id": "match",
+            "label": "Match Content",
+            "description": "Use the resolved content mode"
+        },
+        {
+            "id": "inverse",
+            "label": "Inverse Content",
+            "description": "Use the opposite of the resolved content mode"
+        }
+    ],
+    "colorModes": [
+        {
+            "id": "dark",
+            "label": "Dark",
+            "description": "Legacy alias for contentMode"
+        },
+        {
+            "id": "light",
+            "label": "Light",
+            "description": "Legacy alias for contentMode"
         }
     ]
 }
