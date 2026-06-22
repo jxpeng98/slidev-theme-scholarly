@@ -13,7 +13,7 @@ title: VS Code 插件
 - ⚡ **智能补全** - 对 `layout:`、`themeConfig`、组件（`<...>`）和指令（`:::`）提供上下文候选
 - 📝 **一键插入/应用** - 点击面板中的项目即可插入内容或更新 frontmatter
 - 🚀 **新建演示** - 创建带有预配置模板的新演示文稿
-- 🎨 **主题预设** - 在 Themes 面板中一键应用 `themeConfig.colorTheme` / `themeConfig.fontTheme`
+- 🎨 **主题控制** - 在 Themes 面板中一键应用 `themeConfig.colorTheme`、`themeConfig.fontTheme`、`contentMode`、`chromeMode` 和 `sectionMode`
 - 📚 **参考文献与锚点** - BibTeX 引用补全/悬浮预览、内部锚点补全、统一的 References 面板，以及命令面板里的锚点创建/引用插入
 - 🧭 **Citation 诊断** - 对缺失 bibliography 配置、未解析 cite key、重复 BibTeX key 和缺失 references 页提供编辑器内 warning 与 quick fix
 - 🧪 **Dev Mode** - 内置性能诊断，提供耗时日志与慢操作标记
@@ -47,7 +47,10 @@ scholarly-cite # 插入引用
 插件还提供了基于上下文的补全建议：
 
 - `layout:` -> 布局名称候选（`cover`、`section`、`results` 等）
-- `colorTheme:` / `fontTheme:` / `colorMode:` -> 主题配置值候选
+- `colorTheme:` / `fontTheme:` -> 主题配置值候选
+- `contentMode:` -> 内容表面模式候选（`light`、`dark`）
+- `chromeMode:` / `sectionMode:` -> chrome 与章节表面模式候选（`light`、`dark`、`match`、`inverse`）
+- `colorMode:` -> 兼容旧配置的别名候选
 - `<` -> Scholarly 组件候选（`Theorem`、`Block`、`Columns` 等）
 - `:::` -> Markdown 语法糖指令候选（`theorem`、`block`、`keywords` 等）
 - `](#` / `href="#` / `to="#` -> 当前文档中可用的内部锚点 id
@@ -135,7 +138,7 @@ Quick Fix 可以自动添加 `bibFile: ./references.bib`、创建缺失的 bibli
 | `ss-cover` | 封面/标题幻灯片 |
 | `ss-default` | 默认内容幻灯片 |
 | `ss-intro` | 章节介绍 |
-| `ss-section` | 章节分隔符（支持 `sectionMode: dark/light`） |
+| `ss-section` | 章节分隔符（支持 `sectionMode: dark/light/match/inverse`） |
 | `ss-center` | 居中内容 |
 | `ss-auto-center` | 自动调整的居中内容 |
 | `ss-auto-size` | 带 `autoSizeGrow`、`autoSizeAlign`、`autoSizePadding` 控制项的页面自适应布局 |

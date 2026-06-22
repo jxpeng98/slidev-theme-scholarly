@@ -13,7 +13,7 @@ We provide a VS Code extension to boost your productivity when creating Slidev p
 - ⚡ **Smart Completion** - Context-aware candidates for `layout:`, `themeConfig`, components (`<...>`), and directives (`:::`)
 - 📝 **One-Click Insert** - Click any item in the panel to insert code at cursor position
 - 🚀 **New Presentation** - Create a new presentation with pre-configured template
-- 🎨 **Theme Presets** - Apply `themeConfig.colorTheme` / `themeConfig.fontTheme` from the Themes view
+- 🎨 **Theme Controls** - Apply `themeConfig.colorTheme`, `themeConfig.fontTheme`, `contentMode`, `chromeMode`, and `sectionMode` from the Themes view
 - 📚 **References & Anchors** - BibTeX completion/hover, internal-anchor completion, a unified References view, and command-palette insertion for both anchor definitions and references
 - 🧭 **Citation Diagnostics** - Inline warnings and quick fixes for missing bibliography setup, unresolved cite keys, duplicate BibTeX keys, and missing references slides
 - 🧪 **Dev Mode** - Built-in performance diagnostics with timing logs and slow-operation markers
@@ -47,7 +47,10 @@ Press `Tab` to move between placeholders in the inserted snippet.
 The extension also provides context-aware completion suggestions:
 
 - `layout:` -> layout names (`cover`, `section`, `results`, ...)
-- `colorTheme:` / `fontTheme:` / `colorMode:` -> theme values
+- `colorTheme:` / `fontTheme:` -> theme values
+- `contentMode:` -> content surface values (`light`, `dark`)
+- `chromeMode:` / `sectionMode:` -> chrome and section surface values (`light`, `dark`, `match`, `inverse`)
+- `colorMode:` -> legacy alias values for compatibility
 - `<` -> Scholarly components (`Theorem`, `Block`, `Columns`, ...)
 - `:::` -> Markdown syntax sugar directives (`theorem`, `block`, `keywords`, ...)
 - `](#` / `href="#` / `to="#` -> internal anchor ids from the current document
@@ -135,7 +138,7 @@ The `ss-*` prefixes are the canonical snippet labels shown in completion. Legacy
 | `ss-cover` | Cover/title slide |
 | `ss-default` | Default content slide |
 | `ss-intro` | Section introduction |
-| `ss-section` | Section divider (supports `sectionMode: dark/light`) |
+| `ss-section` | Section divider (supports `sectionMode: dark/light/match/inverse`) |
 | `ss-center` | Centered content |
 | `ss-auto-center` | Auto-adjusting centered content |
 | `ss-auto-size` | Default flow with `autoSizeGrow`, `autoSizeAlign`, and `autoSizePadding` controls |

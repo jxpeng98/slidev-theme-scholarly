@@ -15,7 +15,7 @@ The extension adds a dedicated panel in the VS Code Secondary Side Bar with six 
   - *Academic* - compare, methodology, results, timeline, agenda, acknowledgments, references
 - **Components** - Vue components and syntax sugar
 - **Templates** - Quick-start presentation templates
-- **Themes** - Apply `themeConfig` presets (colorTheme / fontTheme)
+- **Themes** - Apply `themeConfig` presets and surface modes (`colorTheme`, `fontTheme`, `contentMode`, `chromeMode`, `sectionMode`)
 - **References** - Browse BibTeX citations and internal anchors, then insert cite keys or `#anchor-id`
 - **CLI** - Run Scholarly CLI actions directly from sidebar:
   - *Create* - `init` and template list
@@ -35,7 +35,10 @@ Type the prefix and press `Tab` to expand snippets:
 In Markdown files, Scholarly-specific suggestions now appear while typing (without memorizing all prefixes):
 
 - `layout:` -> layout candidates such as `cover`, `default`, `methodology`
-- `colorTheme:` / `fontTheme:` / `colorMode:` -> themeConfig value candidates
+- `colorTheme:` / `fontTheme:` -> themeConfig value candidates
+- `contentMode:` -> content surface mode candidates (`light`, `dark`)
+- `chromeMode:` / `sectionMode:` -> surface mode candidates (`light`, `dark`, `match`, `inverse`)
+- `colorMode:` -> legacy alias candidates for compatibility
 - `<` -> component candidates such as `Theorem`, `Block`, `Steps`
 - `:::` -> syntax sugar directive candidates such as `theorem`, `block`, `columns`
 - `](#` / `href="#` / `to="#` -> internal anchor ids from the current Markdown document

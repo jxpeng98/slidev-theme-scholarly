@@ -5,6 +5,9 @@ import {
   createNewPresentation,
   setColorTheme,
   setFontTheme,
+  setContentMode,
+  setChromeMode,
+  setSectionMode,
   setColorMode,
   applyThemePreset,
   runCliAction,
@@ -211,6 +214,15 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand('slidev-scholarly.setFontTheme', (value?: string) =>
       setFontTheme(value)
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.setContentMode', (value?: 'light' | 'dark') =>
+      setContentMode(value)
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.setChromeMode', (value?: 'light' | 'dark' | 'match' | 'inverse') =>
+      setChromeMode(value)
+    ),
+    vscode.commands.registerCommand('slidev-scholarly.setSectionMode', (value?: 'light' | 'dark' | 'match' | 'inverse') =>
+      setSectionMode(value)
     ),
     vscode.commands.registerCommand('slidev-scholarly.setColorMode', (value?: 'light' | 'dark') =>
       setColorMode(value)

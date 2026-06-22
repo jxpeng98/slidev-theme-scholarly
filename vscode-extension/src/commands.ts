@@ -3,6 +3,8 @@ import {
   COLOR_THEMES,
   FONT_THEMES,
   COLOR_MODES,
+  CONTENT_MODES,
+  SURFACE_MODES,
   THEME_PRESETS,
   THEME_PRESET_IDS,
   TEMPLATES,
@@ -20,8 +22,14 @@ import {
 type ThemeConfigUpdate = {
   colorTheme?: string
   fontTheme?: string
-  colorMode?: 'light' | 'dark'
+  contentMode?: ContentMode
+  chromeMode?: SurfaceMode
+  sectionMode?: SurfaceMode
+  colorMode?: ContentMode
 }
+
+type ContentMode = 'light' | 'dark'
+type SurfaceMode = ContentMode | 'match' | 'inverse'
 
 export type CliActionId =
   | 'initPresentation'
@@ -52,6 +60,15 @@ const CLI_COMMAND_PREFIX = ['npx', '-y', '--package', 'slidev-theme-scholarly', 
 const CLI_SNIPPETS = ['theorem', 'block', 'cite', 'cover', 'section', 'methodology', 'results', 'references'] as const;
 const CLI_WORKFLOWS = ['paper', 'seminar', 'quick'] as const;
 let scholarlyCliTerminal: vscode.Terminal | undefined;
+
+type ThemeApplyOptions = {
+  colorTheme: string
+  fontTheme?: string
+  contentMode?: ContentMode
+  chromeMode?: SurfaceMode
+  sectionMode?: SurfaceMode
+  file: string
+}
 
 export function insertSnippet(snippet: string) {
   const editor = vscode.window.activeTextEditor;
@@ -577,10 +594,10 @@ async function runCliArgs(args: string[], message?: string): Promise<void> {
   }
 }
 
-async function pickOptionalQuickValue(
+async function pickOptionalQuickValue<T extends string>(
   placeHolder: string,
-  items: Array<{ label: string; description?: string; value: string }>
-): Promise<string | undefined> {
+  items: Array<{ label: string; description?: string; detail?: string; value: T }>
+): Promise<T | undefined> {
   const selected = await vscode.window.showQuickPick(
     [
       { label: 'Skip', description: 'Do not set', value: '' },
@@ -593,7 +610,7 @@ async function pickOptionalQuickValue(
   );
 
   if (!selected || !selected.value) return undefined;
-  return selected.value;
+  return selected.value as T;
 }
 
 async function runInitPresentationAction(): Promise<void> {
@@ -638,20 +655,31 @@ async function runThemeApplyAction(): Promise<void> {
     }))
   );
 
-  const colorMode = await pickOptionalQuickValue(
-    'Optional: choose color mode',
-    COLOR_MODES.map(t => ({
+  const contentMode = await pickOptionalQuickValue<ContentMode>(
+    'Optional: choose content mode',
+    CONTENT_MODES.map(t => ({
       label: t.label,
       description: t.value,
       value: t.value
     }))
   );
 
-  const sectionMode = await pickOptionalQuickValue(
+  const chromeMode = await pickOptionalQuickValue<SurfaceMode>(
+    'Optional: choose chrome mode',
+    SURFACE_MODES.map(t => ({
+      label: t.label,
+      description: t.value,
+      detail: t.description,
+      value: t.value
+    }))
+  );
+
+  const sectionMode = await pickOptionalQuickValue<SurfaceMode>(
     'Optional: choose section mode',
-    COLOR_MODES.map(t => ({
+    SURFACE_MODES.map(t => ({
       label: `${t.label} sections`,
       description: t.value,
+      detail: t.description,
       value: t.value
     }))
   );
@@ -662,12 +690,25 @@ async function runThemeApplyAction(): Promise<void> {
   });
   if (!file) return;
 
-  const args = ['theme', 'apply', colorTheme, '--file', file];
-  if (fontTheme) args.push('--font', fontTheme);
-  if (colorMode) args.push('--mode', colorMode);
-  if (sectionMode) args.push('--section-mode', sectionMode);
+  const args = buildThemeApplyArgs({
+    colorTheme,
+    fontTheme,
+    contentMode,
+    chromeMode,
+    sectionMode,
+    file
+  });
 
   await runCliArgs(args, `theme apply ${colorTheme}`);
+}
+
+function buildThemeApplyArgs(options: ThemeApplyOptions): string[] {
+  const args = ['theme', 'apply', options.colorTheme, '--file', options.file];
+  if (options.fontTheme) args.push('--font', options.fontTheme);
+  if (options.contentMode) args.push('--content-mode', options.contentMode);
+  if (options.chromeMode) args.push('--chrome-mode', options.chromeMode);
+  if (options.sectionMode) args.push('--section-mode', options.sectionMode);
+  return args;
 }
 
 async function runThemePresetApplyAction(): Promise<void> {
@@ -810,7 +851,7 @@ export async function runCliAction(action: CliActionId): Promise<void> {
 export async function openCliActionMenu(): Promise<void> {
   const items: Array<vscode.QuickPickItem & { action: CliActionId }> = [
     { label: 'New Presentation...', description: 'sch init with prompts', action: 'initPresentation' },
-    { label: 'Apply Theme Preset...', description: 'sch theme apply', action: 'themeApply' },
+    { label: 'Apply Theme...', description: 'sch theme apply', action: 'themeApply' },
     { label: 'Apply Theme Preset Combo...', description: 'sch theme preset apply', action: 'themePresetApply' },
     { label: 'Append Snippet...', description: 'sch snippet append', action: 'snippetAppend' },
     { label: 'Append Workflow...', description: 'sch workflow apply', action: 'workflowApply' },
@@ -849,11 +890,32 @@ export async function setFontTheme(fontTheme?: string) {
   vscode.window.showInformationMessage(`Slidev Scholarly: fontTheme → ${value}`);
 }
 
-export async function setColorMode(colorMode?: 'light' | 'dark') {
+export async function setContentMode(contentMode?: ContentMode) {
+  const value = contentMode ?? await pickContentMode();
+  if (!value) return;
+  await upsertThemeConfigInActiveDocument({ contentMode: value });
+  vscode.window.showInformationMessage(`Slidev Scholarly: contentMode → ${value}`);
+}
+
+export async function setChromeMode(chromeMode?: SurfaceMode) {
+  const value = chromeMode ?? await pickSurfaceMode('Select a Slidev Scholarly chrome mode');
+  if (!value) return;
+  await upsertThemeConfigInActiveDocument({ chromeMode: value });
+  vscode.window.showInformationMessage(`Slidev Scholarly: chromeMode → ${value}`);
+}
+
+export async function setSectionMode(sectionMode?: SurfaceMode) {
+  const value = sectionMode ?? await pickSurfaceMode('Select a Slidev Scholarly section mode');
+  if (!value) return;
+  await upsertThemeConfigInActiveDocument({ sectionMode: value });
+  vscode.window.showInformationMessage(`Slidev Scholarly: sectionMode → ${value}`);
+}
+
+export async function setColorMode(colorMode?: ContentMode) {
   const value = colorMode ?? await pickColorMode();
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ colorMode: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: colorMode → ${value}`);
+  vscode.window.showInformationMessage(`Slidev Scholarly: contentMode → ${value}`);
 }
 
 export async function applyThemePreset(preset?: ThemePreset | string) {
@@ -921,6 +983,40 @@ async function pickColorMode(): Promise<'light' | 'dark' | undefined> {
 
   const selected = await vscode.window.showQuickPick(items, {
     placeHolder: 'Select a Slidev Scholarly color mode',
+    matchOnDescription: true,
+    matchOnDetail: true
+  });
+
+  return selected?.value;
+}
+
+async function pickContentMode(): Promise<ContentMode | undefined> {
+  const items: Array<vscode.QuickPickItem & { value: ContentMode }> = CONTENT_MODES.map(t => ({
+    label: t.label,
+    description: t.value,
+    detail: t.description,
+    value: t.value
+  }));
+
+  const selected = await vscode.window.showQuickPick(items, {
+    placeHolder: 'Select a Slidev Scholarly content mode',
+    matchOnDescription: true,
+    matchOnDetail: true
+  });
+
+  return selected?.value;
+}
+
+async function pickSurfaceMode(placeHolder: string): Promise<SurfaceMode | undefined> {
+  const items: Array<vscode.QuickPickItem & { value: SurfaceMode }> = SURFACE_MODES.map(t => ({
+    label: t.label,
+    description: t.value,
+    detail: t.description,
+    value: t.value
+  }));
+
+  const selected = await vscode.window.showQuickPick(items, {
+    placeHolder,
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -1011,9 +1107,12 @@ function buildNewFrontmatter(update: ThemeConfigUpdate): string[] {
 
 function buildThemeConfigLines(update: ThemeConfigUpdate): string[] {
   const lines: string[] = [];
+  const contentMode = update.contentMode ?? update.colorMode;
   if (update.colorTheme) lines.push(`  colorTheme: ${update.colorTheme}`);
   if (update.fontTheme) lines.push(`  fontTheme: ${update.fontTheme}`);
-  if (update.colorMode) lines.push(`  colorMode: ${update.colorMode}`);
+  if (contentMode) lines.push(`  contentMode: ${contentMode}`);
+  if (update.chromeMode) lines.push(`  chromeMode: ${update.chromeMode}`);
+  if (update.sectionMode) lines.push(`  sectionMode: ${update.sectionMode}`);
   return lines;
 }
 
@@ -1071,7 +1170,16 @@ function upsertThemeConfigYaml(yaml: string, update: ThemeConfigUpdate): string 
 
   upsertChild('colorTheme', update.colorTheme);
   upsertChild('fontTheme', update.fontTheme);
-  upsertChild('colorMode', update.colorMode);
+  upsertChild('contentMode', update.contentMode ?? update.colorMode);
+  upsertChild('chromeMode', update.chromeMode);
+  upsertChild('sectionMode', update.sectionMode);
 
   return updated.join('\n').trimEnd();
 }
+
+export const __test = {
+  buildThemeApplyArgs,
+  buildNewFrontmatter,
+  buildThemeConfigLines,
+  upsertThemeConfigYaml
+};

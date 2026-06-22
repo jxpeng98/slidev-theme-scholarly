@@ -33,6 +33,9 @@
     "onCommand:slidev-scholarly.applyThemePreset",
     "onCommand:slidev-scholarly.setColorTheme",
     "onCommand:slidev-scholarly.setFontTheme",
+    "onCommand:slidev-scholarly.setContentMode",
+    "onCommand:slidev-scholarly.setChromeMode",
+    "onCommand:slidev-scholarly.setSectionMode",
     "onCommand:slidev-scholarly.setColorMode",
     "onCommand:slidev-scholarly.openSidebar",
     "onCommand:slidev-scholarly.openGuiBuilder",
@@ -159,9 +162,19 @@
         "icon": "$(text-size)"
       },
       {
-        "command": "slidev-scholarly.setColorMode",
-        "title": "Set Color Mode",
+        "command": "slidev-scholarly.setContentMode",
+        "title": "Set Content Mode",
         "icon": "$(color-mode)"
+      },
+      {
+        "command": "slidev-scholarly.setChromeMode",
+        "title": "Set Chrome Mode",
+        "icon": "$(layout-menubar)"
+      },
+      {
+        "command": "slidev-scholarly.setSectionMode",
+        "title": "Set Section Mode",
+        "icon": "$(split-vertical)"
       },
       {
         "command": "slidev-scholarly.openSidebar",
@@ -232,7 +245,17 @@
           "group": "navigation"
         },
         {
-          "command": "slidev-scholarly.setColorMode",
+          "command": "slidev-scholarly.setContentMode",
+          "when": "view == scholarly-themes",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev-scholarly.setChromeMode",
+          "when": "view == scholarly-themes",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev-scholarly.setSectionMode",
           "when": "view == scholarly-themes",
           "group": "navigation"
         },

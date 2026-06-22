@@ -4,7 +4,9 @@ import * as path from 'path';
 import {
   LAYOUT_NAMES,
   COLOR_THEME_IDS as COLOR_THEMES,
-  FONT_THEME_IDS as FONT_THEMES
+  FONT_THEME_IDS as FONT_THEMES,
+  CONTENT_MODE_IDS as CONTENT_MODES,
+  SURFACE_MODE_IDS as SURFACE_MODES
 } from './sharedData';
 
 type SnippetDefinition = {
@@ -14,7 +16,7 @@ type SnippetDefinition = {
   description: string;
 };
 
-// LAYOUT_NAMES, COLOR_THEMES, FONT_THEMES imported from ./sharedData
+// LAYOUT_NAMES, COLOR_THEMES, FONT_THEMES, CONTENT_MODES, SURFACE_MODES imported from ./sharedData
 
 const BIB_STYLES = ['apa', 'harvard1', 'vancouver', 'ieee', 'mla', 'chicago-author-date'];
 
@@ -264,7 +266,28 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
     if (colorModeMatch) {
       const partial = colorModeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(['dark', 'light'], partial, range, 'Scholarly color mode'));
+      items.push(...createValueItems(CONTENT_MODES, partial, range, 'Legacy Scholarly color mode'));
+    }
+
+    const contentModeMatch = linePrefix.match(/\bcontentMode:\s*([a-z-]*)$/);
+    if (contentModeMatch) {
+      const partial = contentModeMatch[1] ?? '';
+      const range = asRange(position, linePrefix.length - partial.length);
+      items.push(...createValueItems(CONTENT_MODES, partial, range, 'Scholarly content mode'));
+    }
+
+    const chromeModeMatch = linePrefix.match(/\bchromeMode:\s*([a-z-]*)$/);
+    if (chromeModeMatch) {
+      const partial = chromeModeMatch[1] ?? '';
+      const range = asRange(position, linePrefix.length - partial.length);
+      items.push(...createValueItems(SURFACE_MODES, partial, range, 'Scholarly chrome mode'));
+    }
+
+    const sectionModeMatch = linePrefix.match(/\bsectionMode:\s*([a-z-]*)$/);
+    if (sectionModeMatch) {
+      const partial = sectionModeMatch[1] ?? '';
+      const range = asRange(position, linePrefix.length - partial.length);
+      items.push(...createValueItems(SURFACE_MODES, partial, range, 'Scholarly section mode'));
     }
 
     const themeMatch = linePrefix.match(/\btheme:\s*([a-z-]*)$/);

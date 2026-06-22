@@ -42,6 +42,8 @@ interface ThemesData {
     colorThemes: ThemeEntry[];
     fontThemes: ThemeEntry[];
     themePresets: ThemePresetEntry[];
+    contentModes: ThemeEntry[];
+    surfaceModes: ThemeEntry[];
     colorModes: ThemeEntry[];
 }
 
@@ -91,6 +93,18 @@ export const COLOR_MODES = themesData.colorModes.map(t => ({
     description: t.description
 }));
 
+export const CONTENT_MODES = themesData.contentModes.map(t => ({
+    value: t.id as 'light' | 'dark',
+    label: t.label,
+    description: t.description
+}));
+
+export const SURFACE_MODES = themesData.surfaceModes.map(t => ({
+    value: t.id as 'light' | 'dark' | 'match' | 'inverse',
+    label: t.label,
+    description: t.description
+}));
+
 export const THEME_PRESETS = themesData.themePresets.map(p => ({
     id: p.id,
     label: p.label,
@@ -134,6 +148,10 @@ export const LAYOUT_NAMES: string[] = layoutsData.layoutGroups.flatMap(g => g.it
 export const COLOR_THEME_IDS: string[] = themesData.colorThemes.map(t => t.id);
 
 export const FONT_THEME_IDS: string[] = themesData.fontThemes.map(t => t.id);
+
+export const CONTENT_MODE_IDS: string[] = themesData.contentModes.map(t => t.id);
+
+export const SURFACE_MODE_IDS: string[] = themesData.surfaceModes.map(t => t.id);
 
 // ── Derived exports for CLI compat ──────────────────────────────────────────
 

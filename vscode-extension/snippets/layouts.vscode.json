@@ -52,7 +52,7 @@
     "body": [
       "---",
       "layout: section",
-      "sectionMode: ${1|dark,light|}",
+      "sectionMode: ${1|dark,light,match,inverse|}",
       "---",
       "",
       "# ${2:Section Title}",
@@ -61,7 +61,7 @@
       "",
       "$0"
     ],
-    "description": "[Structure] Section divider (sectionMode: dark/light)"
+    "description": "[Structure] Section divider (sectionMode: dark/light/match/inverse)"
   },
   "Slidev Scholarly: Center Layout": {
     "prefix": "ss-center",
@@ -681,20 +681,22 @@
       "themeConfig:",
       "  colorTheme: ${3|classic-blue,oxford-burgundy,cambridge-green,yale-blue,princeton-orange,monochrome,warm-sepia,nordic-blue,high-contrast|}",
       "  fontTheme: ${4|classic,modern,traditional,contemporary,humanist,technical,elegant,sans-default|}",
-      "  sectionMode: ${5|dark,light|}",
+      "  contentMode: ${5|light,dark|}",
+      "  chromeMode: ${6|match,inverse,light,dark|}",
+      "  sectionMode: ${7|dark,light,match,inverse|}",
       "  outlineToc: true",
       "  outlineTocOpen: false",
       "bibFile: ./references.bib",
-      "bibStyle: ${6|apa,harvard1,vancouver,ieee,mla,chicago-author-date|}",
+      "bibStyle: ${8|apa,harvard1,vancouver,ieee,mla,chicago-author-date|}",
       "authors:",
-      "  - name: ${7:Author Name}",
-      "    institution: ${8:Institution}",
-      "    email: ${9:email@example.com}",
+      "  - name: ${9:Author Name}",
+      "    institution: ${10:Institution}",
+      "    email: ${11:email@example.com}",
       "---",
       "",
-      "# ${10:Presentation Title}",
+      "# ${12:Presentation Title}",
       "",
-      "${11:Subtitle}",
+      "${13:Subtitle}",
       "",
       "$0"
     ],
