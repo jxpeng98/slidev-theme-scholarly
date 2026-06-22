@@ -85,17 +85,36 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
     failures.push(`${name} selector ${selector} should not contain ${needle}`)
 }
 
-const backgroundSurfaceColorTokenPattern = /--scholarly-(?:canvas-bg|content-surface(?:-muted)?|chrome-bg|toc-surface(?:-muted)?|toolbar-surface)\b/
+const backgroundSurfaceColorTokenPattern = /--scholarly-(?:(?:[\w-]+-)?bg|[\w-]+-surface(?:-muted)?|highlight-[\w-]+-bg|block-[\w-]+-(?:header|content)-bg|theorem-[\w-]+-bg)\b/
 
 const expectNoBackgroundSurfaceColorDeclarations = (name, text) => {
-  const declarationPattern = /(^|[;{\n])\s*([-\w]+)\s*:\s*([^;{}]+);/gm
+  const declarationPattern = /(^|[;{\n])\s*color\s*:\s*([^;{}]+?)(?=;|}|$)/gm
   for (const match of text.matchAll(declarationPattern)) {
-    const property = match[2].trim()
-    const value = match[3].trim()
-    if (property === 'color' && backgroundSurfaceColorTokenPattern.test(value))
+    const value = match[2].trim()
+    if (backgroundSurfaceColorTokenPattern.test(value))
       failures.push(`${name} should not use background or surface tokens in color declarations: color: ${value}`)
   }
 }
+
+const expectBackgroundSurfaceColorFixture = (name, text, shouldFail) => {
+  const before = failures.length
+  expectNoBackgroundSurfaceColorDeclarations(name, text)
+  const failed = failures.length > before
+
+  if (shouldFail && !failed)
+    failures.push(`${name} fixture should catch a background or surface token used as color`)
+  if (shouldFail && failed)
+    failures.length = before
+  if (!shouldFail && failed)
+    failures.push(`${name} fixture should allow non-color declarations and foreground tokens`)
+}
+
+expectBackgroundSurfaceColorFixture('fixture background-color allowed', '.x{ background-color: var(--scholarly-content-surface); }', false)
+expectBackgroundSurfaceColorFixture('fixture same-line forbidden color', '.x{ background: red; color: var(--scholarly-content-surface); }', true)
+expectBackgroundSurfaceColorFixture('fixture final forbidden color', '.x{ color: var(--scholarly-content-surface) }', true)
+expectBackgroundSurfaceColorFixture('fixture code background token as color', '.x{ color: var(--scholarly-code-bg); }', true)
+expectBackgroundSurfaceColorFixture('fixture highlight background token as color', '.x{ color: var(--scholarly-highlight-warning-bg); }', true)
+expectBackgroundSurfaceColorFixture('fixture code foreground token as color', '.x{ color: var(--scholarly-code-fg); }', false)
 
 for (const [name, text] of Object.entries({
   block: files.block,
