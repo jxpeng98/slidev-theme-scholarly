@@ -16,7 +16,7 @@ import {
   rebuildInternalAnchorTargets,
   resolvePendingInternalAnchorNavigation,
 } from '../utils/internalAnchorNavigation'
-import { applyRootColorMode, resolveScholarlyColorMode } from '../utils/colorMode'
+import { resolveScholarlyModes } from '../utils/themeModes'
 import { hasVerticalOverflow, isVerticalScrollOverflowMode } from '../utils/scrollArea'
 import { invalidateTheoremNumberMap, resetOccurrenceTracker } from '../utils/theorem'
 
@@ -127,8 +127,10 @@ const THEME_COLOR_VARIABLES: Array<[keyof ThemeColorConfig, string]> = [
 type ThemeConfig = {
   colorTheme?: string
   fontTheme?: string
+  contentMode?: 'light' | 'dark'
+  chromeMode?: 'light' | 'dark' | 'match' | 'inverse'
   colorMode?: 'light' | 'dark'
-  sectionMode?: 'light' | 'dark'
+  sectionMode?: 'light' | 'dark' | 'match' | 'inverse'
   beamerNav?: boolean
   outlineSidebar?: boolean
   outlineSidebarOpen?: boolean
@@ -279,17 +281,24 @@ const applyThemePresets = (
   setAttr('data-color-theme', colorTheme)
   setAttr('data-font-theme', config?.fontTheme)
   applyThemePresetColors(colorTheme, colorConfig)
-  syncColorModeWithDark(config)
+  syncThemeModesWithDark(config)
 }
 
-// Explicit Scholarly colorMode is authoritative; otherwise follow Slidev's dark class.
-const syncColorModeWithDark = (config?: ThemeConfig | null) => {
+const syncThemeModesWithDark = (config?: ThemeConfig | null) => {
   if (typeof window === 'undefined') return
+
   const root = document.documentElement
-  applyRootColorMode(
-    root,
-    resolveScholarlyColorMode(config?.colorMode, root.classList.contains('dark')),
-  )
+  const resolution = resolveScholarlyModes({
+    themeConfig: config,
+    slidevDark: root.classList.contains('dark'),
+  })
+
+  root.setAttribute('data-content-mode', resolution.contentMode)
+  root.setAttribute('data-chrome-mode', resolution.chromeMode)
+  root.setAttribute('data-section-mode', resolution.sectionMode)
+  root.setAttribute('data-color-mode', resolution.contentMode)
+  root.classList.toggle('dark', resolution.contentMode === 'dark')
+  root.style.colorScheme = resolution.contentMode
 }
 
 // Watch for Slidev's dark mode toggle (class changes on html element)
@@ -956,14 +965,14 @@ const setupDarkModeSync = (config: ThemeConfig | null | undefined) => {
   }
 
   // Initial sync
-  syncColorModeWithDark(config)
+  syncThemeModesWithDark(config)
 
-  // Watch for class changes on html element. With an explicit colorMode, this
-  // immediately restores the configured mode if Slidev/system dark mode changes.
+  // Watch Slidev's dark class. Explicit Scholarly modes restore the resolved
+  // content/chrome/section attributes if Slidev or the system toggles dark mode.
   darkModeObserver = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        syncColorModeWithDark(config)
+        syncThemeModesWithDark(config)
       }
     }
   })

@@ -63,8 +63,11 @@ test('footer outline slide previews are lazy loaded', () => {
   assert.doesNotMatch(files.footerToc, /import FooterTocPreviewCard from '\.\/FooterTocPreviewCard\.vue'/)
 })
 
-test('explicit theme color mode still syncs the Slidev dark class', () => {
-  assert.match(files.mainSetup, /applyRootColorMode/)
-  assert.match(files.mainSetup, /resolveScholarlyColorMode/)
+test('explicit theme modes sync content chrome and section attributes', () => {
+  assert.match(files.mainSetup, /resolveScholarlyModes/)
+  assert.match(files.mainSetup, /data-content-mode/)
+  assert.match(files.mainSetup, /data-chrome-mode/)
+  assert.match(files.mainSetup, /data-section-mode/)
+  assert.match(files.mainSetup, /data-color-mode/)
   assert.doesNotMatch(files.mainSetup, /if \(config\?\.colorMode\) return/)
 })
