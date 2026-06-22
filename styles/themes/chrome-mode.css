@@ -21,7 +21,13 @@
   --scholarly-toc-surface-muted: color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 16%, rgba(15, 23, 42, 0.92) 84%);
   --scholarly-toc-fg: #ffffff;
   --scholarly-toc-fg-muted: rgba(255, 255, 255, 0.62);
+  --scholarly-toc-slide-fg: rgba(255, 255, 255, 0.78);
+  --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66);
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 76%, var(--scholarly-accent, #b8860b) 12%, transparent);
+  --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 62%, transparent);
+  --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 52%, transparent);
+  --scholarly-toc-active-border: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 64%);
+  --scholarly-toc-preview-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 68%, var(--scholarly-accent, #b8860b) 6%, rgba(255, 255, 255, 0.12) 26%);
   --scholarly-toc-shadow: 0 0.55rem 1.8rem rgba(2, 6, 23, 0.34), 0 0.12rem 0.4rem rgba(2, 6, 23, 0.24), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
   --scholarly-toc-hover: color-mix(in srgb, var(--scholarly-accent, #b8860b) 18%, rgba(255, 255, 255, 0.08) 82%);
   --scholarly-toc-control-hover: rgba(255, 255, 255, 0.1);
@@ -54,7 +60,13 @@
   --scholarly-toc-surface-muted: color-mix(in srgb, var(--scholarly-chrome-bg, #fdfbf7) 96%, var(--scholarly-accent, #b8860b) 0.6%, #f5f0e8 3.4%);
   --scholarly-toc-fg: var(--scholarly-chrome-fg, #2d3748);
   --scholarly-toc-fg-muted: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 52%, transparent);
+  --scholarly-toc-slide-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 74%, transparent);
+  --scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 62%, transparent);
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
+  --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 62%, transparent);
+  --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 52%, transparent);
+  --scholarly-toc-active-border: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-chrome-border, #dbe3ec) 64%);
+  --scholarly-toc-preview-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 68%, var(--scholarly-accent, #b8860b) 6%, #c4b998 26%);
   --scholarly-toc-shadow: 0 0.4rem 1.6rem rgba(45, 55, 72, 0.09), 0 0.12rem 0.4rem rgba(45, 55, 72, 0.06), 0 0 0 0.5px rgba(45, 55, 72, 0.04);
   --scholarly-toc-hover: color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, var(--scholarly-chrome-bg, #fdfbf7) 92%);
   --scholarly-toc-control-hover: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 8%, transparent);

@@ -81,6 +81,7 @@ for (const [name, text] of Object.entries({
   expectNotContains(name, text, '--scholarly-content-border')
   expectNotContains(name, text, '--scholarly-bg-warm')
   expectNotContains(name, text, '--scholarly-text-primary')
+  expectNotContains(name, text, '--scholarly-chrome-border')
 }
 
 for (const [name, text] of Object.entries({
@@ -90,8 +91,18 @@ for (const [name, text] of Object.entries({
 })) {
   expectNotMatch(name, text, /--scholarly-footer-(?!height\b)[a-z-]+/, 'footer chrome tokens')
   expectNotMatch(name, text, /--scholarly-chrome-[a-z-]+/, 'chrome tokens')
-  expectNotContains(name, text, 'color: var(--scholarly-canvas-bg)')
+  expectNotMatch(
+    name,
+    text,
+    /color\s*:\s*[^;]*var\(--scholarly-(?:canvas-bg|content-surface(?:-muted)?|chrome-bg|toc-surface(?:-muted)?|toolbar-surface)\b[^;]*;/,
+    'background or surface tokens in color declarations',
+  )
 }
+
+expectCssBlockContains('appendix-index.vue', files.appendixIndex, '.appendix-index-code', 'color: var(--scholarly-content-on-primary)')
+expectCssBlockContains('experiment-grid.vue', files.experimentGrid, '.experiment-grid-card-header span', 'color: var(--scholarly-content-on-primary)')
+expectCssBlockContains('method-pipeline.vue', files.methodPipeline, '.method-pipeline-number', 'color: var(--scholarly-content-on-primary)')
+expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-slide-title', 'color: var(--scholarly-toc-slide-fg')
 
 expectContains('mode.css', files.mode, "@import './content-mode.css';")
 expectContains('mode.css', files.mode, "@import './chrome-mode.css';")
@@ -153,7 +164,13 @@ const requiredChromeTokens = [
   '--scholarly-toc-surface-muted',
   '--scholarly-toc-fg',
   '--scholarly-toc-fg-muted',
+  '--scholarly-toc-slide-fg',
+  '--scholarly-toc-slide-index-fg',
   '--scholarly-toc-border',
+  '--scholarly-toc-rule',
+  '--scholarly-toc-section-border',
+  '--scholarly-toc-active-border',
+  '--scholarly-toc-preview-border',
   '--scholarly-toc-shadow',
   '--scholarly-toc-hover',
   '--scholarly-toc-control-hover',
