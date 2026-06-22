@@ -30,6 +30,8 @@ const __templatesData = JSON.parse(fs.readFileSync(path.join(__sharedDir, 'templ
 const COLOR_THEMES = __themesData.colorThemes.map(t => ({ id: t.id, label: t.label }))
 const FONT_THEMES = __themesData.fontThemes.map(t => ({ id: t.id, label: t.label }))
 const THEME_PRESETS = __themesData.themePresets
+const CONTENT_MODES = ['light', 'dark']
+const SURFACE_MODES = ['light', 'dark', 'match', 'inverse']
 const LAYOUT_GROUPS = __layoutsData.layoutGroups
 const COMPONENT_LIST = __layoutsData.componentNames
 const TEMPLATE_META = Object.fromEntries(
@@ -116,8 +118,8 @@ Usage:
   ${cliName} template list [--json]
   ${cliName} theme list [--json]
   ${cliName} theme preset list [--json]
-  ${cliName} theme preset apply <preset> [--font <font-theme>] [--mode <light|dark>] [--section-mode <light|dark>] [--file <slides.md>]
-  ${cliName} theme apply <color-theme> [--font <font-theme>] [--mode <light|dark>] [--section-mode <light|dark>] [--file <slides.md>]
+  ${cliName} theme preset apply <preset> [--font <font-theme>] [--content-mode <light|dark>] [--chrome-mode <light|dark|match|inverse>] [--section-mode <light|dark|match|inverse>] [--file <slides.md>]
+  ${cliName} theme apply <color-theme> [--font <font-theme>] [--content-mode <light|dark>] [--chrome-mode <light|dark|match|inverse>] [--section-mode <light|dark|match|inverse>] [--file <slides.md>]
   ${cliName} layout list [--json]
   ${cliName} component list [--json]
   ${cliName} snippet list [--json]
@@ -191,20 +193,22 @@ function printThemeHelp() {
   console.log(`Usage:
   ${cliName} theme list [--json]
   ${cliName} theme preset list [--json]
-  ${cliName} theme preset apply <preset> [--font <font-theme>] [--mode <light|dark>] [--section-mode <light|dark>] [--file <slides.md>]
-  ${cliName} theme apply <color-theme> [--font <font-theme>] [--mode <light|dark>] [--section-mode <light|dark>] [--file <slides.md>]
+  ${cliName} theme preset apply <preset> [--font <font-theme>] [--content-mode <light|dark>] [--chrome-mode <light|dark|match|inverse>] [--section-mode <light|dark|match|inverse>] [--file <slides.md>]
+  ${cliName} theme apply <color-theme> [--font <font-theme>] [--content-mode <light|dark>] [--chrome-mode <light|dark|match|inverse>] [--section-mode <light|dark|match|inverse>] [--file <slides.md>]
 
 Subcommands:
   list         Print available color/font themes
   preset       Apply curated preset combos
   apply        Update themeConfig in slide frontmatter
 
+Legacy --mode is accepted as an alias for --content-mode.
+
 Examples:
   ${cliName} theme list
   ${cliName} theme preset list
   ${cliName} theme preset apply cambridge --file slides.md
   ${cliName} theme apply cambridge-green --font elegant
-  ${cliName} theme apply high-contrast --mode light --file slides.md
+  ${cliName} theme apply high-contrast --content-mode light --file slides.md
 `)
 }
 
@@ -560,6 +564,8 @@ function parseThemeApplyArgs(args) {
     colorTheme: '',
     fontTheme: '',
     colorMode: '',
+    contentMode: '',
+    chromeMode: '',
     sectionMode: '',
     file: 'slides.md',
   }
@@ -611,6 +617,36 @@ function parseThemeApplyArgs(args) {
       continue
     }
 
+    if (arg === '--content-mode') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --content-mode.')
+      }
+      result.contentMode = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--content-mode=')) {
+      result.contentMode = arg.split('=', 2)[1] || ''
+      continue
+    }
+
+    if (arg === '--chrome-mode') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --chrome-mode.')
+      }
+      result.chromeMode = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--chrome-mode=')) {
+      result.chromeMode = arg.split('=', 2)[1] || ''
+      continue
+    }
+
     if (arg === '--section-mode') {
       const value = args[i + 1]
       if (!value || value.startsWith('-')) {
@@ -648,6 +684,10 @@ function parseThemeApplyArgs(args) {
     throw new Error('Missing required argument <color-theme>.')
   }
 
+  if (!result.contentMode && result.colorMode) {
+    result.contentMode = result.colorMode
+  }
+
   return result
 }
 
@@ -656,6 +696,8 @@ function parseThemePresetApplyArgs(args) {
     preset: '',
     fontTheme: '',
     colorMode: '',
+    contentMode: '',
+    chromeMode: '',
     sectionMode: '',
     file: 'slides.md',
   }
@@ -707,6 +749,36 @@ function parseThemePresetApplyArgs(args) {
       continue
     }
 
+    if (arg === '--content-mode') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --content-mode.')
+      }
+      result.contentMode = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--content-mode=')) {
+      result.contentMode = arg.split('=', 2)[1] || ''
+      continue
+    }
+
+    if (arg === '--chrome-mode') {
+      const value = args[i + 1]
+      if (!value || value.startsWith('-')) {
+        throw new Error('Missing value for --chrome-mode.')
+      }
+      result.chromeMode = value
+      i += 1
+      continue
+    }
+
+    if (arg.startsWith('--chrome-mode=')) {
+      result.chromeMode = arg.split('=', 2)[1] || ''
+      continue
+    }
+
     if (arg === '--section-mode') {
       const value = args[i + 1]
       if (!value || value.startsWith('-')) {
@@ -742,6 +814,10 @@ function parseThemePresetApplyArgs(args) {
 
   if (!result.preset) {
     throw new Error('Missing required argument <preset>.')
+  }
+
+  if (!result.contentMode && result.colorMode) {
+    result.contentMode = result.colorMode
   }
 
   return result
@@ -1135,6 +1211,16 @@ function hasId(list, id) {
   return list.some(item => item.id === id)
 }
 
+function assertValidContentMode(value, label) {
+  if (value && !CONTENT_MODES.includes(value))
+    throw new Error(`Invalid ${label} value. Use "light" or "dark".`)
+}
+
+function assertValidSurfaceMode(value, label) {
+  if (value && !SURFACE_MODES.includes(value))
+    throw new Error(`Invalid ${label} value. Use "light", "dark", "match", or "inverse".`)
+}
+
 function detectLineEnding(text) {
   return text.includes('\r\n') ? '\r\n' : '\n'
 }
@@ -1195,12 +1281,27 @@ function upsertTopLevelKey(lines, key, value) {
   lines.push(nextLine)
 }
 
-function upsertThemeConfig(lines, kv) {
+function removeNestedKeys(lines, range, keys) {
+  for (let i = range.end - 1; i > range.start; i -= 1) {
+    if (countIndent(lines[i]) <= range.indent) {
+      continue
+    }
+
+    if (keys.some(key => new RegExp(`^\\s*${key}:\\s*`).test(lines[i]))) {
+      lines.splice(i, 1)
+      range.end -= 1
+    }
+  }
+}
+
+function upsertThemeConfig(lines, kv, removeKeys = []) {
   let range = findNestedBlockRange(lines, 'themeConfig')
   if (range.start < 0) {
     lines.push('themeConfig:')
     range = findNestedBlockRange(lines, 'themeConfig')
   }
+
+  removeNestedKeys(lines, range, removeKeys)
 
   const nestedIndent = ' '.repeat(range.indent + 2)
   for (const [key, value] of Object.entries(kv)) {
@@ -1230,7 +1331,8 @@ function upsertThemeConfig(lines, kv) {
 function applyThemeToFile(options) {
   const colorTheme = normalizeId(options.colorTheme)
   const fontTheme = normalizeId(options.fontTheme)
-  const colorMode = normalizeId(options.colorMode)
+  const contentMode = normalizeId(options.contentMode || options.colorMode)
+  const chromeMode = normalizeId(options.chromeMode)
   const sectionMode = normalizeId(options.sectionMode)
   const targetFile = path.resolve(process.cwd(), options.file || 'slides.md')
 
@@ -1242,13 +1344,9 @@ function applyThemeToFile(options) {
     throw new Error(`Unknown font theme: ${options.fontTheme}`)
   }
 
-  if (colorMode && colorMode !== 'light' && colorMode !== 'dark') {
-    throw new Error('Invalid --mode value. Use "light" or "dark".')
-  }
-
-  if (sectionMode && sectionMode !== 'light' && sectionMode !== 'dark') {
-    throw new Error('Invalid --section-mode value. Use "light" or "dark".')
-  }
+  assertValidContentMode(contentMode, options.contentMode ? '--content-mode' : '--mode')
+  assertValidSurfaceMode(chromeMode, '--chrome-mode')
+  assertValidSurfaceMode(sectionMode, '--section-mode')
 
   const exists = fs.existsSync(targetFile)
   const original = exists ? fs.readFileSync(targetFile, 'utf8') : ''
@@ -1270,9 +1368,10 @@ function applyThemeToFile(options) {
   upsertThemeConfig(lines, {
     colorTheme,
     fontTheme,
-    colorMode,
+    contentMode,
+    chromeMode,
     sectionMode,
-  })
+  }, ['colorMode'])
 
   const frontmatter = `---${eol}${lines.join(eol)}${eol}---${eol}`
   const trimmedRest = rest ? rest.replace(/^\s+/, '') : ''
@@ -1292,6 +1391,8 @@ function applyThemePresetToFile(options) {
     colorTheme: preset.colorTheme,
     fontTheme: options.fontTheme || preset.fontTheme,
     colorMode: options.colorMode,
+    contentMode: options.contentMode,
+    chromeMode: options.chromeMode,
     sectionMode: options.sectionMode,
     file: options.file,
   })
@@ -1695,7 +1796,7 @@ function extractThemeConfigValuesFromSlides() {
     if (countIndent(line) <= range.indent)
       continue
 
-    const match = line.match(/^\s*(colorTheme|fontTheme|colorMode|sectionMode):\s*(.+?)\s*$/)
+    const match = line.match(/^\s*(colorTheme|fontTheme|contentMode|chromeMode|colorMode|sectionMode):\s*(.+?)\s*$/)
     if (match)
       values[match[1]] = stripYamlValue(match[2])
   }
@@ -1732,16 +1833,28 @@ function collectThemeConfigDoctorChecks(hasSlides) {
       valid: FONT_THEMES.map(item => item.id),
     },
     {
+      key: 'contentMode',
+      id: 'theme-config-content-mode',
+      label: 'themeConfig.contentMode',
+      valid: CONTENT_MODES,
+    },
+    {
+      key: 'chromeMode',
+      id: 'theme-config-chrome-mode',
+      label: 'themeConfig.chromeMode',
+      valid: SURFACE_MODES,
+    },
+    {
       key: 'colorMode',
       id: 'theme-config-color-mode',
-      label: 'themeConfig.colorMode',
-      valid: ['light', 'dark'],
+      label: 'themeConfig.colorMode (legacy alias)',
+      valid: CONTENT_MODES,
     },
     {
       key: 'sectionMode',
       id: 'theme-config-section-mode',
       label: 'themeConfig.sectionMode',
-      valid: ['light', 'dark'],
+      valid: SURFACE_MODES,
     },
   ]
 
@@ -1777,7 +1890,7 @@ function collectThemeConfigDoctorChecks(hasSlides) {
       'themeConfig',
       'ok',
       'no explicit themeConfig values to validate',
-      'Optionally set themeConfig.colorTheme, fontTheme, colorMode, or sectionMode.',
+      'Optionally set themeConfig.colorTheme, fontTheme, contentMode, chromeMode, or sectionMode.',
     ))
   }
 
