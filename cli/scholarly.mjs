@@ -1294,6 +1294,26 @@ function removeNestedKeys(lines, range, keys) {
   }
 }
 
+function getNestedValue(lines, range, key) {
+  if (range.start < 0) {
+    return ''
+  }
+
+  const pattern = new RegExp(`^\\s*${key}:\\s*(.+?)\\s*$`)
+  for (let i = range.start + 1; i < range.end; i += 1) {
+    if (countIndent(lines[i]) <= range.indent) {
+      continue
+    }
+
+    const match = lines[i].match(pattern)
+    if (match) {
+      return stripYamlValue(match[1])
+    }
+  }
+
+  return ''
+}
+
 function upsertThemeConfig(lines, kv, removeKeys = []) {
   let range = findNestedBlockRange(lines, 'themeConfig')
   if (range.start < 0) {
@@ -1331,7 +1351,7 @@ function upsertThemeConfig(lines, kv, removeKeys = []) {
 function applyThemeToFile(options) {
   const colorTheme = normalizeId(options.colorTheme)
   const fontTheme = normalizeId(options.fontTheme)
-  const contentMode = normalizeId(options.contentMode || options.colorMode)
+  const inputContentMode = normalizeId(options.contentMode || options.colorMode)
   const chromeMode = normalizeId(options.chromeMode)
   const sectionMode = normalizeId(options.sectionMode)
   const targetFile = path.resolve(process.cwd(), options.file || 'slides.md')
@@ -1344,7 +1364,7 @@ function applyThemeToFile(options) {
     throw new Error(`Unknown font theme: ${options.fontTheme}`)
   }
 
-  assertValidContentMode(contentMode, options.contentMode ? '--content-mode' : '--mode')
+  assertValidContentMode(inputContentMode, options.contentMode ? '--content-mode' : '--mode')
   assertValidSurfaceMode(chromeMode, '--chrome-mode')
   assertValidSurfaceMode(sectionMode, '--section-mode')
 
@@ -1362,6 +1382,14 @@ function applyThemeToFile(options) {
   } else {
     lines = []
     rest = original
+  }
+
+  let contentMode = inputContentMode
+  const themeConfigRange = findNestedBlockRange(lines, 'themeConfig')
+  const existingContentMode = normalizeId(getNestedValue(lines, themeConfigRange, 'contentMode'))
+  const existingColorMode = normalizeId(getNestedValue(lines, themeConfigRange, 'colorMode'))
+  if (!contentMode && !CONTENT_MODES.includes(existingContentMode) && CONTENT_MODES.includes(existingColorMode)) {
+    contentMode = existingColorMode
   }
 
   upsertTopLevelKey(lines, 'theme', 'scholarly')
@@ -1837,38 +1865,43 @@ function collectThemeConfigDoctorChecks(hasSlides) {
       id: 'theme-config-content-mode',
       label: 'themeConfig.contentMode',
       valid: CONTENT_MODES,
+      normalize: true,
     },
     {
       key: 'chromeMode',
       id: 'theme-config-chrome-mode',
       label: 'themeConfig.chromeMode',
       valid: SURFACE_MODES,
+      normalize: true,
     },
     {
       key: 'colorMode',
       id: 'theme-config-color-mode',
       label: 'themeConfig.colorMode (legacy alias)',
       valid: CONTENT_MODES,
+      normalize: true,
     },
     {
       key: 'sectionMode',
       id: 'theme-config-section-mode',
       label: 'themeConfig.sectionMode',
       valid: SURFACE_MODES,
+      normalize: true,
     },
   ]
 
   for (const validator of validators) {
-    const value = values[validator.key]
-    if (!value)
+    const rawValue = values[validator.key]
+    if (!rawValue)
       continue
 
+    const value = validator.normalize ? normalizeId(rawValue) : rawValue
     if (validator.valid.includes(value)) {
       checks.push(createDoctorCheck(
         validator.id,
         validator.label,
         'ok',
-        value,
+        rawValue,
         `Keep ${validator.label} set to a supported value.`,
       ))
       continue
@@ -1878,9 +1911,9 @@ function collectThemeConfigDoctorChecks(hasSlides) {
       validator.id,
       validator.label,
       'warn',
-      `unknown value: ${value}`,
+      `unknown value: ${rawValue}`,
       `Use one of: ${formatList(validator.valid, 12)}.`,
-      { value, validValues: validator.valid },
+      { value: rawValue, normalizedValue: value, validValues: validator.valid },
     ))
   }
 

@@ -72,6 +72,115 @@ test('legacy --mode maps to contentMode and removes existing colorMode', () => {
   assert.doesNotMatch(updated, /colorMode:/)
 })
 
+test('--mode=value maps to contentMode and removes existing colorMode', () => {
+  const { file } = makeTempSlides()
+  let slides = readFileSync(file, 'utf8')
+  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: light\n')
+  writeFileSync(file, slides, 'utf8')
+
+  const result = runCli([
+    'theme',
+    'apply',
+    'classic-blue',
+    '--mode=dark',
+    '--file',
+    file,
+  ])
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const updated = readFileSync(file, 'utf8')
+  assert.match(updated, /contentMode: dark/)
+  assert.doesNotMatch(updated, /colorMode:/)
+})
+
+test('theme apply migrates existing colorMode when no mode flags are supplied', () => {
+  const { file } = makeTempSlides()
+  let slides = readFileSync(file, 'utf8')
+  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dark\n')
+  writeFileSync(file, slides, 'utf8')
+
+  const result = runCli([
+    'theme',
+    'apply',
+    'classic-blue',
+    '--file',
+    file,
+  ])
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const updated = readFileSync(file, 'utf8')
+  assert.match(updated, /contentMode: dark/)
+  assert.doesNotMatch(updated, /colorMode:/)
+})
+
+test('theme apply migrates existing colorMode when only chrome mode is supplied', () => {
+  const { file } = makeTempSlides()
+  let slides = readFileSync(file, 'utf8')
+  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dark\n')
+  writeFileSync(file, slides, 'utf8')
+
+  const result = runCli([
+    'theme',
+    'apply',
+    'classic-blue',
+    '--chrome-mode',
+    'inverse',
+    '--file',
+    file,
+  ])
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const updated = readFileSync(file, 'utf8')
+  assert.match(updated, /contentMode: dark/)
+  assert.match(updated, /chromeMode: inverse/)
+  assert.doesNotMatch(updated, /colorMode:/)
+})
+
+test('theme apply removes invalid existing colorMode without migrating it', () => {
+  const { file } = makeTempSlides()
+  let slides = readFileSync(file, 'utf8')
+  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  colorMode: dim\n')
+  writeFileSync(file, slides, 'utf8')
+
+  const result = runCli([
+    'theme',
+    'apply',
+    'classic-blue',
+    '--file',
+    file,
+  ])
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const updated = readFileSync(file, 'utf8')
+  assert.doesNotMatch(updated, /contentMode:/)
+  assert.doesNotMatch(updated, /colorMode:/)
+})
+
+test('theme apply replaces invalid contentMode with valid legacy colorMode', () => {
+  const { file } = makeTempSlides()
+  let slides = readFileSync(file, 'utf8')
+  slides = slides.replace('themeConfig:\n', 'themeConfig:\n  contentMode: dim\n  colorMode: dark\n')
+  writeFileSync(file, slides, 'utf8')
+
+  const result = runCli([
+    'theme',
+    'apply',
+    'classic-blue',
+    '--file',
+    file,
+  ])
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const updated = readFileSync(file, 'utf8')
+  assert.match(updated, /contentMode: dark/)
+  assert.doesNotMatch(updated, /colorMode:/)
+})
+
 test('explicit content mode wins over legacy mode', () => {
   const { file } = makeTempSlides()
 
@@ -120,4 +229,34 @@ themeConfig:
   assert.equal(checks['theme-config-color-mode'].severity, 'warn')
   assert.match(checks['theme-config-color-mode'].label, /legacy/)
   assert.equal(checks['theme-config-section-mode'].severity, 'ok')
+})
+
+test('doctor accepts normalized case-insensitive mode values', () => {
+  const { dir, file } = makeTempSlides()
+  writeFileSync(file, `---
+theme: scholarly
+themeConfig:
+  contentMode: Dark
+  chromeMode: INVERSE
+  colorMode: LIGHT
+  sectionMode: MATCH
+---
+
+# Test
+`, 'utf8')
+
+  const result = runCli(['doctor', '--json'], { cwd: dir })
+
+  assert.equal(result.status, 0, result.stderr)
+
+  const report = JSON.parse(result.stdout)
+  const checks = Object.fromEntries(report.checks.map(check => [check.id, check]))
+  assert.equal(checks['theme-config-content-mode'].severity, 'ok')
+  assert.equal(checks['theme-config-content-mode'].summary, 'Dark')
+  assert.equal(checks['theme-config-chrome-mode'].severity, 'ok')
+  assert.equal(checks['theme-config-chrome-mode'].summary, 'INVERSE')
+  assert.equal(checks['theme-config-color-mode'].severity, 'ok')
+  assert.equal(checks['theme-config-color-mode'].summary, 'LIGHT')
+  assert.equal(checks['theme-config-section-mode'].severity, 'ok')
+  assert.equal(checks['theme-config-section-mode'].summary, 'MATCH')
 })
