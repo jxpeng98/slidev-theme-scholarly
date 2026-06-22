@@ -54,7 +54,7 @@ pnpm bump 1.4.0-beta.1
 
 This updates the root theme and docs versions, but keeps `vscode-extension/package.json` unchanged.
 
-For a paired VS Code Marketplace pre-release:
+For a paired VS Code extension pre-release:
 
 ```bash
 pnpm bump 1.4.0-beta.1 -- --vscode-prerelease-version 1.3.3
@@ -97,28 +97,24 @@ pnpm run tag:vscode
 pnpm run tag:vscode:pre
 ```
 
-## VS Code Marketplace Authentication
+## VS Code Extension Distribution
 
-VS Code Marketplace publishing uses Microsoft Entra ID through GitHub Actions OIDC.
-Do not use `VSCE_PAT` for automated publishing.
+VS Code extension automation currently builds a VSIX and attaches it to a
+GitHub Release or GitHub Pre-release. It does not publish to the VS Code
+Marketplace from GitHub Actions.
 
-One-time setup:
+This avoids the Microsoft Entra ID / Azure default tenant dependency that can
+block automated releases when the tenant or federated identity is unavailable.
+The release workflow only needs `GITHUB_TOKEN` access to create the GitHub
+release and upload the VSIX asset.
 
-1. Create or select a Microsoft Entra workload identity that can be used from GitHub Actions.
-2. Add a federated credential for the GitHub environment subject:
-   `repo:jxpeng98/slidev-theme-scholarly:environment:vscode-marketplace`.
-3. Add the identity to the Visual Studio Marketplace publisher `jxpeng98` with the Contributor role.
-4. Configure these GitHub Actions secrets:
+Marketplace publishing, when needed, should be done manually from the generated
+VSIX or from a local environment that has valid Marketplace publisher access:
 
-| Secret | Value |
-| --- | --- |
-| `AZURE_CLIENT_ID` | Service principal or user-assigned managed identity client ID |
-| `AZURE_TENANT_ID` | Microsoft Entra tenant ID |
-| `AZURE_SUBSCRIPTION_ID` | Azure subscription ID |
-
-The workflow logs in with `azure/login@v3`, grants `id-token: write` only on the
-stable and pre-release publish jobs, runs those jobs in the `vscode-marketplace`
-GitHub environment, and publishes the built VSIX with `vsce publish --azure-credential`.
+```bash
+pnpm --dir vscode-extension run publish
+pnpm --dir vscode-extension run publish:pre
+```
 
 ## Release Checklist
 
@@ -130,6 +126,6 @@ Before creating release tags:
 4. Run `pnpm version:sync` after manual root version edits.
 5. For theme pre-releases, decide whether this is npm-only or paired with a VS Code pre-release.
 6. For paired VS Code pre-releases, choose a plain mapped version that does not equal the future stable base version.
-7. Confirm the VS Code Marketplace Entra ID secrets are configured before pushing `vscode-v*` or `vscode-pre-v*` tags.
+7. Confirm GitHub VSIX distribution is sufficient, or publish the generated VSIX to the VS Code Marketplace manually after the release.
 
 There is no separate `bump:vscode` workflow anymore. Stable VS Code versions move with the root theme version; pre-release VS Code versions are explicit mappings in the shared release process.

@@ -2,7 +2,7 @@
   "name": "slidev-scholarly-snippets",
   "displayName": "Slidev Scholarly Snippets",
   "description": "Quick snippets and templates for Slidev Theme Scholarly",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "publisher": "jxpeng98",
   "icon": "images/icon-256.png",
   "engines": {
@@ -355,8 +355,8 @@
     "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext ts",
     "package": "vsce package",
-    "publish": "vsce publish --azure-credential",
-    "publish:pre": "vsce publish --azure-credential --pre-release"
+    "publish": "vsce publish",
+    "publish:pre": "vsce publish --pre-release"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",

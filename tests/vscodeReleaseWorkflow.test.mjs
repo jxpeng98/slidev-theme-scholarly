@@ -18,7 +18,7 @@ function jobSection(name, nextName) {
   return workflow.slice(start, end)
 }
 
-test('VS Code release workflow publishes with Entra ID OIDC instead of PAT', () => {
+test('VS Code release workflow creates VSIX GitHub releases without Azure publishing', () => {
   assert.match(
     jobSection('build', 'release'),
     /pnpm exec vsce package --pre-release/,
@@ -29,20 +29,22 @@ test('VS Code release workflow publishes with Entra ID OIDC instead of PAT', () 
     ['release', jobSection('release', 'prerelease')],
     ['prerelease', jobSection('prerelease')],
   ]) {
-    assert.match(section, /environment:\s*vscode-marketplace/, `${name} job must use the Marketplace environment`)
-    assert.match(section, /id-token:\s*write/, `${name} job must allow GitHub OIDC token minting`)
-    assert.match(section, /uses:\s*azure\/login@v3/, `${name} job must login to Azure`)
-    assert.match(section, /secrets\.AZURE_CLIENT_ID/, `${name} job must use the Azure client ID secret`)
-    assert.match(section, /secrets\.AZURE_TENANT_ID/, `${name} job must use the Azure tenant ID secret`)
-    assert.match(section, /secrets\.AZURE_SUBSCRIPTION_ID/, `${name} job must use the Azure subscription ID secret`)
-    assert.match(section, /--azure-credential/, `${name} job must publish with Entra ID credentials`)
-    assert.doesNotMatch(section, /VSCE_PAT|--pat\b/, `${name} job must not use PAT authentication`)
+    assert.match(section, /contents:\s*write/, `${name} job must be able to create GitHub releases`)
+    assert.match(section, /uses:\s*actions\/download-artifact@v4/, `${name} job must download the VSIX artifact`)
+    assert.match(section, /uses:\s*softprops\/action-gh-release@v1/, `${name} job must create a GitHub release`)
+    assert.match(section, /files:\s*\.\/vsix\/\*\.vsix/, `${name} job must attach the VSIX asset`)
+    assert.doesNotMatch(section, /environment:\s*vscode-marketplace/, `${name} job must not require Marketplace environment secrets`)
+    assert.doesNotMatch(section, /id-token:\s*write/, `${name} job must not require GitHub OIDC token minting`)
+    assert.doesNotMatch(section, /uses:\s*azure\/login@v3/, `${name} job must not login to Azure`)
+    assert.doesNotMatch(section, /secrets\.AZURE_/, `${name} job must not require Azure secrets`)
+    assert.doesNotMatch(section, /--azure-credential/, `${name} job must not publish with Entra ID credentials`)
+    assert.doesNotMatch(section, /VSCE_PAT|--pat\b/, `${name} job must not require PAT authentication`)
   }
 })
 
-test('VS Code publish scripts use local vsce with Entra ID credentials', () => {
+test('VS Code publish scripts use local vsce without Azure-only flags', () => {
   assert.equal(packageJson.devDependencies['@vscode/vsce'], '3.9.2')
   assert.equal(packageJson.scripts.package, 'vsce package')
-  assert.equal(packageJson.scripts.publish, 'vsce publish --azure-credential')
-  assert.equal(packageJson.scripts['publish:pre'], 'vsce publish --azure-credential --pre-release')
+  assert.equal(packageJson.scripts.publish, 'vsce publish')
+  assert.equal(packageJson.scripts['publish:pre'], 'vsce publish --pre-release')
 })
