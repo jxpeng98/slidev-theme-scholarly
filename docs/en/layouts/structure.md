@@ -95,7 +95,7 @@ Let's discuss our approach
 ```markdown
 ---
 layout: section
-sectionMode: dark  # or 'light' (optional, default: dark)
+sectionMode: dark  # dark, light, match, or inverse (optional, default: dark)
 ---
 
 # Results
@@ -114,6 +114,8 @@ sectionMode: dark  # or 'light' (optional, default: dark)
 |-------|-------------|
 | `dark` | Dark background with light text (default) |
 | `light` | Light background with dark text |
+| `match` | Match the current global `contentMode` |
+| `inverse` | Use the opposite of the current global `contentMode` |
 
 **Global vs Per-slide Configuration:**
 
@@ -123,7 +125,8 @@ You can set a global default in your headmatter:
 ---
 theme: scholarly
 themeConfig:
-  sectionMode: light  # All sections default to light
+  contentMode: light
+  sectionMode: match  # All sections match the global content mode
 ---
 ```
 
@@ -132,10 +135,10 @@ Then override on specific slides:
 ```yaml
 ---
 layout: section
-sectionMode: dark  # Override global setting for this slide
+sectionMode: inverse  # Override global setting for this slide
 ---
 
-# This Section Uses Dark Mode
+# This Section Uses the Inverse Mode
 ```
 
 ---

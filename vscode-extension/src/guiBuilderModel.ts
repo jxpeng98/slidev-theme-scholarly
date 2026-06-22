@@ -24,6 +24,9 @@ export interface BuilderDeckState {
   footerMiddle?: string;
   colorTheme?: string;
   fontTheme?: string;
+  contentMode?: 'light' | 'dark';
+  chromeMode?: 'light' | 'dark' | 'match' | 'inverse';
+  sectionMode?: 'light' | 'dark' | 'match' | 'inverse';
   slides?: BuilderSlideInput[];
 }
 
@@ -65,6 +68,9 @@ function renderFrontmatter(state: BuilderDeckState): string {
     'themeConfig:',
     `  colorTheme: ${yamlScalar(state.colorTheme || 'classic-blue')}`,
     `  fontTheme: ${yamlScalar(state.fontTheme || 'classic')}`,
+    `  contentMode: ${state.contentMode || 'light'}`,
+    `  chromeMode: ${state.chromeMode || 'dark'}`,
+    `  sectionMode: ${state.sectionMode || 'dark'}`,
     '  outlineToc: true',
     '  outlineTocOpen: false',
     '---'

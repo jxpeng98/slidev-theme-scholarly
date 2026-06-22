@@ -10,19 +10,28 @@ export interface GuiBuilderThemeOption {
   label: string;
 }
 
+export interface GuiBuilderModeOption {
+  value: string;
+  label: string;
+}
+
 export interface GuiBuilderHtmlOptions {
   nonce: string;
   cspSource: string;
   layouts: GuiBuilderLayoutOption[];
   colorThemes: GuiBuilderThemeOption[];
   fontThemes: GuiBuilderThemeOption[];
+  contentModes: GuiBuilderModeOption[];
+  surfaceModes: GuiBuilderModeOption[];
 }
 
 export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
   const data = JSON.stringify({
     layouts: options.layouts,
     colorThemes: options.colorThemes,
-    fontThemes: options.fontThemes
+    fontThemes: options.fontThemes,
+    contentModes: options.contentModes,
+    surfaceModes: options.surfaceModes
   }).replace(/</g, '\\u003c');
 
   const layoutCards = options.layouts.map(layout => `
@@ -84,7 +93,7 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
     }
     .toolbar-fields {
       display: grid;
-      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      grid-template-columns: repeat(7, minmax(104px, 1fr));
       gap: 8px;
     }
     .field {
@@ -270,6 +279,18 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
           <label for="font-theme">Font</label>
           <select id="font-theme"></select>
         </div>
+        <div class="field">
+          <label for="content-mode">Content</label>
+          <select id="content-mode"></select>
+        </div>
+        <div class="field">
+          <label for="chrome-mode">Chrome</label>
+          <select id="chrome-mode"></select>
+        </div>
+        <div class="field">
+          <label for="section-mode">Section</label>
+          <select id="section-mode"></select>
+        </div>
       </div>
       <button class="secondary" id="insertIntoEditor">Insert</button>
       <button class="primary" id="generateNewDocument">New Markdown</button>
@@ -322,6 +343,9 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
       subtitle: 'Generated from GUI Builder',
       colorTheme: builderData.colorThemes[0]?.value || 'classic-blue',
       fontTheme: builderData.fontThemes[0]?.value || 'classic',
+      contentMode: 'light',
+      chromeMode: 'dark',
+      sectionMode: 'dark',
       slides: []
     };
     let selectedId = '';
@@ -337,8 +361,20 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
       byId('font-theme').innerHTML = builderData.fontThemes.map(theme =>
         '<option value="' + escapeHtml(theme.value) + '">' + escapeHtml(theme.label) + '</option>'
       ).join('');
+      byId('content-mode').innerHTML = builderData.contentModes.map(mode =>
+        '<option value="' + escapeHtml(mode.value) + '">' + escapeHtml(mode.label) + '</option>'
+      ).join('');
+      byId('chrome-mode').innerHTML = builderData.surfaceModes.map(mode =>
+        '<option value="' + escapeHtml(mode.value) + '">' + escapeHtml(mode.label) + '</option>'
+      ).join('');
+      byId('section-mode').innerHTML = builderData.surfaceModes.map(mode =>
+        '<option value="' + escapeHtml(mode.value) + '">' + escapeHtml(mode.label) + '</option>'
+      ).join('');
       byId('color-theme').value = state.colorTheme;
       byId('font-theme').value = state.fontTheme;
+      byId('content-mode').value = state.contentMode;
+      byId('chrome-mode').value = state.chromeMode;
+      byId('section-mode').value = state.sectionMode;
     }
 
     function addSlide(layoutId) {
@@ -513,6 +549,9 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
     byId('deck-subtitle').addEventListener('input', event => { state.subtitle = event.target.value; postPreview(); });
     byId('color-theme').addEventListener('change', event => { state.colorTheme = event.target.value; postPreview(); });
     byId('font-theme').addEventListener('change', event => { state.fontTheme = event.target.value; postPreview(); });
+    byId('content-mode').addEventListener('change', event => { state.contentMode = event.target.value; postPreview(); });
+    byId('chrome-mode').addEventListener('change', event => { state.chromeMode = event.target.value; postPreview(); });
+    byId('section-mode').addEventListener('change', event => { state.sectionMode = event.target.value; postPreview(); });
     byId('slide-title').addEventListener('input', event => updateSelected({ title: event.target.value }));
     byId('slide-body').addEventListener('input', event => updateSelected({ body: event.target.value }));
     byId('slide-bullets').addEventListener('input', event => updateSelected({

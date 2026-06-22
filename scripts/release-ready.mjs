@@ -61,6 +61,18 @@ const steps = [
     command: ['node', '--test', 'tests/screenshotExport.test.mjs'],
   },
   {
+    name: 'Theme mode regression contract',
+    command: ['node', '--test', 'tests/themeModes.test.mjs'],
+  },
+  {
+    name: 'CLI theme mode regression contract',
+    command: ['node', '--test', 'tests/cliThemeModes.test.mjs'],
+  },
+  {
+    name: 'VS Code extension test suite',
+    command: ['pnpm', '--dir', 'vscode-extension', 'run', 'test'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

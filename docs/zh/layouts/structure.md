@@ -95,7 +95,7 @@ layout: intro
 ```markdown
 ---
 layout: section
-sectionMode: dark  # 或 'light'（可选，默认：dark）
+sectionMode: dark  # dark、light、match 或 inverse（可选，默认：dark）
 ---
 
 # 研究结果
@@ -114,6 +114,8 @@ sectionMode: dark  # 或 'light'（可选，默认：dark）
 |-------|-------------|
 | `dark` | 深色背景配浅色文字（默认） |
 | `light` | 浅色背景配深色文字 |
+| `match` | 跟随全局 `contentMode` |
+| `inverse` | 使用与全局 `contentMode` 相反的模式 |
 
 **全局与单页配置：**
 
@@ -123,7 +125,8 @@ sectionMode: dark  # 或 'light'（可选，默认：dark）
 ---
 theme: scholarly
 themeConfig:
-  sectionMode: light  # 所有 section 默认使用浅色模式
+  contentMode: light
+  sectionMode: match  # 所有 section 默认跟随全局内容模式
 ---
 ```
 
@@ -132,10 +135,10 @@ themeConfig:
 ```yaml
 ---
 layout: section
-sectionMode: dark  # 覆盖全局设置
+sectionMode: inverse  # 覆盖全局设置
 ---
 
-# 此章节使用深色模式
+# 此章节使用反向模式
 ```
 
 ---

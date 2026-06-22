@@ -149,6 +149,19 @@ test('builds theme apply CLI args with explicit mode flags', () => {
   );
 });
 
+test('built-in templates include explicit content and surface mode defaults', () => {
+  const commands = loadCommandsWithVscodeMock();
+
+  for (const markdown of [
+    commands.__test.getAcademicTemplate(),
+    commands.__test.getSimpleTemplate()
+  ]) {
+    assert.match(markdown, /themeConfig:\n(?:  .+\n)*  contentMode: light\n/);
+    assert.match(markdown, /themeConfig:\n(?:  .+\n)*  chromeMode: dark\n/);
+    assert.match(markdown, /themeConfig:\n(?:  .+\n)*  sectionMode: dark\n/);
+  }
+});
+
 test('extension manifest exposes new mode commands and hides legacy color mode command', async () => {
   const manifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
   const commandIds = manifest.contributes.commands.map(item => item.command);

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { renderBuilderMarkdown, type BuilderDeckState } from './guiBuilderModel';
 import { renderGuiBuilderHtml, type GuiBuilderLayoutOption } from './guiBuilderView';
 import { layouts } from './providers';
-import { COLOR_THEMES, FONT_THEMES } from './sharedData';
+import { COLOR_THEMES, CONTENT_MODES, FONT_THEMES, SURFACE_MODES } from './sharedData';
 
 type BuilderMessage = {
   type?: 'generateNewDocument' | 'insertIntoEditor';
@@ -38,7 +38,9 @@ export function openGuiBuilder(context: vscode.ExtensionContext): void {
     cspSource: panel.webview.cspSource,
     layouts: getLayoutOptions(),
     colorThemes: COLOR_THEMES,
-    fontThemes: FONT_THEMES
+    fontThemes: FONT_THEMES,
+    contentModes: CONTENT_MODES,
+    surfaceModes: SURFACE_MODES
   });
 
   panel.webview.onDidReceiveMessage(

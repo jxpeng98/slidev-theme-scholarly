@@ -25,14 +25,45 @@ const requestedModes = (process.env.SCHOLARLY_THEME_MATRIX_MODES || '')
 
 const colorThemes = themesData.colorThemes
   .filter(theme => requestedThemes.length === 0 || requestedThemes.includes(theme.id))
-const surfaceModes = themesData.colorModes
-  .filter(mode => requestedModes.length === 0 || requestedModes.includes(mode.id))
-  .map(mode => ({
-    ...mode,
-    contentMode: mode.id,
+const modePresets = [
+  {
+    id: 'academic-default',
+    label: 'Academic Default',
+    contentMode: 'light',
+    chromeMode: 'dark',
+    sectionMode: 'dark',
+  },
+  {
+    id: 'all-light-match',
+    label: 'All Light Match',
+    contentMode: 'light',
     chromeMode: 'match',
     sectionMode: 'match',
-  }))
+  },
+  {
+    id: 'all-dark-match',
+    label: 'All Dark Match',
+    contentMode: 'dark',
+    chromeMode: 'match',
+    sectionMode: 'match',
+  },
+  {
+    id: 'inverse-chrome',
+    label: 'Inverse Chrome',
+    contentMode: 'light',
+    chromeMode: 'inverse',
+    sectionMode: 'dark',
+  },
+  {
+    id: 'inverse-surfaces',
+    label: 'Inverse Surfaces',
+    contentMode: 'dark',
+    chromeMode: 'inverse',
+    sectionMode: 'inverse',
+  },
+]
+const surfaceModes = modePresets
+  .filter(mode => requestedModes.length === 0 || requestedModes.includes(mode.id))
 
 if (!colorThemes.length)
   throw new Error('No color themes selected for theme matrix export.')

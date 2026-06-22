@@ -332,6 +332,9 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
 bibFile: ./references.bib
@@ -485,6 +488,9 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
+  contentMode: light
+  chromeMode: dark
+  sectionMode: dark
   outlineToc: true
   outlineTocOpen: false
 authors:
@@ -1181,5 +1187,7 @@ export const __test = {
   buildThemeApplyArgs,
   buildNewFrontmatter,
   buildThemeConfigLines,
+  getAcademicTemplate,
+  getSimpleTemplate,
   upsertThemeConfigYaml
 };
