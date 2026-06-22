@@ -5,6 +5,8 @@ const files = {
   highlight: await readFile(new URL('../components/Highlight.vue', import.meta.url), 'utf8'),
   theorem: await readFile(new URL('../components/Theorem.vue', import.meta.url), 'utf8'),
   mode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
+  contentMode: await readFile(new URL('../styles/themes/content-mode.css', import.meta.url), 'utf8'),
+  chromeMode: await readFile(new URL('../styles/themes/chrome-mode.css', import.meta.url), 'utf8'),
   layout: await readFile(new URL('../styles/layout.css', import.meta.url), 'utf8'),
 }
 
@@ -47,28 +49,123 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
     failures.push(`${name} selector ${selector} should not contain ${needle}`)
 }
 
-for (const [name, text] of Object.entries(files)) {
+for (const [name, text] of Object.entries({
+  block: files.block,
+  highlight: files.highlight,
+  theorem: files.theorem,
+  layout: files.layout,
+})) {
   expectNotContains(name, text, ':root.dark')
   expectNotContains(name, text, 'html.dark')
 }
 
-expectContains('Highlight.vue', files.highlight, ':global(:root[data-color-mode="dark"]) .highlight-primary')
+expectContains('mode.css', files.mode, "@import './content-mode.css';")
+expectContains('mode.css', files.mode, "@import './chrome-mode.css';")
 
-const darkModeBlockMatch = files.mode.match(/:root,\s*\n:root\[data-color-mode="dark"\]\s*\{([\s\S]*?)\n\}/)
-const lightModeBlockMatch = files.mode.match(/:root\[data-color-mode="light"\]\s*\{([\s\S]*?)\n\}/)
-const darkModeBlock = darkModeBlockMatch?.[1] || ''
-const lightModeBlock = lightModeBlockMatch?.[1] || ''
+const lightContentBlockMatch = files.contentMode.match(/:root,\s*\n:root\[data-content-mode="light"\]\s*\{([\s\S]*?)\n\}/)
+const darkContentBlockMatch = files.contentMode.match(/:root\[data-content-mode="dark"\]\s*\{([\s\S]*?)\n\}/)
+const darkChromeBlockMatch = files.chromeMode.match(/:root,\s*\n:root\[data-chrome-mode="dark"\]\s*\{([\s\S]*?)\n\}/)
+const lightChromeBlockMatch = files.chromeMode.match(/:root\[data-chrome-mode="light"\]\s*\{([\s\S]*?)\n\}/)
+const lightContentBlock = lightContentBlockMatch?.[1] || ''
+const darkContentBlock = darkContentBlockMatch?.[1] || ''
+const darkChromeBlock = darkChromeBlockMatch?.[1] || ''
+const lightChromeBlock = lightChromeBlockMatch?.[1] || ''
 
-if (!darkModeBlockMatch)
-  failures.push('mode.css should contain the default dark color-mode token block')
-if (!lightModeBlockMatch)
-  failures.push('mode.css should contain the light color-mode token block')
+if (!lightContentBlockMatch)
+  failures.push('content-mode.css should contain the default/light content-mode token block')
+if (!darkContentBlockMatch)
+  failures.push('content-mode.css should contain the dark content-mode token block')
+if (!darkChromeBlockMatch)
+  failures.push('chrome-mode.css should contain the default/dark chrome-mode token block')
+if (!lightChromeBlockMatch)
+  failures.push('chrome-mode.css should contain the light chrome-mode token block')
 
-for (const label of ['Chrome tokens', 'Content tokens', 'Accent tokens', 'Semantic tokens', 'Interaction tokens']) {
-  expectContains('mode.css', files.mode, label)
+const requiredContentTokens = [
+  '--scholarly-canvas-bg',
+  '--scholarly-canvas-fg',
+  '--scholarly-content-surface',
+  '--scholarly-content-surface-muted',
+  '--scholarly-content-border',
+  '--scholarly-content-fg',
+  '--scholarly-content-fg-muted',
+  '--scholarly-footnote-fg',
+  '--scholarly-footnote-link-fg',
+  '--scholarly-footnote-backref-fg',
+  '--scholarly-footnote-sep',
+  '--scholarly-footnote-popover-bg',
+  '--scholarly-footnote-popover-fg',
+  '--scholarly-footnote-popover-border',
+  '--scholarly-footnote-popover-shadow',
+  '--scholarly-footnote-label-bg',
+  '--scholarly-footnote-label-fg',
+  '--scholarly-code-bg',
+  '--scholarly-code-fg',
+  '--scholarly-inline-code-bg',
+  '--scholarly-quote-fg',
+  '--scholarly-quote-border',
+  '--scholarly-table-rule',
+]
+
+const requiredChromeTokens = [
+  '--scholarly-chrome-bg',
+  '--scholarly-chrome-fg',
+  '--scholarly-chrome-fg-muted',
+  '--scholarly-chrome-border',
+  '--scholarly-footer-fg',
+  '--scholarly-footer-fg-muted',
+  '--scholarly-footer-border',
+  '--scholarly-toolbar-surface',
+  '--scholarly-toolbar-fg',
+  '--scholarly-toolbar-border',
+  '--scholarly-toolbar-hover',
+  '--scholarly-toolbar-divider',
+  '--scholarly-toolbar-chip',
+]
+
+const highlightTypes = ['primary', 'success', 'warning', 'danger', 'info']
+for (const type of highlightTypes) {
+  requiredContentTokens.push(`--scholarly-highlight-${type}-bg`)
+  requiredContentTokens.push(`--scholarly-highlight-${type}-fg`)
+  expectCssBlockContains('Highlight.vue', files.highlight, `.highlight-${type}`, `--scholarly-highlight-bg: var(--scholarly-highlight-${type}-bg`)
+  expectCssBlockContains('Highlight.vue', files.highlight, `.highlight-${type}`, `--scholarly-highlight-fg: var(--scholarly-highlight-${type}-fg`)
+  expectCssBlockNotContains('Highlight.vue', files.highlight, `.highlight-${type}`, 'color-mix(')
+}
+
+const blockTypes = ['default', 'info', 'success', 'warning', 'danger', 'example', 'alert']
+for (const type of blockTypes) {
+  requiredContentTokens.push(`--scholarly-block-${type}-header-bg`)
+  requiredContentTokens.push(`--scholarly-block-${type}-header-fg`)
+  requiredContentTokens.push(`--scholarly-block-${type}-content-bg`)
+  requiredContentTokens.push(`--scholarly-block-${type}-border`)
+  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-header`, `var(--scholarly-block-${type}-header-bg`)
+  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-header`, `var(--scholarly-block-${type}-header-fg`)
+  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-content`, `var(--scholarly-block-${type}-content-bg`)
+  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-content`, `var(--scholarly-block-${type}-border`)
+  expectCssBlockContains('Block.vue', files.block, `.block-${type}:not(:has(.block-header)) .block-content`, `var(--scholarly-block-${type}-border`)
+}
+
+const theoremTypes = ['theorem', 'lemma', 'proposition', 'corollary', 'definition', 'example', 'remark', 'proof', 'note', 'claim']
+for (const type of theoremTypes) {
+  requiredContentTokens.push(`--scholarly-theorem-${type}-accent`)
+  requiredContentTokens.push(`--scholarly-theorem-${type}-bg`)
+  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-accent`)
+  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-bg`)
+  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type} .theorem-type`, `var(--scholarly-theorem-${type}-accent`)
+}
+
+for (const token of requiredContentTokens) {
+  expectTokenInBlock('content-mode.css default/light content block', lightContentBlock, token)
+  expectTokenInBlock('content-mode.css dark content block', darkContentBlock, token)
+}
+
+for (const token of requiredChromeTokens) {
+  expectTokenInBlock('chrome-mode.css default/dark chrome block', darkChromeBlock, token)
+  expectTokenInBlock('chrome-mode.css light chrome block', lightChromeBlock, token)
 }
 
 const requiredLayoutTokens = [
+  '--scholarly-canvas-bg',
+  '--scholarly-canvas-fg',
   '--scholarly-content-surface',
   '--scholarly-content-surface-muted',
   '--scholarly-content-border',
@@ -83,51 +180,21 @@ const requiredLayoutTokens = [
   '--scholarly-footer-fg-muted',
   '--scholarly-footer-border',
 ]
-const requiredModeTokens = [...requiredLayoutTokens]
 
-const highlightTypes = ['primary', 'success', 'warning', 'danger', 'info']
-for (const type of highlightTypes) {
-  requiredModeTokens.push(`--scholarly-highlight-${type}-bg`)
-  requiredModeTokens.push(`--scholarly-highlight-${type}-fg`)
-  expectCssBlockContains('Highlight.vue', files.highlight, `.highlight-${type}`, `--scholarly-highlight-bg: var(--scholarly-highlight-${type}-bg`)
-  expectCssBlockContains('Highlight.vue', files.highlight, `.highlight-${type}`, `--scholarly-highlight-fg: var(--scholarly-highlight-${type}-fg`)
-  expectCssBlockNotContains('Highlight.vue', files.highlight, `.highlight-${type}`, 'color-mix(')
-}
-
-const blockTypes = ['default', 'info', 'success', 'warning', 'danger', 'example', 'alert']
-for (const type of blockTypes) {
-  requiredModeTokens.push(`--scholarly-block-${type}-header-bg`)
-  requiredModeTokens.push(`--scholarly-block-${type}-header-fg`)
-  requiredModeTokens.push(`--scholarly-block-${type}-content-bg`)
-  requiredModeTokens.push(`--scholarly-block-${type}-border`)
-  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-header`, `var(--scholarly-block-${type}-header-bg`)
-  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-header`, `var(--scholarly-block-${type}-header-fg`)
-  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-content`, `var(--scholarly-block-${type}-content-bg`)
-  expectCssBlockContains('Block.vue', files.block, `.block-${type} .block-content`, `var(--scholarly-block-${type}-border`)
-  expectCssBlockContains('Block.vue', files.block, `.block-${type}:not(:has(.block-header)) .block-content`, `var(--scholarly-block-${type}-border`)
-}
-
-const theoremTypes = ['theorem', 'lemma', 'proposition', 'corollary', 'definition', 'example', 'remark', 'proof', 'note', 'claim']
-for (const type of theoremTypes) {
-  requiredModeTokens.push(`--scholarly-theorem-${type}-accent`)
-  requiredModeTokens.push(`--scholarly-theorem-${type}-bg`)
-  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-accent`)
-  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-bg`)
-  expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type} .theorem-type`, `var(--scholarly-theorem-${type}-accent`)
-}
-
-for (const token of requiredModeTokens) {
-  expectTokenInBlock('mode.css dark mode block', darkModeBlock, token)
-  expectTokenInBlock('mode.css light mode block', lightModeBlock, token)
-}
-
-for (const token of requiredLayoutTokens) {
+for (const token of requiredLayoutTokens)
   expectContains('layout.css', files.layout, token)
-}
 
 expectCssBlockContains('layout.css', files.layout, '.beamer-footer-left', 'var(--scholarly-footer-fg')
 expectCssBlockContains('layout.css', files.layout, '.beamer-footer-center', 'var(--scholarly-footer-fg-muted')
 expectCssBlockContains('layout.css', files.layout, '.beamer-footer-right', 'var(--scholarly-footer-fg')
+
+const forbiddenContentTokenPattern = /--scholarly-(chrome|toolbar|footer)/
+const forbiddenChromeTokenPattern = /--scholarly-(content|code|quote|highlight|block|theorem)/
+
+if (forbiddenContentTokenPattern.test(files.contentMode))
+  failures.push('content-mode.css should not contain chrome, toolbar, or footer tokens')
+if (forbiddenChromeTokenPattern.test(files.chromeMode))
+  failures.push('chrome-mode.css should not contain content, code, quote, highlight, block, or theorem tokens')
 
 if (failures.length) {
   console.error('Color mode style checks failed:')
