@@ -79,6 +79,8 @@ for (const [name, text] of Object.entries({
   'FooterTocPreviewCard.vue': files.footerTocPreview,
 })) {
   expectNotContains(name, text, '--scholarly-content-border')
+  expectNotContains(name, text, '--scholarly-bg-warm')
+  expectNotContains(name, text, '--scholarly-text-primary')
 }
 
 for (const [name, text] of Object.entries({
@@ -88,6 +90,7 @@ for (const [name, text] of Object.entries({
 })) {
   expectNotMatch(name, text, /--scholarly-footer-(?!height\b)[a-z-]+/, 'footer chrome tokens')
   expectNotMatch(name, text, /--scholarly-chrome-[a-z-]+/, 'chrome tokens')
+  expectNotContains(name, text, 'color: var(--scholarly-canvas-bg)')
 }
 
 expectContains('mode.css', files.mode, "@import './content-mode.css';")
@@ -119,6 +122,7 @@ const requiredContentTokens = [
   '--scholarly-content-border',
   '--scholarly-content-fg',
   '--scholarly-content-fg-muted',
+  '--scholarly-content-on-primary',
   '--scholarly-footnote-fg',
   '--scholarly-footnote-link-fg',
   '--scholarly-footnote-backref-fg',
@@ -145,6 +149,15 @@ const requiredChromeTokens = [
   '--scholarly-footer-fg',
   '--scholarly-footer-fg-muted',
   '--scholarly-footer-border',
+  '--scholarly-toc-surface',
+  '--scholarly-toc-surface-muted',
+  '--scholarly-toc-fg',
+  '--scholarly-toc-fg-muted',
+  '--scholarly-toc-border',
+  '--scholarly-toc-shadow',
+  '--scholarly-toc-hover',
+  '--scholarly-toc-control-hover',
+  '--scholarly-toc-scrollbar',
   '--scholarly-toolbar-surface',
   '--scholarly-toolbar-fg',
   '--scholarly-toolbar-border',

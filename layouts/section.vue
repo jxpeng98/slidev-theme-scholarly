@@ -12,11 +12,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useSlideContext } from '@slidev/client'
+import { useDarkMode, useSlideContext } from '@slidev/client'
 import CenteredLayout from '../components/CenteredLayout.vue'
 import { resolveScholarlyModes, resolveScholarlySectionMode } from '../utils/themeModes'
 
 const { $slidev, $frontmatter } = useSlideContext()
+const { isDark } = useDarkMode()
 
 const themeConfig = computed<Record<string, unknown>>(() => {
   return (($slidev.configs as any)?.themeConfig ?? {}) as Record<string, unknown>
@@ -25,9 +26,7 @@ const themeConfig = computed<Record<string, unknown>>(() => {
 const resolvedSectionMode = computed<'dark' | 'light'>(() => {
   const resolvedModes = resolveScholarlyModes({
     themeConfig: themeConfig.value,
-    slidevDark: typeof document !== 'undefined'
-      ? document.documentElement.classList.contains('dark')
-      : false,
+    slidevDark: isDark.value,
   })
 
   return resolveScholarlySectionMode({

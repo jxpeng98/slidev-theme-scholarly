@@ -157,7 +157,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   min-width: 2.4rem;
   height: 2.1rem;
   background: var(--slidev-theme-primary);
-  color: var(--scholarly-canvas-bg);
+  color: var(--scholarly-content-on-primary);
   font-size: 0.78rem;
 }
 

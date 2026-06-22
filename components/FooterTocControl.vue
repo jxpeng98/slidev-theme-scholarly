@@ -808,23 +808,15 @@ onUnmounted(() => {
   overflow: hidden;
 
   /* Warm paper border */
-  border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
+  border: 1px solid var(--scholarly-toc-border, color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%));
   border-radius: 0.5rem;
 
   /* Matte warm paper surface */
-  background:
-    linear-gradient(
-      180deg,
-      var(--scholarly-bg-warm, #fdfbf7) 0%,
-      color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 97%, #f5f0e8 3%) 100%
-    );
-  color: var(--scholarly-text-primary, #2d3748);
+  background: var(--scholarly-toc-surface, #fdfbf7);
+  color: var(--scholarly-toc-fg, #2d3748);
 
   /* Soft layered paper-card shadows */
-  box-shadow:
-    0 0.4rem 1.6rem rgba(45, 55, 72, 0.09),
-    0 0.12rem 0.4rem rgba(45, 55, 72, 0.06),
-    0 0 0 0.5px rgba(45, 55, 72, 0.04);
+  box-shadow: var(--scholarly-toc-shadow, 0 0.4rem 1.6rem rgba(45, 55, 72, 0.09));
 
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -871,7 +863,7 @@ onUnmounted(() => {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.01em;
-  color: var(--scholarly-text-primary, #2d3748);
+  color: var(--scholarly-toc-fg, #2d3748);
   text-shadow: none;
 }
 
@@ -880,7 +872,7 @@ onUnmounted(() => {
   font-size: 0.54rem;
   line-height: 1.28;
   letter-spacing: 0.01em;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 50%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.52));
 }
 
 /* -- Close button — minimal ------------------------------------------------ */
@@ -894,7 +886,7 @@ onUnmounted(() => {
   border: 1px solid transparent;
   border-radius: 0.28rem;
   background: transparent;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 42%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.42));
   box-shadow: none;
   transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
 }
@@ -919,7 +911,7 @@ onUnmounted(() => {
   background: transparent;
   scrollbar-width: thin;
   scrollbar-gutter: stable;
-  scrollbar-color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 16%, transparent) transparent;
+  scrollbar-color: var(--scholarly-toc-scrollbar, rgba(45, 55, 72, 0.16)) transparent;
 }
 
 .footer-toc-empty {
@@ -927,7 +919,7 @@ onUnmounted(() => {
   padding: 0.42rem;
   font-size: 0.68rem;
   line-height: 1.38;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 48%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.48));
 }
 
 /* -- Section cards — paper tiles ------------------------------------------- */
@@ -940,7 +932,7 @@ onUnmounted(() => {
   padding: 0.14rem;
   border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 52%, transparent);
   border-radius: 0.4rem;
-  background: color-mix(in srgb, var(--scholarly-bg-warm, #fdfbf7) 96%, var(--scholarly-accent, #b8860b) 0.6%, #f5f0e8 3.4%);
+  background: var(--scholarly-toc-surface-muted, #f8f4eb);
   box-shadow: 0 0.06rem 0.16rem rgba(45, 55, 72, 0.04);
   transition: border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
 }
@@ -948,7 +940,7 @@ onUnmounted(() => {
 /* Active section — gold left-bar accent */
 .footer-toc-section.is-active {
   border-color: color-mix(in srgb, var(--scholarly-accent, #b8860b) 36%, var(--scholarly-chrome-border, #dbe3ec) 64%);
-  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 5%, var(--scholarly-bg-warm, #fdfbf7) 92%, #faf5eb 3%);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 5%, var(--scholarly-toc-surface-muted, #f8f4eb) 95%);
   box-shadow:
     0 0.08rem 0.24rem rgba(45, 55, 72, 0.06),
     inset 3px 0 0 color-mix(in srgb, var(--scholarly-accent, #b8860b) 72%, transparent);
@@ -996,7 +988,7 @@ onUnmounted(() => {
 .footer-toc-section-meta {
   font-size: 0.5rem;
   line-height: 1.12;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 42%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.42));
   font-family: var(--scholarly-font-sans);
 }
 
@@ -1012,7 +1004,7 @@ onUnmounted(() => {
   border: 1px solid transparent;
   border-radius: 0.28rem;
   background: transparent;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 36%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.36));
   box-shadow: none;
   transition: background 150ms ease, color 150ms ease;
 }
@@ -1063,7 +1055,7 @@ onUnmounted(() => {
   font-weight: 600;
   line-height: 1.22;
   letter-spacing: 0.01em;
-  color: var(--scholarly-text-primary, #2d3748);
+  color: var(--scholarly-toc-fg, #2d3748);
   overflow-wrap: anywhere;
 }
 
@@ -1098,7 +1090,7 @@ onUnmounted(() => {
 .footer-toc-section-jump:hover,
 .footer-toc-section-jump:focus-visible {
   outline: none;
-  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, var(--scholarly-bg-warm, #fdfbf7) 92%);
+  background: var(--scholarly-toc-hover, color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, #fdfbf7 92%));
 }
 
 .footer-toc-section-jump:focus-visible,
@@ -1111,25 +1103,25 @@ onUnmounted(() => {
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
   outline: none;
-  background: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 8%, transparent);
-  color: var(--scholarly-text-primary, #2d3748);
+  background: var(--scholarly-toc-control-hover, rgba(45, 55, 72, 0.08));
+  color: var(--scholarly-toc-fg, #2d3748);
 }
 
 .footer-toc-panel-close:hover,
 .footer-toc-panel-close:focus-visible {
-  border-color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 14%, transparent);
+  border-color: color-mix(in srgb, var(--scholarly-toc-fg, #2d3748) 14%, transparent);
 }
 
 /* Slide index badge — subtle matte pill */
 .footer-toc-slide-index {
-  background: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 7%, transparent);
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 54%, transparent);
+  background: color-mix(in srgb, var(--scholarly-toc-fg, #2d3748) 7%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.54));
   border: none;
 }
 
 /* Active slide — warm accent highlight */
 .footer-toc-slide.is-active {
-  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 10%, var(--scholarly-bg-warm, #fdfbf7) 90%);
+  background: color-mix(in srgb, var(--scholarly-accent, #b8860b) 10%, var(--scholarly-toc-surface-muted, #f8f4eb) 90%);
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-index {
@@ -1143,12 +1135,12 @@ onUnmounted(() => {
   min-width: 0;
   font-size: 0.63rem;
   line-height: 1.24;
-  color: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 74%, transparent);
+  color: var(--scholarly-toc-fg-muted, rgba(45, 55, 72, 0.74));
   overflow-wrap: anywhere;
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-title {
-  color: var(--scholarly-text-primary, #2d3748);
+  color: var(--scholarly-toc-fg, #2d3748);
 }
 
 /* -- Panel transitions — clean fade ---------------------------------------- */

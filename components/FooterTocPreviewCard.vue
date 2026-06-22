@@ -90,7 +90,7 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 68%, var(--scholarly-accent, #b8860b) 6%, #c4b998 26%);
   border-radius: 0.56rem;
-  background: var(--scholarly-bg-warm, #fdfbf7);
+  background: var(--scholarly-toc-surface, #fdfbf7);
   box-shadow:
     0 0.8rem 2rem rgba(45, 55, 72, 0.1),
     0 0.2rem 0.6rem rgba(45, 55, 72, 0.06),
@@ -105,7 +105,7 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
   overflow: hidden;
   margin: 0.2rem;
   border-radius: 0.44rem;
-  background: var(--scholarly-bg-warm, #fdfbf7);
+  background: var(--scholarly-toc-surface-muted, #fdfbf7);
   box-shadow: inset 0 0 0 1px rgba(45, 55, 72, 0.06);
 }
 

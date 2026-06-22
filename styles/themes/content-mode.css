@@ -13,6 +13,7 @@
   --scholarly-content-border: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 14%, #dbe3ec 86%);
   --scholarly-content-fg: var(--scholarly-text-primary, #2d3748);
   --scholarly-content-fg-muted: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 68%, #ffffff 32%);
+  --scholarly-content-on-primary: #ffffff;
   --scholarly-footnote-fg: color-mix(in srgb, var(--scholarly-text-primary, #2d3748) 86%, #ffffff 14%);
   --scholarly-footnote-link-fg: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 84%, #000000 16%);
   --scholarly-footnote-backref-fg: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 62%, transparent);
@@ -97,6 +98,7 @@
   --scholarly-content-border: color-mix(in srgb, var(--slidev-theme-primary-light, #2c5282) 38%, #94a3b8 20%, transparent);
   --scholarly-content-fg: #e5edf7;
   --scholarly-content-fg-muted: rgba(226, 232, 240, 0.72);
+  --scholarly-content-on-primary: #ffffff;
   --scholarly-footnote-fg: rgba(226, 232, 240, 0.78);
   --scholarly-footnote-link-fg: color-mix(in srgb, var(--slidev-theme-primary-light, #93c5fd) 62%, #dbeafe 38%);
   --scholarly-footnote-backref-fg: rgba(191, 219, 254, 0.72);
@@ -171,4 +173,8 @@
   --scholarly-theorem-note-bg: color-mix(in srgb, #0ea5e9 12%, transparent);
   --scholarly-theorem-claim-accent: #f97316;
   --scholarly-theorem-claim-bg: color-mix(in srgb, #f97316 12%, transparent);
+}
+
+:root[data-color-theme="princeton-orange"] {
+  --scholarly-content-on-primary: #1c1c1c;
 }

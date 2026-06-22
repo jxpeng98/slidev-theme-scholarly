@@ -13,6 +13,19 @@
   --scholarly-footer-fg: #ffffff;
   --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
   --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  --scholarly-toc-surface: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 44%, #0f172a 56%) 0%,
+    color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 58%, #020617 42%) 100%
+  );
+  --scholarly-toc-surface-muted: color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 16%, rgba(15, 23, 42, 0.92) 84%);
+  --scholarly-toc-fg: #ffffff;
+  --scholarly-toc-fg-muted: rgba(255, 255, 255, 0.62);
+  --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 76%, var(--scholarly-accent, #b8860b) 12%, transparent);
+  --scholarly-toc-shadow: 0 0.55rem 1.8rem rgba(2, 6, 23, 0.34), 0 0.12rem 0.4rem rgba(2, 6, 23, 0.24), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  --scholarly-toc-hover: color-mix(in srgb, var(--scholarly-accent, #b8860b) 18%, rgba(255, 255, 255, 0.08) 82%);
+  --scholarly-toc-control-hover: rgba(255, 255, 255, 0.1);
+  --scholarly-toc-scrollbar: rgba(255, 255, 255, 0.22);
   --scholarly-toolbar-surface: linear-gradient(
     180deg,
     color-mix(in srgb, var(--slidev-theme-primary-light, var(--slidev-theme-primary, #1e3a5f)) 58%, var(--slidev-theme-primary, #1e3a5f) 42%) 0%,
@@ -33,6 +46,19 @@
   --scholarly-footer-fg: #ffffff;
   --scholarly-footer-fg-muted: rgba(255, 255, 255, 0.88);
   --scholarly-footer-border: rgba(255, 255, 255, 0.18);
+  --scholarly-toc-surface: linear-gradient(
+    180deg,
+    var(--scholarly-chrome-bg, #fdfbf7) 0%,
+    color-mix(in srgb, var(--scholarly-chrome-bg, #fdfbf7) 97%, #f5f0e8 3%) 100%
+  );
+  --scholarly-toc-surface-muted: color-mix(in srgb, var(--scholarly-chrome-bg, #fdfbf7) 96%, var(--scholarly-accent, #b8860b) 0.6%, #f5f0e8 3.4%);
+  --scholarly-toc-fg: var(--scholarly-chrome-fg, #2d3748);
+  --scholarly-toc-fg-muted: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 52%, transparent);
+  --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
+  --scholarly-toc-shadow: 0 0.4rem 1.6rem rgba(45, 55, 72, 0.09), 0 0.12rem 0.4rem rgba(45, 55, 72, 0.06), 0 0 0 0.5px rgba(45, 55, 72, 0.04);
+  --scholarly-toc-hover: color-mix(in srgb, var(--scholarly-accent, #b8860b) 8%, var(--scholarly-chrome-bg, #fdfbf7) 92%);
+  --scholarly-toc-control-hover: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 8%, transparent);
+  --scholarly-toc-scrollbar: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 16%, transparent);
   --scholarly-toolbar-surface: linear-gradient(
     180deg,
     color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 12%, white 88%) 0%,

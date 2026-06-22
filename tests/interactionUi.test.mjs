@@ -87,8 +87,11 @@ test('base layout consumes resolved canvas mode tokens', () => {
 })
 
 test('section layout resolves surface mode through shared theme mode helpers', () => {
+  assert.match(files.sectionLayout, /useDarkMode/)
+  assert.match(files.sectionLayout, /const \{ isDark \} = useDarkMode\(\)/)
   assert.match(files.sectionLayout, /resolveScholarlySectionMode/)
   assert.match(files.sectionLayout, /resolveScholarlyModes/)
-  assert.match(files.sectionLayout, /document\.documentElement\.classList\.contains\('dark'\)/)
+  assert.match(files.sectionLayout, /slidevDark:\s*isDark\.value/)
+  assert.doesNotMatch(files.sectionLayout, /document\.documentElement\.classList\.contains\('dark'\)/)
   assert.doesNotMatch(files.sectionLayout, /localMode === 'light' \|\| localMode === 'dark'/)
 })

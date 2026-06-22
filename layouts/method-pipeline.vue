@@ -159,7 +159,7 @@ const pipelineStyle = computed(() => ({
   place-items: center;
   border-radius: 999px;
   background: var(--slidev-theme-primary);
-  color: var(--scholarly-canvas-bg);
+  color: var(--scholarly-content-on-primary);
   font-family: var(--scholarly-font-sans);
   font-size: 0.78rem;
   font-weight: 800;
