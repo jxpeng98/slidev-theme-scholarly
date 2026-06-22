@@ -23,7 +23,7 @@
   --scholarly-toc-fg: #ffffff;
   --scholarly-toc-fg-muted: rgba(255, 255, 255, 0.62);
   --scholarly-toc-slide-fg: rgba(255, 255, 255, 0.78);
-  --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.72);
+  --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66);
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 76%, var(--scholarly-accent, #b8860b) 12%, transparent);
   --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 62%, transparent);
   --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 52%, transparent);

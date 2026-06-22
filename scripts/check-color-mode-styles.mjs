@@ -1,4 +1,24 @@
-import { readFile } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
+
+const readStyleBearingFiles = async (baseUrl, prefix) => {
+  const entries = await readdir(baseUrl, { withFileTypes: true })
+  const files = []
+
+  for (const entry of entries) {
+    const childUrl = new URL(`${entry.name}${entry.isDirectory() ? '/' : ''}`, baseUrl)
+    const childName = `${prefix}/${entry.name}`
+
+    if (entry.isDirectory()) {
+      files.push(...await readStyleBearingFiles(childUrl, childName))
+      continue
+    }
+
+    if (entry.isFile() && /\.(?:vue|css)$/.test(entry.name))
+      files.push({ name: childName, text: await readFile(childUrl, 'utf8') })
+  }
+
+  return files
+}
 
 const files = {
   block: await readFile(new URL('../components/Block.vue', import.meta.url), 'utf8'),
@@ -14,6 +34,12 @@ const files = {
   chromeMode: await readFile(new URL('../styles/themes/chrome-mode.css', import.meta.url), 'utf8'),
   layout: await readFile(new URL('../styles/layout.css', import.meta.url), 'utf8'),
 }
+
+const styleBearingFiles = [
+  ...await readStyleBearingFiles(new URL('../components/', import.meta.url), 'components'),
+  ...await readStyleBearingFiles(new URL('../layouts/', import.meta.url), 'layouts'),
+  ...await readStyleBearingFiles(new URL('../styles/', import.meta.url), 'styles'),
+]
 
 const failures = []
 
@@ -84,8 +110,10 @@ for (const [name, text] of Object.entries({
 })) {
   expectNotContains(name, text, ':root.dark')
   expectNotContains(name, text, 'html.dark')
-  expectNoBackgroundSurfaceColorDeclarations(name, text)
 }
+
+for (const { name, text } of styleBearingFiles)
+  expectNoBackgroundSurfaceColorDeclarations(name, text)
 
 for (const [name, text] of Object.entries({
   'FooterTocControl.vue': files.footerToc,
@@ -133,6 +161,7 @@ if (!lightChromeBlockMatch)
   failures.push('chrome-mode.css should contain the light chrome-mode token block')
 
 expectContains('chrome-mode.css light chrome block', lightChromeBlock, '--scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 72%')
+expectContains('chrome-mode.css default/dark chrome block', darkChromeBlock, '--scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66)')
 
 const requiredContentTokens = [
   '--scholarly-canvas-bg',
