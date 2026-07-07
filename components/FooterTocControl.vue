@@ -32,7 +32,7 @@
         type="button"
         class="footer-toc-backdrop"
         :aria-label="labels.close"
-        @click="closePanel"
+        @click="closePanel()"
       />
     </Transition>
 
@@ -56,7 +56,7 @@
               type="button"
               class="footer-toc-panel-close"
               :aria-label="labels.close"
-              @click="closePanel"
+              @click="closePanel()"
             >
               <svg
                 class="footer-toc-panel-close-icon"
@@ -603,11 +603,14 @@ watch(previewEnabled, async (enabled) => {
     await syncPreviewToTargetNo(fallbackPreviewTargetNo.value)
 })
 
-const closePanel = () => {
+const closePanel = async (restoreFocus = true) => {
   panelOpen.value = false
   previewVisible.value = false
   previewAnchorEl.value = null
   previewAnchorRect.value = null
+
+  if (restoreFocus)
+    await restorePresentationFocus()
 }
 
 const scrollToPreviewNo = async (slideNo: number | null, block: ScrollLogicalPosition = 'center') => {
@@ -632,10 +635,13 @@ const scrollToActiveItem = async () => {
 }
 
 const togglePanel = async () => {
-  panelOpen.value = !isOpen.value
-  if (panelOpen.value) {
-    await scrollToActiveItem()
+  if (isOpen.value) {
+    await closePanel()
+    return
   }
+
+  panelOpen.value = true
+  await scrollToActiveItem()
 }
 
 const navigateToSlide = async (slideNo: number) => {
@@ -643,7 +649,7 @@ const navigateToSlide = async (slideNo: number) => {
     return
 
   await $slidev.nav.go(slideNo)
-  closePanel()
+  await closePanel(false)
   await restorePresentationFocus()
 }
 

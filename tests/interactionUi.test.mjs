@@ -11,9 +11,39 @@ const files = {
   themeMode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
 }
 
+function extractConstFunctionBody(source, name) {
+  const start = source.indexOf(`const ${name} =`)
+  assert.notEqual(start, -1, `Expected ${name} to be defined`)
+
+  const openBrace = source.indexOf('{', source.indexOf('=>', start))
+  assert.notEqual(openBrace, -1, `Expected ${name} to have a function body`)
+
+  let depth = 0
+  for (let i = openBrace; i < source.length; i++) {
+    if (source[i] === '{')
+      depth++
+    else if (source[i] === '}')
+      depth--
+
+    if (depth === 0)
+      return source.slice(openBrace + 1, i)
+  }
+
+  assert.fail(`Expected ${name} function body to close`)
+}
+
 test('outline navigation restores presentation focus after closing the panel', () => {
+  const navigateToSlideBody = extractConstFunctionBody(files.footerToc, 'navigateToSlide')
   assert.match(files.footerToc, /const restorePresentationFocus = /)
-  assert.match(files.footerToc, /await \$slidev\.nav\.go\(slideNo\)[\s\S]*restorePresentationFocus\(\)/)
+  assert.match(navigateToSlideBody, /await \$slidev\.nav\.go\(slideNo\)[\s\S]*restorePresentationFocus\(\)/)
+})
+
+test('closing the outline panel after slide preview restores presentation focus', () => {
+  const closePanelBody = extractConstFunctionBody(files.footerToc, 'closePanel')
+  const togglePanelBody = extractConstFunctionBody(files.footerToc, 'togglePanel')
+
+  assert.match(closePanelBody, /await restorePresentationFocus\(\)/)
+  assert.match(togglePanelBody, /if \(isOpen\.value\) \{[\s\S]*await closePanel\(\)[\s\S]*return/)
 })
 
 test('outline collapse control uses an icon-only toggle with accessible state', () => {
