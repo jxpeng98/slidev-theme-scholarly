@@ -26,14 +26,18 @@ const files = {
   footerTocPreview: await readFile(new URL('../components/FooterTocPreviewCard.vue', import.meta.url), 'utf8'),
   highlight: await readFile(new URL('../components/Highlight.vue', import.meta.url), 'utf8'),
   theorem: await readFile(new URL('../components/Theorem.vue', import.meta.url), 'utf8'),
+  themePreview: await readFile(new URL('../components/ThemePreview.vue', import.meta.url), 'utf8'),
   appendixIndex: await readFile(new URL('../layouts/appendix-index.vue', import.meta.url), 'utf8'),
   experimentGrid: await readFile(new URL('../layouts/experiment-grid.vue', import.meta.url), 'utf8'),
+  fact: await readFile(new URL('../layouts/fact.vue', import.meta.url), 'utf8'),
   methodPipeline: await readFile(new URL('../layouts/method-pipeline.vue', import.meta.url), 'utf8'),
   mode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
   contentMode: await readFile(new URL('../styles/themes/content-mode.css', import.meta.url), 'utf8'),
   chromeMode: await readFile(new URL('../styles/themes/chrome-mode.css', import.meta.url), 'utf8'),
+  sectionMode: await readFile(new URL('../styles/themes/section-mode.css', import.meta.url), 'utf8'),
   layout: await readFile(new URL('../styles/layout.css', import.meta.url), 'utf8'),
 }
+const themes = JSON.parse(await readFile(new URL('../shared/themes.json', import.meta.url), 'utf8'))
 
 const styleBearingFiles = [
   ...await readStyleBearingFiles(new URL('../components/', import.meta.url), 'components'),
@@ -63,6 +67,35 @@ const expectTokenInBlock = (name, block, token) => {
     failures.push(`${name} should define ${token}`)
 }
 
+const hexToRgb = (hex) => {
+  const normalized = hex.replace(/^#/, '')
+  return [0, 2, 4].map(offset => Number.parseInt(normalized.slice(offset, offset + 2), 16))
+}
+
+const mixRgb = (foreground, background, foregroundWeight) => foreground.map(
+  (channel, index) => channel * foregroundWeight + background[index] * (1 - foregroundWeight),
+)
+
+const relativeLuminance = rgb => rgb
+  .map((channel) => {
+    const value = channel / 255
+    return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+  })
+  .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0)
+
+const contrastRatio = (foreground, background) => {
+  const foregroundLuminance = relativeLuminance(foreground)
+  const backgroundLuminance = relativeLuminance(background)
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
+    / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
+}
+
+const expectContrast = (name, foreground, background, minimum = 4.5) => {
+  const ratio = contrastRatio(foreground, background)
+  if (ratio < minimum)
+    failures.push(`${name} should have at least ${minimum}:1 contrast (received ${ratio.toFixed(2)}:1)`)
+}
+
 const expectCssBlockContains = (name, text, selector, needle) => {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const match = text.match(new RegExp(`${escaped}\\s*\\{([\\s\\S]*?)\\n\\}`, 'm'))
@@ -83,6 +116,21 @@ const expectCssBlockNotContains = (name, text, selector, needle) => {
 
   if (match[1].includes(needle))
     failures.push(`${name} selector ${selector} should not contain ${needle}`)
+}
+
+const expectRootBlocksDoNotSetSlidevThemeSurface = (name, text) => {
+  const rulePattern = /([^{}]+)\{([^{}]*)\}/g
+  for (const match of text.matchAll(rulePattern)) {
+    const selector = match[1].trim()
+    const body = match[2]
+    if (!selector.includes(':root'))
+      continue
+
+    for (const token of ['--slidev-theme-background', '--slidev-theme-text']) {
+      if (body.includes(token))
+        failures.push(`${name} root selector should not set ${token}`)
+    }
+  }
 }
 
 const backgroundSurfaceColorTokenPattern = /--scholarly-(?:(?:[\w-]+-)?bg|[\w-]+-surface(?:-muted)?|highlight-[\w-]+-bg|block-[\w-]+-(?:header|content)-bg|theorem-[\w-]+-bg)\b/
@@ -122,6 +170,7 @@ for (const [name, text] of Object.entries({
   footerTocPreview: files.footerTocPreview,
   highlight: files.highlight,
   theorem: files.theorem,
+  themePreview: files.themePreview,
   appendixIndex: files.appendixIndex,
   experimentGrid: files.experimentGrid,
   methodPipeline: files.methodPipeline,
@@ -134,6 +183,36 @@ for (const [name, text] of Object.entries({
 for (const { name, text } of styleBearingFiles)
   expectNoBackgroundSurfaceColorDeclarations(name, text)
 
+for (const { name, text } of styleBearingFiles.filter(file => /^(?:components|layouts)\//.test(file.name))) {
+  expectNotMatch(
+    name,
+    text,
+    /(^|[;{\n])\s*color\s*:\s*var\(--(?:slidev-theme-primary(?:-light)?|scholarly-text-primary)\b/m,
+    'raw palette tokens in text color declarations; use content foreground semantics',
+  )
+  expectNotMatch(
+    name,
+    text,
+    /--[\w-]+\s*:\s*var\(--(?:slidev-theme-primary(?:-light)?|scholarly-text-primary)\b/m,
+    'raw palette aliases; component-local foreground aliases must use content semantics',
+  )
+}
+
+for (const { name, text } of styleBearingFiles.filter(file => /^layouts\//.test(file.name))) {
+  expectNotMatch(
+    name,
+    text,
+    /\b(?:text|bg|border)-(?:gray|slate|black|white)(?:-[0-9]+)?\b/,
+    'fixed neutral utility colors; use content surface and foreground tokens',
+  )
+  expectNotMatch(
+    name,
+    text,
+    /(^|[;{\n])\s*color\s*:\s*(?:white|#fff(?:fff)?)(?:\s*!important)?\s*(?=;|}|$)/im,
+    'fixed white text colors; use a semantic foreground token',
+  )
+}
+
 for (const [name, text] of Object.entries({
   'FooterTocControl.vue': files.footerToc,
   'FooterTocPreviewCard.vue': files.footerTocPreview,
@@ -142,6 +221,19 @@ for (const [name, text] of Object.entries({
   expectNotContains(name, text, '--scholarly-bg-warm')
   expectNotContains(name, text, '--scholarly-text-primary')
   expectNotContains(name, text, '--scholarly-chrome-border')
+}
+
+for (const [name, text] of Object.entries({
+  'FooterTocControl.vue': files.footerToc,
+  'FooterTocPreviewCard.vue': files.footerTocPreview,
+  'ThemePreview.vue': files.themePreview,
+})) {
+  expectNotMatch(
+    name,
+    text,
+    /(^|[;{\n])\s*color\s*:\s*(?:white|#fff(?:fff)?)(?:\s*!important)?\s*(?=;|}|$)/im,
+    'fixed white text colors in theme-sensitive preview or TOC badges',
+  )
 }
 
 for (const [name, text] of Object.entries({
@@ -157,9 +249,27 @@ expectCssBlockContains('appendix-index.vue', files.appendixIndex, '.appendix-ind
 expectCssBlockContains('experiment-grid.vue', files.experimentGrid, '.experiment-grid-card-header span', 'color: var(--scholarly-content-on-primary)')
 expectCssBlockContains('method-pipeline.vue', files.methodPipeline, '.method-pipeline-number', 'color: var(--scholarly-content-on-primary)')
 expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-slide-title', 'color: var(--scholarly-toc-slide-fg')
+expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-section-index', 'background: var(--scholarly-toc-badge-bg')
+expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-section-index', 'color: var(--scholarly-toc-badge-fg')
+expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-slide.is-active .footer-toc-slide-index', 'background: var(--scholarly-toc-badge-bg')
+expectCssBlockContains('FooterTocControl.vue', files.footerToc, '.footer-toc-slide.is-active .footer-toc-slide-index', 'color: var(--scholarly-toc-badge-fg')
+expectCssBlockContains('FooterTocPreviewCard.vue', files.footerTocPreview, '.footer-toc-preview-badge', 'background: var(--scholarly-toc-badge-bg')
+expectCssBlockContains('FooterTocPreviewCard.vue', files.footerTocPreview, '.footer-toc-preview-badge', 'color: var(--scholarly-toc-badge-fg')
+expectCssBlockContains('ThemePreview.vue', files.themePreview, '.theme-preview :deep(.theorem-title)', 'color: var(--preview-on-primary)')
+expectContains('ThemePreview.vue semantic preview accent', files.themePreview, '--preview-content-accent')
 
 expectContains('mode.css', files.mode, "@import './content-mode.css';")
 expectContains('mode.css', files.mode, "@import './chrome-mode.css';")
+expectContains('content-mode.css accent token', files.contentMode, '--scholarly-content-accent-fg')
+expectContains('content-mode.css light Shiki override', files.contentMode, ':root[data-content-mode="light"] .shiki')
+expectContains('content-mode.css dark Shiki override', files.contentMode, ':root[data-content-mode="dark"] .shiki')
+expectContains('content-mode.css light Shiki token', files.contentMode, '--shiki-light')
+expectContains('content-mode.css dark Shiki token', files.contentMode, '--shiki-dark')
+expectContains('content-mode.css Princeton readable accent', files.contentMode, ':root[data-content-mode="light"][data-color-theme="princeton-orange"]')
+expectRootBlocksDoNotSetSlidevThemeSurface('section-mode.css', files.sectionMode)
+expectContains('section-mode.css section blocks', files.sectionMode, '.slidev-layout.section')
+expectContains('section-mode.css section blocks', files.sectionMode, '--slidev-theme-background')
+expectContains('section-mode.css section blocks', files.sectionMode, '--slidev-theme-text')
 
 const lightContentBlockMatch = files.contentMode.match(/:root,\s*\n:root\[data-content-mode="light"\]\s*\{([\s\S]*?)\n\}/)
 const darkContentBlockMatch = files.contentMode.match(/:root\[data-content-mode="dark"\]\s*\{([\s\S]*?)\n\}/)
@@ -181,6 +291,10 @@ if (!lightChromeBlockMatch)
 
 expectContains('chrome-mode.css light chrome block', lightChromeBlock, '--scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 72%')
 expectContains('chrome-mode.css default/dark chrome block', darkChromeBlock, '--scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66)')
+expectContains('chrome-mode.css Princeton ink foreground', files.chromeMode, ':root[data-color-theme="princeton-orange"]:not([data-chrome-mode="light"])')
+expectContains('chrome-mode.css Princeton toolbar foreground', files.chromeMode, '--scholarly-toolbar-fg: #1c1c1c')
+expectContains('chrome-mode.css Princeton toolbar surface', files.chromeMode, 'var(--slidev-theme-primary-light, #f08f42) 0%')
+expectContains('section-mode.css Princeton ink foreground', files.sectionMode, ':root[data-color-theme="princeton-orange"] .slidev-layout.section:not([data-section-mode="light"])')
 
 const requiredContentTokens = [
   '--scholarly-canvas-bg',
@@ -189,6 +303,8 @@ const requiredContentTokens = [
   '--scholarly-content-surface-muted',
   '--scholarly-content-border',
   '--scholarly-content-fg',
+  '--scholarly-content-accent-fg',
+  '--scholarly-content-purple-fg',
   '--scholarly-content-fg-muted',
   '--scholarly-content-on-primary',
   '--scholarly-footnote-fg',
@@ -209,6 +325,14 @@ const requiredContentTokens = [
   '--scholarly-table-rule',
 ]
 
+const requiredSlidevCodeTokens = [
+  '--slidev-code-background',
+  '--slidev-code-foreground',
+  '--slidev-code-tab-divider',
+  '--slidev-code-tab-text-color',
+  '--slidev-code-tab-active-text-color',
+]
+
 const requiredChromeTokens = [
   '--scholarly-chrome-bg',
   '--scholarly-chrome-fg',
@@ -223,6 +347,8 @@ const requiredChromeTokens = [
   '--scholarly-toc-fg-muted',
   '--scholarly-toc-slide-fg',
   '--scholarly-toc-slide-index-fg',
+  '--scholarly-toc-badge-bg',
+  '--scholarly-toc-badge-fg',
   '--scholarly-toc-border',
   '--scholarly-toc-rule',
   '--scholarly-toc-section-border',
@@ -262,6 +388,31 @@ for (const type of blockTypes) {
   expectCssBlockContains('Block.vue', files.block, `.block-${type}:not(:has(.block-header)) .block-content`, `var(--scholarly-block-${type}-border`)
 }
 
+for (const [blockName, block] of [
+  ['default/light', lightContentBlock],
+  ['dark', darkContentBlock],
+]) {
+  expectContains(
+    `content-mode.css ${blockName} default block header`,
+    block,
+    '--scholarly-block-default-header-fg: var(--scholarly-content-on-primary)',
+  )
+
+  for (const type of ['info', 'success', 'warning', 'danger', 'example', 'alert']) {
+    const backgroundMatch = block.match(new RegExp(`--scholarly-block-${type}-header-bg:\\s*linear-gradient\\(to right,\\s*(#[0-9a-f]{6}),\\s*(#[0-9a-f]{6})\\)`, 'i'))
+    const foregroundMatch = block.match(new RegExp(`--scholarly-block-${type}-header-fg:\\s*(#[0-9a-f]{6})`, 'i'))
+
+    if (!backgroundMatch || !foregroundMatch) {
+      failures.push(`content-mode.css ${blockName} ${type} block header should use testable hex foreground and gradient endpoints`)
+      continue
+    }
+
+    const foreground = hexToRgb(foregroundMatch[1])
+    expectContrast(`${blockName} ${type} block header start`, foreground, hexToRgb(backgroundMatch[1]))
+    expectContrast(`${blockName} ${type} block header end`, foreground, hexToRgb(backgroundMatch[2]))
+  }
+}
+
 const theoremTypes = ['theorem', 'lemma', 'proposition', 'corollary', 'definition', 'example', 'remark', 'proof', 'note', 'claim']
 for (const type of theoremTypes) {
   requiredContentTokens.push(`--scholarly-theorem-${type}-accent`)
@@ -269,11 +420,88 @@ for (const type of theoremTypes) {
   expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-accent`)
   expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type}`, `var(--scholarly-theorem-${type}-bg`)
   expectCssBlockContains('Theorem.vue', files.theorem, `.theorem-${type} .theorem-type`, `var(--scholarly-theorem-${type}-accent`)
+
+  const accentToken = `--scholarly-theorem-${type}-accent`
+  const backgroundToken = `--scholarly-theorem-${type}-bg`
+  const lightAccentMatch = lightContentBlock.match(new RegExp(`${accentToken}:\\s*(#[0-9a-f]{6})`, 'i'))
+  const lightBackgroundMatch = lightContentBlock.match(new RegExp(`${backgroundToken}:\\s*color-mix\\(in srgb,\\s*(#[0-9a-f]{6})\\s+10%,\\s*transparent\\)`, 'i'))
+  const darkAccentMatch = darkContentBlock.match(new RegExp(`${accentToken}:\\s*(#[0-9a-f]{6})`, 'i'))
+  const darkBackgroundMatch = darkContentBlock.match(new RegExp(`${backgroundToken}:\\s*color-mix\\(in srgb,\\s*(#[0-9a-f]{6})\\s+12%,\\s*transparent\\)`, 'i'))
+
+  if (!lightAccentMatch || !lightBackgroundMatch) {
+    failures.push(`content-mode.css light content block should define testable ${type} theorem colors`)
+  }
+  else {
+    for (const theme of themes.colorThemes) {
+      const compositedBackground = mixRgb(
+        hexToRgb(lightBackgroundMatch[1]),
+        hexToRgb(theme.palette.background),
+        0.1,
+      )
+      expectContrast(`light ${theme.id} ${type} theorem accent`, hexToRgb(lightAccentMatch[1]), compositedBackground)
+    }
+  }
+
+  if (!darkAccentMatch || !darkBackgroundMatch) {
+    failures.push(`content-mode.css dark content block should define testable ${type} theorem colors`)
+  }
+  else {
+    const compositedBackground = mixRgb(hexToRgb(darkBackgroundMatch[1]), hexToRgb('#0f172a'), 0.12)
+    expectContrast(`dark ${type} theorem accent`, hexToRgb(darkAccentMatch[1]), compositedBackground)
+  }
+}
+
+const factVariants = {
+  primary: '--scholarly-content-accent-fg',
+  blue: '--scholarly-highlight-info-fg',
+  green: '--scholarly-highlight-success-fg',
+  amber: '--scholarly-highlight-warning-fg',
+  red: '--scholarly-highlight-danger-fg',
+  purple: '--scholarly-content-purple-fg',
+}
+for (const [variant, token] of Object.entries(factVariants)) {
+  expectCssBlockContains('fact.vue', files.fact, `.fact-${variant}`, `--fact-color-start: var(${token})`)
+  expectCssBlockContains('fact.vue', files.fact, `.fact-${variant}`, '--fact-color-end: color-mix(')
 }
 
 for (const token of requiredContentTokens) {
   expectTokenInBlock('content-mode.css default/light content block', lightContentBlock, token)
   expectTokenInBlock('content-mode.css dark content block', darkContentBlock, token)
+}
+
+for (const token of requiredSlidevCodeTokens) {
+  expectTokenInBlock('content-mode.css default/light content block', lightContentBlock, token)
+  expectTokenInBlock('content-mode.css dark content block', darkContentBlock, token)
+}
+
+for (const theme of themes.colorThemes) {
+  const background = hexToRgb(theme.palette.background)
+  const primary = hexToRgb(theme.palette.primary)
+  const accent = theme.id === 'princeton-orange'
+    ? mixRgb(primary, hexToRgb(theme.palette.foreground), 0.6)
+    : primary
+  expectContrast(`light ${theme.id} content accent`, accent, background)
+  const mutedForeground = mixRgb(hexToRgb(theme.palette.foreground), hexToRgb('#ffffff'), 0.72)
+  expectContrast(`light ${theme.id} muted content`, mutedForeground, background)
+
+  const defaultHeaderForeground = hexToRgb(theme.id === 'princeton-orange' ? '#1c1c1c' : '#ffffff')
+  expectContrast(`light ${theme.id} default block header start`, defaultHeaderForeground, primary)
+  expectContrast(`light ${theme.id} default block header end`, defaultHeaderForeground, hexToRgb(theme.palette.primaryLight))
+
+  const badgeBackground = mixRgb(primary, hexToRgb(theme.palette.accent), 0.88)
+  expectContrast(`${theme.id} TOC badge`, defaultHeaderForeground, badgeBackground)
+
+  expectContrast(`${theme.id} dark chrome start`, defaultHeaderForeground, primary)
+  expectContrast(`${theme.id} dark chrome end`, defaultHeaderForeground, hexToRgb(theme.palette.primaryLight))
+  expectContrast(`${theme.id} dark section start`, defaultHeaderForeground, primary)
+  expectContrast(`${theme.id} dark section end`, defaultHeaderForeground, hexToRgb(theme.palette.primaryLight))
+
+  if (theme.id === 'princeton-orange') {
+    const mutedSurfaceForeground = mixRgb(defaultHeaderForeground, primary, 0.88)
+    const mutedSurfaceForegroundEnd = mixRgb(defaultHeaderForeground, hexToRgb(theme.palette.primaryLight), 0.88)
+    expectContrast('princeton-orange muted chrome/section start', mutedSurfaceForeground, primary)
+    expectContrast('princeton-orange muted chrome/section end', mutedSurfaceForegroundEnd, hexToRgb(theme.palette.primaryLight))
+  }
 }
 
 for (const token of requiredChromeTokens) {

@@ -7,7 +7,9 @@ const files = {
   internalAnchors: await readFile(new URL('../utils/internalAnchorNavigation.ts', import.meta.url), 'utf8'),
   mainSetup: await readFile(new URL('../setup/main.ts', import.meta.url), 'utf8'),
   layout: await readFile(new URL('../styles/layout.css', import.meta.url), 'utf8'),
+  colorThemes: await readFile(new URL('../styles/themes/colors.css', import.meta.url), 'utf8'),
   sectionLayout: await readFile(new URL('../layouts/section.vue', import.meta.url), 'utf8'),
+  contentMode: await readFile(new URL('../styles/themes/content-mode.css', import.meta.url), 'utf8'),
   themeMode: await readFile(new URL('../styles/themes/mode.css', import.meta.url), 'utf8'),
 }
 
@@ -76,10 +78,13 @@ test('footnotes use dedicated readable tokens instead of blending with slide bac
   }
 })
 
-test('theme color presets are promoted at runtime so Slidev body tokens cannot mask them', () => {
-  assert.match(files.mainSetup, /COLOR_THEME_PRESETS/)
+test('theme color presets have one CSS source while runtime only applies custom overrides', () => {
+  assert.doesNotMatch(files.mainSetup, /COLOR_THEME_PRESETS/)
   assert.match(files.mainSetup, /applyThemePresetColors/)
+  assert.match(files.mainSetup, /normalizeThemeColorValue\(customColors\?\.\[key\]\)/)
   assert.match(files.mainSetup, /document\.body/)
+  assert.match(files.colorThemes, /:root\[data-color-theme="classic-blue"\]/)
+  assert.match(files.colorThemes, /--slidev-theme-primary:\s*#1e3a5f/)
 })
 
 test('route navigation does not rebuild the full internal anchor registry', () => {
@@ -102,6 +107,13 @@ test('explicit theme modes sync content chrome and section attributes', () => {
   assert.match(files.mainSetup, /data-section-mode/)
   assert.match(files.mainSetup, /data-color-mode/)
   assert.doesNotMatch(files.mainSetup, /if \(config\?\.colorMode\) return/)
+})
+
+test('content mode selects matching Shiki colors without owning Slidev dark state', () => {
+  assert.match(files.contentMode, /:root\[data-content-mode="light"\] \.shiki/)
+  assert.match(files.contentMode, /color:\s*var\(--shiki-light/)
+  assert.match(files.contentMode, /:root\[data-content-mode="dark"\] \.shiki/)
+  assert.match(files.contentMode, /color:\s*var\(--shiki-dark/)
 })
 
 test('mode compatibility entrypoint imports split content and chrome token files', () => {

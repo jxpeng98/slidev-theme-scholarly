@@ -8,7 +8,6 @@ lang: en
 themeConfig:
   colorTheme: cambridge-green
   fontTheme: elegant
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

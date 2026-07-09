@@ -8,7 +8,6 @@ lang: en
 themeConfig:
   colorTheme: nordic-blue
   fontTheme: classic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

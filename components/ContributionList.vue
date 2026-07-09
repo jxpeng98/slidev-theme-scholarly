@@ -55,7 +55,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .scholarly-contribution-list {
-  --contribution-accent: var(--slidev-theme-primary);
+  --contribution-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --contribution-soft-bg: var(--scholarly-content-surface-muted);
   display: flex;
   flex-direction: column;

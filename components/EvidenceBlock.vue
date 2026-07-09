@@ -48,7 +48,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .scholarly-evidence-block {
-  --evidence-accent: var(--slidev-theme-primary);
+  --evidence-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --evidence-soft-bg: var(--scholarly-content-surface-muted);
   margin: 0.85rem 0;
   overflow: hidden;

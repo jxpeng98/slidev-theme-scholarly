@@ -81,6 +81,8 @@ const cssVars = computed(() => ({
   '--preview-accent': colors.value.accent,
   '--preview-bg-warm': colors.value.bgWarm,
   '--preview-text-primary': colors.value.textPrimary,
+  '--preview-content-accent': props.colorTheme === 'princeton-orange' ? '#9d5926' : colors.value.primary,
+  '--preview-on-primary': props.colorTheme === 'princeton-orange' ? '#1c1c1c' : '#ffffff',
 }))
 </script>
 
@@ -102,7 +104,7 @@ const cssVars = computed(() => ({
 .theme-preview :deep(h1),
 .theme-preview :deep(h2),
 .theme-preview :deep(h3) {
-  color: var(--preview-primary);
+  color: var(--preview-content-accent);
 }
 
 .theme-preview :deep(.block),
@@ -117,7 +119,7 @@ const cssVars = computed(() => ({
 
 .theme-preview :deep(.theorem-title) {
   background: var(--preview-primary);
-  color: white;
+  color: var(--preview-on-primary);
 }
 
 .theme-preview :deep(a) {
@@ -125,11 +127,11 @@ const cssVars = computed(() => ({
 }
 
 .theme-preview :deep(strong) {
-  color: var(--preview-primary);
+  color: var(--preview-content-accent);
 }
 
 .theme-preview :deep(code) {
   background: color-mix(in srgb, var(--preview-primary) 10%, var(--preview-bg-warm));
-  color: var(--preview-primary);
+  color: var(--preview-content-accent);
 }
 </style>

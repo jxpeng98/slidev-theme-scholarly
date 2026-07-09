@@ -1048,8 +1048,8 @@ onUnmounted(() => {
 
 /* Section badge — primary-color matte pill */
 .footer-toc-section-index {
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, var(--scholarly-accent, #b8860b) 12%);
-  color: #fff;
+  background: var(--scholarly-toc-badge-bg, #1e3a5f);
+  color: var(--scholarly-toc-badge-fg, #ffffff);
   box-shadow: none;
 }
 
@@ -1131,8 +1131,8 @@ onUnmounted(() => {
 }
 
 .footer-toc-slide.is-active .footer-toc-slide-index {
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 82%, var(--scholarly-accent, #b8860b) 18%);
-  color: #fff;
+  background: var(--scholarly-toc-badge-bg, #1e3a5f);
+  color: var(--scholarly-toc-badge-fg, #ffffff);
   box-shadow: none;
 }
 

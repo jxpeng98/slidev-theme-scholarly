@@ -214,7 +214,7 @@ const highlightCurrent = computed(() => props.highlightCurrent !== false)
 /* Title - matching bullets h1/h2 style */
 .toc-title {
   margin-bottom: 1.5rem;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
   font-family: var(--scholarly-font-sans, sans-serif);
   font-size: 2rem;
   font-weight: 700;
@@ -267,7 +267,7 @@ const highlightCurrent = computed(() => props.highlightCurrent !== false)
   width: 1.75rem;
   height: 1.75rem;
   background: var(--slidev-theme-primary, #1e3a5f);
-  color: white;
+  color: var(--scholarly-content-on-primary, white);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -283,17 +283,17 @@ const highlightCurrent = computed(() => props.highlightCurrent !== false)
 
 /* Section title */
 .toc-section-title {
-  color: #1f2937 !important;
+  color: var(--scholarly-content-fg, #1f2937) !important;
   font-family: var(--scholarly-font-serif, serif);
 }
 
 .toc-item.is-active .toc-section-title {
-  color: var(--slidev-theme-primary, #1e3a5f) !important;
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f)) !important;
 }
 
 /* Section subtitle */
 .toc-section-subtitle {
-  color: #6b7280 !important;
+  color: var(--scholarly-content-fg-muted, #6b7280) !important;
   font-size: 0.85em;
   font-style: italic;
   margin-left: 0.25em;
@@ -301,6 +301,6 @@ const highlightCurrent = computed(() => props.highlightCurrent !== false)
 
 /* Strong text emphasis - matching bullets */
 .toc-content :deep(strong) {
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
 }
 </style>

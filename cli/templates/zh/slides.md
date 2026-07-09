@@ -8,7 +8,6 @@ lang: zh-CN
 themeConfig:
   colorTheme: cambridge-green
   fontTheme: academic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

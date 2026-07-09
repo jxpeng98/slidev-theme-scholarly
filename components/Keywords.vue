@@ -48,26 +48,26 @@ const resolvedColor = computed(() => props.color ?? 'primary')
 
 .keyword-primary {
   background: rgba(93, 131, 146, 0.15);
-  color: #4a6b7a;
+  color: var(--scholarly-content-accent-fg, #4a6b7a);
 }
 
 .keyword-blue {
   background: rgba(59, 130, 246, 0.15);
-  color: #2563eb;
+  color: var(--scholarly-highlight-info-fg, #2563eb);
 }
 
 .keyword-green {
   background: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  color: var(--scholarly-highlight-success-fg, #059669);
 }
 
 .keyword-purple {
   background: rgba(139, 92, 246, 0.15);
-  color: #7c3aed;
+  color: color-mix(in srgb, #8b5cf6 56%, var(--scholarly-content-fg, #ffffff) 44%);
 }
 
 .keyword-gray {
   background: rgba(107, 114, 128, 0.15);
-  color: #4b5563;
+  color: var(--scholarly-content-fg-muted, #4b5563);
 }
 </style>

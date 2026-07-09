@@ -127,7 +127,6 @@ authors:
     institution: Your University
 themeConfig:
   colorTheme: classic-blue
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
 footerMiddle: Conference 2026

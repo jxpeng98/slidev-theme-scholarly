@@ -8,7 +8,6 @@ lang: en
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: academic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

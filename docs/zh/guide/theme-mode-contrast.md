@@ -10,6 +10,8 @@ Scholarly 将配色身份和可读性 token 分开处理。用 `colorTheme` 控�
 
 ## 推荐默认值
 
+起始模板默认省略 `contentMode`，让新演示自动跟随 Slidev 的明暗状态。如果投影环境需要始终稳定的浅色纸张表面，可显式固定为下面这组配置。
+
 ```yaml
 themeConfig:
   colorTheme: classic-blue

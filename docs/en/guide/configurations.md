@@ -22,7 +22,6 @@ authors:
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
 ---
@@ -69,7 +68,6 @@ Use `themeConfig` for visual and player behavior:
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   beamerNav: false

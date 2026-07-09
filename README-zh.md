@@ -127,7 +127,6 @@ authors:
     institution: 你的大学
 themeConfig:
   colorTheme: classic-blue
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
 footerMiddle: 2026 年会议

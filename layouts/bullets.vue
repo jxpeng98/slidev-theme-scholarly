@@ -55,7 +55,7 @@ const computedStyles = useFontSizeStyles()
 .bullets-content :deep(h1),
 .bullets-content :deep(h2) {
   margin-bottom: 1.5rem;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
   font-family: var(--scholarly-font-sans, sans-serif);
 }
 
@@ -77,7 +77,7 @@ const computedStyles = useFontSizeStyles()
   content: var(--bullet-icon, "▸");
   position: absolute;
   left: 0;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
   font-weight: bold;
 }
 
@@ -95,7 +95,7 @@ const computedStyles = useFontSizeStyles()
 
 .bullets-content :deep(ul ul > li::before) {
   content: "–";
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
 }
 
 /* Ordered list styling */
@@ -122,7 +122,7 @@ const computedStyles = useFontSizeStyles()
   width: 1.75rem;
   height: 1.75rem;
   background: var(--slidev-theme-primary, #1e3a5f);
-  color: white;
+  color: var(--scholarly-content-on-primary, white);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -133,6 +133,6 @@ const computedStyles = useFontSizeStyles()
 
 /* Strong text emphasis */
 .bullets-content :deep(strong) {
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
 }
 </style>

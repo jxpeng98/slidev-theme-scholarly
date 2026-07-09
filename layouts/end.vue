@@ -8,7 +8,7 @@
           </slot>
         </div>
         
-        <div class="end-subtitle" v-if="$slots.default || email || website">
+        <div class="end-subtitle" v-if="$slots.default || subtitle || email || website">
           <slot>
             <p v-if="subtitle">{{ subtitle }}</p>
           </slot>
@@ -82,13 +82,13 @@ const thankYouText = computed(() => {
 .end-title :deep(h1) {
   font-size: 4rem;
   font-weight: 700;
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   margin-bottom: 1rem;
 }
 
 .end-subtitle {
   font-size: 1.75rem;
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
   margin-bottom: 2rem;
 }
 
@@ -116,7 +116,7 @@ const thankYouText = computed(() => {
 }
 
 .contact-item a {
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   text-decoration: none;
 }
 
@@ -137,7 +137,7 @@ const thankYouText = computed(() => {
 
 .qr-label {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: var(--scholarly-content-fg-muted, #9ca3af);
   margin-top: 0.5rem;
 }
 </style>

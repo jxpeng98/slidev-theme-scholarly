@@ -78,7 +78,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
 
 .related-work-eyebrow {
   margin: 0 0 0.3rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.7rem;
   font-weight: 700;
@@ -88,7 +88,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
 
 .related-work-intro h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.55rem;
   line-height: 1.16;
@@ -140,7 +140,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
   top: 0;
   z-index: 1;
   background: color-mix(in srgb, var(--slidev-theme-primary) 10%, var(--scholarly-content-surface) 90%);
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.68rem;
   font-weight: 750;
@@ -152,7 +152,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
 }
 
 .related-work-shell :deep(strong) {
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
 }
 
 .related-work-notes {

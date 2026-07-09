@@ -24,6 +24,8 @@
   --scholarly-toc-fg-muted: rgba(255, 255, 255, 0.62);
   --scholarly-toc-slide-fg: rgba(255, 255, 255, 0.78);
   --scholarly-toc-slide-index-fg: rgba(255, 255, 255, 0.66);
+  --scholarly-toc-badge-bg: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, var(--scholarly-accent, #b8860b) 12%);
+  --scholarly-toc-badge-fg: #ffffff;
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 76%, var(--scholarly-accent, #b8860b) 12%, transparent);
   --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 62%, transparent);
   --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, rgba(255, 255, 255, 0.2)) 52%, transparent);
@@ -64,6 +66,8 @@
   --scholarly-toc-fg-muted: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 52%, transparent);
   --scholarly-toc-slide-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 74%, transparent);
   --scholarly-toc-slide-index-fg: color-mix(in srgb, var(--scholarly-chrome-fg, #2d3748) 72%, transparent);
+  --scholarly-toc-badge-bg: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 88%, var(--scholarly-accent, #b8860b) 12%);
+  --scholarly-toc-badge-fg: #ffffff;
   --scholarly-toc-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 72%, var(--scholarly-accent, #b8860b) 8%, #c4b998 20%);
   --scholarly-toc-rule: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 62%, transparent);
   --scholarly-toc-section-border: color-mix(in srgb, var(--scholarly-chrome-border, #dbe3ec) 52%, transparent);
@@ -90,4 +94,21 @@
   --scholarly-footer-fg: #1f2937;
   --scholarly-footer-fg-muted: rgba(31, 41, 55, 0.88);
   --scholarly-footer-border: rgba(31, 41, 55, 0.2);
+  --scholarly-toc-badge-fg: #1c1c1c;
+}
+
+:root[data-color-theme="princeton-orange"]:not([data-chrome-mode="light"]) {
+  --scholarly-chrome-fg: #1c1c1c;
+  --scholarly-chrome-fg-muted: rgba(28, 28, 28, 0.88);
+  --scholarly-chrome-border: rgba(28, 28, 28, 0.24);
+  --scholarly-toolbar-surface: linear-gradient(
+    180deg,
+    var(--slidev-theme-primary-light, #f08f42) 0%,
+    var(--slidev-theme-primary, #e87722) 100%
+  );
+  --scholarly-toolbar-fg: #1c1c1c;
+  --scholarly-toolbar-border: rgba(28, 28, 28, 0.24);
+  --scholarly-toolbar-hover: rgba(28, 28, 28, 0.1);
+  --scholarly-toolbar-divider: rgba(28, 28, 28, 0.24);
+  --scholarly-toolbar-chip: rgba(28, 28, 28, 0.08);
 }

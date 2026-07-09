@@ -43,74 +43,7 @@ type ThemeColorConfig = {
   footerRightBg?: string
 }
 
-type ThemeColorPreset = Pick<ThemeColorConfig, 'primary' | 'primaryLight' | 'accent' | 'bgWarm' | 'textPrimary'>
-
 const DEFAULT_COLOR_THEME = 'classic-blue'
-const COLOR_THEME_PRESETS: Record<string, ThemeColorPreset> = {
-  'classic-blue': {
-    primary: '#1e3a5f',
-    primaryLight: '#2c5282',
-    accent: '#b8860b',
-    bgWarm: '#fdfbf7',
-    textPrimary: '#2d3748',
-  },
-  'oxford-burgundy': {
-    primary: '#862633',
-    primaryLight: '#a23648',
-    accent: '#c5a572',
-    bgWarm: '#faf8f5',
-    textPrimary: '#2d1b1e',
-  },
-  'cambridge-green': {
-    primary: '#00543c',
-    primaryLight: '#006b4a',
-    accent: '#d4af37',
-    bgWarm: '#f8faf7',
-    textPrimary: '#1a2f1a',
-  },
-  'princeton-orange': {
-    primary: '#e87722',
-    primaryLight: '#f08f42',
-    accent: '#1c1c1c',
-    bgWarm: '#fffbf5',
-    textPrimary: '#2d2d2d',
-  },
-  'yale-blue': {
-    primary: '#0f4d92',
-    primaryLight: '#286fb4',
-    accent: '#d4af37',
-    bgWarm: '#f7f9fc',
-    textPrimary: '#1a2332',
-  },
-  'monochrome': {
-    primary: '#2d3748',
-    primaryLight: '#4a5568',
-    accent: '#718096',
-    bgWarm: '#ffffff',
-    textPrimary: '#1a202c',
-  },
-  'warm-sepia': {
-    primary: '#5d4037',
-    primaryLight: '#795548',
-    accent: '#d4a574',
-    bgWarm: '#faf6f1',
-    textPrimary: '#3e2723',
-  },
-  'nordic-blue': {
-    primary: '#2e5266',
-    primaryLight: '#4a7c9c',
-    accent: '#d4a762',
-    bgWarm: '#f5f8fa',
-    textPrimary: '#1e3a4a',
-  },
-  'high-contrast': {
-    primary: '#000000',
-    primaryLight: '#333333',
-    accent: '#0066cc',
-    bgWarm: '#ffffff',
-    textPrimary: '#000000',
-  },
-}
 
 const THEME_COLOR_VARIABLES: Array<[keyof ThemeColorConfig, string]> = [
   ['primary', '--slidev-theme-primary'],
@@ -242,13 +175,11 @@ const applyThemePresetColors = (
 ) => {
   if (typeof window === 'undefined') return
 
-  const preset = COLOR_THEME_PRESETS[colorTheme || DEFAULT_COLOR_THEME] ?? COLOR_THEME_PRESETS[DEFAULT_COLOR_THEME]
-  const presetColors = preset as Partial<ThemeColorConfig>
   const targets = getThemeColorTargets()
 
   for (const target of targets) {
     for (const [key, cssVar] of THEME_COLOR_VARIABLES) {
-      const value = normalizeThemeColorValue(customColors?.[key] ?? presetColors[key])
+      const value = normalizeThemeColorValue(customColors?.[key])
       if (value)
         target.style.setProperty(cssVar, value)
       else
@@ -297,7 +228,6 @@ const syncThemeModesWithDark = (config?: ThemeConfig | null) => {
   root.setAttribute('data-chrome-mode', resolution.chromeMode)
   root.setAttribute('data-section-mode', resolution.sectionMode)
   root.setAttribute('data-color-mode', resolution.contentMode)
-  root.classList.toggle('dark', resolution.contentMode === 'dark')
   root.style.colorScheme = resolution.contentMode
 }
 
@@ -967,8 +897,8 @@ const setupDarkModeSync = (config: ThemeConfig | null | undefined) => {
   // Initial sync
   syncThemeModesWithDark(config)
 
-  // Watch Slidev's dark class. Explicit Scholarly modes restore the resolved
-  // content/chrome/section attributes if Slidev or the system toggles dark mode.
+  // Watch Slidev's dark class and reflect it into Scholarly surface attributes.
+  // Slidev remains the owner of html.dark.
   darkModeObserver = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {

@@ -11,6 +11,8 @@ Use `colorTheme` for identity, `contentMode` for the normal slide surface,
 
 ## Recommended defaults
 
+Starter templates omit `contentMode`, so new decks follow Slidev's light/dark state automatically. Pin the projection-oriented combination below when you need a predictable light paper surface in every environment.
+
 ```yaml
 themeConfig:
   colorTheme: classic-blue

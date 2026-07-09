@@ -85,20 +85,20 @@ const imageStyle = computed(() => ({
 
 .figure-caption {
   font-size: 1.1rem;
-  color: #4b5563;
+  color: var(--scholarly-content-fg-muted, #4b5563);
   margin-bottom: 0.75rem;
   max-width: 80%;
 }
 
 .caption-label {
   font-weight: 600;
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   margin-right: 0.5rem;
 }
 
 .figure-description {
   font-size: 1rem;
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
   max-width: 70%;
   line-height: 1.5;
 }

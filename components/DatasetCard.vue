@@ -78,7 +78,7 @@ const metaItems = computed(() => [
 
 <style scoped>
 .scholarly-dataset-card {
-  --dataset-accent: var(--slidev-theme-primary);
+  --dataset-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --dataset-soft-bg: var(--scholarly-content-surface-muted);
   display: flex;
   flex-direction: column;

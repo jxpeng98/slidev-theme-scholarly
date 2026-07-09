@@ -8,29 +8,29 @@
 
       <div class="grid gap-16 w-full max-w-5xl" :class="gridCols">
         <div v-if="funders && funders.length" class="text-center">
-          <h3 class="text-lg font-serif italic text-gray-500 mb-6 border-b border-gray-200 pb-2 inline-block px-6">
+          <h3 class="acknowledgment-label text-lg font-serif italic mb-6 border-b pb-2 inline-block px-6">
             Funded By
           </h3>
           <ul class="space-y-4">
-            <li v-for="funder in funders" :key="funder" class="text-xl font-medium text-gray-800">
+            <li v-for="funder in funders" :key="funder" class="acknowledgment-item text-xl font-medium">
               {{ funder }}
             </li>
           </ul>
         </div>
 
         <div v-if="collaborators && collaborators.length" class="text-center">
-          <h3 class="text-lg font-serif italic text-gray-500 mb-6 border-b border-gray-200 pb-2 inline-block px-6">
+          <h3 class="acknowledgment-label text-lg font-serif italic mb-6 border-b pb-2 inline-block px-6">
             In Collaboration With
           </h3>
           <ul class="space-y-4">
-            <li v-for="collab in collaborators" :key="collab" class="text-xl font-medium text-gray-800">
+            <li v-for="collab in collaborators" :key="collab" class="acknowledgment-item text-xl font-medium">
               {{ collab }}
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="mt-12 text-gray-600 max-w-3xl">
+      <div class="acknowledgment-note mt-12 max-w-3xl">
         <slot />
       </div>
     </div>
@@ -65,6 +65,16 @@ const computedStyles = useFontSizeStyles()
 
 <style scoped>
 .text-primary {
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
+}
+.acknowledgment-label {
+  border-color: var(--scholarly-content-border, #e5e7eb);
+  color: var(--scholarly-content-fg-muted, #6b7280);
+}
+.acknowledgment-item {
+  color: var(--scholarly-content-fg, #1f2937);
+}
+.acknowledgment-note {
+  color: var(--scholarly-content-fg-muted, #4b5563);
 }
 </style>

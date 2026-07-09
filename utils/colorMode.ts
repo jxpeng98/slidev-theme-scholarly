@@ -45,7 +45,6 @@ export function applyRootColorMode(
   root.setAttribute('data-color-mode', resolution.mode)
 
   if (resolution.source === 'config') {
-    root.classList.toggle('dark', resolution.mode === 'dark')
     root.style.colorScheme = resolution.mode
     return
   }

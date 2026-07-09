@@ -7,7 +7,7 @@
           <slot />
         </div>
       </div>
-      <div class="flex-1 bg-gray-50 flex items-center justify-center p-6 relative border-l border-gray-200"
+      <div class="methodology-visual flex-1 flex items-center justify-center p-6 relative border-l"
            :style="{ flex: rightFlex }">
         <div class="pattern-grid"></div>
         <div class="w-full h-full flex items-center justify-center relative z-10">
@@ -55,9 +55,14 @@ const computedStyles = useFontSizeStyles()
 .pattern-grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+  background-image: radial-gradient(var(--scholarly-content-border, rgba(0,0,0,0.1)) 1px, transparent 1px);
   background-size: 16px 16px;
   opacity: 0.3;
   pointer-events: none;
+}
+
+.methodology-visual {
+  border-color: var(--scholarly-content-border, #e5e7eb);
+  background: var(--scholarly-content-surface-muted, #f9fafb);
 }
 </style>

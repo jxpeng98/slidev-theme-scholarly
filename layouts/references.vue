@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
   content: "[" counter(ref) "]";
   position: absolute;
   left: 0;
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   font-weight: 500;
   font-size: 0.9em;
 }
@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
   content: "•";
   position: absolute;
   left: 0.5rem;
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
 }
 
 /* Author names */
@@ -239,7 +239,7 @@ onBeforeUnmount(() => {
 
 /* Links */
 .references-content :deep(a) {
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   text-decoration: none;
 }
 

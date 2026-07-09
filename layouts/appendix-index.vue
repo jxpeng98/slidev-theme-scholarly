@@ -96,7 +96,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
 
 .appendix-index-eyebrow {
   margin: 0 0 0.3rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.7rem;
   font-weight: 700;
@@ -106,7 +106,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
 
 .appendix-index-heading h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.55rem;
   line-height: 1.16;
@@ -166,13 +166,13 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   height: 1.8rem;
   border: 1px solid var(--scholarly-content-border);
   background: var(--scholarly-content-surface-muted);
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-size: 0.72rem;
 }
 
 .appendix-index-copy h2 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.95rem;
   line-height: 1.2;

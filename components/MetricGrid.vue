@@ -75,7 +75,7 @@ const gridStyle = computed(() => ({
   --metric-grid-surface: var(--scholarly-content-surface);
   --metric-grid-border: var(--scholarly-content-border);
   --metric-grid-muted: var(--scholarly-content-fg-muted);
-  --metric-grid-primary: var(--slidev-theme-primary);
+  --metric-grid-primary: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   display: grid;
   width: 100%;
   min-width: 0;

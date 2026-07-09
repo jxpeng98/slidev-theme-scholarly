@@ -48,7 +48,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .scholarly-metric-card {
-  --metric-accent: var(--slidev-theme-primary);
+  --metric-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --metric-soft-bg: var(--scholarly-content-surface-muted);
   display: flex;
   min-width: 0;

@@ -559,7 +559,7 @@ themeColors:
 ---
 ```
 
-如果要自定义颜色，请使用 `themeColors`。Scholarly 会把选中的 `themeConfig.colorTheme` 预设同步到 `<html>` 和 `<body>`，因此 Slidev 默认写在 body 上的颜色 token 不会再遮住预设配色。
+如果要自定义颜色，请使用 `themeColors`。预设值由 `themeConfig.colorTheme` 选中的 CSS 规则提供；显式 `themeColors` 覆盖会同步到 `<html>` 和 `<body>`，确保它们在各个 Slidev 表面保持最高优先级。
 
 ## 实时示例
 

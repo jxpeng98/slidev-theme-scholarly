@@ -134,7 +134,7 @@ function formatCell(value: ResultCell, column: NormalizedColumn, row: ResultReco
   --result-table-border: var(--scholarly-content-border);
   --result-table-fg: var(--scholarly-content-fg);
   --result-table-muted: var(--scholarly-content-fg-muted);
-  --result-table-primary: var(--slidev-theme-primary);
+  --result-table-primary: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   width: 100%;
   margin: 0.75rem 0;
   color: var(--result-table-fg);

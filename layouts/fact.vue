@@ -37,10 +37,10 @@ const computedStyles = useFontSizeStyles()
   text-align: center;
   position: relative;
   padding: 3rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--scholarly-content-border, rgba(0, 0, 0, 0.05));
   border-radius: 8px;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.5);
+  background: color-mix(in srgb, var(--scholarly-content-surface, #ffffff) 86%, transparent);
   backdrop-filter: blur(5px);
 }
 
@@ -58,14 +58,14 @@ const computedStyles = useFontSizeStyles()
 
 .fact-number :deep(p) {
   font-size: 1.5rem;
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
   margin: 0;
 }
 
 .fact-number :deep(h2) {
   font-size: 2rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--scholarly-content-fg, #374151);
   margin: 0;
 }
 
@@ -82,32 +82,32 @@ const computedStyles = useFontSizeStyles()
 
 /* Color variants - Academic tones */
 .fact-primary {
-  --fact-color-start: #1e3a5f;
-  --fact-color-end: #2c5282;
+  --fact-color-start: var(--scholarly-content-accent-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-content-accent-fg) 72%, var(--scholarly-content-fg) 28%);
 }
 
 .fact-blue {
-  --fact-color-start: #2c5282;
-  --fact-color-end: #1a365d;
+  --fact-color-start: var(--scholarly-highlight-info-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-highlight-info-fg) 72%, var(--scholarly-content-fg) 28%);
 }
 
 .fact-green {
-  --fact-color-start: #276749;
-  --fact-color-end: #2f855a;
+  --fact-color-start: var(--scholarly-highlight-success-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-highlight-success-fg) 72%, var(--scholarly-content-fg) 28%);
 }
 
 .fact-amber {
-  --fact-color-start: #975a16;
-  --fact-color-end: #744210;
+  --fact-color-start: var(--scholarly-highlight-warning-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-highlight-warning-fg) 72%, var(--scholarly-content-fg) 28%);
 }
 
 .fact-red {
-  --fact-color-start: #9b2c2c;
-  --fact-color-end: #822727;
+  --fact-color-start: var(--scholarly-highlight-danger-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-highlight-danger-fg) 72%, var(--scholarly-content-fg) 28%);
 }
 
 .fact-purple {
-  --fact-color-start: #553c9a;
-  --fact-color-end: #44337a;
+  --fact-color-start: var(--scholarly-content-purple-fg);
+  --fact-color-end: color-mix(in srgb, var(--scholarly-content-purple-fg) 62%, var(--scholarly-content-fg) 38%);
 }
 </style>

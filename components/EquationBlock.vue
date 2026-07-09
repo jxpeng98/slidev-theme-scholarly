@@ -92,7 +92,7 @@ const displayReference = computed(() => {
 }
 
 .equation-label {
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0;

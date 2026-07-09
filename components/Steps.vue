@@ -51,8 +51,8 @@ const props = withDefaults(defineProps<{
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: #e5e7eb;
-  color: #6b7280;
+  background: var(--scholarly-content-surface-muted, #e5e7eb);
+  color: var(--scholarly-content-fg-muted, #6b7280);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<{
 
 .step-active .step-number {
   background: var(--slidev-theme-primary, #5d8392);
-  color: white;
+  color: var(--scholarly-content-on-primary, white);
   box-shadow: 0 0 0 4px rgba(93, 131, 146, 0.2);
 }
 
@@ -78,17 +78,17 @@ const props = withDefaults(defineProps<{
 .step-title {
   font-weight: 600;
   font-size: 1.1rem;
-  color: #374151;
+  color: var(--scholarly-content-fg, #374151);
   margin-bottom: 0.25rem;
 }
 
 .step-active .step-title {
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
 }
 
 .step-description {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
   line-height: 1.5;
 }
 
@@ -98,12 +98,12 @@ const props = withDefaults(defineProps<{
   top: 2.5rem;
   bottom: 0;
   width: 2px;
-  background: #e5e7eb;
+  background: var(--scholarly-content-border, #e5e7eb);
   transform: translateX(-50%);
 }
 
 .step-active + .step-item .step-connector,
 .step-active .step-connector {
-  background: linear-gradient(to bottom, var(--slidev-theme-primary, #5d8392), #e5e7eb);
+  background: linear-gradient(to bottom, var(--slidev-theme-primary, #5d8392), var(--scholarly-content-border, #e5e7eb));
 }
 </style>

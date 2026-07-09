@@ -101,8 +101,8 @@ const computedStyles = useFontSizeStyles()
 .divider-text {
   font-size: 1rem;
   font-weight: 700;
-  color: #9ca3af;
-  background: white;
+  color: var(--scholarly-content-fg-muted, #9ca3af);
+  background: var(--scholarly-content-surface, white);
   padding: 0.5rem;
   border-radius: 50%;
   width: 3rem;
@@ -118,23 +118,23 @@ const computedStyles = useFontSizeStyles()
   background: rgba(239, 68, 68, 0.08);
   border-left: 3px solid #ef4444;
 }
-.compare-red .compare-label { color: #dc2626; }
+.compare-red .compare-label { color: var(--scholarly-highlight-danger-fg, #dc2626); }
 
 .compare-blue {
   background: rgba(59, 130, 246, 0.08);
   border-left: 3px solid #3b82f6;
 }
-.compare-blue .compare-label { color: #2563eb; }
+.compare-blue .compare-label { color: var(--scholarly-highlight-info-fg, #2563eb); }
 
 .compare-green {
   background: rgba(16, 185, 129, 0.08);
   border-left: 3px solid #10b981;
 }
-.compare-green .compare-label { color: #059669; }
+.compare-green .compare-label { color: var(--scholarly-highlight-success-fg, #059669); }
 
 .compare-gray {
   background: rgba(107, 114, 128, 0.08);
   border-left: 3px solid #6b7280;
 }
-.compare-gray .compare-label { color: #4b5563; }
+.compare-gray .compare-label { color: var(--scholarly-content-fg-muted, #4b5563); }
 </style>

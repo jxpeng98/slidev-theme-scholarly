@@ -118,7 +118,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
 
 .paper-summary-eyebrow {
   margin: 0 0 0.35rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.72rem;
   font-weight: 700;
@@ -128,7 +128,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
 
 .paper-summary-hero h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.55rem;
   line-height: 1.18;
@@ -172,7 +172,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
   border: 1px solid var(--scholarly-content-border);
   border-radius: 999px;
   background: var(--scholarly-content-surface-muted);
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-size: 0.62rem;
   font-weight: 650;
 }
@@ -203,7 +203,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
 
 .paper-summary-card h2 {
   margin: 0 0 0.45rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.9rem;
   line-height: 1.2;

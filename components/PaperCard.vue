@@ -81,7 +81,7 @@ const authorsText = computed(() => {
 
 <style scoped>
 .scholarly-paper-card {
-  --paper-accent: var(--slidev-theme-primary);
+  --paper-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --paper-soft-bg: var(--scholarly-content-surface-muted);
   display: flex;
   flex-direction: column;

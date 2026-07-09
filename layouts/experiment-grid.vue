@@ -122,7 +122,7 @@ const gridStyle = computed(() => ({
 
 .experiment-grid-eyebrow {
   margin: 0 0 0.3rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.7rem;
   font-weight: 700;
@@ -132,7 +132,7 @@ const gridStyle = computed(() => ({
 
 .experiment-grid-intro h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.55rem;
   line-height: 1.16;
@@ -188,7 +188,7 @@ const gridStyle = computed(() => ({
 
 .experiment-grid-card h2 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.96rem;
   line-height: 1.2;
@@ -201,7 +201,7 @@ const gridStyle = computed(() => ({
 }
 
 .experiment-grid-card dt {
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.62rem;
   font-weight: 750;
@@ -217,7 +217,7 @@ const gridStyle = computed(() => ({
 }
 
 .experiment-grid-card dd strong {
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-size: 1rem;
   margin-right: 0.25rem;
 }

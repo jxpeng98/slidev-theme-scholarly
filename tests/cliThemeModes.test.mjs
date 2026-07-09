@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { copyFileSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdtempSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -8,6 +8,7 @@ import test from 'node:test'
 const rootDir = path.resolve(import.meta.dirname, '..')
 const cliPath = path.join(rootDir, 'cli/scholarly.mjs')
 const basicSlidesPath = path.join(rootDir, 'cli/templates/basic/slides.md')
+const templatesDir = path.join(rootDir, 'cli/templates')
 
 function runCli(args, options = {}) {
   return spawnSync(process.execPath, [cliPath, ...args], {
@@ -36,6 +37,23 @@ ${themeConfigLines}
 `, 'utf8')
   return { dir, file }
 }
+
+test('starter templates let content mode follow Slidev by default', () => {
+  const templateSlides = readdirSync(templatesDir)
+    .map(template => path.join(templatesDir, template, 'slides.md'))
+    .filter(file => statSync(file, { throwIfNoEntry: false })?.isFile())
+
+  assert.ok(templateSlides.length > 0, 'Expected at least one starter template')
+
+  for (const file of templateSlides) {
+    const slides = readFileSync(file, 'utf8')
+    assert.doesNotMatch(
+      slides,
+      /^\s*contentMode:\s*(?:light|dark)\s*$/m,
+      `${path.relative(rootDir, file)} should not pin contentMode`,
+    )
+  }
+})
 
 test('theme apply writes explicit content, chrome, and section modes without colorMode', () => {
   const { file } = makeTempSlides()

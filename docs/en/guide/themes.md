@@ -560,7 +560,7 @@ themeColors:
 ---
 ```
 
-Use `themeColors` for custom colors. Scholarly promotes the selected `themeConfig.colorTheme` preset to both `<html>` and `<body>`, so Slidev's default body-level color token will not mask the preset.
+Use `themeColors` for custom colors. Preset values come from the CSS rule selected by `themeConfig.colorTheme`; explicit `themeColors` overrides are mirrored to both `<html>` and `<body>` so they remain authoritative across Slidev surfaces.
 
 ## Live Examples
 

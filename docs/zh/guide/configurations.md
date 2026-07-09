@@ -21,7 +21,6 @@ authors:
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
 ---
@@ -68,7 +67,6 @@ authors:
 themeConfig:
   colorTheme: oxford-burgundy
   fontTheme: traditional
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   beamerNav: false

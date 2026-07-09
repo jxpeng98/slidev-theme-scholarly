@@ -40,7 +40,7 @@ const computedStyles = useFontSizeStyles()
   display: block;
   font-size: 6rem;
   line-height: 1;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   opacity: 0.15;
   font-family: serif;
   margin-bottom: -2rem;
@@ -57,7 +57,7 @@ const computedStyles = useFontSizeStyles()
   padding: 0 2rem;
   text-align: center;
   margin-bottom: 1.5rem;
-  color: var(--scholarly-text-primary, #2d3748);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary, #2d3748));
 }
 
 .quote-attribution {
@@ -74,12 +74,12 @@ const computedStyles = useFontSizeStyles()
 .quote-author {
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
 }
 
 .quote-source {
   font-size: 1rem;
   font-style: italic;
-  color: #6b7280;
+  color: var(--scholarly-content-fg-muted, #6b7280);
 }
 </style>

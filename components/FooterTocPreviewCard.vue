@@ -121,8 +121,8 @@ const previewHeight = computed(() => `${previewWidth / slideAspect.value}px`)
   padding: 0 0.32rem;
   border: none;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 86%, var(--scholarly-accent, #b8860b) 14%);
-  color: #fff;
+  background: var(--scholarly-toc-badge-bg, #1e3a5f);
+  color: var(--scholarly-toc-badge-fg, #ffffff);
   font-family: var(--scholarly-font-sans);
   font-size: 0.58rem;
   font-weight: 700;

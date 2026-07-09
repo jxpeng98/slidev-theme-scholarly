@@ -105,7 +105,7 @@ const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.val
 
 .defense-question-eyebrow {
   margin: 0 0 0.35rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.7rem;
   font-weight: 750;
@@ -115,7 +115,7 @@ const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.val
 
 .defense-question-prompt h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.45rem;
   line-height: 1.18;
@@ -163,7 +163,7 @@ const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.val
 .defense-question-answer h2,
 .defense-question-support h2 {
   margin: 0 0 0.55rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.92rem;
   line-height: 1.2;

@@ -16,6 +16,7 @@
 2. **P1: Academic authoring surface** - add high-value layouts and components used in paper talks, seminars, defenses, and reading groups.
 3. **P2: Workflow integration** - make CLI, VS Code extension, templates, docs, and generated screenshots consume the same metadata.
 4. **P3: Advanced academic automation** - add data-driven patterns, citation-aware workflows, and optional addon-style integrations after the core API is stable.
+5. **P4: Color theme expansion** - add new scholarly palette families only after light/dark surface semantics match Slidev reliably.
 
 ---
 
@@ -53,6 +54,13 @@
 | P3.3 Addon boundary decision | Complete | `npm pack --dry-run --json --cache /private/tmp/scholarly-npm-cache` measured 103,935 bytes tarball / 495,176 bytes unpacked; feature docs describe base-vs-addon criteria |
 
 Current decision: P0, P1.1, P1.2, P1.3, P2.1, P2.2, P2.3, P2.4, P3.1, P3.2, and P3.3 are complete. Keep dependency-free, no-network scholarly helpers in the base theme; split future charting, network lookup, large parsing, or broad integration APIs into optional addons.
+
+Next color-theme decision: treat the newly generated academic palette directions
+as P4 design input, not as part of the current light/dark mode repair. Candidate
+families include classic ink-and-brass, computational graphite, archive sepia,
+and field-notes green. Before implementation, convert the selected direction
+into primitive, semantic, and component token changes, then run the full theme
+matrix visual check.
 
 ---
 

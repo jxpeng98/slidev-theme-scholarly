@@ -90,7 +90,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
 
 .limitation-eyebrow {
   margin: 0 0 0.3rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 0.7rem;
   font-weight: 700;
@@ -100,7 +100,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
 
 .limitation-heading h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.55rem;
   line-height: 1.16;
@@ -146,7 +146,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
 
 .limitation-panel h2 {
   margin: 0 0 0.7rem;
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1rem;
   line-height: 1.2;
@@ -165,7 +165,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
 
 .limitation-panel :deep(p),
 .limitation-panel :deep(li) {
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   line-height: 1.45;
 }
 

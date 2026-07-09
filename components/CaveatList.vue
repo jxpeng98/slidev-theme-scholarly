@@ -171,7 +171,7 @@ withDefaults(defineProps<Props>(), {
 }
 
 .caveat-primary {
-  --caveat-accent: var(--slidev-theme-primary);
+  --caveat-accent: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   --caveat-soft-bg: var(--scholarly-content-surface-muted);
 }
 

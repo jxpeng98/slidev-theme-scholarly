@@ -44,7 +44,7 @@ const computedStyles = useFontSizeStyles()
 .statement-quote-mark {
   font-size: 8rem;
   font-family: Georgia, serif;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
   opacity: 0.15;
   position: absolute;
   top: -3rem;
@@ -57,7 +57,7 @@ const computedStyles = useFontSizeStyles()
   font-size: 2.5rem;
   font-weight: 500;
   line-height: 1.4;
-  color: #1f2937;
+  color: var(--scholarly-content-fg, #1f2937);
   margin: 0;
   font-style: italic;
 }
@@ -66,14 +66,14 @@ const computedStyles = useFontSizeStyles()
   font-size: 1.75rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #374151;
+  color: var(--scholarly-content-fg, #374151);
   margin: 0;
 }
 
 .statement-author {
   margin-top: 2rem;
   font-size: 1.25rem;
-  color: var(--slidev-theme-primary, #1e3a5f);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #1e3a5f));
   font-weight: 500;
 }
 </style>

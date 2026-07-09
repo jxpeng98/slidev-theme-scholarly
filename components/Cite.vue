@@ -55,7 +55,7 @@ const numericMarker = computed(() => {
 <style scoped>
 .scholarly-cite {
   font-size: 0.85em;
-  color: #64748b;
+  color: var(--scholarly-content-fg-muted, #64748b);
 }
 
 .scholarly-cite.cite-inline {
@@ -70,7 +70,7 @@ const numericMarker = computed(() => {
 }
 
 .cite-marker {
-  color: var(--slidev-theme-primary, #5d8392);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary, #5d8392));
   font-weight: 500;
 }
 

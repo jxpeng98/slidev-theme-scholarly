@@ -8,11 +8,11 @@
         </h1>
         <div class="space-y-4">
           <div v-for="(item, idx) in parsedItems" :key="idx"
-               class="agenda-item flex items-center p-4 bg-white rounded-lg shadow-sm border border-gray-100">
-            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-primary text-white font-bold text-lg mr-5">
+               class="agenda-item flex items-center p-4 rounded-lg shadow-sm border">
+            <div class="agenda-index flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg mr-5">
               {{ idx + 1 }}
             </div>
-            <div class="text-xl font-serif text-gray-800">{{ item }}</div>
+            <div class="agenda-item-text text-xl font-serif">{{ item }}</div>
           </div>
         </div>
         <div class="mt-8">
@@ -44,9 +44,20 @@ const computedStyles = useFontSizeStyles()
 
 <style scoped>
 .text-primary {
-  color: var(--slidev-theme-primary);
+  color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
 }
 .bg-primary {
   background-color: var(--slidev-theme-primary);
+}
+.agenda-item {
+  border-color: var(--scholarly-content-border, #f3f4f6);
+  background: var(--scholarly-content-surface, #ffffff);
+}
+.agenda-index {
+  background: var(--slidev-theme-primary);
+  color: var(--scholarly-content-on-primary, #ffffff);
+}
+.agenda-item-text {
+  color: var(--scholarly-content-fg, #1f2937);
 }
 </style>

@@ -9,7 +9,6 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: contemporary
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

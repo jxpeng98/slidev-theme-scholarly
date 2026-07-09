@@ -108,7 +108,7 @@ const variantClass = computed(() => `is-${props.variant}`)
 .result-highlight-panel.is-primary {
   --scholarly-result-bg: color-mix(in srgb, var(--slidev-theme-primary) 9%, var(--scholarly-content-surface) 91%);
   --scholarly-result-border: color-mix(in srgb, var(--slidev-theme-primary) 44%, var(--scholarly-content-border) 56%);
-  --scholarly-result-fg: var(--slidev-theme-primary);
+  --scholarly-result-fg: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
 }
 
 .result-highlight-panel.is-success {
@@ -148,7 +148,7 @@ const variantClass = computed(() => `is-${props.variant}`)
 
 .result-highlight-copy h1 {
   margin: 0;
-  color: var(--scholarly-text-primary);
+  color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
   font-size: 1.7rem;
   line-height: 1.12;

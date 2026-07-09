@@ -49,6 +49,13 @@ const modePresets = [
     sectionMode: 'match',
   },
   {
+    id: 'follow-slidev-dark',
+    label: 'Follow Slidev Dark',
+    colorSchema: 'dark',
+    chromeMode: 'match',
+    sectionMode: 'match',
+  },
+  {
     id: 'inverse-chrome',
     label: 'Inverse Chrome',
     contentMode: 'light',
@@ -75,10 +82,12 @@ if (!surfaceModes.length)
 const renderDeck = ({ theme, mode }) => `---
 theme: ${root}
 title: Scholarly Theme Matrix - ${theme.label} / ${mode.label}
+${mode.colorSchema ? `colorSchema: ${mode.colorSchema}` : ''}
+comark: true
 themeConfig:
   colorTheme: ${theme.id}
   fontTheme: classic
-  contentMode: ${mode.contentMode}
+${mode.contentMode ? `  contentMode: ${mode.contentMode}` : ''}
   chromeMode: ${mode.chromeMode}
   sectionMode: ${mode.sectionMode}
 footerMiddle: Theme Matrix
@@ -106,6 +115,22 @@ layout: default
 const readable = 'semantic tokens';
 console.log(readable);
 ~~~
+
+~~~ts [semantic-theme.ts]
+const contentMode = 'follows the slide canvas';
+~~~
+
+::code-group
+
+~~~ts [tokens.ts]
+export const surface = 'semantic';
+~~~
+
+~~~css [tokens.css]
+.slide { color: var(--scholarly-content-fg); }
+~~~
+
+::
 
 | Element | Expected |
 | --- | --- |

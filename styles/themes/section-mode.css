@@ -16,6 +16,12 @@
   --scholarly-section-border: rgba(255, 255, 255, 0.2);
 }
 
+.slidev-layout.section,
+.slidev-layout.section[data-section-mode="dark"] {
+  --slidev-theme-background: var(--scholarly-section-bg);
+  --slidev-theme-text: var(--scholarly-section-fg);
+}
+
 /* -------------------------------------------------------------------------- */
 /* Light Section                                                              */
 /* -------------------------------------------------------------------------- */
@@ -25,4 +31,17 @@
   --scholarly-section-fg: var(--scholarly-text-primary, #2d3748);
   --scholarly-section-fg-muted: rgba(45, 55, 72, 0.75);
   --scholarly-section-border: rgba(45, 55, 72, 0.15);
+}
+
+.slidev-layout.section[data-section-mode="light"] {
+  --slidev-theme-background: var(--scholarly-section-bg);
+  --slidev-theme-text: var(--scholarly-section-fg);
+}
+
+/* Princeton's bright orange dark surface requires ink rather than white. */
+:root[data-color-theme="princeton-orange"][data-section-mode="dark"],
+:root[data-color-theme="princeton-orange"] .slidev-layout.section:not([data-section-mode="light"]) {
+  --scholarly-section-fg: #1c1c1c;
+  --scholarly-section-fg-muted: rgba(28, 28, 28, 0.88);
+  --scholarly-section-border: rgba(28, 28, 28, 0.24);
 }

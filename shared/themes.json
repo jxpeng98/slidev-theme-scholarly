@@ -3,47 +3,110 @@
         {
             "id": "classic-blue",
             "label": "Classic Blue",
-            "description": "Default scholarly palette"
+            "description": "Default scholarly palette",
+            "palette": {
+                "primary": "#1e3a5f",
+                "primaryLight": "#2c5282",
+                "accent": "#b8860b",
+                "background": "#fdfbf7",
+                "foreground": "#2d3748"
+            }
         },
         {
             "id": "oxford-burgundy",
             "label": "Oxford Burgundy",
-            "description": "Deep burgundy accents"
+            "description": "Deep burgundy accents",
+            "palette": {
+                "primary": "#862633",
+                "primaryLight": "#a23648",
+                "accent": "#c5a572",
+                "background": "#faf8f5",
+                "foreground": "#2d1b1e"
+            }
         },
         {
             "id": "cambridge-green",
             "label": "Cambridge Green",
-            "description": "Elegant green accents"
+            "description": "Elegant green accents",
+            "palette": {
+                "primary": "#00543c",
+                "primaryLight": "#006b4a",
+                "accent": "#d4af37",
+                "background": "#f8faf7",
+                "foreground": "#1a2f1a"
+            }
         },
         {
             "id": "yale-blue",
             "label": "Yale Blue",
-            "description": "Strong blue accents"
+            "description": "Strong blue accents",
+            "palette": {
+                "primary": "#0f4d92",
+                "primaryLight": "#286fb4",
+                "accent": "#d4af37",
+                "background": "#f7f9fc",
+                "foreground": "#1a2332"
+            }
         },
         {
             "id": "princeton-orange",
             "label": "Princeton Orange",
-            "description": "Vibrant orange accents"
+            "description": "Vibrant orange accents",
+            "palette": {
+                "primary": "#e87722",
+                "primaryLight": "#f08f42",
+                "accent": "#1c1c1c",
+                "background": "#fffbf5",
+                "foreground": "#2d2d2d"
+            }
         },
         {
             "id": "nordic-blue",
             "label": "Nordic Blue",
-            "description": "Cool nordic tones"
+            "description": "Cool nordic tones",
+            "palette": {
+                "primary": "#2e5266",
+                "primaryLight": "#4a7c9c",
+                "accent": "#d4a762",
+                "background": "#f5f8fa",
+                "foreground": "#1e3a4a"
+            }
         },
         {
             "id": "warm-sepia",
             "label": "Warm Sepia",
-            "description": "Warm paper-like tones"
+            "description": "Warm paper-like tones",
+            "palette": {
+                "primary": "#5d4037",
+                "primaryLight": "#795548",
+                "accent": "#d4a574",
+                "background": "#faf6f1",
+                "foreground": "#3e2723"
+            }
         },
         {
             "id": "monochrome",
             "label": "Monochrome",
-            "description": "Minimal black & white"
+            "description": "Minimal black & white",
+            "palette": {
+                "primary": "#2d3748",
+                "primaryLight": "#4a5568",
+                "accent": "#718096",
+                "background": "#ffffff",
+                "foreground": "#1a202c"
+            }
         },
         {
             "id": "high-contrast",
             "label": "High Contrast",
-            "description": "Maximum contrast"
+            "description": "Maximum contrast",
+            "palette": {
+                "primary": "#000000",
+                "primaryLight": "#333333",
+                "accent": "#0066cc",
+                "background": "#ffffff",
+                "foreground": "#000000"
+            }
         }
     ],
     "fontThemes": [
