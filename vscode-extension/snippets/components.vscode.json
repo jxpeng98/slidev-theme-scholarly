@@ -220,6 +220,27 @@
     ],
     "description": "Insert EquationBlock component"
   },
+  "Slidev Scholarly: ResultTable": {
+    "prefix": "ss-result-table",
+    "body": [
+      "<ResultTable",
+      "  caption=\"${1:Benchmark results}\"",
+      "  :columns=\"[",
+      "    { key: 'model', label: '${2:Model}' },",
+      "    { key: 'accuracy', label: '${3:Accuracy}', align: 'right' },",
+      "    { key: 'latency', label: '${4:Latency (ms)}', align: 'right' }",
+      "  ]\"",
+      "  :rows=\"[",
+      "    { model: '${5:Baseline}', accuracy: '${6:91.5}', latency: '${7:24}' },",
+      "    { model: '${8:Ours}', accuracy: '${9:94.7}', latency: '${10:18}' }",
+      "  ]\"",
+      "  highlight-column=\"accuracy\"",
+      "/>",
+      "",
+      "$0"
+    ],
+    "description": "Compare structured result rows with column alignment and highlighting"
+  },
   "Slidev Scholarly: DatasetCard": {
     "prefix": "ss-dataset-card",
     "body": [

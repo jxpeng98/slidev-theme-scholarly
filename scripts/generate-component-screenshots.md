@@ -263,3 +263,26 @@ subtitle: Limitations with mitigations
   { title: 'Labeled tasks required', description: 'The method assumes labeled target examples are available.', mitigation: 'Report few-shot sensitivity separately.' },
   { title: 'Severe shift remains hard', description: 'Large distribution shift still needs calibration.', mitigation: 'Use shifted-domain evaluation as a separate claim.' }
 ]" />
+
+<!-- Slide 18: result-table -->
+---
+layout: default
+title: ResultTable Component
+subtitle: Structured benchmark comparison
+---
+
+<ResultTable
+  caption="Five-seed benchmark results"
+  :columns="[
+    { key: 'model', label: 'Model' },
+    { key: 'accuracy', label: 'Accuracy (%)', align: 'right' },
+    { key: 'latency', label: 'Latency (ms)', align: 'right' },
+    { key: 'energy', label: 'Energy / sample', align: 'right' }
+  ]"
+  :rows="[
+    { model: 'Supervised baseline', accuracy: '91.5', latency: '24', energy: '1.00×' },
+    { model: 'Adapter', accuracy: '93.1', latency: '21', energy: '0.84×' },
+    { model: 'Scholarly routing', accuracy: '94.7', latency: '18', energy: '0.72×' }
+  ]"
+  highlight-column="accuracy"
+/>

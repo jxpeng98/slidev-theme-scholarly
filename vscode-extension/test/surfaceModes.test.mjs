@@ -149,14 +149,14 @@ test('builds theme apply CLI args with explicit mode flags', () => {
   );
 });
 
-test('built-in templates include explicit content and surface mode defaults', () => {
+test('built-in templates let content mode follow Slidev by default', () => {
   const commands = loadCommandsWithVscodeMock();
 
   for (const markdown of [
     commands.__test.getAcademicTemplate(),
     commands.__test.getSimpleTemplate()
   ]) {
-    assert.match(markdown, /themeConfig:\n(?:  .+\n)*  contentMode: light\n/);
+    assert.doesNotMatch(markdown, /themeConfig:\n(?:  .+\n)*  contentMode: (?:light|dark)\n/);
     assert.match(markdown, /themeConfig:\n(?:  .+\n)*  chromeMode: dark\n/);
     assert.match(markdown, /themeConfig:\n(?:  .+\n)*  sectionMode: dark\n/);
   }

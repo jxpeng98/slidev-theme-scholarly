@@ -131,6 +131,15 @@
     },
     {
       "kind": "components",
+      "id": "components/result-table",
+      "source": "docs/public/images/components/result-table.png",
+      "output": "vscode-extension/media/previews/components/result-table.png",
+      "sourceSha256": "78498b0bc21a79dadabb1ff5bf28668ff45f46a65c1a90a69a34f15758426613",
+      "outputSha256": "9712ca000b642543745a5186a140c48d92425b1911fb788fdaed27324ffd844f",
+      "bytes": 22890
+    },
+    {
+      "kind": "components",
       "id": "components/steps",
       "source": "docs/public/images/components/steps.png",
       "output": "vscode-extension/media/previews/components/steps.png",

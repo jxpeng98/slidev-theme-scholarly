@@ -67,6 +67,2284 @@
             ]
         }
     ],
+    "layoutCatalog": {
+        "cover": {
+            "label": "Title Slide",
+            "summary": "A centered opening slide with presenter and event metadata.",
+            "useFor": "Opening a presentation with its title, authors, and affiliations.",
+            "features": [
+                "Centered title treatment",
+                "Author, institution, and email metadata",
+                "Conference footer and slide navigation"
+            ],
+            "tags": [
+                "opening",
+                "title",
+                "authors",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "authors",
+                    "type": "Array<{ name?: string; institution?: string; email?: string }>",
+                    "required": false,
+                    "description": "Lists presenters and their affiliations; falls back to global authors when omitted."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides heading sizes in the cover content."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Cover title, subtitle, and other opening content."
+                }
+            ]
+        },
+        "default": {
+            "label": "Standard Content",
+            "summary": "The general-purpose slide frame used when no layout is specified.",
+            "useFor": "Presenting text, lists, code, formulas, images, and mixed content.",
+            "features": [
+                "Optional title and subtitle",
+                "Flexible main content area",
+                "Page footer and slide navigation"
+            ],
+            "tags": [
+                "general",
+                "content",
+                "automatic",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "density",
+                    "type": "'auto' | 'compact' | 'normal' | 'relaxed'",
+                    "required": false,
+                    "default": "auto",
+                    "options": [
+                        "auto",
+                        "compact",
+                        "normal",
+                        "relaxed"
+                    ],
+                    "description": "Controls content spacing; auto derives compact, normal, or relaxed density from the rendered content."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Main slide content shown between the optional header and footer."
+                }
+            ]
+        },
+        "intro": {
+            "label": "Section Introduction",
+            "summary": "A spacious, centered introduction for a new part of a talk.",
+            "useFor": "Introducing a section with a title and short framing line.",
+            "features": [
+                "Large centered content",
+                "Header-free composition",
+                "Persistent footer"
+            ],
+            "tags": [
+                "section",
+                "introduction",
+                "transition",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "align",
+                    "type": "'left' | 'center'",
+                    "required": false,
+                    "default": "left",
+                    "options": [
+                        "left",
+                        "center"
+                    ],
+                    "description": "Sets the horizontal alignment of the introduction content."
+                },
+                {
+                    "name": "density",
+                    "type": "'auto' | 'compact' | 'normal' | 'relaxed'",
+                    "required": false,
+                    "default": "normal",
+                    "options": [
+                        "auto",
+                        "compact",
+                        "normal",
+                        "relaxed"
+                    ],
+                    "description": "Sets the density data attribute; the runtime fallback is normal when neither props nor frontmatter supplies a value."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Section-introduction content centered vertically in the available frame."
+                }
+            ]
+        },
+        "section": {
+            "label": "Chapter Divider",
+            "summary": "A dramatic divider for major transitions in a presentation.",
+            "useFor": "Marking chapters or major topic changes.",
+            "features": [
+                "Large centered title",
+                "Dark, light, match, and inverse modes",
+                "Automatic table-of-contents source"
+            ],
+            "tags": [
+                "chapter",
+                "divider",
+                "transition",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "sectionMode",
+                    "type": "'dark' | 'light' | 'match' | 'inverse'",
+                    "required": false,
+                    "default": "themeConfig.sectionMode or dark",
+                    "options": [
+                        "dark",
+                        "light",
+                        "match",
+                        "inverse"
+                    ],
+                    "description": "Controls this section divider's surface; match follows content mode and inverse uses its opposite."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes for the centered section content."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Section title, subtitle, or divider content centered on the slide."
+                }
+            ]
+        },
+        "center": {
+            "label": "Centered Content",
+            "summary": "A minimal frame that centers all content on both axes.",
+            "useFor": "Showing a short message, key point, or simple visual.",
+            "features": [
+                "Horizontal centering",
+                "Vertical centering",
+                "Content-first emphasis"
+            ],
+            "tags": [
+                "centered",
+                "message",
+                "takeaway",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the inherited shared header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the inherited shared header."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes for the centered content."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Content centered horizontally and vertically."
+                }
+            ]
+        },
+        "auto-center": {
+            "label": "Auto-Adjusting Content",
+            "summary": "A centered frame that scales text to fit the available space.",
+            "useFor": "Fitting variable-length content while retaining a centered composition.",
+            "features": [
+                "Automatic font sizing",
+                "Vertical centering",
+                "Left-aligned reading block"
+            ],
+            "tags": [
+                "responsive",
+                "fit",
+                "centered",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "minFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "max(12px, 50% of computed size)",
+                    "description": "Sets the minimum body font size used by the fit loop, in pixels."
+                },
+                {
+                    "name": "maxFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "150% of computed size",
+                    "description": "Sets the initial maximum body font size used by the fit loop, in pixels."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Content centered in the available area and automatically resized to fit."
+                }
+            ]
+        },
+        "auto-size": {
+            "label": "Fit-to-Page Content",
+            "summary": "A Beamer-like content frame that scales its main matter to the page.",
+            "useFor": "Keeping dense or sparse standard slides within the available frame.",
+            "features": [
+                "Automatic width and height fitting",
+                "Configurable font-size limits",
+                "Top or center alignment controls"
+            ],
+            "tags": [
+                "responsive",
+                "dense-content",
+                "beamer",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "density",
+                    "type": "'auto' | 'compact' | 'normal' | 'relaxed'",
+                    "required": false,
+                    "default": "auto",
+                    "options": [
+                        "auto",
+                        "compact",
+                        "normal",
+                        "relaxed"
+                    ],
+                    "description": "Controls content spacing; auto selects a density from the rendered content."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "minFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "max(12px, 60% of computed size)",
+                    "description": "Sets the minimum body font size used while fitting, in pixels."
+                },
+                {
+                    "name": "maxFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "165% of computed size",
+                    "description": "Sets the maximum body font size used while fitting, in pixels."
+                },
+                {
+                    "name": "autoSizeGrow",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Allows sparse content to grow before shrinking it to fit."
+                },
+                {
+                    "name": "autoSizeAlign",
+                    "type": "'top' | 'center'",
+                    "required": false,
+                    "default": "top",
+                    "options": [
+                        "top",
+                        "center"
+                    ],
+                    "description": "Sets the vertical alignment of the main content area."
+                },
+                {
+                    "name": "autoSizePadding",
+                    "type": "'compact' | 'normal'",
+                    "required": false,
+                    "default": "normal",
+                    "options": [
+                        "compact",
+                        "normal"
+                    ],
+                    "description": "Selects compact or normal inner padding."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes, bypassing automatic body fitting when supplied."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Main slide content resized to fit the available frame."
+                }
+            ]
+        },
+        "toc": {
+            "label": "Table of Contents",
+            "summary": "A navigable outline generated from section slides.",
+            "useFor": "Orienting the audience at the start of a talk or section.",
+            "features": [
+                "Automatic section extraction",
+                "Clickable navigation",
+                "Optional numbering and current-section highlight"
+            ],
+            "tags": [
+                "outline",
+                "agenda",
+                "navigation",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string | false",
+                    "required": false,
+                    "default": "Outline / 目录",
+                    "description": "Sets the table-of-contents heading; false hides it, and the fallback follows the deck language."
+                },
+                {
+                    "name": "showNumbers",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Shows numbered badges beside table-of-contents entries."
+                },
+                {
+                    "name": "highlightCurrent",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Highlights the section containing the current slide and de-emphasizes the others."
+                },
+                {
+                    "name": "sections",
+                    "type": "string[]",
+                    "required": false,
+                    "description": "Supplies manual section titles and overrides automatic extraction from section-layout slides."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "number | string | { body?: number | string; base?: number | string; default?: number | string; h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Sets an explicit body size and optional heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional content displayed below the generated table of contents."
+                }
+            ]
+        },
+        "end": {
+            "label": "Closing Slide",
+            "summary": "A professional closing frame with contact and project links.",
+            "useFor": "Ending a presentation and inviting questions or follow-up.",
+            "features": [
+                "Custom thank-you message",
+                "Email and website fields",
+                "Optional QR code"
+            ],
+            "tags": [
+                "closing",
+                "thank-you",
+                "contact",
+                "structure"
+            ],
+            "config": [
+                {
+                    "name": "thankYou",
+                    "type": "string",
+                    "required": false,
+                    "default": "Thank You!",
+                    "description": "Sets the closing message; when omitted, the fallback is localized to Chinese when the deck language is zh."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets fallback subtitle text when the default slot is not supplied."
+                },
+                {
+                    "name": "email",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds a mailto contact link."
+                },
+                {
+                    "name": "website",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds an external website link."
+                },
+                {
+                    "name": "qrcode",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the QR-code image URL."
+                },
+                {
+                    "name": "qrcodeLabel",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds a label below the QR-code image."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "title",
+                    "description": "Custom closing-title content; replaces the localized thank-you heading."
+                },
+                {
+                    "name": "default",
+                    "description": "Closing subtitle or message; replaces the subtitle prop fallback."
+                },
+                {
+                    "name": "contact",
+                    "description": "Custom contact content; replaces the generated email and website links."
+                }
+            ]
+        },
+        "two-cols": {
+            "label": "Two Columns",
+            "summary": "A two-column content frame with a configurable width ratio.",
+            "useFor": "Comparing ideas or presenting parallel streams of content.",
+            "features": [
+                "Named right-side slot",
+                "Configurable column ratio",
+                "Optional title and subtitle"
+            ],
+            "tags": [
+                "columns",
+                "comparison",
+                "parallel",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "ratio",
+                    "type": "string",
+                    "required": false,
+                    "default": "1:1",
+                    "description": "Sets the left-to-right column ratio, such as 1:2, 2:1, or 3:1."
+                },
+                {
+                    "name": "gap",
+                    "type": "string",
+                    "required": false,
+                    "default": "1rem",
+                    "description": "Sets the CSS gap between the two columns."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes across both columns."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "left",
+                    "description": "Left-column content; replaces the default-slot fallback when supplied."
+                },
+                {
+                    "name": "default",
+                    "description": "Fallback content for the left column when the left slot is not supplied."
+                },
+                {
+                    "name": "right",
+                    "description": "Right-column content."
+                }
+            ]
+        },
+        "image-left": {
+            "label": "Image on Left",
+            "summary": "A full-height image paired with explanatory content on the right.",
+            "useFor": "Explaining a visual, setup, artifact, or process.",
+            "features": [
+                "Left-side image panel",
+                "Configurable image-to-content ratio",
+                "Cover, contain, and fill modes"
+            ],
+            "tags": [
+                "image",
+                "visual",
+                "explanation",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "image",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the fallback image URL for the left panel."
+                },
+                {
+                    "name": "ratio",
+                    "type": "string",
+                    "required": false,
+                    "default": "1:1",
+                    "description": "Sets the image-to-content column ratio, such as 1:2 or 2:3."
+                },
+                {
+                    "name": "fit",
+                    "type": "'cover' | 'contain' | 'fill'",
+                    "required": false,
+                    "default": "cover",
+                    "options": [
+                        "cover",
+                        "contain",
+                        "fill"
+                    ],
+                    "description": "Sets the image object-fit mode."
+                },
+                {
+                    "name": "position",
+                    "type": "string",
+                    "required": false,
+                    "default": "center",
+                    "description": "Sets the image object-position value."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes in the text panel."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "image",
+                    "description": "Custom media for the left panel; replaces the image prop fallback."
+                },
+                {
+                    "name": "default",
+                    "description": "Main explanatory content shown in the right panel."
+                }
+            ]
+        },
+        "image-right": {
+            "label": "Image on Right",
+            "summary": "Explanatory content paired with a full-height image on the right.",
+            "useFor": "Supporting an argument or finding with a visual.",
+            "features": [
+                "Right-side image panel",
+                "Configurable content-to-image ratio",
+                "Cover, contain, and fill modes"
+            ],
+            "tags": [
+                "image",
+                "visual",
+                "findings",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "image",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the fallback image URL for the right panel."
+                },
+                {
+                    "name": "ratio",
+                    "type": "string",
+                    "required": false,
+                    "default": "1:1",
+                    "description": "Sets the content-to-image column ratio, such as 3:2 or 2:3."
+                },
+                {
+                    "name": "fit",
+                    "type": "'cover' | 'contain' | 'fill'",
+                    "required": false,
+                    "default": "cover",
+                    "options": [
+                        "cover",
+                        "contain",
+                        "fill"
+                    ],
+                    "description": "Sets the image object-fit mode."
+                },
+                {
+                    "name": "position",
+                    "type": "string",
+                    "required": false,
+                    "default": "center",
+                    "description": "Sets the image object-position value."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes in the text panel."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Main explanatory content shown in the left panel."
+                },
+                {
+                    "name": "image",
+                    "description": "Custom media for the right panel; replaces the image prop fallback."
+                }
+            ]
+        },
+        "bullets": {
+            "label": "Enhanced List",
+            "summary": "A polished list frame with customizable markers and hierarchy.",
+            "useFor": "Presenting key points, summaries, or ordered arguments.",
+            "features": [
+                "Custom bullet markers",
+                "Numbered-list badges",
+                "Nested list support"
+            ],
+            "tags": [
+                "list",
+                "bullets",
+                "summary",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the optional subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "icon",
+                    "type": "string",
+                    "required": false,
+                    "default": "▸",
+                    "description": "Sets the marker character used for unordered list items."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "List or other content styled by the bullets layout."
+                }
+            ]
+        },
+        "figure": {
+            "label": "Academic Figure",
+            "summary": "A centered figure frame with academic labeling and caption support.",
+            "useFor": "Presenting diagrams, plots, and research figures with context.",
+            "features": [
+                "Figure label and caption",
+                "Configurable height",
+                "Contain and cover modes"
+            ],
+            "tags": [
+                "figure",
+                "caption",
+                "diagram",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "image",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the figure image URL; preferred over src in Slidev frontmatter."
+                },
+                {
+                    "name": "src",
+                    "type": "string",
+                    "required": false,
+                    "description": "Legacy alias for the figure image URL; Slidev reserves src in frontmatter."
+                },
+                {
+                    "name": "caption",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets fallback caption content when the caption slot is not supplied."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds a figure label before the caption, such as Figure 1:."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the shared slide header subtitle."
+                },
+                {
+                    "name": "height",
+                    "type": "string",
+                    "required": false,
+                    "default": "55vh",
+                    "description": "Sets the image's maximum height."
+                },
+                {
+                    "name": "fit",
+                    "type": "'contain' | 'cover'",
+                    "required": false,
+                    "default": "contain",
+                    "options": [
+                        "contain",
+                        "cover"
+                    ],
+                    "description": "Sets the image object-fit mode."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes in the description content."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "figure",
+                    "description": "Custom figure media; replaces the image or src fallback."
+                },
+                {
+                    "name": "caption",
+                    "description": "Custom caption content; replaces the caption prop fallback."
+                },
+                {
+                    "name": "default",
+                    "description": "Additional figure description shown below the caption."
+                }
+            ]
+        },
+        "split-image": {
+            "label": "Image Comparison",
+            "summary": "A side-by-side image gallery with per-image captions.",
+            "useFor": "Comparing before-and-after states or multiple visual outputs.",
+            "features": [
+                "Multiple image panels",
+                "Per-image captions",
+                "Optional title and subtitle"
+            ],
+            "tags": [
+                "images",
+                "comparison",
+                "before-after",
+                "content"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "images",
+                    "type": "string[]",
+                    "required": true,
+                    "description": "Lists the image URLs displayed as equal-width panels."
+                },
+                {
+                    "name": "captions",
+                    "type": "string[]",
+                    "required": false,
+                    "description": "Lists captions by image index; missing entries leave the corresponding image uncaptioned."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional explanation displayed below the image row."
+                }
+            ]
+        },
+        "quote": {
+            "label": "Quotation",
+            "summary": "A large quotation treatment with attribution and source.",
+            "useFor": "Highlighting a memorable statement from a person or publication.",
+            "features": [
+                "Decorative quotation marks",
+                "Author attribution",
+                "Optional source citation"
+            ],
+            "tags": [
+                "quote",
+                "attribution",
+                "source",
+                "emphasis"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "author",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds the quote author's name below the quotation."
+                },
+                {
+                    "name": "source",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds the quote source, publication, or year below the author."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The quotation or blockquote content."
+                }
+            ]
+        },
+        "fact": {
+            "label": "Single Statistic",
+            "summary": "A high-impact frame for one number or concise fact.",
+            "useFor": "Making a headline metric or statistic immediately visible.",
+            "features": [
+                "Oversized numeric treatment",
+                "Supporting description",
+                "Configurable semantic color"
+            ],
+            "tags": [
+                "statistic",
+                "metric",
+                "number",
+                "emphasis"
+            ],
+            "config": [
+                {
+                    "name": "color",
+                    "type": "'primary' | 'blue' | 'green' | 'amber' | 'red' | 'purple'",
+                    "required": false,
+                    "options": [
+                        "primary",
+                        "blue",
+                        "green",
+                        "amber",
+                        "red",
+                        "purple"
+                    ],
+                    "description": "Selects the statistic accent class; the component does not assign a runtime default when omitted."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The highlighted number or fact and its supporting text."
+                }
+            ]
+        },
+        "statement": {
+            "label": "Important Statement",
+            "summary": "A centered typographic frame for a bold, readable statement.",
+            "useFor": "Delivering a strong claim, principle, or conclusion.",
+            "features": [
+                "Large statement text",
+                "Readable line length",
+                "Optional attribution"
+            ],
+            "tags": [
+                "statement",
+                "claim",
+                "conclusion",
+                "emphasis"
+            ],
+            "config": [
+                {
+                    "name": "author",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds an attribution below the statement."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The centered statement, quotation, or key claim."
+                }
+            ]
+        },
+        "focus": {
+            "label": "Focused Statement",
+            "summary": "A color-accented frame for one important message or question.",
+            "useFor": "Highlighting a research question, key takeaway, or prompt.",
+            "features": [
+                "Optional leading icon",
+                "Color-accented message",
+                "Supporting text area"
+            ],
+            "tags": [
+                "focus",
+                "question",
+                "takeaway",
+                "emphasis"
+            ],
+            "config": [
+                {
+                    "name": "color",
+                    "type": "'primary' | 'blue' | 'green' | 'amber' | 'red' | 'purple'",
+                    "required": false,
+                    "options": [
+                        "primary",
+                        "blue",
+                        "green",
+                        "amber",
+                        "red",
+                        "purple"
+                    ],
+                    "description": "Selects the focus accent class; the component does not assign a runtime default when omitted."
+                },
+                {
+                    "name": "icon",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds an icon or text marker above the focused content."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The focused statement, question, or takeaway."
+                }
+            ]
+        },
+        "paper-summary": {
+            "label": "Paper Reading Summary",
+            "summary": "A structured overview of one paper's metadata and core contribution.",
+            "useFor": "Summarizing a paper's problem, method, and main finding.",
+            "features": [
+                "Publication metadata chips",
+                "Problem, method, and finding panels",
+                "Keyword tags"
+            ],
+            "tags": [
+                "paper",
+                "reading",
+                "summary",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title and serves as a fallback paper title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "paperTitle",
+                    "type": "string",
+                    "required": false,
+                    "default": "Paper Summary",
+                    "description": "Sets the paper title; the shared header title is used before the built-in fallback."
+                },
+                {
+                    "name": "authors",
+                    "type": "string | string[]",
+                    "required": false,
+                    "description": "Lists authors as an array or a comma-separated string."
+                },
+                {
+                    "name": "venue",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds the publication venue to the metadata row."
+                },
+                {
+                    "name": "year",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Adds the publication year to the metadata row."
+                },
+                {
+                    "name": "doi",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds the DOI to the metadata row."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds review or publication status to the metadata row."
+                },
+                {
+                    "name": "keywords",
+                    "type": "string | string[]",
+                    "required": false,
+                    "description": "Lists keyword chips as an array or a comma-separated string."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Paper Summary",
+                    "description": "Sets the small label above the paper title."
+                },
+                {
+                    "name": "problemLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Problem",
+                    "description": "Labels the problem panel."
+                },
+                {
+                    "name": "methodLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Method",
+                    "description": "Labels the method panel."
+                },
+                {
+                    "name": "findingLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Key Finding",
+                    "description": "Labels the highlighted finding panel."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "problem",
+                    "description": "Content describing the paper's research problem."
+                },
+                {
+                    "name": "method",
+                    "description": "Content describing the paper's method."
+                },
+                {
+                    "name": "finding",
+                    "description": "Content describing the paper's key finding."
+                },
+                {
+                    "name": "default",
+                    "description": "Additional summary notes shown below the three panels."
+                }
+            ]
+        },
+        "related-work-matrix": {
+            "label": "Related Work Matrix",
+            "summary": "A comparison matrix for positioning prior work and research gaps.",
+            "useFor": "Comparing methods, assumptions, settings, and limitations.",
+            "features": [
+                "Markdown table support",
+                "Context description",
+                "Optional notes panel"
+            ],
+            "tags": [
+                "related-work",
+                "matrix",
+                "comparison",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title and provides a fallback matrix heading."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Related Work Matrix",
+                    "description": "Sets the main in-slide heading; the header title is used before the built-in fallback."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Related Work",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "note",
+                    "type": "string",
+                    "required": false,
+                    "description": "Provides fallback notes text when the notes slot is not supplied."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The related-work comparison matrix or table."
+                },
+                {
+                    "name": "notes",
+                    "description": "Notes displayed below the matrix; replaces the note prop fallback."
+                }
+            ]
+        },
+        "method-pipeline": {
+            "label": "Method Pipeline",
+            "summary": "An ordered research workflow with clear step progression.",
+            "useFor": "Explaining a method, protocol, or reproducible process.",
+            "features": [
+                "Structured step data",
+                "Active-step emphasis",
+                "Per-step descriptions and details"
+            ],
+            "tags": [
+                "method",
+                "pipeline",
+                "workflow",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Method Pipeline",
+                    "description": "Sets the main in-slide heading; the header title is used first when present."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Method Pipeline",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "steps",
+                    "type": "Array<{ title: string; description?: string; detail?: string }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Defines pipeline steps; an empty or omitted array displays the built-in Input, Process, and Output examples."
+                },
+                {
+                    "name": "activeStep",
+                    "type": "number",
+                    "required": false,
+                    "default": "0",
+                    "description": "Highlights a one-based step number; zero leaves every step unhighlighted."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional method notes shown below the pipeline."
+                }
+            ]
+        },
+        "result-highlight": {
+            "label": "Result Highlight",
+            "summary": "A claim-led result frame with one dominant metric and supporting evidence.",
+            "useFor": "Leading with a primary result while preserving its comparison context.",
+            "features": [
+                "Metric, unit, and label",
+                "Delta and baseline context",
+                "Evidence slot and semantic variants"
+            ],
+            "tags": [
+                "result",
+                "metric",
+                "evidence",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title and provides a fallback result heading."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Result Highlight",
+                    "description": "Sets the main in-slide heading; the header title is used before the built-in fallback."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Result Highlight",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Primary Metric",
+                    "description": "Labels the highlighted metric."
+                },
+                {
+                    "name": "metric",
+                    "type": "string | number",
+                    "required": false,
+                    "default": "0.0",
+                    "description": "Sets the main highlighted value."
+                },
+                {
+                    "name": "unit",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds a unit after the highlighted value."
+                },
+                {
+                    "name": "delta",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds change or improvement context below the metric."
+                },
+                {
+                    "name": "baseline",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds baseline context below the metric."
+                },
+                {
+                    "name": "variant",
+                    "type": "'primary' | 'success' | 'warning' | 'danger' | 'info'",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Selects the semantic accent style for the result panel."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "evidence",
+                    "description": "Supporting evidence displayed beside the result detail."
+                },
+                {
+                    "name": "default",
+                    "description": "Detailed interpretation or notes for the highlighted result."
+                }
+            ]
+        },
+        "experiment-grid": {
+            "label": "Experiment Grid",
+            "summary": "A compact grid of experimental setups, results, and notes.",
+            "useFor": "Comparing ablations, robustness checks, or evaluation settings.",
+            "features": [
+                "Structured experiment cards",
+                "Two- or three-column grid",
+                "Customizable field labels"
+            ],
+            "tags": [
+                "experiments",
+                "ablation",
+                "grid",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Experiment Grid",
+                    "description": "Sets the main in-slide heading; the header title is used first when present."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Experiment Grid",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "experiments",
+                    "type": "Array<{ name: string; setup?: string; metric?: string; result?: string; note?: string }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Defines experiment cards; an empty or omitted array displays the built-in ablation and robustness examples."
+                },
+                {
+                    "name": "cols",
+                    "type": "number | string",
+                    "required": false,
+                    "default": "2",
+                    "description": "Sets the number of grid columns through the layout CSS variable."
+                },
+                {
+                    "name": "setupLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Setup",
+                    "description": "Labels each experiment's setup field."
+                },
+                {
+                    "name": "metricLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Metric",
+                    "description": "Labels each experiment's result and metric field."
+                },
+                {
+                    "name": "noteLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Note",
+                    "description": "Labels each experiment's note field."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional context shown below the experiment cards."
+                }
+            ]
+        },
+        "limitation": {
+            "label": "Limitation and Mitigation",
+            "summary": "A paired frame for claim boundaries and mitigation strategies.",
+            "useFor": "Making limitations explicit and explaining how they are controlled.",
+            "features": [
+                "Limitation panel",
+                "Mitigation panel",
+                "Customizable headings and framing text"
+            ],
+            "tags": [
+                "limitations",
+                "mitigation",
+                "scope",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Limitation and Mitigation",
+                    "description": "Sets the main in-slide heading; the header title is used first when present."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Limitation",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "limitationLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Limitation",
+                    "description": "Labels the limitation panel."
+                },
+                {
+                    "name": "mitigationLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Mitigation",
+                    "description": "Labels the mitigation panel."
+                },
+                {
+                    "name": "limitation",
+                    "type": "string",
+                    "required": false,
+                    "default": "Name the boundary condition or unresolved risk.",
+                    "description": "Provides fallback limitation text when the limitation slot is not supplied."
+                },
+                {
+                    "name": "mitigation",
+                    "type": "string",
+                    "required": false,
+                    "default": "Explain how the current work controls, measures, or scopes it.",
+                    "description": "Provides fallback mitigation text when the mitigation slot is not supplied."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "limitation",
+                    "description": "Limitation content; replaces the limitation prop fallback."
+                },
+                {
+                    "name": "mitigation",
+                    "description": "Mitigation content; replaces the mitigation prop fallback."
+                },
+                {
+                    "name": "default",
+                    "description": "Additional context shown below both panels."
+                }
+            ]
+        },
+        "defense-question": {
+            "label": "Defense Question",
+            "summary": "A structured Q&A frame for an answer, evidence, and follow-up.",
+            "useFor": "Preparing thesis-defense questions or audience discussion prompts.",
+            "features": [
+                "Prominent question prompt",
+                "Answer and evidence panels",
+                "Optional follow-up panel"
+            ],
+            "tags": [
+                "defense",
+                "question",
+                "evidence",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Defense Question",
+                    "description": "Sets the small label above the question."
+                },
+                {
+                    "name": "question",
+                    "type": "string",
+                    "required": false,
+                    "default": "What is the strongest challenge to this claim?",
+                    "description": "Sets the main defense or discussion prompt."
+                },
+                {
+                    "name": "source",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds an optional source or examiner label below the question."
+                },
+                {
+                    "name": "answer",
+                    "type": "string",
+                    "required": false,
+                    "default": "Start with the direct answer, then state the evidence and boundary conditions.",
+                    "description": "Provides fallback answer text when the default slot is not supplied."
+                },
+                {
+                    "name": "evidence",
+                    "type": "string",
+                    "required": false,
+                    "description": "Provides fallback evidence text when the evidence slot is not supplied."
+                },
+                {
+                    "name": "followup",
+                    "type": "string",
+                    "required": false,
+                    "description": "Provides fallback follow-up text when the followup slot is not supplied."
+                },
+                {
+                    "name": "answerLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Answer",
+                    "description": "Labels the answer panel."
+                },
+                {
+                    "name": "evidenceLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Evidence",
+                    "description": "Labels the evidence panel."
+                },
+                {
+                    "name": "followupLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Follow-up",
+                    "description": "Labels the follow-up panel."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Answer content; replaces the answer prop fallback."
+                },
+                {
+                    "name": "evidence",
+                    "description": "Supporting evidence content shown in the side panel."
+                },
+                {
+                    "name": "followup",
+                    "description": "Follow-up question or next-step content shown in the side panel."
+                }
+            ]
+        },
+        "appendix-index": {
+            "label": "Appendix Index",
+            "summary": "A navigable map of backup slides and supporting material.",
+            "useFor": "Organizing appendices, extra experiments, implementation details, or proofs.",
+            "features": [
+                "Structured appendix entries",
+                "Labels and page references",
+                "Optional descriptions"
+            ],
+            "tags": [
+                "appendix",
+                "backup-slides",
+                "index",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Overrides the shared slide header subtitle."
+                },
+                {
+                    "name": "heading",
+                    "type": "string",
+                    "required": false,
+                    "default": "Appendix Index",
+                    "description": "Sets the main index heading; the header title is used first when present."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Adds supporting text below the main heading."
+                },
+                {
+                    "name": "eyebrow",
+                    "type": "string",
+                    "required": false,
+                    "default": "Appendix",
+                    "description": "Sets the small label above the main heading."
+                },
+                {
+                    "name": "items",
+                    "type": "Array<{ label?: string; title: string; description?: string; page?: string | number }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Defines appendix entries; an empty or omitted array displays the built-in example entries."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional material shown below the appendix index."
+                }
+            ]
+        },
+        "compare": {
+            "label": "Side-by-Side Comparison",
+            "summary": "A labeled two-column frame for contrasting approaches or concepts.",
+            "useFor": "Comparing a baseline with a proposal, or two competing ideas.",
+            "features": [
+                "Named left and right columns",
+                "Independent accent colors",
+                "Optional title and subtitle"
+            ],
+            "tags": [
+                "comparison",
+                "baseline",
+                "columns",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the shared slide header subtitle."
+                },
+                {
+                    "name": "leftLabel",
+                    "type": "string",
+                    "required": false,
+                    "description": "Labels the left comparison panel."
+                },
+                {
+                    "name": "rightLabel",
+                    "type": "string",
+                    "required": false,
+                    "description": "Labels the right comparison panel."
+                },
+                {
+                    "name": "leftColor",
+                    "type": "'red' | 'blue' | 'green' | 'gray'",
+                    "required": false,
+                    "options": [
+                        "red",
+                        "blue",
+                        "green",
+                        "gray"
+                    ],
+                    "description": "Selects the left panel accent variant."
+                },
+                {
+                    "name": "rightColor",
+                    "type": "'red' | 'blue' | 'green' | 'gray'",
+                    "required": false,
+                    "options": [
+                        "red",
+                        "blue",
+                        "green",
+                        "gray"
+                    ],
+                    "description": "Selects the right panel accent variant."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides heading sizes inside both comparison panels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "left",
+                    "description": "Left comparison content; takes precedence over the default slot."
+                },
+                {
+                    "name": "default",
+                    "description": "Fallback content for the left panel when the left slot is not supplied."
+                },
+                {
+                    "name": "right",
+                    "description": "Right comparison content."
+                }
+            ]
+        },
+        "methodology": {
+            "label": "Research Methodology",
+            "summary": "A two-column research-method frame suited to text and diagrams.",
+            "useFor": "Presenting procedural steps alongside a method diagram or visual.",
+            "features": [
+                "Method and visual columns",
+                "Configurable column ratio",
+                "Optional title and subtitle"
+            ],
+            "tags": [
+                "methodology",
+                "methods",
+                "diagram",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "ratio",
+                    "type": "string",
+                    "required": false,
+                    "default": "1:1",
+                    "description": "Sets the left-to-right flex ratio, such as 1:1 or 2:3."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes across both methodology panels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Method description shown in the left panel."
+                },
+                {
+                    "name": "right",
+                    "description": "Diagram, figure, or supporting content shown in the right panel."
+                }
+            ]
+        },
+        "results": {
+            "label": "Results Dashboard",
+            "summary": "A configurable grid for multiple metrics, findings, or result cards.",
+            "useFor": "Summarizing several outcomes on one slide.",
+            "features": [
+                "Configurable column count",
+                "Flexible card content",
+                "Optional title and subtitle"
+            ],
+            "tags": [
+                "results",
+                "metrics",
+                "dashboard",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the title rendered by the shared slide header."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "cols",
+                    "type": "number | string",
+                    "required": false,
+                    "default": "2",
+                    "description": "Sets the number of equal-width result grid columns."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "header",
+                    "description": "Optional content displayed above the result grid."
+                },
+                {
+                    "name": "default",
+                    "description": "Cards, metrics, figures, or other items placed in the result grid."
+                }
+            ]
+        },
+        "timeline": {
+            "label": "Research Timeline",
+            "summary": "A vertical sequence of dated milestones and descriptions.",
+            "useFor": "Showing research progress, project phases, or historical events.",
+            "features": [
+                "Structured milestone data",
+                "Year or period labels",
+                "Per-item descriptions"
+            ],
+            "tags": [
+                "timeline",
+                "milestones",
+                "history",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the timeline heading and also supplies the shared slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "items",
+                    "type": "Array<{ year: string | number; title: string; description?: string }>",
+                    "required": false,
+                    "description": "Defines chronological entries with a year, required title, and optional description."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional timeline context displayed below the generated entries."
+                }
+            ]
+        },
+        "agenda": {
+            "label": "Agenda Overview",
+            "summary": "A concise numbered overview of planned topics.",
+            "useFor": "Presenting a talk outline or meeting agenda from an explicit item list.",
+            "features": [
+                "Structured agenda items",
+                "Automatic numbering",
+                "Custom title"
+            ],
+            "tags": [
+                "agenda",
+                "outline",
+                "topics",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "default": "Agenda",
+                    "description": "Sets the agenda heading and also supplies the slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the optional subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "items",
+                    "type": "string[]",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Lists the numbered agenda entries."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional content shown below the agenda list."
+                }
+            ]
+        },
+        "acknowledgments": {
+            "label": "Acknowledgments",
+            "summary": "A credits frame for funders, collaborators, and contributors.",
+            "useFor": "Recognizing financial support and research collaborators.",
+            "features": [
+                "Funder list",
+                "Collaborator list",
+                "Additional thank-you content"
+            ],
+            "tags": [
+                "acknowledgments",
+                "funding",
+                "collaborators",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "default": "Acknowledgments",
+                    "description": "Sets the acknowledgments heading and also supplies the slide header title."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the optional subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "funders",
+                    "type": "string[]",
+                    "required": false,
+                    "description": "Lists funding organizations in the Funded By column."
+                },
+                {
+                    "name": "collaborators",
+                    "type": "string[]",
+                    "required": false,
+                    "description": "Lists collaborators in the collaboration column."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Additional acknowledgment text shown below the funder and collaborator lists."
+                }
+            ]
+        },
+        "references": {
+            "label": "Bibliography",
+            "summary": "An academic reference list generated from citations or written manually.",
+            "useFor": "Closing a talk with sources or paginating a long bibliography.",
+            "features": [
+                "BibTeX bibliography generation",
+                "Pagination controls",
+                "Automatic font-size adjustment"
+            ],
+            "tags": [
+                "references",
+                "bibliography",
+                "citations",
+                "academic"
+            ],
+            "config": [
+                {
+                    "name": "page",
+                    "type": "number",
+                    "required": false,
+                    "description": "Marks a continuation page; values greater than one change the fallback heading to References (cont.)."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "default": "References",
+                    "description": "Overrides the generated references heading."
+                },
+                {
+                    "name": "subtitle",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sets the subtitle rendered by the shared slide header."
+                },
+                {
+                    "name": "minFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "max(10px, 40% of computed size)",
+                    "description": "Sets the minimum body font size used by the automatic fit loop, in pixels."
+                },
+                {
+                    "name": "maxFontSize",
+                    "type": "number",
+                    "required": false,
+                    "default": "120% of computed size",
+                    "description": "Sets the initial maximum body font size used by the automatic fit loop, in pixels."
+                },
+                {
+                    "name": "fontsize",
+                    "type": "{ h1?: number | string; h2?: number | string; h3?: number | string }",
+                    "required": false,
+                    "description": "Overrides per-slide heading sizes; numeric values are interpreted as pixels."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Reference entries that are automatically resized to fit the available area."
+                }
+            ]
+        }
+    },
     "componentNames": [
         "Theorem",
         "Block",
@@ -83,6 +2361,1191 @@
         "DatasetCard",
         "PaperCard",
         "ContributionList",
-        "CaveatList"
-    ]
+        "CaveatList",
+        "ResultTable"
+    ],
+    "componentGroups": [
+        {
+            "name": "academic",
+            "label": "Academic",
+            "description": "Formal statements and research context",
+            "items": [
+                "Theorem",
+                "EquationBlock",
+                "DatasetCard",
+                "PaperCard",
+                "ContributionList",
+                "CaveatList"
+            ]
+        },
+        {
+            "name": "evidence",
+            "label": "Evidence & Results",
+            "description": "Metrics, claims, and structured result data",
+            "items": [
+                "MetricCard",
+                "MetricGrid",
+                "EvidenceBlock",
+                "ResultTable"
+            ]
+        },
+        {
+            "name": "structure",
+            "label": "Structure",
+            "description": "Reusable content organization helpers",
+            "items": [
+                "Block",
+                "Steps",
+                "Keywords",
+                "Columns"
+            ]
+        },
+        {
+            "name": "citations",
+            "label": "Citations",
+            "description": "Academic source markers and notes",
+            "items": [
+                "Cite"
+            ]
+        },
+        {
+            "name": "theme-utilities",
+            "label": "Style & Utilities",
+            "description": "Theme-aware emphasis, math, and authoring helpers",
+            "items": [
+                "Highlight",
+                "ThemePreview"
+            ]
+        }
+    ],
+    "componentCatalog": {
+        "Theorem": {
+            "label": "Theorem",
+            "category": "academic",
+            "summary": "A formal statement block for theorems, definitions, proofs, and related types.",
+            "useFor": "Presenting numbered mathematical or scholarly statements.",
+            "features": [
+                "Automatic numbering",
+                "Ten formal statement types",
+                "Multilingual labels"
+            ],
+            "aliases": [
+                "theorem",
+                "lemma",
+                "definition",
+                "proof",
+                "corollary"
+            ],
+            "config": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "required": false,
+                    "default": "theorem",
+                    "options": [
+                        "theorem",
+                        "lemma",
+                        "proposition",
+                        "corollary",
+                        "definition",
+                        "example",
+                        "remark",
+                        "proof",
+                        "note",
+                        "claim"
+                    ],
+                    "description": "Formal statement type; controls the localized label and semantic styling."
+                },
+                {
+                    "name": "number",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Explicit statement number. When provided, it takes precedence over automatic numbering."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional theorem title shown in the header."
+                },
+                {
+                    "name": "autoNumber",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Automatically assigns a number when no explicit number is provided; proof and note types remain unnumbered."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Uses reduced margins, padding, and header size."
+                },
+                {
+                    "name": "showHeader",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Shows the localized type, number, and title header; disable it for a content-only box."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "The theorem, proof, definition, or other formal statement content."
+                }
+            ]
+        },
+        "Block": {
+            "label": "Block",
+            "category": "structure",
+            "summary": "A Beamer-style callout with a title and semantic visual treatment.",
+            "useFor": "Grouping notes, warnings, examples, findings, or alerts.",
+            "features": [
+                "Seven semantic types",
+                "Optional title",
+                "Vue and syntax-sugar usage"
+            ],
+            "aliases": [
+                "block",
+                "callout",
+                "beamer-block"
+            ],
+            "config": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "required": false,
+                    "default": "default",
+                    "options": [
+                        "default",
+                        "info",
+                        "success",
+                        "warning",
+                        "danger",
+                        "example",
+                        "alert"
+                    ],
+                    "description": "Semantic block style used to select the themed header, border, and content colors."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional block header. Without a title, the component renders as a single bordered content box."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces the block's outer margin."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Main block content, including Markdown paragraphs and lists."
+                }
+            ]
+        },
+        "Cite": {
+            "label": "Citation",
+            "category": "citations",
+            "summary": "A compact numeric or author-year marker with optional citation content.",
+            "useFor": "Adding inline citations or footnote-like manual source notes.",
+            "features": [
+                "Numeric and author-year markers",
+                "Inline and block display",
+                "Automatic numeric IDs"
+            ],
+            "aliases": [
+                "cite",
+                "citation",
+                "source-note"
+            ],
+            "config": [
+                {
+                    "name": "id",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Numeric citation marker or custom key. If omitted, a client-side numeric counter is assigned."
+                },
+                {
+                    "name": "inline",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Renders the citation inline; false renders a block-style citation note."
+                },
+                {
+                    "name": "author",
+                    "type": "string",
+                    "required": false,
+                    "description": "Legacy manual author text. Supplying author or year switches the marker to author-year form."
+                },
+                {
+                    "name": "year",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Legacy manual publication year. Supplying author or year switches the marker to author-year form."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Optional citation detail displayed after the numeric or author-year marker."
+                }
+            ]
+        },
+        "Steps": {
+            "label": "Steps",
+            "category": "structure",
+            "summary": "A connected, numbered sequence for processes and workflows.",
+            "useFor": "Explaining ordered methods, procedures, or project phases.",
+            "features": [
+                "Structured step data",
+                "Active-step emphasis",
+                "Connecting lines"
+            ],
+            "aliases": [
+                "steps",
+                "workflow",
+                "process"
+            ],
+            "config": [
+                {
+                    "name": "steps",
+                    "type": "Array<{ title?: string; description?: string }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Ordered step objects; each item may provide a title and description."
+                },
+                {
+                    "name": "activeStep",
+                    "type": "number",
+                    "required": false,
+                    "description": "One-based index of the step to emphasize; omit it to leave every step inactive."
+                }
+            ],
+            "slots": []
+        },
+        "Keywords": {
+            "label": "Keywords",
+            "category": "structure",
+            "summary": "A compact collection of topic or concept tags.",
+            "useFor": "Showing research topics, taxonomy terms, or key concepts.",
+            "features": [
+                "Array-driven tags",
+                "Semantic color options",
+                "Items prop alias"
+            ],
+            "aliases": [
+                "keywords",
+                "tags",
+                "topics"
+            ],
+            "config": [
+                {
+                    "name": "keywords",
+                    "type": "string[]",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Keyword labels to render as tags; takes precedence over the legacy items alias."
+                },
+                {
+                    "name": "items",
+                    "type": "string[]",
+                    "required": false,
+                    "description": "Legacy alias for keywords, used only when keywords is not provided."
+                },
+                {
+                    "name": "color",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "blue",
+                        "green",
+                        "purple",
+                        "gray"
+                    ],
+                    "description": "Color treatment applied to every keyword tag."
+                }
+            ],
+            "slots": []
+        },
+        "Columns": {
+            "label": "Columns",
+            "category": "structure",
+            "summary": "A flexible two-, three-, or four-column content container.",
+            "useFor": "Organizing parallel content without changing the slide layout.",
+            "features": [
+                "Two to four columns",
+                "Custom gaps and ratios",
+                "Optional balanced heights"
+            ],
+            "aliases": [
+                "columns",
+                "multi-column",
+                "cols"
+            ],
+            "config": [
+                {
+                    "name": "columns",
+                    "type": "2 | 3 | 4 | number | string",
+                    "required": false,
+                    "default": "2",
+                    "options": [
+                        "2",
+                        "3",
+                        "4"
+                    ],
+                    "description": "Number of rendered columns. Only 2, 3, and 4 are accepted after normalization."
+                },
+                {
+                    "name": "cols",
+                    "type": "2 | 3 | 4 | number | string",
+                    "required": false,
+                    "options": [
+                        "2",
+                        "3",
+                        "4"
+                    ],
+                    "description": "Legacy alias for columns, used only when columns is absent or invalid."
+                },
+                {
+                    "name": "ratio",
+                    "type": "string",
+                    "required": false,
+                    "description": "Colon-separated positive width weights such as 1:2 or 1:1:2; invalid ratios fall back to equal columns."
+                },
+                {
+                    "name": "gap",
+                    "type": "string | number",
+                    "required": false,
+                    "default": "1.5rem",
+                    "description": "Grid gap. Numbers and numeric strings are interpreted as rem; CSS length strings are used directly."
+                },
+                {
+                    "name": "balanced",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Stretches column containers to a balanced height."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Content for the first column."
+                },
+                {
+                    "name": "col2",
+                    "description": "Content for the second column."
+                },
+                {
+                    "name": "col3",
+                    "description": "Content for the third column when columns is 3 or 4."
+                },
+                {
+                    "name": "col4",
+                    "description": "Content for the fourth column when columns is 4."
+                }
+            ]
+        },
+        "Highlight": {
+            "label": "Highlight",
+            "category": "theme-utilities",
+            "summary": "An inline, theme-aware treatment for emphasized text.",
+            "useFor": "Calling attention to a phrase, value, or result within prose.",
+            "features": [
+                "Five semantic types",
+                "Inline composition",
+                "Legacy color aliases"
+            ],
+            "aliases": [
+                "highlight",
+                "mark",
+                "inline-emphasis"
+            ],
+            "config": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic highlight treatment; takes precedence over the legacy color alias."
+                },
+                {
+                    "name": "color",
+                    "type": "string",
+                    "required": false,
+                    "options": [
+                        "yellow",
+                        "green",
+                        "blue",
+                        "pink",
+                        "purple"
+                    ],
+                    "description": "Legacy color alias mapped to warning, success, info, danger, and primary respectively."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Inline text or content to highlight."
+                }
+            ]
+        },
+        "ThemePreview": {
+            "label": "Theme Preview",
+            "category": "theme-utilities",
+            "summary": "A scoped wrapper that previews a Scholarly color theme inside a block.",
+            "useFor": "Comparing theme palettes without changing the deck's global theme.",
+            "features": [
+                "Locally scoped CSS variables",
+                "All built-in color themes",
+                "No global theme mutation"
+            ],
+            "aliases": [
+                "theme-preview",
+                "color-theme",
+                "palette-preview"
+            ],
+            "config": [
+                {
+                    "name": "colorTheme",
+                    "type": "string",
+                    "required": false,
+                    "default": "classic-blue",
+                    "options": [
+                        "classic-blue",
+                        "oxford-burgundy",
+                        "cambridge-green",
+                        "princeton-orange",
+                        "yale-blue",
+                        "monochrome",
+                        "warm-sepia",
+                        "nordic-blue",
+                        "high-contrast"
+                    ],
+                    "description": "Theme palette to preview locally inside the component; unknown ids fall back to classic-blue and do not change the global slide theme."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Content rendered with the selected preview palette."
+                }
+            ]
+        },
+        "MetricCard": {
+            "label": "Metric Card",
+            "category": "evidence",
+            "summary": "A readable card for one result metric, unit, comparison, and note.",
+            "useFor": "Keeping a key number visible without letting it dominate the slide.",
+            "features": [
+                "Value, unit, and delta",
+                "Trend semantics",
+                "Compact and semantic variants"
+            ],
+            "aliases": [
+                "metric-card",
+                "metric",
+                "kpi"
+            ],
+            "config": [
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "description": "Short metric label such as Accuracy or Latency."
+                },
+                {
+                    "name": "value",
+                    "type": "string | number",
+                    "required": true,
+                    "description": "Required main metric value, rendered with tabular numeric styling."
+                },
+                {
+                    "name": "unit",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional unit shown after the value, such as % or ms."
+                },
+                {
+                    "name": "delta",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional comparison or change badge such as +3.2 or -12%."
+                },
+                {
+                    "name": "caption",
+                    "type": "string",
+                    "required": false,
+                    "description": "Supporting note below the metric; default-slot content replaces this text."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and soft-background treatment."
+                },
+                {
+                    "name": "trend",
+                    "type": "string",
+                    "required": false,
+                    "default": "flat",
+                    "options": [
+                        "up",
+                        "down",
+                        "flat"
+                    ],
+                    "description": "Semantic trend class applied to the delta badge."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces card gaps and padding for dense slides."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Custom supporting caption content shown below the value."
+                }
+            ]
+        },
+        "MetricGrid": {
+            "label": "Metric Grid",
+            "category": "evidence",
+            "summary": "A responsive grid of compact metric cards.",
+            "useFor": "Summarizing results, ablations, or experiment dashboards.",
+            "features": [
+                "Array-driven metrics",
+                "One to four columns",
+                "Configurable gap and compact mode"
+            ],
+            "aliases": [
+                "metric-grid",
+                "metrics",
+                "results-dashboard"
+            ],
+            "config": [
+                {
+                    "name": "metrics",
+                    "type": "Array<{ label?: string; value: string | number; unit?: string; delta?: string; caption?: string; variant?: 'primary' | 'success' | 'warning' | 'danger' | 'info'; trend?: 'up' | 'down' | 'flat' }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Metric objects rendered as MetricCard instances. An item's variant overrides the grid-level variant."
+                },
+                {
+                    "name": "columns",
+                    "type": "1 | 2 | 3 | 4 | number | string",
+                    "required": false,
+                    "default": "3",
+                    "options": [
+                        "1",
+                        "2",
+                        "3",
+                        "4"
+                    ],
+                    "description": "Responsive grid column count, numerically clamped to the range 1–4."
+                },
+                {
+                    "name": "gap",
+                    "type": "string | number",
+                    "required": false,
+                    "default": "0.75rem",
+                    "description": "Space between cards. Numbers and numeric strings are interpreted as rem; CSS length strings are used directly."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Default MetricCard variant for metrics that do not specify their own variant."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Uses compact density for every generated MetricCard."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Custom cards or other grid children appended after cards generated from metrics."
+                }
+            ]
+        },
+        "EvidenceBlock": {
+            "label": "Evidence Block",
+            "category": "evidence",
+            "summary": "A claim block with supporting evidence, source, and confidence context.",
+            "useFor": "Making the basis and scope of a research claim easy to inspect.",
+            "features": [
+                "Claim and evidence content",
+                "Source and confidence markers",
+                "Footer slot and semantic variants"
+            ],
+            "aliases": [
+                "evidence-block",
+                "claim-evidence",
+                "confidence"
+            ],
+            "config": [
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Evidence",
+                    "description": "Small contextual label above the evidence title."
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Main evidence title or claim."
+                },
+                {
+                    "name": "source",
+                    "type": "string",
+                    "required": false,
+                    "description": "Source marker such as a table, figure, appendix, dataset, or seed summary."
+                },
+                {
+                    "name": "confidence",
+                    "type": "string",
+                    "required": false,
+                    "description": "Confidence, interval, sample scope, or other qualification displayed as metadata."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and header-background treatment."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces outer margins and internal padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Main evidence explanation, values, list, or supporting content."
+                },
+                {
+                    "name": "footer",
+                    "description": "Supplementary source, scope, method, or interpretation note below the evidence."
+                }
+            ]
+        },
+        "EquationBlock": {
+            "label": "Equation Block",
+            "category": "academic",
+            "summary": "A titled equation container with reference and caption support.",
+            "useFor": "Connecting a formula to the surrounding scholarly argument.",
+            "features": [
+                "Title and label",
+                "Optional numbered reference",
+                "Caption and compact mode"
+            ],
+            "aliases": [
+                "equation-block",
+                "equation",
+                "formula"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional equation title."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Equation",
+                    "description": "Small contextual label shown before the title."
+                },
+                {
+                    "name": "caption",
+                    "type": "string",
+                    "required": false,
+                    "description": "Explanatory caption displayed below the equation."
+                },
+                {
+                    "name": "reference",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Equation number or reference marker displayed at the right of the header."
+                },
+                {
+                    "name": "numbered",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Wraps an unwrapped reference in parentheses; disable it for labels such as Appendix A."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces outer margins and internal padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Equation content, normally Markdown math or rendered KaTeX."
+                }
+            ]
+        },
+        "DatasetCard": {
+            "label": "Dataset Card",
+            "category": "academic",
+            "summary": "A structured summary of a dataset's task, scale, split, and provenance.",
+            "useFor": "Introducing benchmarks or explaining an experimental dataset.",
+            "features": [
+                "Task and sample metadata",
+                "Split and source fields",
+                "License and semantic variants"
+            ],
+            "aliases": [
+                "dataset-card",
+                "dataset",
+                "benchmark"
+            ],
+            "config": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "required": true,
+                    "description": "Required dataset name."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Dataset",
+                    "description": "Small contextual label above the dataset name."
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "required": false,
+                    "description": "Short dataset description."
+                },
+                {
+                    "name": "task",
+                    "type": "string",
+                    "required": false,
+                    "description": "Dataset task or modality shown as a badge, such as Classification."
+                },
+                {
+                    "name": "samples",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Sample count or scale marker."
+                },
+                {
+                    "name": "features",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Feature, modality, or field count."
+                },
+                {
+                    "name": "split",
+                    "type": "string",
+                    "required": false,
+                    "description": "Train, validation, test, or cross-validation split summary."
+                },
+                {
+                    "name": "source",
+                    "type": "string",
+                    "required": false,
+                    "description": "Dataset source, benchmark suite, or repository shown in the footer."
+                },
+                {
+                    "name": "license",
+                    "type": "string",
+                    "required": false,
+                    "description": "License or access constraint shown in the footer."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and metadata-background treatment."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces card gaps, margins, and padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Supplementary dataset notes displayed before the source and license footer."
+                }
+            ]
+        },
+        "PaperCard": {
+            "label": "Paper Card",
+            "category": "academic",
+            "summary": "A publication card with bibliographic metadata and a contribution summary.",
+            "useFor": "Related-work slides, paper summaries, and reading-group decks.",
+            "features": [
+                "Authors, venue, year, and status",
+                "DOI or paper link",
+                "One-sentence contribution"
+            ],
+            "aliases": [
+                "paper-card",
+                "publication",
+                "related-work"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": true,
+                    "description": "Required paper title."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Paper",
+                    "description": "Small contextual label above the paper title."
+                },
+                {
+                    "name": "authors",
+                    "type": "string[] | string",
+                    "required": false,
+                    "description": "Authors as an array, joined with commas, or as an already formatted string."
+                },
+                {
+                    "name": "venue",
+                    "type": "string",
+                    "required": false,
+                    "description": "Publication venue or journal."
+                },
+                {
+                    "name": "year",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Publication year."
+                },
+                {
+                    "name": "status",
+                    "type": "string",
+                    "required": false,
+                    "description": "Review or publication status shown as a badge."
+                },
+                {
+                    "name": "doi",
+                    "type": "string",
+                    "required": false,
+                    "description": "DOI identifier without the URL prefix, displayed as metadata."
+                },
+                {
+                    "name": "url",
+                    "type": "string",
+                    "required": false,
+                    "description": "Paper URL used by the footer link."
+                },
+                {
+                    "name": "urlLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Open paper",
+                    "description": "Visible label for the paper URL link."
+                },
+                {
+                    "name": "contribution",
+                    "type": "string",
+                    "required": false,
+                    "description": "One-sentence contribution or takeaway highlighted within the card."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and metadata-background treatment."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces card gaps, margins, and padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Supplementary paper details displayed before the optional link footer."
+                }
+            ]
+        },
+        "ContributionList": {
+            "label": "Contribution List",
+            "category": "academic",
+            "summary": "An ordered list of contribution claims with optional evidence markers.",
+            "useFor": "Making a paper's novelty and supporting evidence explicit.",
+            "features": [
+                "Structured contribution items",
+                "Optional numeric markers",
+                "Semantic variants and compact mode"
+            ],
+            "aliases": [
+                "contribution-list",
+                "contributions",
+                "novelty"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional section title."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Contributions",
+                    "description": "Small contextual label above the title."
+                },
+                {
+                    "name": "items",
+                    "type": "Array<{ title?: string; description?: string; evidence?: string }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Contribution entries with an optional title, explanation, and evidence badge."
+                },
+                {
+                    "name": "ordered",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "true",
+                    "description": "Shows one-based numeric markers; false uses visually empty circular markers."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "primary",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and marker-background treatment."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces list gaps, margins, and padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Supplementary content displayed below the structured contribution items."
+                }
+            ]
+        },
+        "CaveatList": {
+            "label": "Caveat List",
+            "category": "academic",
+            "summary": "A structured list of limitations paired with mitigation notes.",
+            "useFor": "Scoping claims on result, discussion, or defense slides.",
+            "features": [
+                "Caveat title and description",
+                "Optional mitigation per item",
+                "Semantic variants and compact mode"
+            ],
+            "aliases": [
+                "caveat-list",
+                "limitations",
+                "mitigations"
+            ],
+            "config": [
+                {
+                    "name": "title",
+                    "type": "string",
+                    "required": false,
+                    "description": "Optional section title."
+                },
+                {
+                    "name": "label",
+                    "type": "string",
+                    "required": false,
+                    "default": "Caveats",
+                    "description": "Small contextual label above the title."
+                },
+                {
+                    "name": "items",
+                    "type": "Array<{ title?: string; description?: string; mitigation?: string }>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Caveat entries with an optional title, limitation description, and mitigation."
+                },
+                {
+                    "name": "mitigationLabel",
+                    "type": "string",
+                    "required": false,
+                    "default": "Mitigation",
+                    "description": "Label placed before each item's mitigation text."
+                },
+                {
+                    "name": "variant",
+                    "type": "string",
+                    "required": false,
+                    "default": "warning",
+                    "options": [
+                        "primary",
+                        "success",
+                        "warning",
+                        "danger",
+                        "info"
+                    ],
+                    "description": "Semantic accent and marker-background treatment."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces list gaps, margins, and padding."
+                }
+            ],
+            "slots": [
+                {
+                    "name": "default",
+                    "description": "Supplementary content displayed below the structured caveat items."
+                }
+            ]
+        },
+        "ResultTable": {
+            "label": "Result Table",
+            "category": "evidence",
+            "summary": "A theme-aware table for small structured result datasets.",
+            "useFor": "Comparing methods, metrics, and experimental outputs with exact values.",
+            "features": [
+                "Object and array rows",
+                "Column labels, alignment, and formatting",
+                "Highlighted columns and compact mode"
+            ],
+            "aliases": [
+                "result-table",
+                "results-table",
+                "comparison-table"
+            ],
+            "config": [
+                {
+                    "name": "rows",
+                    "type": "Array<Record<string, string | number | boolean | null | undefined> | Array<string | number | boolean | null | undefined>>",
+                    "required": false,
+                    "default": "[]",
+                    "description": "Result rows as objects or positional arrays. Object keys or array positions are matched to the resolved columns."
+                },
+                {
+                    "name": "columns",
+                    "type": "Array<string | { key: string; label?: string; align?: 'left' | 'center' | 'right'; format?: (value, row) => string | number }>",
+                    "required": false,
+                    "description": "Optional column order and configuration. Strings use the same value for key and label; objects can customize labels, alignment, and formatting."
+                },
+                {
+                    "name": "caption",
+                    "type": "string",
+                    "required": false,
+                    "description": "Short caption displayed above the table."
+                },
+                {
+                    "name": "compact",
+                    "type": "boolean",
+                    "required": false,
+                    "default": "false",
+                    "description": "Reduces table font size, margins, and cell padding."
+                },
+                {
+                    "name": "highlightColumn",
+                    "type": "string | number",
+                    "required": false,
+                    "description": "Highlights a column by its key or zero-based column index."
+                }
+            ],
+            "slots": []
+        }
+    }
 }

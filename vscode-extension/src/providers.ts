@@ -1,23 +1,33 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { getColorThemePreviewDir, getComponentPreviewFile } from './preview';
 import {
-  COLOR_THEMES_SIMPLE as COLOR_THEMES,
-  FONT_THEMES_SIMPLE as FONT_THEMES,
+  getColorThemePreviewDir,
+  getComponentPreviewFile,
+  type PreviewDetails
+} from './preview';
+import {
+  COLOR_THEMES,
+  FONT_THEMES,
   THEME_PRESETS,
   LAYOUT_GROUPS,
+  LAYOUT_CATALOG,
   COMPONENT_NAMES,
+  COMPONENT_CATALOG,
+  COMPONENT_GROUPS,
   TEMPLATES
 } from './sharedData';
 import type { CliActionId } from './commands';
 
 export interface SnippetItem {
+  id?: string;
   label: string;
   description: string;
   snippet: string;
   icon?: string;
   category?: string;
+  canonicalName?: string;
+  details?: PreviewDetails;
 }
 
 function toMarkdownCodeBlock(snippet: string): string {
@@ -38,18 +48,21 @@ function hasPreview(extensionUri: vscode.Uri, ...segments: string[]): boolean {
 function createLayoutTooltip(
   extensionUri: vscode.Uri,
   layoutId: string,
+  label: string,
   description: string,
-  snippet: string
+  snippet: string,
+  details?: PreviewDetails
 ): vscode.MarkdownString {
   const md = new vscode.MarkdownString('', true);
   md.baseUri = extensionUri;
   md.supportHtml = true;
   if (hasPreview(extensionUri, 'media', 'previews', 'layouts', `${layoutId}.png`)) {
-    md.appendMarkdown(`![${layoutId}](./media/previews/layouts/${layoutId}.png)\n\n`);
+    md.appendMarkdown(`![${label}](./media/previews/layouts/${layoutId}.png)\n\n`);
   }
-  md.appendMarkdown(`**${layoutId}** — ${description}\n\n`);
+  md.appendMarkdown(`**${label}**  \`${layoutId}\`\n\n${description}\n\n`);
+  appendCatalogDetails(md, details);
   md.appendMarkdown(toMarkdownCodeBlock(snippet));
-  md.appendMarkdown('\n\n*Click 👁 for larger preview*');
+  md.appendMarkdown('\n\n*Use the Preview action for the full catalog entry.*');
   return md;
 }
 
@@ -57,7 +70,8 @@ function createComponentTooltip(
   extensionUri: vscode.Uri,
   label: string,
   description: string,
-  snippet: string
+  snippet: string,
+  details?: PreviewDetails
 ): vscode.MarkdownString {
   const md = new vscode.MarkdownString('', true);
   md.baseUri = extensionUri;
@@ -67,9 +81,44 @@ function createComponentTooltip(
     md.appendMarkdown(`![${label}](./media/previews/components/${file}.png)\n\n`);
   }
   md.appendMarkdown(`**${label}** — ${description}\n\n`);
+  appendCatalogDetails(md, details);
   md.appendMarkdown(toMarkdownCodeBlock(snippet));
-  md.appendMarkdown('\n\n*Click 👁 for larger preview*');
+  md.appendMarkdown('\n\n*Use the Preview action for the full catalog entry.*');
   return md;
+}
+
+function appendCatalogDetails(md: vscode.MarkdownString, details: PreviewDetails | undefined): void {
+  if (!details) return;
+  if (details.category) md.appendMarkdown(`**Category:** ${details.category}\n\n`);
+  if (details.useFor) md.appendMarkdown(`**Best for:** ${details.useFor}\n\n`);
+  if (details.features?.length) {
+    md.appendMarkdown(`**Provides:** ${details.features.join(' · ')}\n\n`);
+  }
+  if (details.config) {
+    if (details.config.length) {
+      md.appendMarkdown('**Configuration:**\n\n');
+      for (const item of details.config) {
+        const options = item.options?.length ? `; values: ${item.options.join(' | ')}` : '';
+        const defaultValue = item.default !== undefined ? `; default: ${item.default}` : '';
+        const requirement = item.required ? 'required' : 'optional';
+        md.appendMarkdown(`- \`${item.name}\` — \`${item.type}\`; ${requirement}${defaultValue}${options}: ${item.description}\n`);
+      }
+      md.appendMarkdown('\n');
+    } else {
+      md.appendMarkdown('**Configuration:** No item-specific props.\n\n');
+    }
+  }
+  if (details.slots) {
+    if (details.slots.length) {
+      md.appendMarkdown('**Slots:**\n\n');
+      for (const slot of details.slots) {
+        md.appendMarkdown(`- \`${slot.name}\`: ${slot.description}\n`);
+      }
+      md.appendMarkdown('\n');
+    } else {
+      md.appendMarkdown('**Slots:** None.\n\n');
+    }
+  }
 }
 
 function createThemeTooltip(
@@ -92,7 +141,7 @@ function createThemeTooltip(
   md.appendMarkdown(`**${label}**\n\n`);
   if (description) md.appendMarkdown(`${description}\n\n`);
   if (colorTheme) md.appendMarkdown(`\`colorTheme: ${colorTheme}\`\n\n`);
-  md.appendMarkdown('*Click 👁 for full preview*');
+  md.appendMarkdown('*Use the Preview action for the full theme gallery.*');
   return md;
 }
 
@@ -140,23 +189,91 @@ function findLayoutId(snippet: string): string | undefined {
   return snippet.match(/^layout:\s*([a-z0-9-]+)/m)?.[1];
 }
 
-function createLayoutSnippetItem(layoutId: string, definition?: SnippetDefinition): SnippetItem {
+function createLayoutSnippetItem(
+  layoutId: string,
+  categoryLabel: string,
+  definition?: SnippetDefinition
+): SnippetItem {
+  const catalog = LAYOUT_CATALOG[layoutId];
   return {
-    label: layoutId,
-    description: definition ? stripCategoryPrefix(definition.description) : `Insert ${layoutId} layout`,
-    snippet: definition?.body ?? `---\nlayout: ${layoutId}\n---\n\n$0`
+    id: layoutId,
+    label: catalog?.label ?? layoutId,
+    description: catalog?.summary
+      ?? (definition ? stripCategoryPrefix(definition.description) : `Insert ${layoutId} layout`),
+    icon: 'layout',
+    snippet: definition?.body ?? `---\nlayout: ${layoutId}\n---\n\n$0`,
+    details: catalog
+      ? {
+          category: categoryLabel,
+          useFor: catalog.useFor,
+          features: catalog.features,
+          tags: catalog.tags,
+          config: catalog.config,
+          slots: catalog.slots
+        }
+      : { category: categoryLabel }
   };
 }
 
 function createComponentSnippetItem(definition: SnippetDefinition): SnippetItem {
   const label = stripScholarlyPrefix(definition.name);
-  const baseName = label.replace(/\s+\(.+?\)$/, '');
+  const canonicalName = resolveComponentName(label, definition.body);
+  const catalog = canonicalName ? COMPONENT_CATALOG[canonicalName] : undefined;
+  const category = catalog?.category ?? inferUtilityCategory(label);
+  const categoryLabel = COMPONENT_GROUPS.find(group => group.name === category)?.label ?? category;
   return {
+    id: canonicalName ?? label,
     label,
-    description: definition.description,
-    icon: COMPONENT_NAMES.includes(baseName) ? 'symbol-method' : 'symbol-snippet',
-    snippet: definition.body
+    description: catalog?.summary ?? definition.description,
+    icon: componentIcon(label, canonicalName),
+    category,
+    canonicalName,
+    snippet: definition.body,
+    details: catalog
+      ? {
+          category: categoryLabel,
+          useFor: catalog.useFor,
+          features: catalog.features,
+          tags: catalog.aliases,
+          config: catalog.config,
+          slots: catalog.slots
+        }
+      : {
+          category: categoryLabel,
+          useFor: definition.description
+        }
   };
+}
+
+function resolveComponentName(label: string, snippet: string): string | undefined {
+  const componentTag = snippet.match(/<([A-Z][A-Za-z0-9]+)/)?.[1];
+  if (componentTag && COMPONENT_NAMES.includes(componentTag)) return componentTag;
+
+  const baseLabel = label.replace(/\s+\(.+?\)$/, '');
+  const normalized = normalizeCatalogTerm(baseLabel);
+  return Object.entries(COMPONENT_CATALOG).find(([name, catalog]) =>
+    [name, catalog.label, ...catalog.aliases]
+      .some(candidate => normalizeCatalogTerm(candidate) === normalized)
+  )?.[0];
+}
+
+function normalizeCatalogTerm(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function inferUtilityCategory(label: string): string {
+  return /citation|bibliograph|references|anchor/i.test(label)
+    ? 'citations'
+    : 'theme-utilities';
+}
+
+function componentIcon(label: string, canonicalName: string | undefined): string {
+  if (canonicalName) return 'symbol-method';
+  if (/citation|bibliograph|references|anchor/i.test(label)) return 'references';
+  if (/math/i.test(label)) return 'symbol-operator';
+  if (/font/i.test(label)) return 'text-size';
+  if (/comment/i.test(label)) return 'comment';
+  return 'symbol-snippet';
 }
 
 const layoutSnippetDefinitions = readSnippetDefinitions('layouts.json');
@@ -173,7 +290,7 @@ export const layoutCategories = Object.fromEntries(
       label: group.label,
       description: group.description,
       icon: group.icon,
-      layouts: group.items.map(id => createLayoutSnippetItem(id, layoutSnippetById.get(id)))
+      layouts: group.items.map(id => createLayoutSnippetItem(id, group.label, layoutSnippetById.get(id)))
     }
   ])
 );
@@ -189,6 +306,17 @@ export const layouts: SnippetItem[] = Object.entries(layoutCategories).flatMap(
 export const components: SnippetItem[] = readSnippetDefinitions('components.json')
   .map(createComponentSnippetItem);
 
+export const componentCategories = Object.fromEntries(
+  COMPONENT_GROUPS.map(group => [
+    group.name,
+    {
+      label: group.label,
+      description: group.description,
+      items: components.filter(item => item.category === group.name)
+    }
+  ])
+);
+
 // Tree Item class
 export class SnippetTreeItem extends vscode.TreeItem {
   constructor(
@@ -198,7 +326,7 @@ export class SnippetTreeItem extends vscode.TreeItem {
     super(item.label, collapsibleState);
     this.tooltip = item.description;
     this.description = item.description;
-    this.iconPath = new vscode.ThemeIcon('symbol-snippet');
+    this.iconPath = new vscode.ThemeIcon(item.icon || 'symbol-snippet');
     this.command = {
       command: 'slidev-scholarly.insertLayout',
       title: 'Insert',
@@ -221,6 +349,19 @@ class LayoutCategoryTreeItem extends vscode.TreeItem {
     this.description = categoryData.description;
     this.iconPath = new vscode.ThemeIcon(categoryData.icon);
     this.contextValue = 'layoutCategory';
+  }
+}
+
+class ComponentCategoryTreeItem extends vscode.TreeItem {
+  constructor(
+    public readonly categoryKey: string,
+    public readonly categoryData: { label: string; description: string; items: SnippetItem[] }
+  ) {
+    super(categoryData.label, vscode.TreeItemCollapsibleState.Collapsed);
+    this.description = `${categoryData.items.length}`;
+    this.tooltip = categoryData.description;
+    this.iconPath = new vscode.ThemeIcon('symbol-folder');
+    this.contextValue = 'componentCategory';
   }
 }
 
@@ -251,9 +392,11 @@ export class LayoutsProvider implements vscode.TreeDataProvider<vscode.TreeItem>
           item.contextValue = 'layoutSnippet';
           item.tooltip = createLayoutTooltip(
             this.extensionUri,
+            layout.id || layout.label,
             layout.label,
             layout.description,
-            layout.snippet
+            layout.snippet,
+            layout.details
           );
           item.command = {
             command: 'slidev-scholarly.insertLayout',
@@ -270,29 +413,43 @@ export class LayoutsProvider implements vscode.TreeDataProvider<vscode.TreeItem>
 }
 
 // Components Provider
-export class ComponentsProvider implements vscode.TreeDataProvider<SnippetTreeItem> {
+export class ComponentsProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
   constructor(private readonly extensionUri: vscode.Uri) { }
 
-  getTreeItem(element: SnippetTreeItem): vscode.TreeItem {
-    element.contextValue = 'componentSnippet';
-    element.tooltip = createComponentTooltip(
-      this.extensionUri,
-      element.item.label,
-      element.item.description,
-      element.item.snippet
-    );
-    element.command = {
-      command: 'slidev-scholarly.insertComponent',
-      title: 'Insert',
-      arguments: [{ snippet: element.snippet }]
-    };
+  getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(): Thenable<SnippetTreeItem[]> {
-    return Promise.resolve(
-      components.map(item => new SnippetTreeItem(item, vscode.TreeItemCollapsibleState.None))
-    );
+  getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
+    if (!element) {
+      return Promise.resolve(
+        Object.entries(componentCategories)
+          .filter(([, category]) => category.items.length > 0)
+          .map(([key, category]) => new ComponentCategoryTreeItem(key, category))
+      );
+    }
+
+    if (element instanceof ComponentCategoryTreeItem) {
+      return Promise.resolve(element.categoryData.items.map(component => {
+        const item = new SnippetTreeItem(component, vscode.TreeItemCollapsibleState.None);
+        item.contextValue = 'componentSnippet';
+        item.tooltip = createComponentTooltip(
+          this.extensionUri,
+          component.label,
+          component.description,
+          component.snippet,
+          component.details
+        );
+        item.command = {
+          command: 'slidev-scholarly.insertComponent',
+          title: 'Insert',
+          arguments: [{ snippet: component.snippet }]
+        };
+        return item;
+      }));
+    }
+
+    return Promise.resolve([]);
   }
 }
 
@@ -421,7 +578,7 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
               'colorTheme',
               theme.value,
               theme.label,
-              theme.value,
+              theme.description,
               {
                 command: 'slidev-scholarly.setColorTheme',
                 title: 'Set Color Theme',
@@ -432,7 +589,7 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
             item.tooltip = createThemeTooltip(
               this.extensionUri,
               theme.label,
-              theme.value,
+              theme.description,
               theme.value
             );
             return item;
@@ -447,7 +604,7 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
               'fontTheme',
               theme.value,
               theme.label,
-              theme.value,
+              theme.description,
               {
                 command: 'slidev-scholarly.setFontTheme',
                 title: 'Set Font Theme',
@@ -456,7 +613,7 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
               { fontTheme: theme.value }
             );
             item.tooltip = new vscode.MarkdownString(
-              `**${theme.label}**\n\n\`fontTheme: ${theme.value}\``
+              `**${theme.label}**\n\n${theme.description}\n\n\`fontTheme: ${theme.value}\`\n\n*Use the Preview action for usage guidance.*`
             );
             return item;
           })

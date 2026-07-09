@@ -31,10 +31,12 @@ test('renders scholarly frontmatter and ordered slides from GUI state', () => {
   });
 
   assert.match(markdown, /^---\ntheme: scholarly\n/);
+  assert.match(markdown, /title: Research Talk/);
+  assert.match(markdown, /subtitle: A GUI-generated draft/);
   assert.match(markdown, /footerMiddle: Workshop 2026/);
   assert.match(markdown, /colorTheme: classic-blue/);
   assert.match(markdown, /fontTheme: classic/);
-  assert.match(markdown, /contentMode: light/);
+  assert.doesNotMatch(markdown, /contentMode: (?:light|dark)/);
   assert.match(markdown, /chromeMode: dark/);
   assert.match(markdown, /sectionMode: dark/);
   assert.match(markdown, /layout: cover/);
@@ -66,4 +68,53 @@ test('uses practical placeholder text when a GUI slide is incomplete', () => {
 
   assert.match(markdown, /# Untitled slide/);
   assert.match(markdown, /Add content here\./);
+});
+
+test('renders layout-specific configuration and named slots', () => {
+  const markdown = renderBuilderMarkdown({
+    slides: [
+      createBuilderSlide('split-image', {
+        title: 'Qualitative comparison',
+        config: {
+          images: '["./before.png", "./after.png"]',
+          captions: ['Before', 'After'],
+          title: 'true',
+          ratio: '1:1',
+          showNumbers: false,
+          emptyValue: ''
+        },
+        slots: {
+          default: 'Default content stays in the normal body fields.',
+          notes: 'Explain the visual difference.'
+        }
+      })
+    ]
+  });
+
+  assert.match(markdown, /layout: split-image/);
+  assert.match(markdown, /images: \["\.\/before\.png","\.\/after\.png"\]/);
+  assert.match(markdown, /captions: \["Before","After"\]/);
+  assert.match(markdown, /title: "true"/);
+  assert.match(markdown, /ratio: "1:1"/);
+  assert.match(markdown, /showNumbers: false/);
+  assert.doesNotMatch(markdown, /emptyValue:/);
+  assert.match(markdown, /::notes::\n\nExplain the visual difference\./);
+  assert.doesNotMatch(markdown, /::default::/);
+  assert.match(markdown, /Default content stays in the normal body fields\./);
+});
+
+test('preserves declared string values instead of coercing YAML-like scalars', () => {
+  const markdown = renderBuilderMarkdown({
+    slides: [createBuilderSlide('end', {
+      config: {
+        subtitle: 'null',
+        qrcodeLabel: '2026',
+        website: 'true'
+      }
+    })]
+  });
+
+  assert.match(markdown, /subtitle: "null"/);
+  assert.match(markdown, /qrcodeLabel: "2026"/);
+  assert.match(markdown, /website: "true"/);
 });

@@ -10,10 +10,19 @@ import * as path from 'path';
 
 // ── Raw JSON types ──────────────────────────────────────────────────────────
 
+export interface ThemePalette {
+    primary: string;
+    primaryLight: string;
+    accent: string;
+    background: string;
+    foreground: string;
+}
+
 interface ThemeEntry {
     id: string;
     label: string;
     description: string;
+    palette?: ThemePalette;
 }
 
 interface ThemePresetEntry {
@@ -29,6 +38,48 @@ interface LayoutGroup {
     label?: string;
     description?: string;
     icon?: string;
+    items: string[];
+}
+
+export interface CatalogConfigEntry {
+    name: string;
+    type: string;
+    required: boolean;
+    default?: string;
+    options?: string[];
+    description: string;
+}
+
+export interface CatalogSlotEntry {
+    name: string;
+    description: string;
+}
+
+export interface LayoutCatalogEntry {
+    label: string;
+    summary: string;
+    useFor: string;
+    features: string[];
+    tags: string[];
+    config: CatalogConfigEntry[];
+    slots: CatalogSlotEntry[];
+}
+
+export interface ComponentCatalogEntry {
+    label: string;
+    category: string;
+    summary: string;
+    useFor: string;
+    features: string[];
+    aliases: string[];
+    config: CatalogConfigEntry[];
+    slots: CatalogSlotEntry[];
+}
+
+export interface ComponentGroup {
+    name: string;
+    label: string;
+    description: string;
     items: string[];
 }
 
@@ -49,7 +100,10 @@ interface ThemesData {
 
 interface LayoutsData {
     layoutGroups: LayoutGroup[];
+    layoutCatalog: Record<string, LayoutCatalogEntry>;
     componentNames: string[];
+    componentGroups: ComponentGroup[];
+    componentCatalog: Record<string, ComponentCatalogEntry>;
 }
 
 interface TemplatesData {
@@ -78,7 +132,8 @@ function toKebabCase(value: string): string {
 export const COLOR_THEMES = themesData.colorThemes.map(t => ({
     value: t.id,
     label: t.label,
-    description: t.description
+    description: t.description,
+    palette: t.palette
 }));
 
 export const FONT_THEMES = themesData.fontThemes.map(t => ({
@@ -124,12 +179,15 @@ export const TEMPLATES = templatesData.templates.map(t => ({
 
 export const COLOR_THEMES_SIMPLE = themesData.colorThemes.map(t => ({
     value: t.id,
-    label: t.label
+    label: t.label,
+    description: t.description,
+    palette: t.palette
 }));
 
 export const FONT_THEMES_SIMPLE = themesData.fontThemes.map(t => ({
     value: t.id,
-    label: t.label
+    label: t.label,
+    description: t.description
 }));
 
 export const LAYOUT_GROUPS = layoutsData.layoutGroups.map(group => ({
@@ -139,6 +197,12 @@ export const LAYOUT_GROUPS = layoutsData.layoutGroups.map(group => ({
     icon: group.icon ?? 'symbol-folder',
     items: group.items
 }));
+
+export const LAYOUT_CATALOG: Record<string, LayoutCatalogEntry> = layoutsData.layoutCatalog;
+
+export const COMPONENT_GROUPS: ComponentGroup[] = layoutsData.componentGroups;
+
+export const COMPONENT_CATALOG: Record<string, ComponentCatalogEntry> = layoutsData.componentCatalog;
 
 // ── Derived exports for snippetCompletion.ts ────────────────────────────────
 // Shape: plain string[]
@@ -178,3 +242,9 @@ export const COLOR_THEME_PREVIEW_DIRS: Record<string, string> = {
     monochrome: 'monochrome',
     'high-contrast': 'high-contrast'
 };
+
+export const COLOR_THEME_PALETTES: Record<string, ThemePalette> = Object.fromEntries(
+    themesData.colorThemes
+        .filter((theme): theme is ThemeEntry & { palette: ThemePalette } => Boolean(theme.palette))
+        .map(theme => [theme.id, theme.palette])
+);

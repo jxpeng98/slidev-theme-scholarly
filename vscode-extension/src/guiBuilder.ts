@@ -36,7 +36,7 @@ export function openGuiBuilder(context: vscode.ExtensionContext): void {
   panel.webview.html = renderGuiBuilderHtml({
     nonce: getNonce(),
     cspSource: panel.webview.cspSource,
-    layouts: getLayoutOptions(),
+    layouts: getLayoutOptions(panel.webview, context.extensionUri),
     colorThemes: COLOR_THEMES,
     fontThemes: FONT_THEMES,
     contentModes: CONTENT_MODES,
@@ -77,12 +77,26 @@ async function handleBuilderMessage(message: BuilderMessage): Promise<void> {
   }
 }
 
-function getLayoutOptions(): GuiBuilderLayoutOption[] {
+function getLayoutOptions(webview: vscode.Webview, extensionUri: vscode.Uri): GuiBuilderLayoutOption[] {
   return layouts.map(layout => ({
-    id: layout.label,
+    id: layout.id || layout.label,
     label: layout.label,
     description: layout.description,
-    category: layout.category
+    category: layout.category,
+    image: webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        extensionUri,
+        'media',
+        'previews',
+        'layouts',
+        `${layout.id || layout.label}.png`
+      )
+    ).toString(),
+    useFor: layout.details?.useFor,
+    features: layout.details?.features,
+    tags: layout.details?.tags,
+    config: layout.details?.config,
+    slots: layout.details?.slots
   }));
 }
 

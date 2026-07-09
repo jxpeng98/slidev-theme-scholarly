@@ -35,7 +35,8 @@ const COMPONENTS = {
   14: 'dataset-card',
   15: 'paper-card',
   16: 'contribution-list',
-  17: 'caveat-list'
+  17: 'caveat-list',
+  18: 'result-table'
 }
 
 console.log('🎨 Generating component screenshots...')

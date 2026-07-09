@@ -332,7 +332,6 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true
@@ -488,7 +487,6 @@ lang: en
 themeConfig:
   colorTheme: classic-blue
   fontTheme: classic
-  contentMode: light
   chromeMode: dark
   sectionMode: dark
   outlineToc: true
