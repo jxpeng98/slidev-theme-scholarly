@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0-beta.6] - 2026-07-14
+
+### Added
+
+- **VS Code layout catalog**: Documented all 34 layouts and 17 canonical components with use cases, configuration types, required values, defaults, options, features, and slots across the tree, preview, and GUI Builder.
+- **GUI Builder configuration editing**: Added layout-aware configuration and named-slot editors with required-field validation, typed serialization, deck metadata synchronization, and ResultTable previews.
+
+### Changed
+
+- **Theme-aware extension UI**: Unified Extension webviews around VS Code semantic color tokens and expanded the responsive layout library, filtering, inspector, theme swatches, and slide reordering experience.
+- **Display mode ownership**: Let slide content follow Slidev's resolved light/dark state while keeping content, chrome, and section surfaces independently configurable.
+
+### Fixed
+
+- **Theme contrast**: Routed layout and component colors through semantic foreground tokens, including accessible Block, Theorem, code-tab, TOC badge, Fact, and Princeton Orange combinations.
+- **Builder output correctness**: Preserved string configuration values, validated structured JSON and required props, synchronized deck title/subtitle with the cover, and retained default slot content.
+
 ## [1.4.0-beta.5] - 2026-07-07
 
 ### Fixed

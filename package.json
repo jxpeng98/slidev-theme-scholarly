@@ -1,6 +1,6 @@
 {
   "name": "slidev-theme-scholarly",
-  "version": "1.4.0-beta.5",
+  "version": "1.4.0-beta.6",
   "type": "module",
   "description": "A scholarly presentation theme for Slidev with LaTeX Beamer-style styling",
   "author": "Jiaxin Peng",

@@ -57,7 +57,7 @@ This updates the root theme and docs versions, but keeps `vscode-extension/packa
 For a paired VS Code extension pre-release:
 
 ```bash
-pnpm bump 1.4.0-beta.1 -- --vscode-prerelease-version 1.3.3
+pnpm bump 1.4.0-beta.1 --vscode-prerelease-version 1.3.3
 ```
 
 The mapped VS Code version must be plain `X.Y.Z` and must not equal the future stable base version (`1.4.0` in this example).
