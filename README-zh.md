@@ -62,59 +62,91 @@
 
 ## 🚀 快速开始
 
-### 安装
+### 前置要求
 
-```bash
-npm i -D slidev-theme-scholarly
-```
+安装 Node.js 20 或更新版本。
 
 ### 使用 CLI 创建（推荐）
 
-```bash
-# 一次性使用
-npx -y --package slidev-theme-scholarly sch init my-talk
+一次性使用 `npx` 时，请使用完整包名：
 
-# 在已安装本包的工作区中
-npx sch init my-talk --template academic
-# 或
-npx sts init my-talk --template academic
+```bash
+npx -y slidev-theme-scholarly init my-talk --template academic
+cd my-talk
+pnpm install
+pnpm run dev
 ```
 
-可用模板列表：
+`npx` 必须先取得 CLI 代码才能执行。当本地尚未安装这个包时，npm 会把它
+临时安装到自己的缓存目录，不会写入当前项目，也不是全局安装。`-y` 会自动
+确认这次缓存安装，避免出现交互式询问。
+
+不创建项目，直接查看可用模板：
 
 ```bash
-npx sch template list
+npx -y slidev-theme-scholarly template list
 ```
 
 初始化模板已经内建 Scholarly 的 citation 支持。正常使用这个主题时，不需要再额外维护项目级 `vite.config`。
+
+### 使用项目本地 CLI
+
+生成的项目已经把 Scholarly 声明为开发依赖。已有 Slidev 项目需要先安装：
+
+```bash
+pnpm add -D slidev-theme-scholarly
+```
+
+然后通过项目的包管理器执行短命令 `sch`：
+
+```bash
+pnpm exec sch --version
+```
+
+使用 npm 时，执行 `npm i -D slidev-theme-scholarly`，再使用 `npx sch`。
+`sts` 和 `scholarly` 都是 `sch` 的别名。
 
 常用命令：
 
 ```bash
 # 查看帮助
-npx sch help
-npx sch help theme
+pnpm exec sch help
+pnpm exec sch help theme
 
 # 查看 Scholarly 主题资产
-npx sch theme list
-npx sch layout list
-npx sch component list
-npx sch snippet list
+pnpm exec sch theme list
+pnpm exec sch layout list
+pnpm exec sch component list
+pnpm exec sch snippet list
 
 # 一键写入 Scholarly 主题预设到 frontmatter
-npx sch theme apply oxford-burgundy --font traditional --file slides.md
-npx sch theme preset apply oxford --file slides.md
+pnpm exec sch theme apply oxford-burgundy --font traditional --file slides.md
+pnpm exec sch theme preset apply oxford --file slides.md
 
 # 追加学术片段到 slides
-npx sch snippet append theorem --file slides.md
-npx sch snippet append references --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch snippet append references --file slides.md
 
 # 追加整套学术演示骨架
-npx sch workflow list
-npx sch workflow apply paper --file slides.md
+pnpm exec sch workflow list
+pnpm exec sch workflow apply paper --file slides.md
+
+# 根据 BibTeX 生成论文摘要
+pnpm exec sch paper summary --bib references.bib --key sample2026
 
 # 检查环境和项目状态（包含 Scholarly 检查）
-npx sch doctor
+pnpm exec sch doctor
+pnpm exec sch doctor --json
+```
+
+### 可选的全局 CLI
+
+不需要全局安装也能使用 Scholarly CLI。如果希望在项目外直接使用短命令：
+
+```bash
+npm i -g slidev-theme-scholarly
+sch template list
+# 别名：sts、scholarly
 ```
 
 ### 手动创建演示文稿

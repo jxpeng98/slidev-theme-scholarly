@@ -48,7 +48,7 @@ Prefer:
 Run the doctor and a visual export before sharing:
 
 ```bash
-sch doctor
+pnpm exec sch doctor
 pnpm run theme:matrix
 ```
 

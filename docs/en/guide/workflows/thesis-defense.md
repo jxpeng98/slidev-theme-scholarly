@@ -8,7 +8,7 @@ Use this path when the deck must defend a thesis with evidence, limitations,
 questions, and appendix navigation.
 
 ```bash
-sch init defense --template thesis-defense
+npx -y slidev-theme-scholarly init defense --template thesis-defense
 ```
 
 ## Recommended layouts
@@ -31,9 +31,9 @@ sch init defense --template thesis-defense
 ## Useful snippets
 
 ```bash
-sch snippet append methodology --file slides.md
-sch snippet append results --file slides.md
-sch snippet append references --file slides.md
+pnpm exec sch snippet append methodology --file slides.md
+pnpm exec sch snippet append results --file slides.md
+pnpm exec sch snippet append references --file slides.md
 ```
 
 Keep appendix slides short and link them from the main deck with clear labels.

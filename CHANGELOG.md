@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-07-29
+
+### Changed
+
+- **CLI invocation guidance**: Distinguished one-time `npx` usage, project-local
+  `pnpm exec sch` usage, and optional global installation across the English and
+  Chinese README and documentation.
+- **npx installation expectations**: Documented that first-run package downloads
+  are stored in the npm cache and that `-y` accepts the cache installation
+  prompt without adding the package to the project or global packages.
+- **CLI coverage**: Added project-local examples for paper summaries and
+  structured doctor output while retaining the `sch`, `sts`, and `scholarly`
+  aliases.
+
+### Fixed
+
+- **One-time CLI commands**: Replaced ambiguous `npx sch` and bare `sch`
+  examples with commands that identify the `slidev-theme-scholarly` package or
+  explicitly use the project-local binary.
+- **Generated project installation**: Added the pnpm build-script permission
+  required by `citation-js`, preventing current pnpm releases from completing a
+  generated project's first install with an ignored-build error.
+- **Package root entry**: Restored the declared `index.js` runtime entry and
+  added a release check that verifies every exported module and CLI binary
+  points to a file included in the npm package.
+
 ## [1.4.0] - 2026-07-29
 
 This stable release rolls up the complete `1.4.0-beta` series for the theme,

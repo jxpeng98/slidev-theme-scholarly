@@ -109,6 +109,10 @@ const WORKFLOWS = [
   },
 ]
 
+const PNPM_WORKSPACE_CONFIG = `allowBuilds:
+  citation-js: true
+`
+
 function printHelp() {
   console.log(`${cliName} v${packageJson.version}
 
@@ -1080,6 +1084,12 @@ function copyTemplate(sourceDir, targetDir, replacements) {
   }
 }
 
+function ensurePnpmWorkspaceConfig(targetDir) {
+  const configPath = path.join(targetDir, 'pnpm-workspace.yaml')
+  if (!fs.existsSync(configPath))
+    fs.writeFileSync(configPath, PNPM_WORKSPACE_CONFIG, 'utf8')
+}
+
 function toPackageName(raw) {
   const normalized = raw
     .toLowerCase()
@@ -1108,6 +1118,7 @@ function createProject(options) {
   }
 
   copyTemplate(templatePath, targetPath, replacements)
+  ensurePnpmWorkspaceConfig(targetPath)
 
   const relativePath = path.relative(process.cwd(), targetPath) || '.'
   const cdTarget = relativePath.startsWith('..') ? targetPath : relativePath

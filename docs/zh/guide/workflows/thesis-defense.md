@@ -7,7 +7,7 @@ title: 学位答辩工作流
 适合需要系统论证、展示证据、回应局限和准备答辩问题的演示。
 
 ```bash
-sch init defense --template thesis-defense
+npx -y slidev-theme-scholarly init defense --template thesis-defense
 ```
 
 ## 推荐布局
@@ -30,9 +30,9 @@ sch init defense --template thesis-defense
 ## 常用片段
 
 ```bash
-sch snippet append methodology --file slides.md
-sch snippet append results --file slides.md
-sch snippet append references --file slides.md
+pnpm exec sch snippet append methodology --file slides.md
+pnpm exec sch snippet append results --file slides.md
+pnpm exec sch snippet append references --file slides.md
 ```
 
 附录页保持短小，并从主线页面用清楚的标签跳转。

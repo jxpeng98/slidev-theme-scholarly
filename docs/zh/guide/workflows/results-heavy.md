@@ -7,7 +7,7 @@ title: 结果密集型报告工作流
 适合主线由指标、消融、数据集和实验对比驱动的报告。
 
 ```bash
-sch init results-talk --template conference-lightning
+npx -y slidev-theme-scholarly init results-talk --template conference-lightning
 ```
 
 ## 推荐布局
@@ -29,8 +29,8 @@ sch init results-talk --template conference-lightning
 ## 常用片段
 
 ```bash
-sch snippet append results --file slides.md
-sch snippet append block --file slides.md
+pnpm exec sch snippet append results --file slides.md
+pnpm exec sch snippet append block --file slides.md
 ```
 
 把重复出现的结果结论整理成 MetricGrid 或 EvidenceBlock，避免每页临时画框。

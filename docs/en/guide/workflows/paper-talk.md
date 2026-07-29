@@ -8,7 +8,7 @@ Use this path for a conference presentation, lab meeting, or reading-session
 talk centered on one paper and its contribution.
 
 ```bash
-sch init paper-session --template paper-talk
+npx -y slidev-theme-scholarly init paper-session --template paper-talk
 ```
 
 ## Recommended layouts
@@ -30,9 +30,9 @@ sch init paper-session --template paper-talk
 ## Useful snippets
 
 ```bash
-sch snippet append cite --file slides.md
-sch snippet append methodology --file slides.md
-sch snippet append results --file slides.md
+pnpm exec sch snippet append cite --file slides.md
+pnpm exec sch snippet append methodology --file slides.md
+pnpm exec sch snippet append results --file slides.md
 ```
 
 Use the VS Code sidebar previews when deciding whether a paper section needs a

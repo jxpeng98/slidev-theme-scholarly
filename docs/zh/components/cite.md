@@ -143,7 +143,7 @@ layout: references
 当 citation 没有按预期渲染时，可以运行：
 
 ```bash
-npx -y --package slidev-theme-scholarly sch doctor
+npx -y slidev-theme-scholarly doctor
 ```
 
 citation 检查会报告：

@@ -13,7 +13,7 @@ Install Node.js 20 or newer. The generated projects use `pnpm`.
 Use the CLI without a global install:
 
 ```bash
-npx -y --package slidev-theme-scholarly sch init my-talk
+npx -y slidev-theme-scholarly init my-talk
 cd my-talk
 pnpm install
 pnpm run dev
@@ -21,12 +21,17 @@ pnpm run dev
 
 The browser opens with a live Slidev preview. Edit `slides.md` to start writing.
 
+The first `npx` run may need to download Scholarly before it can execute the
+CLI. npm stores that temporary installation in its cache rather than adding it
+to your project or global packages. The `-y` flag accepts the cache installation
+without prompting.
+
 ## Pick A Template
 
 List available templates:
 
 ```bash
-npx -y --package slidev-theme-scholarly sch template list
+npx -y slidev-theme-scholarly template list
 ```
 
 Common choices:
@@ -45,40 +50,51 @@ Common choices:
 Create from a specific template:
 
 ```bash
-npx -y --package slidev-theme-scholarly sch init paper-session --template paper-talk
-npx -y --package slidev-theme-scholarly sch init defense --template thesis-defense
+npx -y slidev-theme-scholarly init paper-session --template paper-talk
+npx -y slidev-theme-scholarly init defense --template thesis-defense
 ```
 
 If you are unsure, start with the [academic workflow guide](./workflows/).
 
 ## Useful CLI Commands
 
+After `pnpm install`, run the project-local `sch` binary with `pnpm exec`.
+This keeps the CLI version aligned with the version declared by the project.
+
 Discover what the theme provides:
 
 ```bash
-npx sch theme list
-npx sch layout list
-npx sch component list
-npx sch snippet list
+pnpm exec sch theme list
+pnpm exec sch layout list
+pnpm exec sch component list
+pnpm exec sch snippet list
 ```
 
 Apply a theme preset or append common content:
 
 ```bash
-npx sch theme preset apply cambridge --file slides.md
-npx sch snippet append theorem --file slides.md
-npx sch workflow apply paper --file slides.md
+pnpm exec sch theme preset apply cambridge --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch workflow apply paper --file slides.md
 ```
 
 Check the project setup:
 
 ```bash
-npx sch doctor
-npx sch doctor --json
+pnpm exec sch doctor
+pnpm exec sch doctor --json
 ```
 
 `sch doctor` reports `OK`, `WARN`, and `ERROR` items with concrete next actions.
 Use `--json` for CI, scripts, or editor integrations.
+
+With npm, install `slidev-theme-scholarly` locally and use `npx sch`. A global
+install is optional:
+
+```bash
+npm i -g slidev-theme-scholarly
+sch template list
+```
 
 ## Manual Setup For An Existing Slidev Project
 

@@ -79,7 +79,7 @@ than the content.
 Generate a paper summary from a BibTeX key:
 
 ```bash
-sch paper summary --bib references.bib --key sample2026
+pnpm exec sch paper summary --bib references.bib --key sample2026
 ```
 
 The command reads title, authors, year, DOI, URL, and venue fields, then emits a

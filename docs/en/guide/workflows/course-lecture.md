@@ -8,7 +8,7 @@ Use this path for teaching decks, tutorials, and structured lessons where the
 audience needs concepts, examples, and checkpoints.
 
 ```bash
-sch init lecture --template basic
+npx -y slidev-theme-scholarly init lecture --template basic
 ```
 
 ## Recommended layouts
@@ -30,9 +30,9 @@ sch init lecture --template basic
 ## Useful snippets
 
 ```bash
-sch snippet append theorem --file slides.md
-sch snippet append block --file slides.md
-sch snippet append section --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch snippet append block --file slides.md
+pnpm exec sch snippet append section --file slides.md
 ```
 
 Use examples early and move optional derivations to appendix or backup slides.

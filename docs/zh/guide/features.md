@@ -69,7 +69,7 @@ const rows = parseCsvTable(csv)
 从 BibTeX key 生成论文摘要：
 
 ```bash
-sch paper summary --bib references.bib --key sample2026
+pnpm exec sch paper summary --bib references.bib --key sample2026
 ```
 
 命令会读取 title、authors、year、DOI、URL 和 venue 字段，并输出 `paper-summary` 幻灯片。使用 `--layout paper-card` 可以生成组件片段，使用 `--json` 可以给脚本消费结构化输出。缺少关键字段时，命令会返回 `warnings`，但仍输出可渲染的 fallback Markdown。

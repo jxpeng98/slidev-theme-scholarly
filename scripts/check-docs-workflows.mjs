@@ -72,6 +72,12 @@ async function checkLocale(locale, config) {
   const workflowsIndex = await readText(path.join(localeRoot, 'guide', 'workflows', 'index.md'))
   const contrast = await readText(path.join(localeRoot, 'guide', 'theme-mode-contrast.md'))
 
+  expectIncludes(`${locale}/guide/quick-start.md`, quickStart, 'npx -y slidev-theme-scholarly')
+  expectIncludes(`${locale}/guide/quick-start.md`, quickStart, 'pnpm exec sch')
+  expectIncludes(`${locale}/guide/quick-start.md`, quickStart, 'npm i -g slidev-theme-scholarly')
+  expect(!quickStart.includes('npx -y --package slidev-theme-scholarly'), `${locale} quick start should use the package name directly with npx`)
+  expect(!/^npx sch\b/m.test(quickStart), `${locale} quick start should not rely on an implicit local npx binary`)
+
   for (const needle of config.indexNeedles)
     expectIncludes(`${locale}/index.md`, home, needle)
 
@@ -101,8 +107,19 @@ async function checkLocale(locale, config) {
     expect(!/`colorMode:\s*(light|dark)`/.test(text), `${name} should not recommend colorMode as the primary mode`)
     expectIncludes(name, text, '../../layouts/')
     expectIncludes(name, text, '../../components/')
-    expect(/sch (init|snippet|workflow)/.test(text), `${name} should include a Scholarly CLI command`)
+    expect(/(?:npx -y slidev-theme-scholarly|pnpm exec sch) (?:init|snippet|workflow)/.test(text), `${name} should include an explicit Scholarly CLI command`)
+    expect(!/^sch\b/m.test(text), `${name} should not rely on a globally installed sch binary`)
   }
+}
+
+const rootReadme = await readText(path.join(root, 'README.md'))
+const rootReadmeZh = await readText(path.join(root, 'README-zh.md'))
+for (const [name, text] of [['README.md', rootReadme], ['README-zh.md', rootReadmeZh]]) {
+  expectIncludes(name, text, 'npx -y slidev-theme-scholarly')
+  expectIncludes(name, text, 'pnpm exec sch')
+  expectIncludes(name, text, 'npm i -g slidev-theme-scholarly')
+  expect(!text.includes('npx -y --package slidev-theme-scholarly'), `${name} should use the package name directly with npx`)
+  expect(!/^npx sch\b/m.test(text), `${name} should not rely on an implicit local npx binary`)
 }
 
 const configSource = await readText(path.join(docsRoot, '.vitepress', 'config.ts'))

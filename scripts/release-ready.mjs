@@ -5,6 +5,10 @@ const fullVisual = process.env.SCHOLARLY_FULL_VISUAL === '1' || process.argv.inc
 
 const steps = [
   {
+    name: 'Package export and CLI bin contract',
+    command: ['node', 'scripts/check-package-contract.mjs'],
+  },
+  {
     name: 'Color mode and semantic token contract',
     command: ['node', 'scripts/check-color-mode-styles.mjs'],
   },

@@ -8,7 +8,7 @@ Use this path for a reading group, survey talk, or seminar section comparing
 prior work.
 
 ```bash
-sch init reading-session --template reading-group
+npx -y slidev-theme-scholarly init reading-session --template reading-group
 ```
 
 ## Recommended layouts
@@ -30,8 +30,8 @@ sch init reading-session --template reading-group
 ## Useful snippets
 
 ```bash
-sch snippet append cite --file slides.md
-sch workflow apply seminar --file slides.md
+pnpm exec sch snippet append cite --file slides.md
+pnpm exec sch workflow apply seminar --file slides.md
 ```
 
 Use the bibliography slide early while drafting so unresolved citation keys are

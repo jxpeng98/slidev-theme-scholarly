@@ -7,7 +7,7 @@ title: 课程讲义工作流
 适合课程、教程和结构化教学材料，重点是概念、例子和阶段性总结。
 
 ```bash
-sch init lecture --template basic
+npx -y slidev-theme-scholarly init lecture --template basic
 ```
 
 ## 推荐布局
@@ -29,9 +29,9 @@ sch init lecture --template basic
 ## 常用片段
 
 ```bash
-sch snippet append theorem --file slides.md
-sch snippet append block --file slides.md
-sch snippet append section --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch snippet append block --file slides.md
+pnpm exec sch snippet append section --file slides.md
 ```
 
 尽早加入例子，把可选推导放到附录或备份页。

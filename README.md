@@ -62,59 +62,94 @@ A professional presentation theme for [Slidev](https://sli.dev), designed specif
 
 ## 🚀 Quick Start
 
-### Installation
+### Requirements
 
-```bash
-npm i -D slidev-theme-scholarly
-```
+Install Node.js 20 or newer.
 
 ### Create with CLI (Recommended)
 
-```bash
-# one-time usage
-npx -y --package slidev-theme-scholarly sch init my-talk
+Use the package name for a one-time `npx` run:
 
-# after package is installed in a workspace
-npx sch init my-talk --template academic
-# or
-npx sts init my-talk --template academic
+```bash
+npx -y slidev-theme-scholarly init my-talk --template academic
+cd my-talk
+pnpm install
+pnpm run dev
 ```
 
-Available templates:
+`npx` must download the CLI code before it can run it. When the package is not
+already available locally, npm installs it into its cache, not into your project
+or global packages. The `-y` flag accepts that temporary cache installation
+without an interactive prompt.
+
+List the available templates without creating a project:
 
 ```bash
-npx sch template list
+npx -y slidev-theme-scholarly template list
 ```
 
 Generated starters work out of the box with Scholarly's built-in citation support. Normal theme usage does not require a project-level `vite.config`.
+
+### Use the Project-Local CLI
+
+Generated projects already declare Scholarly as a development dependency. For
+an existing Slidev project, install it first:
+
+```bash
+pnpm add -D slidev-theme-scholarly
+```
+
+Then run the short `sch` binary through the project package manager:
+
+```bash
+pnpm exec sch --version
+```
+
+With npm, use `npm i -D slidev-theme-scholarly` and `npx sch`. The `sts` and
+`scholarly` binaries are aliases of `sch`.
 
 Common commands:
 
 ```bash
 # show help
-npx sch help
-npx sch help theme
+pnpm exec sch help
+pnpm exec sch help theme
 
 # list Scholarly presets and assets
-npx sch theme list
-npx sch layout list
-npx sch component list
-npx sch snippet list
+pnpm exec sch theme list
+pnpm exec sch layout list
+pnpm exec sch component list
+pnpm exec sch snippet list
 
 # apply Scholarly visual preset to slides frontmatter
-npx sch theme apply oxford-burgundy --font traditional --file slides.md
-npx sch theme preset apply oxford --file slides.md
+pnpm exec sch theme apply oxford-burgundy --font traditional --file slides.md
+pnpm exec sch theme preset apply oxford --file slides.md
 
 # append academic snippet blocks into slides
-npx sch snippet append theorem --file slides.md
-npx sch snippet append references --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch snippet append references --file slides.md
 
 # append full scholarly workflow skeleton
-npx sch workflow list
-npx sch workflow apply paper --file slides.md
+pnpm exec sch workflow list
+pnpm exec sch workflow apply paper --file slides.md
+
+# generate a paper summary from BibTeX
+pnpm exec sch paper summary --bib references.bib --key sample2026
 
 # check environment and project readiness (includes Scholarly checks)
-npx sch doctor
+pnpm exec sch doctor
+pnpm exec sch doctor --json
+```
+
+### Optional Global CLI
+
+A global install is not required, but it makes the short binaries available
+outside a project:
+
+```bash
+npm i -g slidev-theme-scholarly
+sch template list
+# aliases: sts, scholarly
 ```
 
 ### Create Manually

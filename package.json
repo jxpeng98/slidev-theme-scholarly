@@ -1,6 +1,6 @@
 {
   "name": "slidev-theme-scholarly",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "type": "module",
   "description": "A scholarly presentation theme for Slidev with LaTeX Beamer-style styling",
   "author": "Jiaxin Peng",
@@ -31,6 +31,7 @@
     "setup",
     "utils",
     "vite.config.ts",
+    "index.js",
     "index.d.ts",
     "README.md",
     "LICENSE"

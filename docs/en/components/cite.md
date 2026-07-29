@@ -143,7 +143,7 @@ Normal theme usage does not require a project-level `vite.config.ts`; Scholarly 
 Run the doctor when citations do not render as expected:
 
 ```bash
-npx -y --package slidev-theme-scholarly sch doctor
+npx -y slidev-theme-scholarly doctor
 ```
 
 The citation checks report:

@@ -7,7 +7,7 @@ title: 论文报告工作流
 适合会议报告、组会汇报，或围绕一篇论文展开的读书会报告。
 
 ```bash
-sch init paper-session --template paper-talk
+npx -y slidev-theme-scholarly init paper-session --template paper-talk
 ```
 
 ## 推荐布局
@@ -29,9 +29,9 @@ sch init paper-session --template paper-talk
 ## 常用片段
 
 ```bash
-sch snippet append cite --file slides.md
-sch snippet append methodology --file slides.md
-sch snippet append results --file slides.md
+pnpm exec sch snippet append cite --file slides.md
+pnpm exec sch snippet append methodology --file slides.md
+pnpm exec sch snippet append results --file slides.md
 ```
 
 在 VS Code 侧边栏中用预览快速判断某一页更适合布局还是组件。

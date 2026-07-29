@@ -8,7 +8,7 @@ Use this path when the main story is driven by metrics, ablations, datasets, and
 experimental comparisons.
 
 ```bash
-sch init results-talk --template conference-lightning
+npx -y slidev-theme-scholarly init results-talk --template conference-lightning
 ```
 
 ## Recommended layouts
@@ -30,8 +30,8 @@ sch init results-talk --template conference-lightning
 ## Useful snippets
 
 ```bash
-sch snippet append results --file slides.md
-sch snippet append block --file slides.md
+pnpm exec sch snippet append results --file slides.md
+pnpm exec sch snippet append block --file slides.md
 ```
 
 Turn repeated result claims into a MetricGrid or EvidenceBlock instead of

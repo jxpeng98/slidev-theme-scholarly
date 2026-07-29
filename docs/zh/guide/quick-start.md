@@ -13,7 +13,7 @@ title: 快速开始
 不需要全局安装 CLI：
 
 ```bash
-npx -y --package slidev-theme-scholarly sch init my-talk
+npx -y slidev-theme-scholarly init my-talk
 cd my-talk
 pnpm install
 pnpm run dev
@@ -21,12 +21,16 @@ pnpm run dev
 
 浏览器会打开 Slidev 实时预览。编辑 `slides.md` 即可开始写作。
 
+第一次运行 `npx` 时，npm 可能需要先下载 Scholarly 才能执行 CLI。这个临时
+安装保存在 npm 缓存中，不会写入当前项目，也不是全局安装。`-y` 会自动确认
+这次缓存安装，避免交互式询问。
+
 ## 选择模板
 
 查看可用模板：
 
 ```bash
-npx -y --package slidev-theme-scholarly sch template list
+npx -y slidev-theme-scholarly template list
 ```
 
 常用选择：
@@ -45,40 +49,51 @@ npx -y --package slidev-theme-scholarly sch template list
 用指定模板创建：
 
 ```bash
-npx -y --package slidev-theme-scholarly sch init paper-session --template paper-talk
-npx -y --package slidev-theme-scholarly sch init defense --template thesis-defense
+npx -y slidev-theme-scholarly init paper-session --template paper-talk
+npx -y slidev-theme-scholarly init defense --template thesis-defense
 ```
 
 如果不确定该选哪个模板，先看[学术工作流指南](./workflows/)。
 
 ## 常用 CLI 命令
 
+执行 `pnpm install` 后，通过 `pnpm exec` 调用项目本地的 `sch` 命令。
+这样使用的 CLI 版本会与项目声明的版本保持一致。
+
 查看主题提供的资源：
 
 ```bash
-npx sch theme list
-npx sch layout list
-npx sch component list
-npx sch snippet list
+pnpm exec sch theme list
+pnpm exec sch layout list
+pnpm exec sch component list
+pnpm exec sch snippet list
 ```
 
 应用主题预设或追加常用内容：
 
 ```bash
-npx sch theme preset apply cambridge --file slides.md
-npx sch snippet append theorem --file slides.md
-npx sch workflow apply paper --file slides.md
+pnpm exec sch theme preset apply cambridge --file slides.md
+pnpm exec sch snippet append theorem --file slides.md
+pnpm exec sch workflow apply paper --file slides.md
 ```
 
 检查项目配置：
 
 ```bash
-npx sch doctor
-npx sch doctor --json
+pnpm exec sch doctor
+pnpm exec sch doctor --json
 ```
 
 `sch doctor` 会用 `OK`、`WARN` 和 `ERROR` 报告检查结果，并给出可执行的下一步。
 如果要给 CI、脚本或编辑器集成消费同一份诊断，使用 `--json`。
+
+使用 npm 时，请先在项目中安装 `slidev-theme-scholarly`，再运行 `npx sch`。
+全局安装是可选的：
+
+```bash
+npm i -g slidev-theme-scholarly
+sch template list
+```
 
 ## 手动方式
 

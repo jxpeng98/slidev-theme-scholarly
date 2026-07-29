@@ -46,7 +46,7 @@ tokens，但写作者仍应避免在浅色页面上使用大面积深色高亮�
 分享前运行 doctor 和视觉导出：
 
 ```bash
-sch doctor
+pnpm exec sch doctor
 pnpm run theme:matrix
 ```
 

@@ -7,7 +7,7 @@ title: 文献综述工作流
 适合读书会、综述报告或研讨课中比较已有工作的部分。
 
 ```bash
-sch init reading-session --template reading-group
+npx -y slidev-theme-scholarly init reading-session --template reading-group
 ```
 
 ## 推荐布局
@@ -29,8 +29,8 @@ sch init reading-session --template reading-group
 ## 常用片段
 
 ```bash
-sch snippet append cite --file slides.md
-sch workflow apply seminar --file slides.md
+pnpm exec sch snippet append cite --file slides.md
+pnpm exec sch workflow apply seminar --file slides.md
 ```
 
 写作早期就保留 references 页，便于及时发现未解析的引用 key。
