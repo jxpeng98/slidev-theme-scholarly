@@ -356,10 +356,11 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 🙏 Credit
 
-Slidev Theme Scholarly draws visual inspiration from
-[LaTeX Beamer](https://ctan.org/pkg/beamer). Thanks to the
-[linux.do community](https://linux.do/) for practical AI tooling discussions
-and feedback.
+Slidev Theme Scholarly is inspired by the visual language of
+[LaTeX Beamer](https://ctan.org/pkg/beamer).
+
+Special thanks to the [linux.do community](https://linux.do/) for sharing
+practical insights and thoughtful feedback on AI tooling.
 
 ---
 
