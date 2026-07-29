@@ -354,6 +354,15 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
+## 🙏 Credit
+
+Slidev Theme Scholarly draws visual inspiration from
+[LaTeX Beamer](https://ctan.org/pkg/beamer). Thanks to the
+[linux.do community](https://linux.do/) for practical AI tooling discussions
+and feedback.
+
+---
+
 ## 🔗 Links
 
 - [📖 Documentation](https://scholarly-docs.jxpeng.dev/en/)

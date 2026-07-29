@@ -409,6 +409,14 @@ MIT 许可证 - 详见 [LICENSE](./LICENSE)。
 
 ---
 
+## 🙏 致谢
+
+Slidev 学术主题的视觉设计受到 [LaTeX Beamer](https://ctan.org/pkg/beamer)
+启发。感谢 [linux.do 社区](https://linux.do/) 围绕实用 AI 工具展开的讨论
+与反馈。
+
+---
+
 ## 🔗 链接
 
 - [📖 文档](https://scholarly-docs.jxpeng.dev/zh/)
