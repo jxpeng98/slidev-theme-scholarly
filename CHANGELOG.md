@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-29
+
+This stable release rolls up the complete `1.4.0-beta` series for the theme,
+documentation site, CLI, and VS Code extension.
+
+### Added
+
+- **Academic presentation system**: Expanded the theme to 34 layouts and 17
+  canonical components, including paper summaries, related-work matrices,
+  method pipelines, experiment grids, evidence blocks, metric cards, dataset
+  cards, contribution lists, and defense-oriented slides.
+- **Documented layout configuration**: Added use cases, configuration types,
+  required values, defaults, options, features, and named slots for every
+  layout and canonical component in the VS Code tree, preview, and GUI Builder.
+- **VS Code GUI Builder**: Added layout-aware configuration and slot editors,
+  typed serialization, required-field validation, slide reordering, theme
+  controls, deck metadata synchronization, and generated previews.
+- **Academic workflows**: Added curated paper-talk, seminar, thesis-defense,
+  reading-group, and lightning-talk templates together with BibTeX citation,
+  paper-summary, data-result, and doctor workflows.
+
+### Changed
+
+- **Independent display modes**: Added explicit `contentMode`, `chromeMode`, and
+  `sectionMode` controls while retaining legacy `colorMode` compatibility.
+- **Semantic theme colors**: Unified layouts, components, navigation, code
+  surfaces, and the VS Code extension around semantic foreground, background,
+  border, and focus tokens across light, dark, match, and inverse modes.
+- **Presentation navigation**: Reworked the footer outline into a compact,
+  section-grouped navigator with current-section jumps, previews, internal
+  anchors, and improved long-deck performance.
+- **Release quality gates**: Added metadata, citation, theme-token, layout,
+  component, documentation, template, VS Code, CLI, and full visual-matrix
+  checks for stable releases.
+
+### Fixed
+
+- **Theme contrast and focus**: Corrected unreadable foreground combinations,
+  TOC badges, code tabs, theorem and block surfaces, Princeton Orange section
+  slides, and focus restoration after closing the outline.
+- **Builder output correctness**: Preserved string values and default slot
+  content, validated structured JSON and required properties, and kept cover
+  metadata synchronized with deck-level title and subtitle fields.
+- **Runtime stability**: Reduced repeated internal-anchor work, lazy-loaded
+  outline previews, stabilized repeated theorem numbering, and improved
+  scrolling behavior for overflowing slide content.
+
+### Upgrade Notes
+
+- Stable theme and VS Code extension versions are now aligned at `1.4.0`.
+- Node.js 20+ and Slidev v52+ are required.
+- New projects should use `contentMode`, `chromeMode`, and `sectionMode`;
+  existing `colorMode` configurations remain supported for compatibility.
+
 ## [1.4.0-beta.6] - 2026-07-14
 
 ### Added
