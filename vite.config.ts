@@ -1,5 +1,6 @@
 import citationPluginMod from '@jxpeng98/markdown-it-citation'
 import { defineConfig } from 'vite'
+import { resolveScholarlyCitationConfig } from './setup/citation-config'
 
 const SCHOLARLY_CITATIONS_RE = /<!--\s*scholarly-citations:\s*(\[.*?\])\s*-->/
 const SCHOLARLY_CITATION_SETUP_FLAG = Symbol.for('scholarly.citation.setup')
@@ -10,8 +11,12 @@ function resolveCitationPlugin(mod: unknown): unknown {
 
 function resolveCitationConfig(options: Record<string, unknown> = {}) {
   const config = (globalThis as typeof globalThis & {
-    __scholarlyConfig?: Record<string, unknown>
-  }).__scholarlyConfig || {}
+    __scholarlyConfig?: {
+      bibFile?: string
+      bibStyle?: string
+      showNum?: boolean
+    }
+  }).__scholarlyConfig || resolveScholarlyCitationConfig({})
 
   return {
     bibFile: options.bibFile || config.bibFile || 'references.bib',
@@ -57,7 +62,6 @@ function setupScholarlyCitationMarkdown(md: any, options: Record<string, unknown
 export default defineConfig({
   slidev: {
     markdown: {
-      // Slidev has used both hook names across releases.
       markdownSetup(md) {
         setupScholarlyCitationMarkdown(md)
       },
