@@ -1,47 +1,45 @@
 ---
 title: Guide
+description: The shortest path from an empty folder to a finished Scholarly presentation.
 ---
 
 # Guide
 
-Use this guide when you want to build a Scholarly deck, choose the right
-template, and tune the theme without reading every reference page first.
+Start with what you need to do; each row points to the relevant guide.
 
-## Start
+## 1. Start
 
-New deck:
+| Situation | Guide |
+|---|---|
+| Create a new presentation | [Quick start](./quick-start) |
+| Choose a structure for a paper talk, defense, review, results talk, or lecture | [Academic workflows](./workflows/) |
+| Add Scholarly to an existing Slidev project | [Add the theme](./quick-start#add-scholarly-to-an-existing-slidev-project) |
+| Move an existing Scholarly deck to a new version | [Upgrade notes](./upgrade) |
 
-- [Quick Start](./quick-start.md): create a deck, pick a template, run it locally.
-- [Academic Workflows](./workflows/): choose a paper talk, thesis defense,
-  reading group, course lecture, or results-heavy path.
+## 2. Build
 
-Existing Slidev deck:
+| Task | Guide |
+|---|---|
+| Choose the structure of a slide | [Layouts](../layouts/) |
+| Add theorems, metrics, evidence, and paper details | [Components](../components/) |
+| Add BibTeX citations, footnotes, and a reference slide | [Citations](../components/cite) |
+| Replace common Vue tags with Markdown directives | [Syntax sugar](../syntax-sugar) |
+| Copy a complete working deck | [Examples](../examples) |
 
-- [Quick Start](./quick-start.md#manual-setup-for-an-existing-slidev-project):
-  add the theme and enable references.
-- [Upgrade Notes](./upgrade.md): check compatibility notes before moving an old
-  deck forward.
+## 3. Customize
 
-## Choose Building Blocks
+| Task | Guide |
+|---|---|
+| Set authors, footers, numbering, and per-slide options | [Configuration](./configurations) |
+| Choose colors and typography | [Colors and typography](./themes) |
+| Control light and dark surfaces | [Theme modes and contrast](./theme-mode-contrast) |
+| Insert layouts, components, and citations from the editor | [VS Code extension](./vscode-extension) |
 
-- [Layouts](../layouts/): pick page structures for title, content, methods,
-  results, references, appendix, and Q&A slides.
-- [Components](../components/): add theorems, blocks, citations, metrics,
-  equations, datasets, paper summaries, and caveats.
-- [Syntax Sugar](../syntax-sugar.md): write common components with Markdown
-  directives instead of Vue tags.
+## 4. Reference
 
-## Customize
+| Task | Guide |
+|---|---|
+| Review the full feature set | [Feature overview](./features) |
+| Set up the repository for local development | [Contributing](../contributing) |
 
-- [Configuration](./configurations.md): authors, footer, colors, fonts,
-  theorem numbering, footnotes, and per-slide overrides.
-- [Color & Typography Themes](./themes.md): preview and choose presets.
-- [Theme Mode and Contrast](./theme-mode-contrast.md): keep light/dark mode and
-  contrast readable.
-
-## Work Faster
-
-- [VS Code Extension](./vscode-extension.md): snippets, previews, BibTeX
-  helpers, and deck metadata support.
-- [Examples](../examples.md): inspect complete examples after you know which
-  pattern you need.
+If something breaks, run `pnpm exec sch doctor` first and follow its suggestions.

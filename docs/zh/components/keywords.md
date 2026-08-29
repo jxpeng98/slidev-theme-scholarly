@@ -4,7 +4,7 @@ title: Keywords
 
 # Keywords 组件
 
-`Keywords` 组件显示关键词标签，非常适合展示研究主题或关键概念。
+`Keywords` 将研究主题或核心概念整理成一组简短标签。
 
 ## 基本用法
 
@@ -12,7 +12,7 @@ title: Keywords
 <Keywords :keywords="['机器学习', '深度学习', '神经网络']" />
 ```
 
-或使用语法糖：
+也可以写成 Markdown 指令：
 
 ```markdown
 :::keywords{:keywords='["机器学习", "深度学习"]' color="blue"}:::

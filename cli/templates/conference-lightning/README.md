@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Conference lightning template created by `scholarly`.
+This template is designed for a short conference talk.
 
-## Run
+## Start
 
 ```bash
 pnpm install

@@ -4,11 +4,11 @@ title: Syntax Sugar
 
 # Syntax Sugar
 
-This theme provides convenient Markdown syntax sugar for components, making it easier to use without writing HTML-like tags.
+Syntax sugar lets you call components with Markdown directives instead of repeating full Vue tags.
 
 ## Overview
 
-Instead of writing Vue component syntax:
+Using `Block` as an example, the full Vue syntax is:
 
 ```markdown
 <Block type="info" title="Note">
@@ -16,7 +16,7 @@ Content here
 </Block>
 ```
 
-You can use the simpler Markdown directive syntax:
+The equivalent Markdown directive is:
 
 ```markdown
 :::block{type="info" title="Note"}
@@ -121,7 +121,7 @@ For any $\epsilon > 0$, the algorithm converges in $O(1/\epsilon^2)$ steps.
 
 ## Notes
 
-- The syntax sugar is processed at build time by the theme markdown transformers
-- All props from the original components are supported
-- For complex props (arrays, objects), use the Vue binding syntax with `:prop`
-- Restart Slidev after making changes to see the effect
+- The theme processes these directives at build time.
+- Each directive accepts the same props as its component.
+- Use Vue binding syntax such as `:prop` for arrays and objects.
+- Restart Slidev after changing directive syntax.

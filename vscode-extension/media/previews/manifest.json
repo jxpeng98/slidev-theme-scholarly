@@ -794,6 +794,33 @@
       "sourceSha256": "6e34ffb482c5298109b7476c1ef901d7e59857c288e588984628e08b6b3847f1",
       "outputSha256": "03ca30f1d1efc6927f16c8c3ce4fb8b466bc895c1a766fc04b5d356bd9b82586",
       "bytes": 22460
+    },
+    {
+      "kind": "vscode",
+      "id": "vscode/gui-builder",
+      "source": "docs/public/images/vscode/gui-builder.png",
+      "output": "vscode-extension/media/previews/vscode/gui-builder.png",
+      "sourceSha256": "efb6f99763d4ceef3077231c92e069d0028854c65d4685884d7450673ba67a34",
+      "outputSha256": "611ccfb9c585571a1646cd75695169d5020e7ca90f1ffa5215fc29d32084c234",
+      "bytes": 42864
+    },
+    {
+      "kind": "vscode",
+      "id": "vscode/sidebar-overview",
+      "source": "docs/public/images/vscode/sidebar-overview.png",
+      "output": "vscode-extension/media/previews/vscode/sidebar-overview.png",
+      "sourceSha256": "d056825f387bcf6cda59fa964baadc4ebaca30be9313f544ef3058f3fb95d2ef",
+      "outputSha256": "3e731e3ee50a9d2cad8718901c666dc3e260932b647a12dd0d6b0a9fa7953964",
+      "bytes": 32301
+    },
+    {
+      "kind": "vscode",
+      "id": "vscode/theme-controls",
+      "source": "docs/public/images/vscode/theme-controls.png",
+      "output": "vscode-extension/media/previews/vscode/theme-controls.png",
+      "sourceSha256": "2f6b280df05ec9c31100e0c348b2e5b59cd36fb8a3b2dc91a149b831eff068d3",
+      "outputSha256": "fd7b26cb2cf55e4017f97454bcb7f4283444b55a569ec6c079b5f0157f873eb3",
+      "bytes": 55037
     }
   ]
 }

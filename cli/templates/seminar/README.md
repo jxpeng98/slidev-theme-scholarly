@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Research seminar template created by `scholarly`.
+This template is designed for a research seminar.
 
-## Run
+## Start
 
 ```bash
 pnpm install

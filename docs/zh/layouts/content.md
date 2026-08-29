@@ -4,11 +4,11 @@ title: 内容布局
 
 # 内容布局
 
-用于显示图片、分栏和列表内容的布局。
+这些布局负责组织图片、分栏和列表内容。
 
-## two-cols - 双栏
+## two-cols - 双栏 {#two-cols}
 
-**用于：** 比较或显示并行内容
+**适合：** 比较两组内容，或并排展示相关信息
 
 ![双栏布局示例](/images/layouts/two-cols.png)
 
@@ -19,22 +19,23 @@ ratio: "2:3"
 title: 双栏布局
 ---
 
-## 左栏 (2fr)
+## 左栏（2fr）
 
-此栏占据 2 份宽度。
+左栏占可用宽度的五分之二。
 
 - 要点 1
 - 要点 2
 
 ::right::
 
-## 右栏 (3fr)
+## 右栏（3fr）
 
-此栏占据 3 份宽度。
+右栏占可用宽度的五分之三。
 ```
 
 **属性：**
 - `ratio`：列宽比例，如 "1:1"、"2:3"（默认："1:1"）
+- `gap`：两栏之间的 CSS 间距（默认：`1rem`）
 - `title`、`subtitle`：可选的页眉内容
 
 **显示内容：**
@@ -45,9 +46,9 @@ title: 双栏布局
 
 ---
 
-## image-left - 左图右文
+## image-left - 左图右文 {#image-left}
 
-**用于：** 用文字解释视觉内容
+**适合：** 以图片为主、文字说明为辅的页面
 
 ![左图右文布局示例](/images/layouts/image-left.png)
 
@@ -59,19 +60,20 @@ ratio: "1:2"
 title: 左图布局
 ---
 
-## 右侧内容 (2fr)
+## 右侧内容（2fr）
 
 - 设备 A
 - 设备 B
 - 设备 C
 
-设置的描述...
+补充说明……
 ```
 
 **属性：**
 - `image`：图片 URL 或路径
 - `ratio`：图片:内容比例（默认："1:1"）
 - `fit`：`cover`、`contain`、`fill`（默认：`cover`）
+- `position`：图片的 CSS 定位（默认：`center`）
 - `title`、`subtitle`：可选的页眉内容
 
 **显示内容：**
@@ -81,9 +83,9 @@ title: 左图布局
 
 ---
 
-## image-right - 左文右图
+## image-right - 左文右图 {#image-right}
 
-**用于：** 文字配支持性视觉内容
+**适合：** 先讲文字，再用右侧图片补充说明
 
 ![左文右图布局示例](/images/layouts/image-right.png)
 
@@ -96,9 +98,9 @@ fit: contain
 title: 右图布局
 ---
 
-## 左侧内容 (3fr)
+## 左侧内容（3fr）
 
-我们的发现显示...
+在这里概括主要发现。
 
 - 发现 1
 - 发现 2
@@ -108,6 +110,7 @@ title: 右图布局
 - `image`：图片 URL 或路径
 - `ratio`：内容:图片比例（默认："1:1"）
 - `fit`：`cover`、`contain`、`fill`（默认：`cover`）
+- `position`：图片的 CSS 定位（默认：`center`）
 - `title`、`subtitle`：可选的页眉内容
 
 **显示内容：**
@@ -117,9 +120,9 @@ title: 右图布局
 
 ---
 
-## bullets - 增强列表
+## bullets - 增强列表 {#bullets}
 
-**用于：** 带有自定义标记的专业项目符号样式
+**适合：** 展示一组层次清楚的要点
 
 ![增强列表布局示例](/images/layouts/bullets.png)
 
@@ -150,9 +153,9 @@ icon: "→"
 
 ---
 
-## figure - 学术图片
+## figure - 学术图片 {#figure}
 
-**用于：** 以适当的学术标题和标签显示图片
+**适合：** 展示带编号和说明的学术图片
 
 ![学术图片布局示例](/images/layouts/figure.png)
 
@@ -169,7 +172,7 @@ height: 60%
 图片下方的额外描述。
 ```
 
-在 Slidev 的 frontmatter 里请使用 `image`，不要使用 `src`。`src` 是 Slidev 用于外部幻灯片源的保留字段，使用它会导致 figure 页面在 build/export 时被吞掉。
+在 Slidev 的 frontmatter 中请使用 `image`，不要使用 `src`。`src` 是留给外部幻灯片源的字段，误用后 figure 页面可能不会出现在构建和导出结果中。
 
 **属性：**
 - `image`：图片 URL 或路径
@@ -182,9 +185,9 @@ height: 60%
 
 ---
 
-## split-image - 图片对比
+## split-image - 图片对比 {#split-image}
 
-**用于：** 并排显示多张图片并带有说明
+**适合：** 并排比较多张图片，并为每张图片添加说明
 
 ![图片对比布局示例](/images/layouts/split-image.png)
 

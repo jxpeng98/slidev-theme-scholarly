@@ -4,7 +4,7 @@ title: MetricCard
 
 # MetricCard
 
-`MetricCard` presents one result metric with an optional unit, delta, and short caption. It is useful for paper talks where one number needs to stay readable without taking over the slide.
+`MetricCard` presents one key result with its unit, change, and supporting note.
 
 ![MetricCard example](/images/components/metric-card.png)
 

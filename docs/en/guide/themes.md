@@ -4,7 +4,7 @@ title: Color & Typography Themes
 
 # Color & Typography Themes
 
-Slidev Theme Scholarly v2.0 introduces customizable color and typography themes to match your institution's branding or personal preferences.
+Scholarly provides color and typography themes that can be combined to match an institution or presentation style.
 
 ## Theme Gallery
 
@@ -143,11 +143,11 @@ Slidev Theme Scholarly v2.0 introduces customizable color and typography themes 
 
 ## Color Themes
 
-Choose from 9 professionally designed color palettes:
+Choose from nine color palettes:
 
 ### Classic Academic Blue (Default)
 
-The default theme inspired by traditional academic institutions.
+The default palette draws on traditional academic colors.
 
 ```yaml
 ---
@@ -228,7 +228,7 @@ themeConfig:
 
 ### Monochrome Professional
 
-Clean, professional grayscale theme.
+A grayscale palette for figures, screenshots, and text-heavy slides.
 
 ```yaml
 ---
@@ -264,7 +264,8 @@ themeConfig:
 
 ### High Contrast (Accessibility)
 
-Maximum contrast theme for accessibility needs. WCAG AAA compliant.
+A high-contrast palette for accessibility-sensitive decks. Check the final
+text, accent, and background combinations against the WCAG level you need.
 
 ```yaml
 ---
@@ -281,11 +282,11 @@ themeConfig:
 
 ## Typography Themes
 
-Choose from 8 carefully curated font combinations:
+Choose from eight font pairings:
 
 ### Classic Palatino (Default)
 
-Traditional academic typography with Palatino serif and Helvetica sans.
+Traditional academic typography pairing Palatino serif with Helvetica sans serif.
 
 ```yaml
 ---
@@ -332,7 +333,7 @@ themeConfig:
 
 ### Contemporary Sans
 
-Clean, modern sans-serif focused design.
+A clean, modern design led by sans serif type.
 
 ```yaml
 ---
@@ -396,7 +397,7 @@ themeConfig:
 
 ### Sans Default
 
-Sans-serif focused typography for modern presentations.
+Sans serif typography for clean, modern presentations.
 
 ```yaml
 ---
@@ -426,126 +427,12 @@ themeConfig:
 ---
 ```
 
-## Surface Modes
+## Surface modes
 
-Control readable slide surfaces, player chrome, and section dividers separately:
-
-| Option | Controls | Values |
-|-------|----------|--------|
-| `contentMode` | Ordinary slide canvas, quote, code, table, footnotes, Highlight, Block, and Theorem | `light`, `dark` |
-| `chromeMode` | Header, footer, page number, navigation buttons, TOC, and toolbar surfaces | `light`, `dark`, `match`, `inverse` |
-| `sectionMode` | Default section slide appearance | `light`, `dark`, `match`, `inverse` |
-
-Legacy `colorMode` remains a deprecated alias for `contentMode`. When
-`contentMode` is omitted, Scholarly first checks `colorMode`, then follows
-Slidev's current light/dark state. For compatibility, legacy `colorMode` also
-drives `chromeMode` when neither `contentMode` nor `chromeMode` is set.
-
-### Migration Examples
-
-```yaml
-# Before
-themeConfig:
-  colorTheme: classic-blue
-  colorMode: dark
-  sectionMode: dark
-
-# After
-themeConfig:
-  colorTheme: classic-blue
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
-```
-
-```yaml
-# All-light deck
-themeConfig:
-  colorTheme: high-contrast
-  contentMode: light
-  chromeMode: match
-  sectionMode: match
-```
-
-```yaml
-# All-dark deck
-themeConfig:
-  colorTheme: nordic-blue
-  contentMode: dark
-  chromeMode: match
-  sectionMode: match
-```
-
-### Global Defaults
-
-Set it in headmatter:
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
----
-```
-
-### Priority Chain
-
-```
-contentMode > legacy colorMode > Slidev light/dark state
-chromeMode > legacy colorMode when contentMode is absent > 'dark'
-sectionMode > 'dark'
-```
-
-| Value | Description |
-|-------|-------------|
-| `light` | Light surfaces with dark text |
-| `dark` | Dark surfaces with light text |
-| `match` | Follow `contentMode` |
-| `inverse` | Invert `contentMode`; available for `chromeMode` and `sectionMode` |
-
-## Section Mode
-
-Control the appearance of section layout slides independently:
-
-### Global Default
-
-Set a default for all section slides in your headmatter:
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  sectionMode: inverse  # light, dark, match, or inverse
----
-```
-
-### Per-Slide Override
-
-Override the global setting on individual section slides:
-
-```yaml
----
-layout: section
-sectionMode: dark  # light, dark, match, or inverse
----
-
-# This Section Uses Dark Mode
-```
-
-### Priority Chain
-
-```
-Per-slide sectionMode > Global themeConfig.sectionMode > 'dark' (default)
-```
-
-| Value | Description |
-|-------|-------------|
-| `dark` | Dark gradient background with light text (default) |
-| `light` | Light background with dark text |
-| `match` | Use the resolved `contentMode` |
-| `inverse` | Use the opposite of the resolved `contentMode` |
+`colorTheme` selects the palette. `contentMode`, `chromeMode`, and
+`sectionMode` independently control content, presentation controls, and section
+dividers. See [Theme Mode and Contrast](./theme-mode-contrast) for recommended
+combinations, legacy `colorMode` migration, precedence, and per-slide overrides.
 
 ## Custom Colors
 
@@ -560,11 +447,11 @@ themeColors:
 ---
 ```
 
-Use `themeColors` for custom colors. Preset values come from the CSS rule selected by `themeConfig.colorTheme`; explicit `themeColors` overrides are mirrored to both `<html>` and `<body>` so they remain authoritative across Slidev surfaces.
+Preset values come from the CSS rule selected by `themeConfig.colorTheme`. Values set in `themeColors` are applied to both `<html>` and `<body>`, so they take precedence across Slidev surfaces.
 
 ## Live Examples
 
-Each color theme has a dedicated example file demonstrating the theme in action:
+Run any color theme locally with its example file:
 
 | Theme | Command |
 |-------|---------|
@@ -580,38 +467,5 @@ Each color theme has a dedicated example file demonstrating the theme in action:
 
 The decks in `examples/` use `theme: ../` so they work when running Slidev from this repository. If you installed the theme from npm, change it to `theme: scholarly`.
 
-## Implementation Details
-
-Themes are applied using CSS custom properties and data attributes:
-
-- Color themes use `[data-color-theme="theme-name"]`
-- Font themes use `[data-font-theme="theme-name"]`
-- Content mode uses `[data-content-mode="dark/light"]`
-- Chrome mode uses `[data-chrome-mode="dark/light"]`
-- Section mode uses `[data-section-mode="dark/light"]`
-
-`data-color-mode` is kept as a legacy mirror of `data-content-mode`.
-
-This allows for seamless theme switching without reloading the presentation.
-
-### Semantic Token Groups
-
-Scholarly keeps readable content colors separate from the theme's identity colors. When creating a new color theme or adjusting light/dark behavior, prefer these token groups instead of hard-coded component colors:
-
-| Token group | Purpose | Examples |
-|-------------|---------|----------|
-| Chrome tokens | Header, footer, toolbar, and navigation surfaces | `--scholarly-chrome-bg`, `--scholarly-toolbar-hover` |
-| Content tokens | Readable slide body surfaces, borders, code, quote, and table colors | `--scholarly-content-surface`, `--scholarly-code-bg`, `--scholarly-quote-fg` |
-| Accent tokens | Theme identity colors provided by color presets or `themeColors` | `--slidev-theme-primary`, `--slidev-theme-primary-light`, `--scholarly-accent` |
-| Semantic tokens | Variant-specific readable states for highlights, blocks, and theorems | `--scholarly-highlight-warning-bg`, `--scholarly-block-info-border`, `--scholarly-theorem-definition-accent` |
-| Interaction tokens | Hover, focus, pinned, active, and muted UI feedback | `--scholarly-toolbar-hover`, `--scholarly-content-fg-muted` |
-
-The key rule is that a background token and its foreground token must move together. For example, `Highlight` uses `--scholarly-highlight-*-bg` and `--scholarly-highlight-*-fg`, so a dark highlight background cannot accidentally inherit dark body text in light mode.
-
-## Regenerate Theme Screenshots
-
-To export the first 4 slides of every theme example into `images/themes/*` (and sync to `docs/public/images/themes/*`), run:
-
-```bash
-pnpm run export:theme-images
-```
+Theme implementation and preview regeneration are documented in
+[Contributing](../contributing#theme-and-preview-changes).

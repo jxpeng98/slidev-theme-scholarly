@@ -1,7 +1,7 @@
 {
   "name": "slidev-scholarly-snippets",
-  "displayName": "Slidev Scholarly Snippets",
-  "description": "Quick snippets and templates for Slidev Theme Scholarly",
+  "displayName": "Slidev Scholarly",
+  "description": "Write Slidev Theme Scholarly presentations with templates, layouts, citations, theme controls, and project checks",
   "version": "1.4.1",
   "publisher": "jxpeng98",
   "icon": "images/icon-256.png",
@@ -62,33 +62,33 @@
     "views": {
       "slidev-scholarly": [
         {
+          "id": "scholarly-templates",
+          "name": "Start · Templates",
+          "icon": "$(new-file)"
+        },
+        {
           "id": "scholarly-layouts",
-          "name": "Layouts",
+          "name": "Build · Layouts",
           "icon": "$(layout)"
         },
         {
           "id": "scholarly-components",
-          "name": "Components",
+          "name": "Build · Components",
           "icon": "$(symbol-method)"
         },
         {
-          "id": "scholarly-templates",
-          "name": "Templates",
-          "icon": "$(file-code)"
-        },
-        {
-          "id": "scholarly-themes",
-          "name": "Themes",
-          "icon": "$(paintcan)"
-        },
-        {
           "id": "scholarly-references",
-          "name": "References",
+          "name": "Build · Citations & Anchors",
           "icon": "$(book)"
         },
         {
+          "id": "scholarly-themes",
+          "name": "Customize · Themes",
+          "icon": "$(paintcan)"
+        },
+        {
           "id": "scholarly-cli",
-          "name": "CLI",
+          "name": "Reference · CLI Actions",
           "icon": "$(terminal)"
         },
         {
@@ -104,111 +104,133 @@
       {
         "command": "slidev-scholarly.insertLayout",
         "title": "Insert Layout",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.insertComponent",
         "title": "Insert Component",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.newPresentation",
-        "title": "New Scholarly Presentation",
+        "title": "Create Presentation",
+        "category": "Slidev Scholarly",
         "icon": "$(new-file)"
       },
       {
         "command": "slidev-scholarly.insertCitation",
         "title": "Insert Citation",
+        "category": "Slidev Scholarly",
         "icon": "$(quote)"
       },
       {
         "command": "slidev-scholarly.insertInternalAnchor",
         "title": "Insert Internal Anchor",
+        "category": "Slidev Scholarly",
         "icon": "$(symbol-key)"
       },
       {
         "command": "slidev-scholarly.insertAnchorReference",
         "title": "Insert Internal Anchor Reference",
+        "category": "Slidev Scholarly",
         "icon": "$(link)"
       },
       {
         "command": "slidev-scholarly.insertBibKey",
         "title": "Insert BibTeX Key",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.insertPaperSummary",
         "title": "Insert Paper Summary",
+        "category": "Slidev Scholarly",
         "icon": "$(file-text)"
       },
       {
         "command": "slidev-scholarly.insertAnchorKey",
         "title": "Insert Anchor Key",
+        "category": "Slidev Scholarly",
         "icon": "$(link)"
       },
       {
         "command": "slidev-scholarly.applyThemePreset",
         "title": "Apply Theme Preset",
+        "category": "Slidev Scholarly",
         "icon": "$(wand)"
       },
       {
         "command": "slidev-scholarly.setColorTheme",
         "title": "Set Color Theme",
+        "category": "Slidev Scholarly",
         "icon": "$(symbol-color)"
       },
       {
         "command": "slidev-scholarly.setFontTheme",
         "title": "Set Font Theme",
+        "category": "Slidev Scholarly",
         "icon": "$(text-size)"
       },
       {
         "command": "slidev-scholarly.setContentMode",
         "title": "Set Content Mode",
+        "category": "Slidev Scholarly",
         "icon": "$(color-mode)"
       },
       {
         "command": "slidev-scholarly.setChromeMode",
         "title": "Set Chrome Mode",
+        "category": "Slidev Scholarly",
         "icon": "$(layout-menubar)"
       },
       {
         "command": "slidev-scholarly.setSectionMode",
         "title": "Set Section Mode",
+        "category": "Slidev Scholarly",
         "icon": "$(split-vertical)"
       },
       {
         "command": "slidev-scholarly.openSidebar",
-        "title": "Open Slidev Scholarly Sidebar",
+        "title": "Open Sidebar",
+        "category": "Slidev Scholarly",
         "icon": "$(layout-sidebar-left)"
       },
       {
         "command": "slidev-scholarly.openGuiBuilder",
         "title": "Open GUI Builder",
+        "category": "Slidev Scholarly",
         "icon": "$(layout)"
       },
       {
         "command": "slidev-scholarly.refreshReferences",
         "title": "Refresh References",
+        "category": "Slidev Scholarly",
         "icon": "$(refresh)"
       },
       {
         "command": "slidev-scholarly.cliAction",
-        "title": "Run Scholarly CLI Action",
+        "title": "Run CLI Action",
+        "category": "Slidev Scholarly",
         "icon": "$(terminal)"
       },
       {
         "command": "slidev-scholarly.cliMenu",
-        "title": "Scholarly CLI Quick Actions",
+        "title": "Open CLI Actions",
+        "category": "Slidev Scholarly",
         "icon": "$(terminal-bash)"
       },
       {
         "command": "slidev-scholarly.toggleDevMode",
-        "title": "Slidev Scholarly: Toggle Dev Mode",
+        "title": "Toggle Dev Mode",
+        "category": "Slidev Scholarly",
         "icon": "$(debug)"
       },
       {
         "command": "slidev-scholarly.preview",
-        "title": "Preview",
+        "title": "Preview Item",
+        "category": "Slidev Scholarly",
         "icon": "$(eye)"
       }
     ],

@@ -4,7 +4,7 @@ title: MetricGrid
 
 # MetricGrid
 
-`MetricGrid` renders several `MetricCard` items in a compact responsive grid. Use it for result summaries, ablations, or experiment dashboards inside academic slides.
+`MetricGrid` arranges several `MetricCard` items in a responsive grid for result summaries, ablations, or experiment overviews.
 
 ![MetricGrid example](/images/components/metric-grid.png)
 

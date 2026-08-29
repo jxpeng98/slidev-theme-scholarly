@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<{
   baseline?: string
   variant?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
 }>(), {
-  eyebrow: 'Result Highlight',
+  eyebrow: undefined,
   label: 'Primary Metric',
   metric: '0.0',
   variant: 'primary',
@@ -140,7 +140,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   margin: 0 0 0.35rem;
   color: var(--scholarly-result-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -158,7 +158,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   max-width: 44rem;
   margin: 0.5rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -188,7 +188,7 @@ const variantClass = computed(() => `is-${props.variant}`)
 }
 
 .result-highlight-value small {
-  font-size: 0.9rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 750;
 }
 
@@ -198,7 +198,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   gap: 0.45rem;
   margin-top: 0.65rem;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
 }
 

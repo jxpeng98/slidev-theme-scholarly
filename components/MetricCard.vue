@@ -80,7 +80,7 @@ withDefaults(defineProps<Props>(), {
   min-width: 0;
   overflow: hidden;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
   letter-spacing: 0;
   line-height: 1.2;
@@ -96,7 +96,7 @@ withDefaults(defineProps<Props>(), {
   border-radius: 999px;
   background: var(--metric-soft-bg);
   color: var(--metric-accent);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
   line-height: 1.2;
 }
@@ -120,14 +120,14 @@ withDefaults(defineProps<Props>(), {
 
 .metric-unit {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.9rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 650;
   line-height: 1;
 }
 
 .metric-caption {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.76rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.35;
 }
 

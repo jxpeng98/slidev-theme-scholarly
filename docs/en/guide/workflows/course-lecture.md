@@ -4,8 +4,8 @@ title: Course Lecture Workflow
 
 # Course Lecture Workflow
 
-Use this path for teaching decks, tutorials, and structured lessons where the
-audience needs concepts, examples, and checkpoints.
+A course deck usually moves from concepts to examples, with regular checkpoints.
+Start a lecture, tutorial, or structured lesson with the `basic` template:
 
 ```bash
 npx -y slidev-theme-scholarly init lecture --template basic
@@ -39,7 +39,7 @@ Use examples early and move optional derivations to appendix or backup slides.
 
 ## Theme mode and contrast
 
-Lecture slides are often read from the back of a room. Keep explanatory slides
-in `contentMode: light` with `chromeMode: match`, use `sectionMode: dark` for
-separation, and avoid low contrast quote or Highlight combinations. See
+Lecture slides must stay readable from the back of the room. Keep explanatory
+slides in `contentMode: light` with `chromeMode: match`, use `sectionMode: dark`
+for section breaks, and avoid low-contrast quote or Highlight combinations. See
 [theme mode and contrast](../theme-mode-contrast).

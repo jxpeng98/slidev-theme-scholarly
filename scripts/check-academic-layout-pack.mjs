@@ -48,7 +48,7 @@ const layoutSnippets = await readText('vscode-extension/snippets/layouts.json')
 const vscodeLayoutSnippets = await readText('vscode-extension/snippets/layouts.vscode.json')
 const englishDocs = await readText('docs/en/layouts/academic.md')
 const chineseDocs = await readText('docs/zh/layouts/academic.md')
-const academicExample = await readText('examples/example-academic.md')
+const academicGallery = await readText('examples/example-academic-gallery.md')
 
 const sharedAcademicItems = sharedLayouts.layoutGroups
   ?.find(group => group.name === 'academic')
@@ -72,7 +72,7 @@ for (const layoutId of layoutIds) {
   expectContains('vscode-extension/snippets/layouts.json', layoutSnippets, `Slidev Scholarly: ${snippetName} Layout`)
   expectContains('docs/en/layouts/academic.md', englishDocs, `## ${layoutId}`)
   expectContains('docs/zh/layouts/academic.md', chineseDocs, `## ${layoutId}`)
-  expectContains('examples/example-academic.md', academicExample, `layout: ${layoutId}`)
+  expectContains('examples/example-academic-gallery.md', academicGallery, `layout: ${layoutId}`)
 
   expectContains(layoutFile, layoutText, 'ScholarlyHeader')
   expectContains(layoutFile, layoutText, 'ScholarlyFooter')

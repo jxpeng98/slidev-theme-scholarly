@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Thesis defense template created by `scholarly`.
+This template is designed for a thesis defense.
 
-## Run
+## Start
 
 ```bash
 pnpm install

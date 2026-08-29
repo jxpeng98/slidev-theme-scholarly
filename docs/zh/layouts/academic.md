@@ -4,11 +4,11 @@ title: 学术布局
 
 # 学术布局
 
-专为学术演示设计的布局 - 研究方法、结果、对比和参考文献。
+这些布局围绕论文、方法、实验、答辩和参考文献组织内容。
 
-## paper-summary - 论文摘要
+## paper-summary - 论文摘要 {#paper-summary}
 
-**用于：** 汇总单篇论文的元信息、问题、方法和主要发现。
+**适合：** 概括单篇论文的基本信息、问题、方法和主要发现。
 
 ```markdown
 ---
@@ -35,17 +35,19 @@ keywords:
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
 - `paperTitle`：摘要头部展示的论文标题
 - `authors`：作者字符串或作者数组
 - `venue`、`year`、`doi`、`status`：可选元信息
 - `keywords`：主题标签字符串或数组
+- `eyebrow`：论文标题上方的标签
 - `problemLabel`、`methodLabel`、`findingLabel`：覆盖三张摘要卡片标题
 
 ---
 
-## related-work-matrix - 相关工作矩阵
+## related-work-matrix - 相关工作矩阵 {#related-work-matrix}
 
-**用于：** 在介绍贡献前，对比已有工作、方法假设和研究空白。
+**适合：** 在介绍贡献前，对比已有工作、方法假设和研究空白。
 
 ```markdown
 ---
@@ -67,13 +69,14 @@ description: 将当前工作放到已有方法谱系中定位。
 - `title`、`subtitle`：可选页眉
 - `heading`：页面内主标题
 - `description`：矩阵上方的简短说明
+- `eyebrow`：主标题上方的标签
 - `note`：不使用 `notes` slot 时的可选说明
 
 ---
 
-## method-pipeline - 方法流程
+## method-pipeline - 方法流程 {#method-pipeline}
 
-**用于：** 以有序步骤展示研究流程，并可突出当前步骤。
+**适合：** 按顺序展示研究流程，并突出当前步骤。
 
 ```markdown
 ---
@@ -96,26 +99,27 @@ steps:
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
 - `steps`：`{ title, description, detail }` 数组
 - `activeStep`：要强调的步骤序号，从 1 开始
 - `heading`、`description`、`eyebrow`：页面内文字控制
 
 ---
 
-## result-highlight - 结果强调
+## result-highlight - 结果强调 {#result-highlight}
 
-**用于：** 先给出一个核心结果，再用证据或限制说明支撑它。
+**适合：** 先给出核心结果，再补充证据和局限。
 
 ```markdown
 ---
 layout: result-highlight
 title: 主要结果
 heading: 我们的方法在不增加计算量的情况下提升准确率
-label: Accuracy
+label: 准确率
 metric: 94.7
 unit: "%"
-delta: +3.2 over baseline
-baseline: 5-seed average
+delta: 比基线高 3.2
+baseline: 5 次随机种子平均值
 variant: success
 ---
 
@@ -128,6 +132,7 @@ variant: success
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
 - `metric`、`unit`、`label`：主指标区域
 - `delta`、`baseline`：指标下方的上下文标签
 - `variant`：`primary`、`success`、`warning`、`danger` 或 `info`
@@ -135,9 +140,9 @@ variant: success
 
 ---
 
-## experiment-grid - 实验矩阵
+## experiment-grid - 实验矩阵 {#experiment-grid}
 
-**用于：** 紧凑对比实验设置、指标结果和备注。
+**适合：** 集中比较实验设置、指标和备注。
 
 ```markdown
 ---
@@ -161,15 +166,17 @@ experiments:
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
+- `heading`、`description`、`eyebrow`：页面内文字控制
 - `experiments`：`{ name, setup, result, metric, note }` 数组
 - `cols`：网格列数，通常为 `2` 或 `3`
 - `setupLabel`、`metricLabel`、`noteLabel`：覆盖定义列表标签
 
 ---
 
-## limitation - 限制与缓解
+## limitation - 局限与应对 {#limitation}
 
-**用于：** 说明结论边界，以及研究如何控制或限定这个问题。
+**适合：** 说明结论边界，以及研究如何规避或界定这些局限。
 
 ```markdown
 ---
@@ -189,22 +196,23 @@ description: 明确当前研究能支持和不能支持的结论。
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
 - `limitation`、`mitigation`：不使用 slot 时的纯文本回退
 - `limitationLabel`、`mitigationLabel`：面板标题
 - `heading`、`description`、`eyebrow`：页面内文字控制
 
 ---
 
-## defense-question - 答辩问题
+## defense-question - 答辩问题 {#defense-question}
 
-**用于：** 准备论文答辩或 Q&A 页，包含回答、证据和后续讨论。
+**适合：** 准备答辩问答，并整理回答、证据和后续讨论。
 
 ```markdown
 ---
 layout: defense-question
 title: 答辩问题
 question: 为什么提出的方法能超过最强基线？
-source: Committee question
+source: 答辩委员会问题
 ---
 
 路由阶段提升了任务专门化能力，同时保持基础表示稳定。
@@ -214,10 +222,12 @@ source: Committee question
 - 五个随机种子下方差较低。
 
 ::followup::
-如果计算预算增加，可以补充与更大 teacher model 的比较。
+如果计算预算增加，可以补充与更大教师模型的比较。
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
+- `eyebrow`：问题上方的标签
 - `question`：主问题
 - `source`：可选的问题来源或提问人标签
 - `answer`、`evidence`、`followup`：不使用 slot 时的纯文本回退
@@ -225,9 +235,9 @@ source: Committee question
 
 ---
 
-## appendix-index - 附录索引
+## appendix-index - 附录索引 {#appendix-index}
 
-**用于：** 为备份页、额外实验和证明构建快速导航。
+**适合：** 为备份页、额外实验和证明建立导航。
 
 ```markdown
 ---
@@ -249,14 +259,15 @@ items:
 ```
 
 **属性：**
+- `title`、`subtitle`：可选页眉
 - `items`：`{ label, title, description, page }` 数组
 - `heading`、`description`、`eyebrow`：页面内文字控制
 
 ---
 
-## compare - 并排对比
+## compare - 并排对比 {#compare}
 
-**用于：** 用带标签的双栏对比两种方法、方案或概念
+**适合：** 用带标签的双栏对比两种方法、方案或概念。
 
 ![并排对比布局示例](/images/layouts/compare.png)
 
@@ -289,9 +300,9 @@ rightColor: green
 
 ---
 
-## methodology - 研究方法
+## methodology - 研究方法 {#methodology}
 
-**用于：** 用于展示研究方法和图表的双栏布局
+**适合：** 并排展示研究方法和图表。
 
 ![研究方法布局示例](/images/layouts/methodology.png)
 
@@ -319,9 +330,9 @@ title: 研究方法
 
 ---
 
-## results - 结果仪表板
+## results - 结果仪表板 {#results}
 
-**用于：** 用于显示多个指标或结果的网格布局
+**适合：** 用网格汇总多项指标或结果。
 
 ![结果仪表板布局示例](/images/layouts/results.png)
 
@@ -349,9 +360,9 @@ title: 主要结果
 
 ---
 
-## timeline - 研究时间线
+## timeline - 研究时间线 {#timeline}
 
-**用于：** 以垂直时间线格式显示研究进展或历史事件
+**适合：** 按时间顺序展示研究进展或历史事件。
 
 ![研究时间线布局示例](/images/layouts/timeline.png)
 
@@ -368,7 +379,7 @@ items:
     description: 开发核心算法
   - year: "2022"
     title: 验证
-    description: 进行实验
+    description: 开展实验
 ---
 ```
 
@@ -378,9 +389,9 @@ items:
 
 ---
 
-## agenda - 议程概览
+## agenda - 议程概览 {#agenda}
 
-**用于：** 展示演示大纲或会议议程
+**适合：** 展示报告大纲或会议议程。
 
 ![议程概览布局示例](/images/layouts/agenda.png)
 
@@ -402,9 +413,9 @@ items:
 
 ---
 
-## acknowledgments - 致谢
+## acknowledgments - 致谢 {#acknowledgments}
 
-**用于：** 显示资助来源和合作者
+**适合：** 列出资助来源和合作者。
 
 ![致谢布局示例](/images/layouts/acknowledgments.png)
 
@@ -430,9 +441,9 @@ collaborators:
 
 ---
 
-## references - 参考文献
+## references - 参考文献 {#references}
 
-**用于：** 以学术格式显示参考文献。自动从 BibTeX 引用生成参考文献。
+**适合：** 根据 BibTeX 引用自动生成参考文献页。
 
 ![参考文献布局示例](/images/layouts/references.png)
 
@@ -442,7 +453,7 @@ layout: references
 ---
 ```
 
-**对于较长的参考文献列表，使用分页：**
+**参考文献较多时，可以分页：**
 
 ```markdown
 ---
@@ -459,7 +470,7 @@ title: "参考文献（续）"
 ---
 ```
 
-如果你想把 bibliography 放在该页里的某个精确位置，可以手动在对应位置写 `[[bibliography]]`。
+需要指定参考文献的插入位置时，在相应位置写入 `[[bibliography]]`。
 
 **手动参考文献（不使用 BibTeX）：**
 
@@ -480,6 +491,7 @@ layout: references
 - `page`：当前页码（用于分页）
 - `perPage`：每页参考文献数量
 - `title`：自定义标题（默认："参考文献"或"参考文献（续）"）
+- `minFontSize`、`maxFontSize`：字号上下限，单位为像素
 
 **特点：**
 

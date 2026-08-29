@@ -4,265 +4,187 @@ title: VS Code Extension
 
 # VS Code Extension
 
-We provide a VS Code extension to boost your productivity when creating Slidev presentations with this theme.
+The extension brings Scholarly's templates, layouts, components, citations, theme controls, and project checks into VS Code. Its sidebar follows the usual workflow: start, build, customize, then check.
 
-## Features
+## Install
 
-- 🎯 **Secondary Side Bar Panel** - Quick access to layouts, components, templates, themes, references, and CLI actions
-- ✨ **Code Snippets** - Type `ss-` or `scholarly-` to trigger snippets for layouts and components
-- ⚡ **Smart Completion** - Context-aware candidates for `layout:`, `themeConfig`, components (`<...>`), and directives (`:::`)
-- 📝 **One-Click Insert** - Click any item in the panel to insert code at cursor position
-- 🚀 **New Presentation** - Create a new presentation with pre-configured template
-- 🎨 **Theme Controls** - Apply `themeConfig.colorTheme`, `themeConfig.fontTheme`, `contentMode`, `chromeMode`, and `sectionMode` from the Themes view
-- 📚 **References & Anchors** - BibTeX completion/hover, internal-anchor completion, a unified References view, and command-palette insertion for both anchor definitions and references
-- 🧭 **Citation Diagnostics** - Inline warnings and quick fixes for missing bibliography setup, unresolved cite keys, duplicate BibTeX keys, and missing references slides
-- 🧪 **Dev Mode** - Built-in performance diagnostics with timing logs and slow-operation markers
+Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets).
 
-## Installation
+## Open the extension
 
-### From VSIX File
+1. Open a Markdown file.
+2. Open the Secondary Side Bar.
+3. Select **Slidev Scholarly**.
 
-1. Download the `.vsix` file from the [release page](https://github.com/jxpeng98/slidev-theme-scholarly/releases)
-2. In VS Code, press `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Windows/Linux)
-3. Type "Extensions: Install from VSIX" and select the downloaded file
-4. Reload VS Code
+The sidebar is ordered by task:
 
-## Usage
+| Stage | View | Purpose |
+|---|---|---|
+| Start | **Start · Templates** | Create a deck from a template |
+| Build | **Build · Layouts** | Insert a whole-slide structure |
+| Build | **Build · Components** | Insert theorems, metrics, evidence, and other content |
+| Build | **Build · Citations & Anchors** | Insert BibTeX keys, summaries, and internal links |
+| Customize | **Customize · Themes** | Set presets, colors, fonts, and light or dark modes |
+| Reference | **Reference · CLI Actions** | Run CLI tasks, the doctor, and help |
 
-### Using Code Snippets
+<figure class="docs-screenshot docs-screenshot--narrow">
+  <img src="/images/vscode/sidebar-overview.png" alt="Slidev Scholarly sidebar in VS Code with templates, layouts, components, citations, and theme sections" loading="lazy">
+  <figcaption>Keep the sidebar beside your Markdown and work through it from top to bottom.</figcaption>
+</figure>
 
-Type the prefix in any Markdown file to trigger auto-completion:
+## 1. Start a deck
 
-```markdown
-ss-cover      # Insert cover layout
-ss-theorem    # Insert theorem component
-ss-block      # Insert block component
-scholarly-cite # Insert citation
+Choose a template from **Start · Templates**, or run:
+
+```text
+Slidev Scholarly: Create Presentation
 ```
 
-Press `Tab` to move between placeholders in the inserted snippet.
+The template creates a regular Markdown file that you can edit directly.
 
-### Smart Completion While Typing
+### Use the GUI Builder
 
-The extension also provides context-aware completion suggestions:
+To assemble a first draft visually, run `Slidev Scholarly: Open GUI Builder`. The builder can:
 
-- `layout:` -> layout names (`cover`, `section`, `results`, ...)
-- `colorTheme:` / `fontTheme:` -> theme values
-- `contentMode:` -> content surface values (`light`, `dark`)
-- `chromeMode:` / `sectionMode:` -> chrome and section surface values (`light`, `dark`, `match`, `inverse`)
-- `colorMode:` -> legacy alias values for compatibility
-- `<` -> Scholarly components (`Theorem`, `Block`, `Columns`, ...)
-- `:::` -> Markdown syntax sugar directives (`theorem`, `block`, `keywords`, ...)
-- `](#` / `href="#` / `to="#` -> internal anchor ids from the current document
-- `ss-` / `scholarly-` -> built-in snippet candidates
+- add, reorder, and remove slides;
+- edit common content fields;
+- choose colors, fonts, and surface modes;
+- create a new file or insert the result into the active editor.
 
-If suggestions are not shown automatically, use `Ctrl+Space` (or `Cmd+Space` on macOS if available).
+The result is still regular Slidev Markdown.
 
-### Citation Diagnostics And Quick Fixes
+<figure class="docs-screenshot">
+  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly GUI Builder with deck details, theme settings, layout library, and slide list" loading="lazy">
+  <figcaption>Build the first draft here, then refine the generated Markdown.</figcaption>
+</figure>
 
-When a Markdown deck contains `@citekey` or `!@citekey`, the extension checks the active file for:
+## 2. Build the slides
 
-- missing `bibFile` frontmatter or default `references.bib`
-- missing `.bib` files
-- duplicate BibTeX keys
-- unresolved citation keys
-- missing `layout: references` slide
+### Insert layouts and components
 
-Quick Fix actions can add `bibFile: ./references.bib`, create the missing bibliography file, append a BibTeX stub for an unresolved key, or add a references slide. The diagnostics reuse the same shared citation parser as `sch doctor`, so Vue event handlers, emails, URLs, inline code, and fenced code blocks are ignored.
+Choose a layout or component from the sidebar. Selecting an item inserts its Markdown at the cursor; the eye icon opens a visual preview first.
 
-### Insert Internal Anchors
+Use:
 
-The Command Palette now includes two dedicated anchor commands:
+- [Layouts](../layouts/) for whole-slide structure;
+- [Components](../components/) for theorems, metrics, evidence, and other content;
+- [Citations](../components/cite) for BibTeX references and footnotes.
 
-- `Insert Internal Anchor` -> create a new anchor at the cursor using `::anchor{#anchor-id}`, `{#anchor-id}`, or `id="anchor-id"`
-- `Insert Internal Anchor Reference` -> pick an existing anchor from the current Markdown document and insert `#anchor-id`
+### Use completions as you type
 
-If you prefer snippets, type `ss-anchor` to insert a standalone anchor marker quickly.
+| Trigger | Suggestions |
+|---|---|
+| `layout:` | Layout names |
+| `colorTheme:`, `fontTheme:` | Theme values |
+| `contentMode:`, `chromeMode:`, `sectionMode:` | Light and dark modes |
+| `<` | Scholarly components |
+| `:::` | Markdown directives |
+| `](#`, `href="#`, `to="#` | Internal anchors |
+| `ss-`, `scholarly-` | Built-in snippets |
 
-### Dev Mode For Performance Testing
+Press `Ctrl+Space` if suggestions do not open automatically.
 
-Enable dev mode when you need to profile extension behavior:
+### Insert citations and anchors
 
-- Command Palette: `Slidev Scholarly: Toggle Dev Mode`
-- Settings:
-  - `slidevScholarly.devMode.enabled`
-  - `slidevScholarly.devMode.slowThresholdMs` (default `25`)
+**Build · Citations & Anchors** lists BibTeX entries and internal anchors from the active document.
 
-After enabling:
+Available commands include:
 
-- You will see a `Scholarly Dev` indicator in the status bar
-- Performance logs are printed to the `Slidev Scholarly` output channel
-- Operations slower than your threshold are tagged as `SLOW`
+- `Slidev Scholarly: Insert Citation`
+- `Slidev Scholarly: Insert Internal Anchor`
+- `Slidev Scholarly: Insert Internal Anchor Reference`
+- `Slidev Scholarly: Insert Paper Summary`
 
-If you develop the extension locally, use the debug target `Run Extension (Dev Mode)` in `vscode-extension/.vscode/launch.json`.
+### Use snippets
 
-### Using Secondary Side Bar
+Type a prefix and press `Tab`:
 
-1. Open the **Secondary Side Bar** on the right and select **Slidev Scholarly**
-2. Browse through six sections:
-   - **Layouts** - Slide layouts organized by category:
-     - *Structure* - cover, default, intro, section, center, auto-center, auto-size, toc, end
-     - *Content* - two-cols, image-left/right, bullets, figure, split-image
-     - *Emphasis* - quote, fact, statement, focus
-     - *Academic* - compare, methodology, results, timeline, agenda, acknowledgments, references
-   - **Components** - Built-in Vue components
-   - **Templates** - Pre-made presentation templates
-   - **Themes** - Apply theme presets (updates frontmatter)
-   - **References** - Browse both BibTeX citations and internal anchors, then insert cite keys or `#anchor-id` targets
-   - **CLI** - Run Scholarly CLI actions from sidebar:
-     - *Create* - new presentation and template list
-     - *Theme* - apply/list themes, apply preset combos, list layouts/components
-     - *Snippets* - append/show/list snippets, append workflows
-     - *Tools* - doctor and help
-3. Click an item (or the `+` button where available) to insert/apply
+| Prefix | Inserts |
+|---|---|
+| `ss-cover` | Cover slide |
+| `ss-section` | Section divider |
+| `ss-figure` | Figure with caption |
+| `ss-theorem` | Theorem component |
+| `ss-results` | Results layout |
+| `ss-cite` | BibTeX citation |
+| `ss-anchor` | Internal anchor |
+| `ss-frontmatter` | Scholarly frontmatter |
 
-### Creating New Presentation
+Browse the full catalog from the completion list or sidebar. Legacy `scholarly-*` prefixes still work.
 
-1. Open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-2. Type "Slidev Scholarly: New Presentation"
-3. Choose a location and filename
-4. A new file will be created with the basic template
+## 3. Customize the deck
 
-## Available Snippets
+**Customize · Themes** contains four groups:
 
-### Layout Snippets
+- **Presets**
+- **Color Themes**
+- **Font Themes**
+- **Light & Dark Modes**
 
-Layouts are organized into four categories. You can use category-specific prefixes (`ss-structure-*`, `ss-content-*`, `ss-emphasis-*`, `ss-academic-*`) or the shorter `ss-*` prefix.
+Theme actions update frontmatter in the active Markdown file. They do not rewrite slide content.
 
-The `ss-*` prefixes are the canonical snippet labels shown in completion. Legacy `scholarly-*` aliases remain available through the extension's smart completion for compatibility.
+<figure class="docs-screenshot">
+  <img src="/images/vscode/theme-controls.png" alt="Slidev Scholarly color theme picker open in VS Code" loading="lazy">
+  <figcaption>Choose a theme in the sidebar or Command Palette. The extension writes the change to frontmatter.</figcaption>
+</figure>
 
-#### Structure Layouts
+## 4. Check and get help
 
-| Prefix | Description |
-|--------|-------------|
-| `ss-cover` | Cover/title slide |
-| `ss-default` | Default content slide |
-| `ss-intro` | Section introduction |
-| `ss-section` | Section divider (supports `sectionMode: dark/light/match/inverse`) |
-| `ss-center` | Centered content |
-| `ss-auto-center` | Auto-adjusting centered content |
-| `ss-auto-size` | Default flow with `autoSizeGrow`, `autoSizeAlign`, and `autoSizePadding` controls |
-| `ss-toc` | Auto-generated table of contents grouped by sections |
-| `ss-end` | Thank you/closing slide |
+**Reference · CLI Actions** groups commands by task:
 
-Note: if you enable `themeConfig.outlineToc: true` in frontmatter, the footer TOC in play mode uses the same section grouping. On desktop play mode, hovering or focusing TOC items also shows a slide preview.
+| Group | Actions |
+|---|---|
+| Start | Create a presentation or list templates |
+| Build | List layouts and components, add snippets, or apply workflows |
+| Customize | Set a theme or list presets |
+| Check & Help | Run `doctor` or show CLI help |
 
-#### Content Layouts
+### Citation diagnostics
 
-| Prefix | Description |
-|--------|-------------|
-| `ss-two-cols` | Two-column layout |
-| `ss-image-left` | Image on left, text on right |
-| `ss-image-right` | Image on right, text on left |
-| `ss-bullets` | Enhanced bullet list |
-| `ss-figure` | Academic figure with caption |
-| `ss-split-image` | Side-by-side image comparison |
+When a deck contains `@citekey` or `!@citekey`, the extension checks for:
 
-#### Emphasis Layouts
+- missing `bibFile` configuration;
+- missing `.bib` files;
+- duplicate or unresolved keys;
+- a missing `layout: references` slide.
 
-| Prefix | Description |
-|--------|-------------|
-| `ss-quote` | Quote with author attribution |
-| `ss-fact` | Single fact/statistic |
-| `ss-statement` | Important statement |
-| `ss-focus` | Focused statement with icon |
-
-#### Academic Layouts
-
-| Prefix | Description |
-|--------|-------------|
-| `ss-compare` | Side-by-side comparison |
-| `ss-methodology` | Research methodology |
-| `ss-results` | Results dashboard |
-| `ss-timeline` | Research timeline |
-| `ss-agenda` | Agenda/overview |
-| `ss-acknowledgments` | Acknowledgments slide |
-| `ss-references` | Bibliography slide |
-
-### Component Snippets
-
-| Prefix | Description |
-|--------|-------------|
-| `ss-theorem` | Theorem/lemma/definition |
-| `ss-block` | Beamer-style colored block |
-| `ss-steps` | Workflow/process steps |
-| `ss-steps-md` | Workflow/process steps (Markdown syntax sugar) |
-| `ss-keywords` | Keyword tags |
-| `ss-keywords-md` | Keyword tags (Markdown syntax sugar) |
-| `ss-columns` | Multi-column layout |
-| `ss-columns-md` | Multi-column layout (Markdown syntax sugar) |
-| `ss-highlight` | Text highlighting |
-| `ss-highlight-md` | Text highlighting (Markdown syntax sugar) |
-| `ss-cite` | BibTeX citation `@citekey` |
-| `ss-cite-multi` | Grouped BibTeX citations |
-| `ss-cite-note` | Footnote-like manual citation note |
-| `ss-anchor` | Standalone internal anchor `::anchor{#anchor-id}` |
-| `ss-cite-comp` | Cite component (non-BibTeX) |
-| `ss-cite-md` | Cite component (Markdown syntax sugar) |
-| `ss-theme-preview` | ThemePreview component |
-| `ss-bibliography` | Bibliography placeholder |
-| `ss-references-slide` | References slide |
-
-### Theme Preset Snippets
-
-| Prefix | Description |
-|--------|-------------|
-| `ss-theme-classic` | Classic Blue + Classic fonts |
-| `ss-theme-oxford` | Oxford Burgundy + Traditional fonts |
-| `ss-theme-cambridge` | Cambridge Green + Elegant fonts |
-| `ss-theme-modern` | Monochrome + Sans-default fonts |
-
-### Utility Snippets
-
-| Prefix | Description |
-|--------|-------------|
-| `ss-frontmatter` | Full frontmatter configuration |
-| `ss-slide` / `---` | Slide divider |
-
-## Tips
-
-### Quick Layout Selection
-
-When you need a specific layout, just type `ss-` and browse through the autocomplete suggestions. Each snippet includes helpful placeholders for common options.
-
-### Combining with Markdown Syntax Sugar
-
-The extension works great with the [Markdown Syntax Sugar](../syntax-sugar.md) feature. You can use either:
-
-```markdown
-<!-- Using Vue component (from snippet) -->
-<Theorem type="theorem" title="Main Result">
-Content here
-</Theorem>
-
-<!-- Using Markdown directive -->
-:::theorem{type="theorem" title="Main Result"}
-Content here
-:::
-```
-
-### Customizing Snippets
-
-If you want to modify the snippets, you can:
-
-1. Open VS Code Settings
-2. Search for "Configure User Snippets"
-3. Select "markdown.json"
-4. Add your custom snippets
+Quick Fix can repair the common cases.
 
 ## Troubleshooting
 
-### Snippets Not Showing
+### Suggestions or snippets do not appear
 
-1. Make sure the extension is installed and enabled
-2. Check that you're editing a `.md` file
-3. Try pressing `Ctrl+Space` to manually trigger suggestions
+1. Confirm that the extension is installed and enabled.
+2. Open a `.md` file.
+3. Press `Ctrl+Space`.
 
-### Slidev Scholarly View Missing
+### The sidebar is missing
 
-1. Run `View: Toggle Secondary Side Bar`
-2. If the view is still not on the right, run `View: Reset View Locations`
+1. Run `View: Toggle Secondary Side Bar`.
+2. Run `View: Reset View Locations` if the view is still missing.
 
-## Feedback
+## Extension development
 
-Found a bug or have a feature request? Please open an issue on [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly/issues).
+<details>
+<summary>Install a local VSIX</summary>
+
+1. Download or build the `.vsix` file.
+2. Open the Command Palette with `Cmd+Shift+P` or `Ctrl+Shift+P`.
+3. Run `Extensions: Install from VSIX...`.
+4. Select the file and reload VS Code.
+
+</details>
+
+<details>
+<summary>Turn on developer diagnostics</summary>
+
+Run `Slidev Scholarly: Toggle Dev Mode`. The status bar shows `Scholarly Dev`, and the **Slidev Scholarly** output channel records timing logs.
+
+Settings:
+
+- `slidevScholarly.devMode.enabled`
+- `slidevScholarly.devMode.slowThresholdMs` (default: `25`)
+
+</details>
+
+Report bugs and feature requests on [GitHub](https://github.com/jxpeng98/slidev-theme-scholarly/issues).

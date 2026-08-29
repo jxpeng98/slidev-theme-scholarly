@@ -13,6 +13,9 @@
       :compact="compact"
     />
     <slot />
+    <p v-if="!metrics.length && !$slots.default" class="metric-grid-empty" role="status">
+      No metrics available. Check the slide data source.
+    </p>
   </section>
 </template>
 
@@ -90,6 +93,16 @@ const gridStyle = computed(() => ({
 
 .scholarly-metric-grid :deep(.scholarly-metric-card) {
   min-height: 100%;
+}
+
+.metric-grid-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--metric-grid-border);
+  color: var(--metric-grid-muted);
+  font-size: var(--scholarly-text-sm);
+  text-align: center;
 }
 
 @media (max-width: 720px) {

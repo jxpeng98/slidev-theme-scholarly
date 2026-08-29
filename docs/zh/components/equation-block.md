@@ -4,14 +4,14 @@ title: EquationBlock
 
 # EquationBlock
 
-`EquationBlock` 为公式添加标题、标签、编号和说明，使公式与周围论证保持清晰关联，同时继续使用主题语义 token。
+`EquationBlock` 为需要交代上下文的公式补充标题、编号和说明。
 
 ![EquationBlock 示例](/images/components/equation-block.png)
 
 ## 基本用法
 
 ```markdown
-<EquationBlock title="Training Objective" reference="1" caption="监督损失与 routing 损失的加权组合">
+<EquationBlock title="训练目标" reference="1" caption="监督损失与路由损失的加权组合">
 
 $$
 \mathcal{L} = \mathcal{L}_{task} + \lambda \mathcal{L}_{routing}
@@ -23,7 +23,7 @@ $$
 ## 非编号引用
 
 ```markdown
-<EquationBlock label="Update" title="Routing score" reference="Appendix A" :numbered="false">
+<EquationBlock label="更新" title="路由分数" reference="附录 A" :numbered="false">
 
 $$
 s_i = \operatorname{softmax}(W h_i)
@@ -32,9 +32,9 @@ $$
 </EquationBlock>
 ```
 
-## Props
+## 属性
 
-| Prop | 类型 | 默认值 | 说明 |
+| 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `title` | `string` | - | 公式标题 |
 | `label` | `string` | `'Equation'` | 标题前的小标签 |

@@ -480,7 +480,7 @@ export class TemplatesProvider implements vscode.TreeDataProvider<SnippetTreeIte
   }
 }
 
-type ThemeGroupId = 'presets' | 'colorThemes' | 'fontThemes';
+type ThemeGroupId = 'presets' | 'colorThemes' | 'fontThemes' | 'modes';
 
 type ThemePresetItem = {
   id: string;
@@ -540,7 +540,8 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
       return Promise.resolve([
         new ThemeGroupTreeItem('presets', 'Presets'),
         new ThemeGroupTreeItem('colorThemes', 'Color Themes'),
-        new ThemeGroupTreeItem('fontThemes', 'Font Themes')
+        new ThemeGroupTreeItem('fontThemes', 'Font Themes'),
+        new ThemeGroupTreeItem('modes', 'Light & Dark Modes')
       ]);
     }
 
@@ -619,6 +620,37 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
           })
         );
       }
+
+      if (element.groupId === 'modes') {
+        const modes = [
+          {
+            label: 'Content Slides',
+            description: 'Set content backgrounds to light or dark',
+            icon: 'color-mode',
+            command: 'slidev-scholarly.setContentMode'
+          },
+          {
+            label: 'Headers, Footers & Navigation',
+            description: 'Set the chrome mode',
+            icon: 'layout-menubar',
+            command: 'slidev-scholarly.setChromeMode'
+          },
+          {
+            label: 'Section Dividers',
+            description: 'Set the section mode',
+            icon: 'split-vertical',
+            command: 'slidev-scholarly.setSectionMode'
+          }
+        ];
+
+        return Promise.resolve(modes.map(mode => {
+          const item = new vscode.TreeItem(mode.label, vscode.TreeItemCollapsibleState.None);
+          item.description = mode.description;
+          item.iconPath = new vscode.ThemeIcon(mode.icon);
+          item.command = { command: mode.command, title: mode.label };
+          return item;
+        }));
+      }
     }
 
     return Promise.resolve([]);
@@ -636,120 +668,122 @@ type CliActionItem = {
 
 const CLI_GROUPS: Record<CliGroupId, { label: string; icon: string; items: CliActionItem[] }> = {
   create: {
-    label: 'Create',
+    label: 'Start',
     icon: 'new-file',
     items: [
       {
         label: 'New Presentation...',
-        description: 'Run scholarly init with prompts',
+        description: 'Create a deck with guided prompts',
         icon: 'new-file',
         action: 'initPresentation'
       },
       {
         label: 'List Templates',
-        description: 'Run scholarly template list',
+        description: 'See every starting template',
         icon: 'list-flat',
         action: 'templateList'
       }
     ]
   },
   theme: {
-    label: 'Theme',
+    label: 'Customize',
     icon: 'paintcan',
     items: [
       {
-        label: 'Apply Theme Preset...',
-        description: 'Apply color/font preset to frontmatter',
+        label: 'Set Theme...',
+        description: 'Choose colors, fonts, and surface modes',
         icon: 'wand',
         action: 'themeApply'
       },
       {
-        label: 'Apply Theme Preset Combo...',
-        description: 'Run scholarly theme preset apply',
+        label: 'Apply Curated Preset...',
+        description: 'Apply a ready-made theme combination',
         icon: 'paintcan',
         action: 'themePresetApply'
       },
       {
-        label: 'List Themes',
-        description: 'Run scholarly theme list',
+        label: 'List Color Themes',
+        description: 'See every color theme',
         icon: 'symbol-color',
         action: 'themeList'
       },
       {
-        label: 'List Theme Presets',
-        description: 'Run scholarly theme preset list',
+        label: 'List Curated Presets',
+        description: 'See every preset combination',
         icon: 'list-flat',
         action: 'themePresetList'
-      },
+      }
+    ]
+  },
+  snippets: {
+    label: 'Build',
+    icon: 'symbol-snippet',
+    items: [
       {
         label: 'List Layouts',
-        description: 'Run scholarly layout list',
+        description: 'See available slide structures',
         icon: 'layout',
         action: 'layoutList'
       },
       {
         label: 'List Components',
-        description: 'Run scholarly component list',
+        description: 'See available content blocks',
         icon: 'symbol-method',
         action: 'componentList'
-      }
-    ]
-  },
-  snippets: {
-    label: 'Snippets',
-    icon: 'symbol-snippet',
-    items: [
+      },
       {
         label: 'Append Snippet...',
-        description: 'Append theorem/methodology/etc to slides',
+        description: 'Add a ready-made block to slides.md',
         icon: 'add',
         action: 'snippetAppend'
       },
       {
-        label: 'Show Snippet...',
-        description: 'Print a snippet in terminal',
-        icon: 'eye',
-        action: 'snippetShow'
-      },
-      {
-        label: 'List Snippets',
-        description: 'Run scholarly snippet list',
-        icon: 'list-flat',
-        action: 'snippetList'
-      },
-      {
-        label: 'Append Workflow...',
-        description: 'Append paper/seminar/quick workflow',
+        label: 'Apply Workflow...',
+        description: 'Add a paper, seminar, or quick workflow',
         icon: 'git-commit',
         action: 'workflowApply'
       },
       {
+        label: 'List Snippets',
+        description: 'See every reusable block',
+        icon: 'list-flat',
+        action: 'snippetList'
+      },
+      {
+        label: 'Show Snippet...',
+        description: 'Print a block without changing a file',
+        icon: 'eye',
+        action: 'snippetShow'
+      },
+      {
         label: 'List Workflows',
-        description: 'Run scholarly workflow list',
+        description: 'See every presentation workflow',
         icon: 'list-tree',
         action: 'workflowList'
       }
     ]
   },
   tools: {
-    label: 'Tools',
+    label: 'Check & Help',
     icon: 'tools',
     items: [
       {
         label: 'Doctor',
-        description: 'Check CLI environment and project status',
+        description: 'Check setup, citations, and project files',
         icon: 'pulse',
         action: 'doctor'
       },
       {
         label: 'Help',
-        description: 'Run scholarly help',
+        description: 'List every CLI command',
         icon: 'question',
         action: 'help'
       }
     ]
   }
 };
+
+const CLI_GROUP_ORDER: CliGroupId[] = ['create', 'snippets', 'theme', 'tools'];
 
 class CliGroupTreeItem extends vscode.TreeItem {
   constructor(public readonly groupId: CliGroupId, label: string, icon: string) {
@@ -780,7 +814,7 @@ export class CliProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
 
   getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
     if (!element) {
-      const groups = (Object.keys(CLI_GROUPS) as CliGroupId[]).map(
+      const groups = CLI_GROUP_ORDER.map(
         key => new CliGroupTreeItem(key, CLI_GROUPS[key].label, CLI_GROUPS[key].icon)
       );
       return Promise.resolve(groups);

@@ -4,7 +4,7 @@ title: Steps
 
 # Steps Component
 
-The `Steps` component displays a workflow or process with numbered steps and connecting lines.
+`Steps` presents a process in order and can highlight the current step.
 
 ## Basic Usage
 
@@ -16,7 +16,7 @@ The `Steps` component displays a workflow or process with numbered steps and con
 ]" />
 ```
 
-Or using the syntax sugar:
+The Markdown directive is equivalent:
 
 ```markdown
 :::steps{:steps='[{"title":"Step 1","description":"Description"}]' :activeStep="1"}:::

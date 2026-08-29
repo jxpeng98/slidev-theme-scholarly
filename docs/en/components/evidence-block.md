@@ -4,7 +4,7 @@ title: EvidenceBlock
 
 # EvidenceBlock
 
-`EvidenceBlock` groups a claim with its supporting evidence, source marker, and confidence note. It is designed for dense paper and defense slides where readers need to see the basis for a claim quickly.
+`EvidenceBlock` places a claim beside its evidence, source, and confidence note.
 
 ![EvidenceBlock example](/images/components/evidence-block.png)
 

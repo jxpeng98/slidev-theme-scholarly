@@ -4,9 +4,8 @@ title: Academic Workflows
 
 # Academic Workflows
 
-Start from the kind of academic talk you need to deliver, then use the linked
-template, layouts, components, and theme guidance as a focused path through the
-reference docs.
+Choose the kind of talk you are preparing. Each workflow points to a suitable
+template and the layouts, components, and theme settings you are most likely to need.
 
 | Workflow | Start here | Best when |
 |----------|------------|-----------|
@@ -16,5 +15,5 @@ reference docs.
 | [Results-heavy presentation](./results-heavy) | `conference-lightning` or `paper-talk` template | The talk is driven by metrics, ablations, and experimental evidence. |
 | [Course lecture](./course-lecture) | `basic` or `academic` template | You teach concepts, definitions, examples, and takeaways. |
 
-If you are tuning visual readability, read the [theme mode and contrast guide](../theme-mode-contrast)
-before choosing a palette.
+Before choosing a palette, check the [theme mode and contrast guide](../theme-mode-contrast)
+for readability recommendations.

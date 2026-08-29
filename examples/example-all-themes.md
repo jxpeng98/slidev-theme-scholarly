@@ -224,7 +224,7 @@ title: High Contrast
 
 ### Sample Content
 
-Maximum **accessibility** with WCAG AAA compliant contrast ratios.
+A high-contrast starting point for accessibility-sensitive decks; verify every final text and background pair.
 
 - Primary: `#000000` (Black)
 - Accent: `#0066cc` (Blue)

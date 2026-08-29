@@ -4,7 +4,7 @@ title: Upgrade Notes
 
 # Upgrade Notes
 
-This theme is preparing for a **major upgrade**. Upcoming releases may include **breaking changes** that affect existing decks.
+Scholarly is preparing for a major upgrade. Upcoming releases may introduce breaking changes for existing decks.
 
 ## What might be affected
 
@@ -45,7 +45,7 @@ If something breaks, pin the previous version temporarily while you migrate.
 
 ## Using pre-releases (for early testing)
 
-We publish **pre-releases** for testing changes before a stable release.
+We publish **pre-releases** so changes can be tested before the stable release.
 
 ### Tag / version format
 
@@ -70,5 +70,5 @@ Pre-releases follow SemVer and **must include** the `-<pre>` prerelease segment;
 
 ## Where to find the detailed changes
 
-- GitHub Releases: https://github.com/jxpeng98/slidev-theme-scholarly/releases
-- Changelog: https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md
+- [GitHub Releases](https://github.com/jxpeng98/slidev-theme-scholarly/releases)
+- [Changelog](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md)

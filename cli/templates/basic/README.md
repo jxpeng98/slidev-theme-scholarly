@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Presentation scaffold created by `scholarly`.
+This starter contains a minimal Scholarly presentation.
 
-## Run
+## Start
 
 ```bash
 pnpm install
@@ -17,4 +17,4 @@ pnpm run build
 
 ## Notes
 
-- Use `layout: references` for an automatically generated bibliography slide
+- Use `layout: references` to generate a bibliography slide automatically.

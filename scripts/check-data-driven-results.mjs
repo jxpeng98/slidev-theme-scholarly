@@ -100,9 +100,9 @@ for (const forbidden of ['bg-white', 'bg-gray', 'text-gray', '#fff', '#ffffff'])
 if (/#[0-9a-fA-F]{3,8}\b/.test(resultTable))
   failures.push('components/ResultTable.vue should not contain raw hex colors')
 
-for (const [name, file] of [
-  ['English features', 'docs/en/guide/features.md'],
-  ['Chinese features', 'docs/zh/guide/features.md'],
+for (const [name, file, markdownTable, chartingDependency] of [
+  ['English features', 'docs/en/guide/features.md', 'Markdown table', 'charting dependency'],
+  ['Chinese features', 'docs/zh/guide/features.md', 'Markdown 表格', '图表依赖'],
 ]) {
   const text = await readText(file)
   expectContains(name, text, "import rows from './results.json'")
@@ -111,14 +111,20 @@ for (const [name, file] of [
   expectContains(name, text, 'parseCsvTable')
   expectContains(name, text, 'ResultTable')
   expectContains(name, text, 'MetricGrid')
-  expectContains(name, text, 'Markdown table')
-  expectContains(name, text, 'charting dependency')
+  expectContains(name, text, markdownTable)
+  expectContains(name, text, chartingDependency)
 }
 
 const academicExample = await readText('examples/example-academic.md')
 expectContains('examples/example-academic.md', academicExample, '<ResultTable')
 expectContains('examples/example-academic.md', academicExample, 'parseCsvTable')
 expectContains('examples/example-academic.md', academicExample, 'toMetricItems')
+expectContains('components/ResultTable.vue', resultTable, 'No result rows available')
+
+const evidenceSlideStart = academicExample.indexOf('title: Evidence Table')
+const evidenceSlideEnd = academicExample.indexOf('\n---\nlayout:', evidenceSlideStart + 1)
+const evidenceSlide = academicExample.slice(evidenceSlideStart, evidenceSlideEnd)
+expectContains('Evidence Table slide', evidenceSlide, '<script setup>')
 
 const helpers = await importDataHelpers()
 for (const name of ['parseCsvRows', 'parseCsvTable', 'normalizeResultRows', 'toMetricItems']) {

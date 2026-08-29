@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Paper talk template created by `scholarly`.
+This template is designed for presenting a single paper.
 
-## Run
+## Start
 
 ```bash
 pnpm install

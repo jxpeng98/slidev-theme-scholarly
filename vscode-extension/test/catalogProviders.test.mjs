@@ -179,4 +179,28 @@ test('preserves theme descriptions in the Themes tree', async () => {
   assert.equal(colorThemes[0].description, 'Default scholarly palette');
   assert.equal(fontThemes[0].label, 'Classic');
   assert.equal(fontThemes[0].description, 'Traditional academic feel');
+
+  assert.equal(groups[3].label, 'Light & Dark Modes');
+  const modes = await provider.getChildren(groups[3]);
+  assert.deepEqual(
+    modes.map(item => item.label),
+    ['Content Slides', 'Headers, Footers & Navigation', 'Section Dividers']
+  );
+});
+
+test('orders CLI actions by the documentation workflow', async () => {
+  const { providers } = loadCatalogModules();
+  const provider = new providers.CliProvider();
+  const groups = await provider.getChildren();
+
+  assert.deepEqual(
+    groups.map(item => item.label),
+    ['Start', 'Build', 'Customize', 'Check & Help']
+  );
+
+  const buildItems = await provider.getChildren(groups[1]);
+  assert.deepEqual(
+    buildItems.slice(0, 4).map(item => item.label),
+    ['List Layouts', 'List Components', 'Append Snippet...', 'Apply Workflow...']
+  );
 });

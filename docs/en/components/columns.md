@@ -4,7 +4,7 @@ title: Columns
 
 # Columns Component
 
-The `Columns` component creates flexible multi-column layouts.
+`Columns` splits content into two, three, or four columns for comparison or grouping.
 
 ## Basic Usage
 
@@ -22,7 +22,7 @@ Content for column 2
 </Columns>
 ```
 
-Or using the syntax sugar:
+The Markdown directive is equivalent:
 
 ```markdown
 :::columns{columns="2" gap="2rem"}

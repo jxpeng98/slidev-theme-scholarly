@@ -1,48 +1,39 @@
 ---
 title: Components
+description: Add structured research content inside a Scholarly slide.
 ---
 
 # Components
 
-This theme provides several components for academic presentations.
+Components add structured content inside a layout. Use them when ordinary Markdown is not enough.
 
-## Available Components
+## Choose by content
 
-| Component | Purpose |
-|-----------|---------|
-| [Theorem](./theorem) | Theorems, lemmas, definitions with auto-numbering |
-| [Block](./block) | Beamer-style colored blocks |
-| [Steps](./steps) | Workflow/process visualization |
-| [Keywords](./keywords) | Keyword tags |
-| [Columns](./columns) | Multi-column layouts |
-| [Highlight](./highlight) | Text highlighting |
-| [MetricCard](./metric-card) | Single key metric with delta and caption |
-| [MetricGrid](./metric-grid) | Compact grid of result metrics |
-| [EvidenceBlock](./evidence-block) | Claim evidence, source, and confidence notes |
-| [EquationBlock](./equation-block) | Numbered equations with title and caption |
-| [DatasetCard](./dataset-card) | Dataset scale, split, task, and source summary |
-| [PaperCard](./paper-card) | Paper metadata and contribution summary |
-| [ContributionList](./contribution-list) | Numbered contribution claims with evidence |
-| [CaveatList](./caveat-list) | Limitations and mitigations |
-| [Cite](./cite) | Academic citations |
-| [ThemePreview](./theme-preview) | Preview a color theme inside a block |
+| Content | Components |
+|---|---|
+| Claims and formal statements | [Theorem](./theorem), [Block](./block), [Highlight](./highlight) |
+| Sources and papers | [Citations](./cite), [PaperCard](./paper-card) |
+| Results and evidence | [MetricCard](./metric-card), [MetricGrid](./metric-grid), [EvidenceBlock](./evidence-block), [ResultTable](./result-table) |
+| Methods and data | [EquationBlock](./equation-block), [DatasetCard](./dataset-card), [Steps](./steps) |
+| Contributions and limits | [ContributionList](./contribution-list), [CaveatList](./caveat-list) |
+| Page composition | [Columns](./columns), [Keywords](./keywords), [ThemePreview](./theme-preview) |
 
-## Quick Example
+## Use a component
+
+Components can wrap Markdown content:
 
 ```markdown
-<Theorem type="theorem" title="Pythagorean Theorem">
+<Theorem type="theorem" title="Pythagorean theorem">
 
-For a right triangle: $a^2 + b^2 = c^2$
+For a right triangle, $a^2 + b^2 = c^2$.
 
 </Theorem>
-
-<Block type="info" title="Note">
-
-Important information here.
-
-</Block>
-
-<MetricCard label="Accuracy" value="94.7" unit="%" delta="+3.2" variant="success" />
 ```
 
-See individual component pages for detailed documentation.
+Or accept data through props:
+
+```markdown
+<MetricCard label="Accuracy" value="94.7" unit="%" />
+```
+
+Open a component page for its props and complete examples. For shorter authoring syntax, see [syntax sugar](../syntax-sugar).

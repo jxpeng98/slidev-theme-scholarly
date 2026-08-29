@@ -92,7 +92,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -110,7 +110,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Limitation
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 

@@ -7,7 +7,7 @@ aspectRatio: 4/3
 lang: en
 themeConfig:
   colorTheme: oxford-burgundy
-  fontTheme: academic
+  fontTheme: traditional
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

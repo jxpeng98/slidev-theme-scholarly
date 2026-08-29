@@ -78,7 +78,7 @@ const props = withDefaults(defineProps<{
   metricLabel?: string
   noteLabel?: string
 }>(), {
-  eyebrow: 'Experiment Grid',
+  eyebrow: undefined,
   cols: 2,
   setupLabel: 'Setup',
   metricLabel: 'Metric',
@@ -124,7 +124,7 @@ const gridStyle = computed(() => ({
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -142,7 +142,7 @@ const gridStyle = computed(() => ({
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -162,7 +162,7 @@ const gridStyle = computed(() => ({
 }
 
 .experiment-grid-card {
-  padding: 0.9rem;
+  padding: 0.55rem;
   overflow: auto;
 }
 
@@ -170,7 +170,7 @@ const gridStyle = computed(() => ({
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.45rem;
 }
 
 .experiment-grid-card-header span {
@@ -182,7 +182,7 @@ const gridStyle = computed(() => ({
   background: var(--slidev-theme-primary);
   color: var(--scholarly-content-on-primary);
   font-family: var(--scholarly-font-sans);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 800;
 }
 
@@ -196,14 +196,14 @@ const gridStyle = computed(() => ({
 
 .experiment-grid-card dl {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.35rem;
   margin: 0;
 }
 
 .experiment-grid-card dt {
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.62rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 750;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -212,8 +212,8 @@ const gridStyle = computed(() => ({
 .experiment-grid-card dd {
   margin: 0.12rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
-  line-height: 1.45;
+  font-size: var(--scholarly-text-xs);
+  line-height: 1.3;
 }
 
 .experiment-grid-card dd strong {

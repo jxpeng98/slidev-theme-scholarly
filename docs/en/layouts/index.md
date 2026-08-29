@@ -1,80 +1,37 @@
 ---
 title: Layouts
+description: Choose a page structure for each part of an academic presentation.
 ---
 
 # Layouts
 
-This theme provides 20+ professional layouts designed for academic presentations.
+A layout controls the structure of an entire slide. Scholarly includes 34 layouts, grouped by the job they do.
 
-## Layout Categories
+## Choose by task
 
-| Category | Purpose | Layouts |
-|----------|---------|---------|
-| [Structure](./structure) | Organize presentation flow | cover, section, agenda, end |
-| [Content](./content) | Display information | default, two-cols, figure, split-image |
-| [Emphasis](./emphasis) | Highlight key points | center, focus, quote, statement, fact |
-| [Academic](./academic) | Research-specific content | intro, methodology, results, references |
+| I need to... | Start with... | Reference |
+|---|---|---|
+| Open, divide, or close a talk | `cover`, `section`, `toc`, `end` | [Structure](./structure) |
+| Arrange text, figures, or columns | `default`, `two-cols`, `figure`, `image-right` | [Content](./content) |
+| Make one idea stand out | `focus`, `fact`, `quote`, `statement` | [Emphasis](./emphasis) |
+| Present methods, evidence, or findings | `method-pipeline`, `experiment-grid`, `results`, `references` | [Academic](./academic) |
 
-## Quick Reference
+## Use a layout
 
-### Structure Layouts
-
-- **cover** - Title slide with authors and affiliations
-- **section** - Section divider
-- **auto-size** - Default layout with fit-to-page main matter
-- **agenda** - Presentation outline
-- **end** - Closing slide
-
-### Content Layouts
-
-- **default** - Standard content slide (automatic)
-- **two-cols** - Two-column layout
-- **figure** - Centered figure with caption
-- **split-image** - Content with side image
-
-### Emphasis Layouts
-
-- **center** - Centered content
-- **focus** - Single focused message
-- **quote** - Quotation display
-- **statement** - Key statement
-- **fact** - Fact/statistic highlight
-
-### Academic Layouts
-
-- **intro** - Introduction slide
-- **methodology** - Research methods
-- **results** - Research findings
-- **references** - Bibliography display
-- **acknowledgments** - Credits and thanks
-
-## Usage Example
+Set `layout` in the frontmatter for that slide:
 
 ```markdown
 ---
-layout: cover
+layout: figure
+image: /results.png
+caption: Validation accuracy across three datasets
 ---
 
-# My Presentation
-Your subtitle here
-
----
-layout: section
----
-
-# Section 1: Introduction
-
----
-layout: two-cols
----
-
-# Two Column Content
-
-::left::
-Content on the left
-
-::right::
-Content on the right
+# Main result
 ```
 
-See individual layout category pages for detailed documentation.
+Options belong in the same frontmatter block. Each reference page lists the supported options and shows the rendered layout.
+
+## A useful rule
+
+Choose the layout that matches the slide's main job. Add components only for content the layout does not already provide.

@@ -4,7 +4,7 @@ title: Citations
 
 # Citations
 
-The theme has built-in support for academic citations using BibTeX files. Citations are automatically collected and bibliography is generated.
+Scholarly reads BibTeX files directly, collects citations as you use them, and builds the bibliography slide.
 
 ## Configuration
 
@@ -67,7 +67,7 @@ Efficient adaptation is commonly evaluated with grouped evidence @smith2023deep 
 ### Footnote-like Citation Note
 
 For a short manual note that behaves like a footnote or reading annotation, use `<Cite :inline="false">`.
-This is not connected to the BibTeX bibliography; it is for manual context.
+This note stays outside the BibTeX bibliography and only adds local context.
 
 ```markdown
 <Cite :inline="false" author="Smith et al." year="2026">
@@ -91,7 +91,7 @@ In Slidev's interactive view, the theme applies academic footnote styling automa
 - Click the marker to pin the popover
 - Press `Esc` or click outside to close it
 
-You can set a global default in the headmatter:
+Set the global default in the deck headmatter:
 
 ```yaml
 ---
@@ -99,7 +99,7 @@ footnoteDisplay: hover-only
 ---
 ```
 
-And override it per slide with frontmatter:
+Override it on an individual slide with frontmatter:
 
 ```markdown
 ---
@@ -130,13 +130,13 @@ layout: references
 ---
 ```
 
-The bibliography is automatically generated from all citations used in your slides.
+The theme builds the bibliography from the citations used in your slides.
 
-If the slide body is empty, or only contains headings/comments, the theme injects the bibliography automatically.
+If the slide body is empty or contains only headings and comments, the theme inserts the bibliography automatically.
 
 If you want custom placement inside a references slide, add `[[bibliography]]` exactly where the list should appear.
 
-Normal theme usage does not require a project-level `vite.config.ts`; Scholarly registers the citation hooks from the theme package itself.
+You do not need a project-level `vite.config.ts`; Scholarly registers the citation hooks from the theme package.
 
 ## Doctor Diagnostics
 
@@ -162,9 +162,9 @@ Common warnings:
 - References slide: [WARN] missing; add layout: references
 ```
 
-## Internal Anchor Jumps
+## Cross-Slide Anchor Jumps
 
-In Slidev's interactive view, Scholarly now upgrades internal `href="#..."` links into slide-aware jumps:
+In Slidev's interactive view, Scholarly turns internal `href="#..."` links into slide-aware jumps:
 
 - In-text BibTeX citations can jump to the matching bibliography entry, even when the references list is on another slide
 - Generic internal links such as `[Jump](#appendix-proof)` work across slides when the target is declared with `## Appendix {#appendix-proof}`, `::anchor{#appendix-proof}`, or an explicit `id="appendix-proof"`
@@ -215,7 +215,7 @@ Create a `references.bib` file in your project root:
 
 ## Cite Component (Manual)
 
-The `<Cite>` component is a lightweight helper for manual citation notes (non-BibTeX). For BibTeX citations, prefer `@citekey` / `!@citekey`.
+Use the lightweight `<Cite>` component for manual notes that do not belong in BibTeX. For formal citations, prefer `@citekey` or `!@citekey`.
 
 ### Author-Year Marker (Legacy)
 
@@ -248,3 +248,12 @@ Optionally set a fixed `id`:
 Reference item here.
 </Cite>
 ```
+
+### Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `id` | `string \| number` | automatic | Fixed numeric marker or key |
+| `inline` | `boolean` | `true` | Uses inline rather than block presentation |
+| `author` | `string` | - | Author text for a manual author-year marker |
+| `year` | `string \| number` | - | Year for a manual author-year marker |

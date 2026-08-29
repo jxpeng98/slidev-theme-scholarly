@@ -4,11 +4,11 @@ title: Structure Layouts
 
 # Structure Layouts
 
-Layouts for organizing your presentation structure - title slides, sections, and endings.
+These layouts shape the deck as a whole: its opening, sections, outline, and closing.
 
-## cover - Title Slide
+## cover - Title Slide {#cover}
 
-**Use for:** The first slide of your presentation
+**Use for:** The first slide in a deck
 
 ![Cover Layout Example](/images/layouts/cover.png)
 
@@ -29,14 +29,20 @@ Subtitle or description
 **What it shows:**
 
 - Large title in the center
-- Author(s) with institution and email
-- Footer with author, conference, page number, and live beamer-style navigation buttons
+- Authors, institutions, and email addresses
+- A footer with the author, conference, page number, and presentation controls
+
+**Props:**
+
+- `authors`: Array of `{ name, institution?, email? }`; falls back to global `authors`
+- `footerLeft`: Text at the left side of the footer
+- `footerMiddle`: Text at the center of the footer
 
 ---
 
-## default - Standard Content
+## default - Standard Content {#default}
 
-**Use for:** Most of your slides (this is automatic!)
+**Use for:** Most content slides; this is the default layout
 
 ![Default Layout Example](/images/layouts/default.png)
 
@@ -51,18 +57,23 @@ subtitle: Optional subtitle
 - Bullet point 1
 - Bullet point 2
 
-You can add text, images, code, math formulas, etc.
+Add text, images, code, or equations here.
 ```
 
 **What it shows:**
 
 - Optional header with title and subtitle
-- Your content in the middle
-- Footer at the bottom with page number and live beamer-style navigation buttons
+- The slide content
+- A footer with the page number and presentation controls
+
+**Props:**
+
+- `title`, `subtitle`: Optional header content
+- `density`: `auto`, `compact`, `normal`, or `relaxed`
 
 ---
 
-## intro - Section Introduction
+## intro - Section Introduction {#intro}
 
 **Use for:** Starting a new section of your talk
 
@@ -75,7 +86,7 @@ layout: intro
 
 # Part 2: Methodology
 
-Let's discuss our approach
+Next, we explain the method
 ```
 
 **What it shows:**
@@ -84,11 +95,16 @@ Let's discuss our approach
 - No header (more space for the title)
 - Footer at the bottom
 
+**Props:**
+
+- `align`: `left` or `center` (default: `left`)
+- `density`: `auto`, `compact`, `normal`, or `relaxed`
+
 ---
 
-## section - Chapter Divider
+## section - Chapter Divider {#section}
 
-**Use for:** Major transitions in your presentation
+**Use for:** Separating the main sections of a deck
 
 ![Section Layout Example](/images/layouts/section.png)
 
@@ -103,10 +119,10 @@ sectionMode: dark  # dark, light, match, or inverse (optional, default: dark)
 
 **What it shows:**
 
-- Very large, centered title
+- Large, centered title
 - No header
 - Footer at the bottom
-- Perfect for dramatic section breaks
+- A clear visual break between sections
 
 **sectionMode Options:**
 
@@ -119,7 +135,7 @@ sectionMode: dark  # dark, light, match, or inverse (optional, default: dark)
 
 **Global vs Per-slide Configuration:**
 
-You can set a global default in your headmatter:
+Set the global default in the headmatter:
 
 ```yaml
 ---
@@ -143,7 +159,7 @@ sectionMode: inverse  # Override global setting for this slide
 
 ---
 
-## toc - Table of Contents
+## toc - Table of Contents {#toc}
 
 **Use for:** Outline/agenda slide (auto-generated from your `layout: section` slides)
 
@@ -174,7 +190,7 @@ highlightCurrent: true # optional, default: true
 
 ---
 
-## center - Centered Content
+## center - Centered Content {#center}
 
 **Use for:** Short messages or key points
 
@@ -193,11 +209,11 @@ This is the most important point
 **What it shows:**
 
 - All content centered horizontally and vertically
-- Great for emphasis
+- Makes a short message the focus of the slide
 
 ---
 
-## auto-center - Auto-Adjusting Content
+## auto-center - Auto-Adjusting Content {#auto-center}
 
 **Use for:** Content that needs automatic font size adjustment
 
@@ -221,11 +237,16 @@ This layout automatically adjusts font size to fit content.
 - Centers content vertically
 - Keeps text left-aligned within the centered block
 
+**Props:**
+
+- `title`, `subtitle`: Optional header content
+- `minFontSize`, `maxFontSize`: Font-size limits in pixels
+
 ---
 
-## auto-size - Fit-to-Page Default Layout
+## auto-size - Fit-to-Page Default Layout {#auto-size}
 
-**Use for:** Default-style slides that should behave more like a LaTeX Beamer frame
+**Use for:** Slides with variable amounts of content that should keep the default reading order
 
 ```markdown
 ---
@@ -241,8 +262,7 @@ maxFontSize: 30
 
 ## Auto-Sized Main Matter
 
-This layout keeps the default reading flow,
-but it adjusts the main matter font size to fit the page.
+This layout keeps the default reading flow while adjusting the body text to fit the page.
 ```
 
 **What it shows:**
@@ -252,17 +272,20 @@ but it adjusts the main matter font size to fit the page.
 - Keeps content top-aligned instead of vertically centered
 - Supports `minFontSize` and `maxFontSize` frontmatter overrides
 
-**Configuration entry points:**
+**Props:**
 
-- `autoSizeGrow: true | false` - allow sparse slides to grow above their base size, or only shrink when needed
-- `autoSizeAlign: top | center` - keep the main matter pinned to the top or vertically centered inside the available area
-- `autoSizePadding: compact | normal` - switch between tighter and roomier inner spacing for the main matter box
+- `title`, `subtitle`: Optional header content
+- `density`: `auto`, `compact`, `normal`, or `relaxed`
+- `minFontSize`, `maxFontSize`: Font-size limits in pixels
+- `autoSizeGrow`: Allow sparse slides to grow, or only shrink when needed
+- `autoSizeAlign`: `top` or `center`
+- `autoSizePadding`: `compact` or `normal`
 
 ---
 
-## end - Thank You Slide
+## end - Thank You Slide {#end}
 
-**Use for:** Professional closing slide with contact information
+**Use for:** A closing slide with contact information
 
 ![End Layout Example](/images/layouts/end.png)
 

@@ -65,6 +65,18 @@ function expectWorkflowLinks(locale, text) {
     expectIncludes(`${locale} workflows index`, text, `./${workflow}`)
 }
 
+async function checkLayoutLinks(file, text) {
+  const links = text.matchAll(/\]\((\.\.\/\.\.\/layouts\/[^)#]+)#([^)]+)\)/g)
+  for (const [, target, anchor] of links) {
+    const targetFile = path.resolve(path.dirname(file), `${target}.md`)
+    const targetText = await readText(targetFile)
+    expect(
+      targetText.includes(`{#${anchor}}`),
+      `${path.relative(root, file)} links to missing anchor ${target}#${anchor}`,
+    )
+  }
+}
+
 async function checkLocale(locale, config) {
   const localeRoot = path.join(docsRoot, locale)
   const home = await readText(path.join(localeRoot, 'index.md'))
@@ -109,6 +121,7 @@ async function checkLocale(locale, config) {
     expectIncludes(name, text, '../../components/')
     expect(/(?:npx -y slidev-theme-scholarly|pnpm exec sch) (?:init|snippet|workflow)/.test(text), `${name} should include an explicit Scholarly CLI command`)
     expect(!/^sch\b/m.test(text), `${name} should not rely on a globally installed sch binary`)
+    await checkLayoutLinks(file, text)
   }
 }
 
@@ -123,6 +136,8 @@ for (const [name, text] of [['README.md', rootReadme], ['README-zh.md', rootRead
 }
 
 const configSource = await readText(path.join(docsRoot, '.vitepress', 'config.ts'))
+expectIncludes('docs/.vitepress/config.ts', configSource, "srcExclude: ['superpowers/**']")
+expectIncludes('docs/.vitepress/config.ts', configSource, 'locales: {\n    en:')
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/en/guide/workflows/'")
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/zh/guide/workflows/'")
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/en/guide/theme-mode-contrast'")

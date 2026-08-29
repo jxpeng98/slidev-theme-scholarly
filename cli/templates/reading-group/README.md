@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Reading group template created by `scholarly`.
+This template is designed for a reading group or paper discussion.
 
-## Run
+## Start
 
 ```bash
 pnpm install

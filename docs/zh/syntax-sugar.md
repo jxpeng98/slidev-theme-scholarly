@@ -4,11 +4,11 @@ title: 语法糖
 
 # 语法糖
 
-本主题为组件提供了便捷的 Markdown 语法糖，使您无需编写 HTML 标签即可轻松使用组件。
+语法糖让你用 Markdown 指令调用组件，不必反复书写完整的 Vue 标签。
 
 ## 概述
 
-无需编写 Vue 组件语法：
+以 `Block` 为例，完整的 Vue 写法是：
 
 ```markdown
 <Block type="info" title="提示">
@@ -16,7 +16,7 @@ title: 语法糖
 </Block>
 ```
 
-您可以使用更简洁的 Markdown 指令语法：
+改用 Markdown 指令后，可以写成：
 
 ```markdown
 :::block{type="info" title="提示"}
@@ -30,7 +30,7 @@ title: 语法糖
 
 ```markdown
 :::block{type="info" title="标题"}
-您的内容...
+正文内容……
 :::
 ```
 
@@ -40,7 +40,7 @@ title: 语法糖
 
 ```markdown
 :::theorem{type="theorem" title="定理名称"}
-数学内容...
+数学内容……
 :::
 ```
 
@@ -54,7 +54,7 @@ title: 语法糖
 :::
 ```
 
-**类型：** `primary`、`success`、`warning`、`danger`、`info`（传统别名：`color="yellow|green|blue|pink|purple"`）
+**类型：** `primary`、`success`、`warning`、`danger`、`info`（旧版别名：`color="yellow|green|blue|pink|purple"`）
 
 ### Cite（引用）
 
@@ -99,7 +99,7 @@ title: 研究方法
 ## 我们的方法
 
 :::block{type="info" title="核心创新"}
-我们提出了一种结合...的新方法
+我们提出了一种结合两类方法的新方案。
 :::
 
 :::theorem{type="theorem" title="收敛性"}
@@ -121,7 +121,7 @@ title: 研究方法
 
 ## 注意事项
 
-- 语法糖在构建时由主题的 Markdown transformers 处理
-- 支持原始组件的所有属性
-- 对于复杂属性（数组、对象），使用 Vue 绑定语法 `:prop`
-- 修改后需要重启 Slidev 才能生效
+- 主题会在构建时处理这些 Markdown 指令。
+- 指令支持对应组件的全部属性。
+- 数组和对象等复杂属性需要使用 Vue 绑定语法 `:prop`。
+- 修改语法后需要重启 Slidev。

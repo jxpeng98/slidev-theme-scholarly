@@ -4,7 +4,7 @@ title: Examples
 
 # Examples
 
-## Complete Minimal Example
+## Minimal Complete Example
 
 ```markdown
 ---
@@ -21,7 +21,7 @@ A brief overview
 
 # Introduction
 
-This is my research about...
+State the research question in one sentence.
 
 - Point 1
 - Point 2
@@ -49,10 +49,10 @@ We prove that our algorithm runs in $O(n \log n)$ time.
 Questions?
 ```
 
-### Example with All Features
+## Complete English Example
 
-See [`example.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/example.md) for a complete demonstration of all layouts and features.
+[`examples/example.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/examples/example.md) shows the most common layouts and components in one deck.
 
-### Chinese Example
+## Complete Chinese Example
 
-See [`example-zh.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/example-zh.md) for a complete example in Chinese (中文示例).
+The Chinese version is available in [`examples/example-zh.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/examples/example-zh.md).

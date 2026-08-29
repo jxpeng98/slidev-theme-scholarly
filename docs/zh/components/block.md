@@ -4,23 +4,23 @@ title: Block
 
 # Block 组件
 
-`Block` 组件创建 Beamer 风格的彩色内容块，用于突出显示重要内容。
+`Block` 用统一的视觉层级组织提示、结论、示例和警告。
 
 ## 基本用法
 
 ```markdown
 <Block type="info" title="重要提示">
 
-这里是内容...
+这里填写正文内容。
 
 </Block>
 ```
 
-或使用语法糖：
+也可以写成 Markdown 指令：
 
 ```markdown
 :::block{type="info" title="重要提示"}
-这里是内容...
+这里填写正文内容。
 :::
 ```
 
@@ -50,7 +50,7 @@ title: Block
 
 ```markdown
 :::block{type="warning" title="局限性"}
-此方法需要大量训练数据。
+这种方法需要大量训练数据。
 :::
 ```
 
@@ -58,7 +58,7 @@ title: Block
 
 ```markdown
 :::block{type="example" title="案例研究"}
-考虑函数 $f(x) = x^2$...
+考虑函数 $f(x) = x^2$。
 :::
 ```
 
@@ -68,3 +68,4 @@ title: Block
 |------|------|--------|------|
 | `type` | `string` | `'default'` | 块样式类型 |
 | `title` | `string` | - | 可选的标题 |
+| `compact` | `boolean` | `false` | 减小外边距和内边距 |

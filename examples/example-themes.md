@@ -249,7 +249,7 @@ themeConfig:
 
 <Block type="success" title="Accessibility">
 
-WCAG AAA compliant contrast ratios for maximum readability.
+High-contrast colors for readability checks. Verify the final text and background pairs against your target WCAG level.
 
 </Block>
 
@@ -415,7 +415,7 @@ Best for tech talks, startup pitches, and modern conferences.
 layout: section
 ---
 
-# Part 3: New Layouts (v2.0)
+# Part 3: Academic Layouts
 
 ## 6 additional layouts for diverse needs
 

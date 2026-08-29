@@ -4,7 +4,7 @@ title: 配置指南
 
 # 配置指南
 
-多数演示只需要一个简短的 frontmatter。把它放在 `slides.md` 顶部：
+大多数演示只需在 `slides.md` 顶部加入一小段 frontmatter：
 
 ```yaml
 ---
@@ -57,11 +57,11 @@ authors:
 | 中间 | 空，除非设置了 `footerMiddle` |
 | 右侧 | 页码 |
 
-使用 `footerLeft`、`footerMiddle` 或 `footerRight` 可以覆盖显示文本。
+要修改页脚内容，请设置 `footerLeft`、`footerMiddle` 或 `footerRight`。
 
 ## 主题配置
 
-使用 `themeConfig` 控制视觉和放映行为：
+`themeConfig` 集中管理颜色、字体、页脚导航和大纲：
 
 ```yaml
 themeConfig:
@@ -76,17 +76,17 @@ themeConfig:
 
 | 选项 | 作用 | 默认值 |
 | --- | --- | --- |
-| `fontTheme` | 字体预设 id | `classic` |
+| `fontTheme` | 字体预设 ID | `classic` |
 | `beamerNav` | 放映模式页脚导航按钮 | `true` |
 | `outlineToc` | 页脚 TOC 按钮和大纲面板 | `false` |
 | `outlineTocOpen` | 加载后默认打开大纲面板 | `false` |
 | `footnoteDisplay` | `both`、`hover-only` 或 `notes-only` | `both` |
 
-色彩和表面控制：
+配色和区域明暗设置：
 
 | 选项 | 控制范围 | 默认值 |
 | --- | --- | --- |
-| `colorTheme` | 品牌调色板：主色、强调色、纸张色调和基础文字色 | `classic-blue` |
+| `colorTheme` | 整体配色：主色、强调色、背景和文字颜色 | `classic-blue` |
 | `contentMode` | 普通幻灯片画布、可读内容表面、引用、代码、表格、注脚、Highlight、Block 和 Theorem | 先跟随 `colorMode`，再跟随 Slidev 深色状态 |
 | `chromeMode` | 页眉、页脚、页码、导航按钮、TOC 和工具栏表面 | `dark` |
 | `sectionMode` | `layout: section` 幻灯片的默认外观 | `dark` |
@@ -97,22 +97,21 @@ themeConfig:
 
 - 导航按钮会在概览、嵌入和打印/导出视图中隐藏。
 - 页脚 TOC 会按 `layout: section` 分组。
-- 长演示会切换为更紧凑的 section 优先视图。
+- 演示较长时，大纲会优先显示章节，并采用更紧凑的间距。
 - 设置了 `hideInToc: true` 的页面不会出现在 TOC 中。
 - 旧配置 `outlineSidebar` 和 `outlineSidebarOpen` 仍兼容；新演示建议使用 `outlineToc` 和 `outlineTocOpen`。
 
-## 色彩表面模式
+## 页面明暗模式
 
-Slidev 的 `colorSchema` 控制播放器层面的浅色/深色切换。Scholarly 将主题表面拆成显式控制项：
+Slidev 的 `colorSchema` 控制整体的浅色和深色切换。Scholarly 还可以分别设置不同页面区域：
 
 - `contentMode` 控制普通幻灯片画布和可读内容表面。
 - `chromeMode` 控制页眉、页脚、页码、导航、TOC 和工具栏表面。
 - `sectionMode` 控制 `layout: section` 幻灯片，可取 `light`、`dark`、`match` 和 `inverse`。
 
-`contentMode` 可取 `light` 和 `dark`。`chromeMode` 可取 `light`、`dark`、`match`
-和 `inverse`。旧配置 `colorMode` 仍作为 `contentMode` 的兼容别名保留；未显式设置
-`contentMode` 且未显式设置 `chromeMode` 时，它也会保留旧的外壳模式行为。新演示应使用
-`contentMode` 和 `chromeMode`。
+`contentMode` 可设为 `light` 或 `dark`，`chromeMode` 可设为 `light`、`dark`、
+`match` 或 `inverse`。旧的 `colorMode` 仍然可用；新演示请直接设置 `contentMode`
+和 `chromeMode`。如果两项都没有设置，`colorMode` 还会沿用旧版的界面明暗逻辑。
 
 ```yaml
 colorSchema: both
@@ -127,10 +126,10 @@ themeConfig:
 
 | 目标 | 配置 |
 | --- | --- |
-| 浅色学术内容配深色外壳和章节页 | `contentMode: light`、`chromeMode: dark`、`sectionMode: dark` |
+| 浅色正文配深色界面和章节页 | `contentMode: light`、`chromeMode: dark`、`sectionMode: dark` |
 | 全浅色演示 | `contentMode: light`、`chromeMode: match`、`sectionMode: match` |
 | 全深色演示 | `contentMode: dark`、`chromeMode: match`、`sectionMode: match` |
-| 优先保证可访问性 | `colorTheme: high-contrast` 并显式设置各表面模式 |
+| 优先保证无障碍可读性 | `colorTheme: high-contrast` 并明确设置各区域模式 |
 
 ## 定理编号
 
@@ -143,7 +142,7 @@ theoremNumberFormat: '[{number}]'    # [1], [2], [3]
 theoremNumberFormat: '{number}.'     # 1., 2., 3.
 ```
 
-使用 `number` prop 可以设置单个手动编号，使用 `:autoNumber="false"` 可以关闭某个陈述的编号。
+使用 `number` 属性可以手动设置单个编号；使用 `:autoNumber="false"` 可以关闭某条陈述的编号。
 
 ## 字体大小
 
@@ -169,9 +168,9 @@ fontsize:
 # 自定义字号页面
 ```
 
-接受 `px`、`rem`、`em` 和数字。数字会按像素处理。单页设置会覆盖全局设置。
+字号可以使用 `px`、`rem` 或 `em`，也可以直接写数字；纯数字按像素处理。单页设置的优先级高于全局设置。
 
-如果只想调整封面字号，可以在封面页使用 scoped CSS：
+如果只想调整封面字号，可以在封面页加入局部 CSS：
 
 ```markdown
 <style>
@@ -208,7 +207,7 @@ footnoteDisplay: notes-only
 
 | 模式 | 行为 |
 | --- | --- |
-| `both` | 底部注脚加行内 hover/click 预览 |
+| `both` | 同时显示底部注脚和行内悬停、点击预览 |
 | `hover-only` | 只保留行内预览 |
 | `notes-only` | 只保留底部注脚 |
 
@@ -225,4 +224,4 @@ hideInToc: true
 ---
 ```
 
-页面级 props 和示例见[布局](../layouts/)与[组件](../components/)。
+页面属性和示例见[布局](../layouts/)与[组件](../components/)。

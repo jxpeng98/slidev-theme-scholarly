@@ -4,8 +4,7 @@ title: Configuration Guide
 
 # Configuration Guide
 
-Most decks only need a small frontmatter block. Add it at the top of
-`slides.md`:
+For most decks, a short frontmatter block at the top of `slides.md` is enough:
 
 ```yaml
 ---
@@ -62,7 +61,7 @@ Override text with `footerLeft`, `footerMiddle`, or `footerRight`.
 
 ## Theme Config
 
-Use `themeConfig` for visual and player behavior:
+Use `themeConfig` to control the deck's appearance and player behavior:
 
 ```yaml
 themeConfig:
@@ -174,8 +173,8 @@ fontsize:
 # Custom Sized Slide
 ```
 
-Accepted values include `px`, `rem`, `em`, and numbers. Numbers are treated as
-pixels. Per-slide settings override global settings.
+Values can use `px`, `rem`, or `em`; plain numbers are treated as pixels.
+Per-slide settings take precedence over the global settings.
 
 For cover-only typography, use scoped CSS on the cover slide:
 

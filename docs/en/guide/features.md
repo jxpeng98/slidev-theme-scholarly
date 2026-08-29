@@ -4,24 +4,22 @@ title: Key Features
 
 # Key Features
 
-Scholarly turns Slidev into an academic deck authoring environment: structured
-layouts, reusable research components, BibTeX citations, readable theme presets,
-and editor tooling.
+Scholarly builds on Slidev with the pieces academic presentations usually need:
+research layouts and components, BibTeX citations, theme presets, and editor tools.
 
 ## Academic Deck Structure
 
 - 34 layout previews covering covers, sections, content slides, figures,
   comparisons, methods, results, timelines, appendices, defenses, and references.
-- Automatic header and footer styling with author names, conference text, page
-  numbers, and optional beamer-style navigation.
-- Footer outline TOC for long decks, grouped by `layout: section`.
+- Headers and footers with author names, conference text, page numbers, and
+  optional Beamer-style navigation.
+- A footer outline for long decks, grouped by `layout: section`.
 
-Start with [Layouts](../layouts/) when you know the slide shape you need.
+If you know what the next slide needs to say, start with [Layouts](../layouts/).
 
 ## Research Components
 
-Use components for recurring academic content instead of rebuilding styles on
-each slide:
+Components keep recurring academic content consistent from slide to slide:
 
 | Component area | Components |
 | --- | --- |
@@ -43,13 +41,13 @@ manual numbers, and custom number formats.
 - Generate references from BibTeX with APA, Harvard, Vancouver, IEEE, MLA, or
   Chicago styles.
 
-Normal citation usage needs only `bibFile` and `bibStyle` in frontmatter.
+For most decks, `bibFile` and `bibStyle` are the only citation settings you need.
 
 ## Data-Driven Result Slides
 
-Small result summaries can live in JSON or CSV and render through theme
-components. Scholarly uses Vite and Slidev imports directly; there is no runtime
-fetch loader or charting dependency.
+Store small result summaries in JSON or CSV, then render them with theme
+components. Scholarly uses Vite and Slidev imports directly, without a runtime
+data loader or charting dependency.
 
 ```ts
 import rows from './results.json'
@@ -71,8 +69,7 @@ import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
 const rows = parseCsvTable(csv)
 ```
 
-Use static Markdown tables for one-off slides where a data file would be heavier
-than the content.
+For data used on one slide, a Markdown table is usually simpler.
 
 ## Paper Metadata Scaffolding
 
@@ -82,20 +79,19 @@ Generate a paper summary from a BibTeX key:
 pnpm exec sch paper summary --bib references.bib --key sample2026
 ```
 
-The command reads title, authors, year, DOI, URL, and venue fields, then emits a
-`paper-summary` slide. Use `--layout paper-card` for a component snippet, or
-`--json` when scripts need structured output.
-When required fields are missing, the CLI reports `warnings` and still emits
-renderable fallback Markdown.
+The command reads the title, authors, year, DOI, URL, and venue, then creates a
+`paper-summary` slide. Add `--layout paper-card` for a component snippet or
+`--json` for structured output. If required fields are missing, the CLI prints
+warnings and still creates editable Markdown.
 
 ## Theme Presets
 
-Scholarly ships readable color and font presets for academic decks, including
+Scholarly includes color and font presets for academic decks, including
 classic blue, Oxford burgundy, Cambridge green, Yale blue, Princeton orange,
 Nordic blue, warm sepia, monochrome, and high contrast.
 
-Use [Color & Typography Themes](./themes.md) for visual selection, then tune
-mode and contrast in [Theme Mode and Contrast](./theme-mode-contrast.md).
+Choose a palette in [Color & Typography Themes](./themes.md), then adjust its
+light and dark modes in [Theme Mode and Contrast](./theme-mode-contrast.md).
 
 ## Authoring Tools
 
@@ -108,7 +104,7 @@ See [VS Code Extension](./vscode-extension.md) for editor setup.
 
 ## Base Theme Boundary
 
-Scholarly keeps no-network academic helpers in the base theme: citations,
-footnote previews, references slides, lightweight data imports, and BibTeX
-summary scaffolding. Features that need network access, large parsers, charting
-engines, large assets, or broad integration APIs should stay in optional addons.
+The base theme includes only tools that work offline: citations, footnote previews,
+reference slides, lightweight data imports, and BibTeX summary generation.
+Anything that needs a network connection, a large parser, a charting engine, or
+a third-party API belongs in an optional add-on.

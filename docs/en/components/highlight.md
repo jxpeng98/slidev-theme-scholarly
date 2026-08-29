@@ -4,7 +4,7 @@ title: Highlight
 
 # Highlight Component
 
-The `Highlight` component provides inline text highlighting.
+`Highlight` draws attention to a phrase or number inside a sentence. Do not use it for full paragraphs.
 
 ## Basic Usage
 
@@ -12,7 +12,7 @@ The `Highlight` component provides inline text highlighting.
 This is <Highlight>important text</Highlight> in your slide.
 ```
 
-Or using the syntax sugar:
+The Markdown directive is equivalent:
 
 ```markdown
 :::highlight{type="warning"}

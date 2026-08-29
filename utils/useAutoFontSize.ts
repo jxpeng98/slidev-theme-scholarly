@@ -8,7 +8,7 @@ type MaybeRef<T> = T | Ref<T>
 interface UseAutoFontSizeOptions {
   /**
    * Minimum font size in pixels when auto-adjusting.
-   * Defaults to 60% of the current computed size, but not lower than 12px.
+   * Defaults to 60% of the current computed size, but not lower than 16px.
    */
   minFontSizePx?: MaybeRef<number | undefined>
   /**
@@ -130,7 +130,7 @@ export function useAutoFontSize(
 
     let candidateSize = computedSize
     const strategy = unref(options.strategy) ?? 'shrink'
-    const minFontSize = unref(options.minFontSizePx) ?? Math.max(12, Math.round(computedSize * 0.6))
+    const minFontSize = unref(options.minFontSizePx) ?? Math.max(16, Math.round(computedSize * 0.6))
     const growthFactor = unref(options.growthFactor) ?? 1.5
     const maxFontSize = unref(options.maxFontSizePx) ?? Math.round(computedSize * growthFactor)
     const maxAttempts = 80

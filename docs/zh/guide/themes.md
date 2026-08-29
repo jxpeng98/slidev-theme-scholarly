@@ -4,7 +4,7 @@ title: 色彩与字体主题
 
 # 色彩与字体主题
 
-Slidev Theme Scholarly v2.0 引入了可定制的色彩和字体主题，以匹配您机构的品牌或个人偏好。
+Scholarly 提供可组合的配色和字体主题，方便匹配机构风格或演示场景。
 
 ## 主题预览
 
@@ -143,11 +143,11 @@ Slidev Theme Scholarly v2.0 引入了可定制的色彩和字体主题，以匹�
 
 ## 色彩主题
 
-从 9 种专业设计的调色板中选择：
+共有 9 组配色可供选择：
 
 ### 经典学术蓝（默认）
 
-受传统学术机构启发的默认主题。
+默认配色取自传统学术机构常用的蓝色与金色。
 
 ```yaml
 ---
@@ -163,7 +163,7 @@ theme: scholarly
 
 ### 牛津酒红
 
-受牛津大学启发的丰富酒红色。
+以牛津酒红为主色，搭配低饱和金色。
 
 ```yaml
 ---
@@ -196,7 +196,7 @@ themeConfig:
 
 ### 耶鲁蓝
 
-传统耶鲁蓝，呈现出色外观。
+传统的耶鲁蓝，适合风格正式的学术报告。
 
 ```yaml
 ---
@@ -212,7 +212,7 @@ themeConfig:
 
 ### 普林斯顿橙
 
-充满活力的橙色，适合富有激情的演示。
+醒目的橙色，适合需要较强视觉节奏的演示。
 
 ```yaml
 ---
@@ -228,7 +228,7 @@ themeConfig:
 
 ### 单色专业
 
-简洁、专业的灰度主题。
+以灰度为主，适合截图、图表和文字较多的页面。
 
 ```yaml
 ---
@@ -240,7 +240,7 @@ themeConfig:
 
 ### 暖棕褐色
 
-温暖、复古风格的棕褐色调。
+偏暖、带有复古感的棕褐色。
 
 ```yaml
 ---
@@ -252,7 +252,7 @@ themeConfig:
 
 ### 北欧蓝
 
-清爽、斯堪的纳维亚风格的蓝色调色板。
+清冷克制的蓝色系，带有斯堪的纳维亚设计风格。
 
 ```yaml
 ---
@@ -264,7 +264,7 @@ themeConfig:
 
 ### 高对比度（无障碍）
 
-最大对比度主题，满足无障碍需求。符合 WCAG AAA 标准。
+适合无障碍要求较高场景的高对比度配色。请根据目标 WCAG 等级，检查最终内容中的文字、强调色和背景组合。
 
 ```yaml
 ---
@@ -281,11 +281,11 @@ themeConfig:
 
 ## 字体主题
 
-从 8 种精心策划的字体组合中选择：
+共有 8 组字体搭配可供选择：
 
 ### 经典 Palatino（默认）
 
-传统学术排版，使用 Palatino 衬线和 Helvetica 无衬线。
+以 Palatino 衬线字体为主，搭配 Helvetica 无衬线字体。
 
 ```yaml
 ---
@@ -316,7 +316,7 @@ themeConfig:
 
 ### 传统 Garamond
 
-使用 Garamond 的经典图书排版。
+以 Garamond 呈现经典的书籍式排版。
 
 ```yaml
 ---
@@ -332,7 +332,7 @@ themeConfig:
 
 ### 当代无衬线
 
-简洁、现代、以无衬线字体为主的设计。
+以无衬线字体为主，风格简洁现代。
 
 ```yaml
 ---
@@ -380,7 +380,7 @@ themeConfig:
 
 ### 优雅衬线
 
-精致、优雅的衬线排版。
+偏精致典雅的衬线字体组合。
 
 ```yaml
 ---
@@ -412,7 +412,7 @@ themeConfig:
 
 ## 组合主题
 
-您可以组合色彩和字体主题：
+配色和字体可以自由组合：
 
 ```yaml
 ---
@@ -426,125 +426,11 @@ themeConfig:
 ---
 ```
 
-## 表面模式
+## 各区域的明暗模式
 
-分别控制可读内容表面、播放器外壳和章节分隔页：
-
-| 选项 | 控制范围 | 可选值 |
-|-------|----------|--------|
-| `contentMode` | 普通幻灯片画布、引用、代码、表格、注脚、Highlight、Block 和 Theorem | `light`、`dark` |
-| `chromeMode` | 页眉、页脚、页码、导航按钮、TOC 和工具栏表面 | `light`、`dark`、`match`、`inverse` |
-| `sectionMode` | 默认章节页外观 | `light`、`dark`、`match`、`inverse` |
-
-旧配置 `colorMode` 仍作为 `contentMode` 的废弃别名保留。未设置 `contentMode`
-时，Scholarly 会先读取 `colorMode`，再跟随 Slidev 当前的浅色/深色状态。为了兼容旧
-演示，未设置 `contentMode` 和 `chromeMode` 时，`colorMode` 也会继续驱动外壳模式。
-
-### 迁移示例
-
-```yaml
-# 迁移前
-themeConfig:
-  colorTheme: classic-blue
-  colorMode: dark
-  sectionMode: dark
-
-# 迁移后
-themeConfig:
-  colorTheme: classic-blue
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
-```
-
-```yaml
-# 全浅色演示
-themeConfig:
-  colorTheme: high-contrast
-  contentMode: light
-  chromeMode: match
-  sectionMode: match
-```
-
-```yaml
-# 全深色演示
-themeConfig:
-  colorTheme: nordic-blue
-  contentMode: dark
-  chromeMode: match
-  sectionMode: match
-```
-
-### 全局默认值
-
-在首页 headmatter 中设置：
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
----
-```
-
-### 优先级链
-
-```
-contentMode > 旧配置 colorMode > Slidev 当前浅色/深色状态
-chromeMode > 未设置 contentMode 时的旧配置 colorMode > 'dark'
-sectionMode > 'dark'
-```
-
-| 值 | 描述 |
-|-------|-------------|
-| `light` | 浅色表面配深色文字 |
-| `dark` | 深色表面配浅色文字 |
-| `match` | 跟随 `contentMode` |
-| `inverse` | 与 `contentMode` 相反；适用于 `chromeMode` 和 `sectionMode` |
-
-## 章节模式
-
-独立控制 section 布局幻灯片的外观：
-
-### 全局默认值
-
-在首页的 headmatter 中设置所有 section 幻灯片的默认值：
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  sectionMode: inverse  # light、dark、match 或 inverse
----
-```
-
-### 单页覆盖
-
-在单个 section 幻灯片上覆盖全局设置：
-
-```yaml
----
-layout: section
-sectionMode: dark  # light、dark、match 或 inverse
----
-
-# 此章节使用深色模式
-```
-
-### 优先级链
-
-```
-单页 sectionMode > 全局 themeConfig.sectionMode > 'dark'（默认）
-```
-
-| 值 | 描述 |
-|-------|-------------|
-| `dark` | 深色渐变背景配浅色文字（默认） |
-| `light` | 浅色背景配深色文字 |
-| `match` | 使用解析后的 `contentMode` |
-| `inverse` | 使用与解析后 `contentMode` 相反的模式 |
+`colorTheme` 决定配色；`contentMode`、`chromeMode` 和 `sectionMode` 分别控制正文、
+放映控件和章节页。推荐组合、旧 `colorMode` 迁移、优先级和单页覆盖方式请参阅
+[主题模式与对比度](./theme-mode-contrast)。
 
 ## 自定义颜色
 
@@ -559,11 +445,11 @@ themeColors:
 ---
 ```
 
-如果要自定义颜色，请使用 `themeColors`。预设值由 `themeConfig.colorTheme` 选中的 CSS 规则提供；显式 `themeColors` 覆盖会同步到 `<html>` 和 `<body>`，确保它们在各个 Slidev 表面保持最高优先级。
+预设颜色来自 `themeConfig.colorTheme` 选中的 CSS 规则。通过 `themeColors` 设置的颜色会同时应用到 `<html>` 和 `<body>`，因此在 Slidev 各个界面区域中拥有更高优先级。
 
 ## 实时示例
 
-每个色彩主题都有专门的示例文件展示其实际效果：
+可以通过对应的示例文件在本地预览每组配色：
 
 | 主题 | 命令 |
 |------|------|
@@ -577,40 +463,7 @@ themeColors:
 | 暖棕褐色 | `pnpm run dev -- examples/example-sepia.md` |
 | 高对比度 | `pnpm run dev -- examples/example-high-contrast.md` |
 
-`examples/` 下的示例文档使用了 `theme: ../`，以便在本仓库中直接运行 Slidev 进行开发预览。如果你是通过 npm 安装的主题，请将其改为 `theme: scholarly`。
+`examples/` 下的示例文档使用 `theme: ../`，这样可以直接在本仓库中运行 Slidev。通过 npm 安装主题时，请改用 `theme: scholarly`。
 
-## 实现细节
-
-主题使用 CSS 自定义属性和数据属性应用：
-
-- 色彩主题使用 `[data-color-theme="theme-name"]`
-- 字体主题使用 `[data-font-theme="theme-name"]`
-- 内容模式使用 `[data-content-mode="dark/light"]`
-- 外壳模式使用 `[data-chrome-mode="dark/light"]`
-- 章节模式使用 `[data-section-mode="dark/light"]`
-
-`data-color-mode` 保留为 `data-content-mode` 的旧镜像。
-
-这允许无缝切换主题，无需重新加载演示文稿。
-
-### 语义 Token 分组
-
-Scholarly 会把可读内容颜色和主题识别色分开管理。新增配色主题或调整浅色/深色行为时，应优先使用这些 token 分组，而不是在组件里写死颜色：
-
-| Token 分组 | 用途 | 示例 |
-|------------|------|------|
-| Chrome tokens | 页眉、页脚、工具栏和导航表面 | `--scholarly-chrome-bg`、`--scholarly-toolbar-hover` |
-| Content tokens | 正文内容表面、边框、代码、引用和表格颜色 | `--scholarly-content-surface`、`--scholarly-code-bg`、`--scholarly-quote-fg` |
-| Accent tokens | 配色预设或 `themeColors` 提供的主题识别色 | `--slidev-theme-primary`、`--slidev-theme-primary-light`、`--scholarly-accent` |
-| Semantic tokens | highlight、Block、Theorem 等变体的可读状态 | `--scholarly-highlight-warning-bg`、`--scholarly-block-info-border`、`--scholarly-theorem-definition-accent` |
-| Interaction tokens | hover、focus、pinned、active 和弱化 UI 反馈 | `--scholarly-toolbar-hover`、`--scholarly-content-fg-muted` |
-
-核心规则是背景 token 和前景 token 必须成对变化。例如 `Highlight` 使用 `--scholarly-highlight-*-bg` 与 `--scholarly-highlight-*-fg`，这样浅色模式下的深色 highlight 背景不会再意外继承深色正文文本。
-
-## 重新生成主题截图
-
-将每个主题示例的前 4 页导出到 `images/themes/*`（并同步到 `docs/public/images/themes/*`）：
-
-```bash
-pnpm run export:theme-images
-```
+主题实现和预览图重新生成方法请参阅
+[贡献指南](../contributing#theme-and-preview-changes)。

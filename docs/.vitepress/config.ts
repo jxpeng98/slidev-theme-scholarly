@@ -1,171 +1,197 @@
 import { defineConfig } from 'vitepress'
-import { withSidebar } from 'vitepress-sidebar';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
 
-// https://vitepress.dev/reference/site-config
+const enSidebar = [
+  {
+    text: 'Start here',
+    items: [
+      { text: 'Overview', link: '/en/' },
+      { text: 'Quick start', link: '/en/guide/quick-start' },
+      { text: 'VS Code extension', link: '/en/guide/vscode-extension' },
+      { text: 'Choose a workflow', link: '/en/guide/workflows/' },
+      { text: 'Upgrade notes', link: '/en/guide/upgrade' },
+    ],
+  },
+  {
+    text: 'Build your deck',
+    items: [
+      { text: 'Layouts', link: '/en/layouts/' },
+      { text: 'Components', link: '/en/components/' },
+      { text: 'Citations', link: '/en/components/cite' },
+      { text: 'Syntax sugar', link: '/en/syntax-sugar' },
+      { text: 'Examples', link: '/en/examples' },
+    ],
+  },
+  {
+    text: 'Customize',
+    collapsed: true,
+    items: [
+      { text: 'Configuration', link: '/en/guide/configurations' },
+      { text: 'Colors and typography', link: '/en/guide/themes' },
+      { text: 'Theme modes and contrast', link: '/en/guide/theme-mode-contrast' },
+    ],
+  },
+  {
+    text: 'Reference',
+    collapsed: true,
+    items: [
+      { text: 'Feature overview', link: '/en/guide/features' },
+      { text: 'All guides', link: '/en/guide/' },
+      { text: 'Contributing', link: '/en/contributing' },
+    ],
+  },
+]
 
+const zhSidebar = [
+  {
+    text: '从这里开始',
+    items: [
+      { text: '概览', link: '/zh/' },
+      { text: '快速开始', link: '/zh/guide/quick-start' },
+      { text: 'VS Code 插件', link: '/zh/guide/vscode-extension' },
+      { text: '选择工作流', link: '/zh/guide/workflows/' },
+      { text: '升级说明', link: '/zh/guide/upgrade' },
+    ],
+  },
+  {
+    text: '制作演示',
+    items: [
+      { text: '布局', link: '/zh/layouts/' },
+      { text: '组件', link: '/zh/components/' },
+      { text: '引用', link: '/zh/components/cite' },
+      { text: '语法糖', link: '/zh/syntax-sugar' },
+      { text: '示例', link: '/zh/examples' },
+    ],
+  },
+  {
+    text: '定制',
+    collapsed: true,
+    items: [
+      { text: '配置', link: '/zh/guide/configurations' },
+      { text: '颜色与字体', link: '/zh/guide/themes' },
+      { text: '主题模式与对比度', link: '/zh/guide/theme-mode-contrast' },
+    ],
+  },
+  {
+    text: '参考',
+    collapsed: true,
+    items: [
+      { text: '功能概览', link: '/zh/guide/features' },
+      { text: '全部文档', link: '/zh/guide/' },
+      { text: '参与贡献', link: '/zh/contributing' },
+    ],
+  },
+]
 
-const vitePressOptions = {
-  title: "Slidev Theme Scholarly",
-  description: "A Slidev Theme for professional academic presentations",
+export default defineConfig({
+  title: 'Slidev Theme Scholarly',
+  description: 'Build clear academic presentations with Slidev and Markdown.',
+  cleanUrls: true,
+  lastUpdated: true,
+  srcExclude: ['superpowers/**'],
 
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    search: { provider: 'local' },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/jxpeng98/slidev-theme-scholarly' }
+      { icon: 'github', link: 'https://github.com/jxpeng98/slidev-theme-scholarly' },
     ],
-    outline: {
-      label: 'On this page',
-      level: [1, 6],
-    },
   },
 
   locales: {
-    root: {
+    en: {
       label: 'English',
       lang: 'en',
       link: '/en/',
       themeConfig: {
         nav: [
-          { text: 'Home', link: '/en/' },
           {
-            text: 'Guide',
+            text: 'Start',
             items: [
-              { text: 'Quick Start', link: '/en/guide/quick-start' },
-              { text: 'Upgrade Notes', link: '/en/guide/upgrade' },
-              { text: 'Features', link: '/en/guide/features' },
-              { text: 'Academic Workflows', link: '/en/guide/workflows/' },
-              { text: 'Configurations', link: '/en/guide/configurations' },
-              { text: 'Theme Mode and Contrast', link: '/en/guide/theme-mode-contrast' },
-              { text: 'Color & Typography Themes', link: '/en/guide/themes' }
-            ]
+              { text: 'Quick start', link: '/en/guide/quick-start' },
+              { text: 'VS Code extension', link: '/en/guide/vscode-extension' },
+              { text: 'Choose a workflow', link: '/en/guide/workflows/' },
+              { text: 'Upgrade a deck', link: '/en/guide/upgrade' },
+            ],
           },
           {
-            text: 'Layouts',
+            text: 'Build',
             items: [
-              { text: 'Overview', link: '/en/layouts/' },
-              { text: 'Structure', link: '/en/layouts/structure' },
-              { text: 'Content', link: '/en/layouts/content' },
-              { text: 'Emphasis', link: '/en/layouts/emphasis' },
-              { text: 'Academic', link: '/en/layouts/academic' }
-            ]
+              { text: 'Layouts', link: '/en/layouts/' },
+              { text: 'Components', link: '/en/components/' },
+              { text: 'Citations', link: '/en/components/cite' },
+              { text: 'Syntax sugar', link: '/en/syntax-sugar' },
+              { text: 'Examples', link: '/en/examples' },
+            ],
           },
           {
-            text: 'Components',
+            text: 'Customize',
             items: [
-              { text: 'Overview', link: '/en/components/' },
-              { text: 'Theorem', link: '/en/components/theorem' },
-              { text: 'Block', link: '/en/components/block' },
-              { text: 'Steps', link: '/en/components/steps' },
-              { text: 'Keywords', link: '/en/components/keywords' },
-              { text: 'Columns', link: '/en/components/columns' },
-              { text: 'Highlight', link: '/en/components/highlight' },
-              { text: 'MetricCard', link: '/en/components/metric-card' },
-              { text: 'MetricGrid', link: '/en/components/metric-grid' },
-              { text: 'EvidenceBlock', link: '/en/components/evidence-block' },
-              { text: 'EquationBlock', link: '/en/components/equation-block' },
-              { text: 'DatasetCard', link: '/en/components/dataset-card' },
-              { text: 'PaperCard', link: '/en/components/paper-card' },
-              { text: 'ContributionList', link: '/en/components/contribution-list' },
-              { text: 'CaveatList', link: '/en/components/caveat-list' },
-              { text: 'Cite', link: '/en/components/cite' },
-              { text: 'ThemePreview', link: '/en/components/theme-preview' }
-            ]
+              { text: 'Configuration', link: '/en/guide/configurations' },
+              { text: 'Colors and typography', link: '/en/guide/themes' },
+              { text: 'Modes and contrast', link: '/en/guide/theme-mode-contrast' },
+            ],
           },
-          { text: 'Syntax Sugar', link: '/en/syntax-sugar' },
-          { text: 'Examples', link: '/en/examples' }
+          {
+            text: 'Reference',
+            items: [
+              { text: 'Feature overview', link: '/en/guide/features' },
+              { text: 'All guides', link: '/en/guide/' },
+              { text: 'Contributing', link: '/en/contributing' },
+            ],
+          },
         ],
-      }
+        sidebar: { '/en/': enSidebar },
+        outline: { label: 'On this page', level: [2, 3] },
+        docFooter: { prev: 'Previous', next: 'Next' },
+        lastUpdated: { text: 'Updated' },
+      },
     },
     zh: {
       label: '简体中文',
-      lang: 'zh',
+      lang: 'zh-CN',
       link: '/zh/',
       themeConfig: {
         nav: [
-          { text: '首页', link: '/zh/' },
           {
-            text: '指南',
+            text: '开始',
             items: [
               { text: '快速开始', link: '/zh/guide/quick-start' },
-              { text: '重大升级说明', link: '/zh/guide/upgrade' },
-              { text: '主要功能', link: '/zh/guide/features' },
-              { text: '学术工作流', link: '/zh/guide/workflows/' },
+              { text: 'VS Code 插件', link: '/zh/guide/vscode-extension' },
+              { text: '选择工作流', link: '/zh/guide/workflows/' },
+              { text: '升级演示', link: '/zh/guide/upgrade' },
+            ],
+          },
+          {
+            text: '制作',
+            items: [
+              { text: '布局', link: '/zh/layouts/' },
+              { text: '组件', link: '/zh/components/' },
+              { text: '引用', link: '/zh/components/cite' },
+              { text: '语法糖', link: '/zh/syntax-sugar' },
+              { text: '示例', link: '/zh/examples' },
+            ],
+          },
+          {
+            text: '定制',
+            items: [
               { text: '配置', link: '/zh/guide/configurations' },
-              { text: '主题模式与对比度', link: '/zh/guide/theme-mode-contrast' },
-              { text: '色彩与字体主题', link: '/zh/guide/themes' }
-            ]
+              { text: '颜色与字体', link: '/zh/guide/themes' },
+              { text: '模式与对比度', link: '/zh/guide/theme-mode-contrast' },
+            ],
           },
           {
-            text: '布局',
+            text: '参考',
             items: [
-              { text: '概览', link: '/zh/layouts/' },
-              { text: '结构布局', link: '/zh/layouts/structure' },
-              { text: '内容布局', link: '/zh/layouts/content' },
-              { text: '强调布局', link: '/zh/layouts/emphasis' },
-              { text: '学术布局', link: '/zh/layouts/academic' }
-            ]
+              { text: '功能概览', link: '/zh/guide/features' },
+              { text: '全部文档', link: '/zh/guide/' },
+              { text: '参与贡献', link: '/zh/contributing' },
+            ],
           },
-          {
-            text: '组件',
-            items: [
-              { text: '概览', link: '/zh/components/' },
-              { text: '定理', link: '/zh/components/theorem' },
-              { text: 'Block', link: '/zh/components/block' },
-              { text: 'Steps', link: '/zh/components/steps' },
-              { text: 'Keywords', link: '/zh/components/keywords' },
-              { text: 'Columns', link: '/zh/components/columns' },
-              { text: 'Highlight', link: '/zh/components/highlight' },
-              { text: 'MetricCard', link: '/zh/components/metric-card' },
-              { text: 'MetricGrid', link: '/zh/components/metric-grid' },
-              { text: 'EvidenceBlock', link: '/zh/components/evidence-block' },
-              { text: 'EquationBlock', link: '/zh/components/equation-block' },
-              { text: 'DatasetCard', link: '/zh/components/dataset-card' },
-              { text: 'PaperCard', link: '/zh/components/paper-card' },
-              { text: 'ContributionList', link: '/zh/components/contribution-list' },
-              { text: 'CaveatList', link: '/zh/components/caveat-list' },
-              { text: 'Cite', link: '/zh/components/cite' },
-              { text: 'ThemePreview', link: '/zh/components/theme-preview' }
-            ]
-          },
-          { text: '语法糖', link: '/zh/syntax-sugar' },
-          { text: '示例', link: '/zh/examples' }
         ],
-      }
-    }
-  }
-}
-
-const documentRootPath = existsSync(resolve(process.cwd(), 'en')) ? '.' : 'docs';
-
-const commonSidebarOptions = {
-  // vitepress-sidebar expects a path relative to `process.cwd()`
-  documentRootPath,
-  useTitleFromFrontmatter: true,
-  frontmatterTitleFieldName: 'title',
-  collapsed: true,
-  removePrefixAfterOrdering: true,
-  prefixSeparator: '-',
-  hyphenToSpace: true,
-  useFolderTitleFromIndexFile: true,
-  useFolderLinkFromIndexFile: true,
-  sortMenusByName: false,
-};
-
-const vitePressSidebarOptions = [
-  {
-    ...commonSidebarOptions,
-    scanStartPath: '/en',
-    basePath: '/',
-    resolvePath: '/en/'
+        sidebar: { '/zh/': zhSidebar },
+        outline: { label: '本页内容', level: [2, 3] },
+        docFooter: { prev: '上一篇', next: '下一篇' },
+        lastUpdated: { text: '更新于' },
+      },
+    },
   },
-  {
-    ...commonSidebarOptions,
-    scanStartPath: '/zh',
-    basePath: '/',
-    resolvePath: '/zh/',
-  }
-];
-
-export default defineConfig(withSidebar(vitePressOptions, vitePressSidebarOptions));
+})

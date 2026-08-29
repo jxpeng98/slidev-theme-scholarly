@@ -4,11 +4,11 @@ title: 结构布局
 
 # 结构布局
 
-用于组织演示文稿结构的布局 - 标题页、章节和结束页。
+这些布局负责演示的整体结构，包括封面、章节页、目录和结束页。
 
-## cover - 标题页
+## cover - 标题页 {#cover}
 
-**用于：** 演示文稿的第一张幻灯片
+**适合：** 演示的第一张幻灯片
 
 ![封面布局示例](/images/layouts/cover.png)
 
@@ -29,14 +29,20 @@ footerMiddle: 2025 年会议名称
 **显示内容：**
 
 - 居中的大标题
-- 带有单位和邮箱的作者信息
-- 带有作者、会议、页码和放映态导航按钮的页脚
+- 作者、单位和邮箱
+- 作者、会议、页码和放映导航组成的页脚
+
+**属性：**
+
+- `authors`：`{ name, institution?, email? }` 数组；未设置时使用全局 `authors`
+- `footerLeft`：页脚左侧文字
+- `footerMiddle`：页脚中间文字
 
 ---
 
-## default - 标准内容
+## default - 标准内容 {#default}
 
-**用于：** 大部分幻灯片（这是自动的！）
+**适合：** 大多数正文页面，也是默认布局
 
 ![默认布局示例](/images/layouts/default.png)
 
@@ -56,15 +62,20 @@ subtitle: 可选的副标题
 
 **显示内容：**
 
-- 可选的带有标题和副标题的页眉
-- 中间的内容
-- 底部带页码和放映态导航按钮的页脚
+- 可选的标题和副标题
+- 页面正文
+- 带页码和放映导航的页脚
+
+**属性：**
+
+- `title`、`subtitle`：可选页眉内容
+- `density`：`auto`、`compact`、`normal` 或 `relaxed`
 
 ---
 
-## intro - 章节介绍
+## intro - 章节介绍 {#intro}
 
-**用于：** 开始报告的新部分
+**适合：** 引出报告的新部分
 
 ![章节介绍布局示例](/images/layouts/intro.png)
 
@@ -75,7 +86,7 @@ layout: intro
 
 # 第二部分：研究方法
 
-让我们讨论我们的方法
+下面介绍研究方法
 ```
 
 **显示内容：**
@@ -84,11 +95,16 @@ layout: intro
 - 无页眉（为标题留出更多空间）
 - 底部的页脚
 
+**属性：**
+
+- `align`：`left` 或 `center`（默认：`left`）
+- `density`：`auto`、`compact`、`normal` 或 `relaxed`
+
 ---
 
-## section - 章节分隔符
+## section - 章节分隔符 {#section}
 
-**用于：** 演示中的重大转换
+**适合：** 分隔演示中的主要章节
 
 ![章节布局示例](/images/layouts/section.png)
 
@@ -103,10 +119,10 @@ sectionMode: dark  # dark、light、match 或 inverse（可选，默认：dark�
 
 **显示内容：**
 
-- 非常大的居中标题
+- 大字号居中标题
 - 无页眉
 - 底部的页脚
-- 完美的戏剧性章节分隔
+- 醒目的章节分隔
 
 **sectionMode 选项：**
 
@@ -119,7 +135,7 @@ sectionMode: dark  # dark、light、match 或 inverse（可选，默认：dark�
 
 **全局与单页配置：**
 
-你可以在首页的 headmatter 中设置全局默认值：
+可以在文件开头的 headmatter 中设置全局默认值：
 
 ```yaml
 ---
@@ -138,14 +154,14 @@ layout: section
 sectionMode: inverse  # 覆盖全局设置
 ---
 
-# 此章节使用反向模式
+# 本章节使用反向模式
 ```
 
 ---
 
-## toc - 目录（Table of Contents）
+## toc - 目录（Table of Contents） {#toc}
 
-**用于：** 目录/大纲页（自动从 `layout: section` 的章节页生成）
+**适合：** 自动生成目录或大纲
 
 ![目录布局示例](/images/layouts/toc.png)
 
@@ -174,9 +190,9 @@ highlightCurrent: true # 可选，默认：true
 
 ---
 
-## center - 居中内容
+## center - 居中内容 {#center}
 
-**用于：** 简短信息或关键要点
+**适合：** 简短信息或关键要点
 
 ![居中布局示例](/images/layouts/center.png)
 
@@ -193,13 +209,13 @@ layout: center
 **显示内容：**
 
 - 所有内容水平和垂直居中
-- 非常适合强调
+- 让简短内容成为视觉焦点
 
 ---
 
-## auto-center - 自动调整内容
+## auto-center - 自动调整内容 {#auto-center}
 
-**用于：** 需要自动调整字体大小的内容
+**适合：** 需要根据内容自动调整字号的页面
 
 ![自动居中布局示例](/images/layouts/auto-center.png)
 
@@ -212,7 +228,7 @@ subtitle: 副标题
 
 ## 自动居中内容
 
-此布局会自动调整字体大小以适应内容。
+布局会根据内容量自动调整字号。
 ```
 
 **显示内容：**
@@ -221,11 +237,16 @@ subtitle: 副标题
 - 内容垂直居中
 - 在居中块内保持文本左对齐
 
+**属性：**
+
+- `title`、`subtitle`：可选页眉内容
+- `minFontSize`、`maxFontSize`：字号上下限，单位为像素
+
 ---
 
-## auto-size - 页面自适应的默认布局
+## auto-size - 页面自适应的默认布局 {#auto-size}
 
-**用于：** 希望保留默认布局阅读流，同时让页面行为更接近 LaTeX Beamer frame 的内容页
+**适合：** 内容多少不固定，但仍希望保持默认阅读顺序的页面
 
 ```markdown
 ---
@@ -241,28 +262,31 @@ maxFontSize: 30
 
 ## 自动适应页面的正文
 
-这个布局会保留 default 的阅读流，
-同时自动调整 main matter 的字号以适应页面。
+这个布局会保留默认阅读顺序，
+同时自动调整正文字号以适应页面。
 ```
 
 **显示内容：**
 
-- 保留默认布局的 header 和 footer
-- 根据可用宽高自动调整 main matter
+- 保留默认布局的页眉和页脚
+- 根据可用空间自动调整正文
 - 正文保持自上而下展开，不做垂直居中
-- 支持使用 `minFontSize` 和 `maxFontSize` frontmatter 约束字号范围
+- 可通过 `minFontSize` 和 `maxFontSize` 限制字号范围
 
-**配置入口：**
+**属性：**
 
-- `autoSizeGrow: true | false` - 稀疏内容是否允许放大，或只在需要时缩小
-- `autoSizeAlign: top | center` - main matter 是贴顶部展示，还是在可用区域内垂直居中
-- `autoSizePadding: compact | normal` - 切换更紧凑或更常规的正文内边距
+- `title`、`subtitle`：可选页眉内容
+- `density`：`auto`、`compact`、`normal` 或 `relaxed`
+- `minFontSize`、`maxFontSize`：字号上下限，单位为像素
+- `autoSizeGrow`：稀疏内容是否允许放大，或只在需要时缩小
+- `autoSizeAlign`：`top` 或 `center`
+- `autoSizePadding`：`compact` 或 `normal`
 
 ---
 
-## end - 致谢页
+## end - 致谢页 {#end}
 
-**用于：** 带有联系信息的专业结束幻灯片
+**适合：** 带联系信息的结束页
 
 ![致谢页布局示例](/images/layouts/end.png)
 
@@ -276,7 +300,7 @@ qrcode: https://example.com/qr.png
 qrcodeLabel: 扫码获取论文
 ---
 
-感谢您的聆听！
+感谢聆听！
 ```
 
 **属性：**

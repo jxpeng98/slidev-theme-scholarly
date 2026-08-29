@@ -4,7 +4,7 @@ title: 示例
 
 # 示例
 
-## 完整的最小示例
+## 最小完整示例
 
 ```markdown
 ---
@@ -21,7 +21,7 @@ footerMiddle: 我的报告 2025
 
 # 引言
 
-这是我关于...的研究
+这里用一句话说明研究问题。
 
 - 要点 1
 - 要点 2
@@ -38,21 +38,21 @@ layout: section
 
 <Theorem type="theorem">
 
-我们证明了我们的算法在 $O(n \log n)$ 时间内运行.
+我们证明了这个算法的时间复杂度为 $O(n \log n)$。
 
 </Theorem>
 
 ---
 
-# 谢谢
+# 感谢聆听
 
 有问题吗？
 ```
 
-### 所有功能的示例
+## 中文完整示例
 
-查看 [`example-zh.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/example-zh.md) 了解所有布局和功能的完整演示.
+[`examples/example-zh.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/examples/example-zh.md) 展示了常用布局和组件的完整写法。
 
-### 英文示例
+## 英文完整示例
 
-查看 [`example.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/example.md) 了解完整的英文示例.
+英文版本见 [`examples/example.md`](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/examples/example.md)。

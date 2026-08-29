@@ -11,6 +11,8 @@
   --slidev-theme-primary-light: #2c5282;
   --scholarly-accent: #b8860b;
   --scholarly-font-size: 1rem;
+  --scholarly-text-xs: 0.875rem;
+  --scholarly-text-sm: 1rem;
 
   /* Typography - Academic font stacks */
   --scholarly-font-serif: "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
@@ -1400,5 +1402,54 @@ footer {
   }
   100% {
     box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--slidev-theme-primary, #1e3a5f) 0%, transparent);
+  }
+}
+
+/* Portrait phones use a readable document flow instead of scaling 980px slides. */
+@media (max-width: 640px) and (orientation: portrait) {
+  #slide-container {
+    height: 100dvh !important;
+    overflow: auto !important;
+  }
+
+  #slide-content {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  #slideshow,
+  .slidev-page,
+  .slidev-page .slidev-layout {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .slidev-page {
+    position: static !important;
+  }
+
+  .slidev-page .slidev-layout {
+    min-height: calc(100dvh - 4rem);
+  }
+
+  .slidev-layout .header-fixed,
+  .slidev-layout footer.fixed {
+    position: static !important;
+  }
+
+  .slidev-layout .beamer-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .slidev-layout .beamer-footer-center,
+  .slidev-layout .beamer-footer-left {
+    display: none;
+  }
+
+  .slidev-layout .beamer-footer-right {
+    grid-column: 1 / -1;
   }
 }

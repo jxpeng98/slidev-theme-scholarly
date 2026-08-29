@@ -853,30 +853,35 @@ export async function runCliAction(action: CliActionId): Promise<void> {
 }
 
 export async function openCliActionMenu(): Promise<void> {
-  const items: Array<vscode.QuickPickItem & { action: CliActionId }> = [
-    { label: 'New Presentation...', description: 'sch init with prompts', action: 'initPresentation' },
-    { label: 'Apply Theme...', description: 'sch theme apply', action: 'themeApply' },
-    { label: 'Apply Theme Preset Combo...', description: 'sch theme preset apply', action: 'themePresetApply' },
-    { label: 'Append Snippet...', description: 'sch snippet append', action: 'snippetAppend' },
-    { label: 'Append Workflow...', description: 'sch workflow apply', action: 'workflowApply' },
-    { label: 'Show Snippet...', description: 'sch snippet show', action: 'snippetShow' },
-    { label: 'List Templates', description: 'sch template list', action: 'templateList' },
-    { label: 'List Themes', description: 'sch theme list', action: 'themeList' },
-    { label: 'List Theme Presets', description: 'sch theme preset list', action: 'themePresetList' },
-    { label: 'List Layouts', description: 'sch layout list', action: 'layoutList' },
-    { label: 'List Components', description: 'sch component list', action: 'componentList' },
-    { label: 'List Snippets', description: 'sch snippet list', action: 'snippetList' },
-    { label: 'List Workflows', description: 'sch workflow list', action: 'workflowList' },
-    { label: 'Doctor', description: 'sch doctor', action: 'doctor' },
-    { label: 'Help', description: 'sch help', action: 'help' }
+  const items: Array<vscode.QuickPickItem & { action?: CliActionId }> = [
+    { label: 'Start', kind: vscode.QuickPickItemKind.Separator },
+    { label: 'New Presentation...', description: 'Create a deck with guided prompts', detail: 'sch init', action: 'initPresentation' },
+    { label: 'List Templates', description: 'See every starting template', detail: 'sch template list', action: 'templateList' },
+    { label: 'Build', kind: vscode.QuickPickItemKind.Separator },
+    { label: 'List Layouts', description: 'See available slide structures', detail: 'sch layout list', action: 'layoutList' },
+    { label: 'List Components', description: 'See available content blocks', detail: 'sch component list', action: 'componentList' },
+    { label: 'Append Snippet...', description: 'Add a ready-made block to slides.md', detail: 'sch snippet append', action: 'snippetAppend' },
+    { label: 'Apply Workflow...', description: 'Add a paper, seminar, or quick workflow', detail: 'sch workflow apply', action: 'workflowApply' },
+    { label: 'Show Snippet...', description: 'Print a block without changing a file', detail: 'sch snippet show', action: 'snippetShow' },
+    { label: 'List Snippets', description: 'See every reusable block', detail: 'sch snippet list', action: 'snippetList' },
+    { label: 'List Workflows', description: 'See every presentation workflow', detail: 'sch workflow list', action: 'workflowList' },
+    { label: 'Customize', kind: vscode.QuickPickItemKind.Separator },
+    { label: 'Set Theme...', description: 'Choose colors, fonts, and surface modes', detail: 'sch theme apply', action: 'themeApply' },
+    { label: 'Apply Curated Preset...', description: 'Apply a ready-made theme combination', detail: 'sch theme preset apply', action: 'themePresetApply' },
+    { label: 'List Color Themes', description: 'See every color theme', detail: 'sch theme list', action: 'themeList' },
+    { label: 'List Curated Presets', description: 'See every preset combination', detail: 'sch theme preset list', action: 'themePresetList' },
+    { label: 'Check & Help', kind: vscode.QuickPickItemKind.Separator },
+    { label: 'Doctor', description: 'Check setup, citations, and project files', detail: 'sch doctor', action: 'doctor' },
+    { label: 'Help', description: 'List every CLI command', detail: 'sch help', action: 'help' }
   ];
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select a Scholarly CLI action',
-    matchOnDescription: true
+    placeHolder: 'Choose the next Scholarly task',
+    matchOnDescription: true,
+    matchOnDetail: true
   });
 
-  if (!selected) return;
+  if (!selected?.action) return;
   await runCliAction(selected.action);
 }
 

@@ -80,7 +80,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -98,7 +98,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -119,7 +119,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
   margin: 0;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
 }
 
 .related-work-shell :deep(th),
@@ -142,7 +142,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
   background: color-mix(in srgb, var(--slidev-theme-primary) 10%, var(--scholarly-content-surface) 90%);
   color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 750;
   text-align: left;
 }
@@ -158,7 +158,7 @@ const heading = computed(() => props.heading || headerTitle.value || 'Related Wo
 .related-work-notes {
   padding: 0.65rem 0.8rem;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   line-height: 1.45;
 }
 

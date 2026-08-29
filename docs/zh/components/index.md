@@ -1,107 +1,39 @@
 ---
 title: 组件
+description: 在 Scholarly 幻灯片中加入结构化研究内容。
 ---
 
 # 组件
 
-本主题为学术演示提供多种组件。
+普通 Markdown 不够用时，再用组件组织定理、指标、证据等内容。
 
-## 定理组件
+## 按内容选择
 
-在学术演示中, 你经常需要展示正式的陈述, 如定理, 引理或定义. 这个主题提供了一个特殊的组件, 可以：
+| 内容 | 组件 |
+|---|---|
+| 论点和正式陈述 | [Theorem](./theorem)、[Block](./block)、[Highlight](./highlight) |
+| 来源和论文 | [引用](./cite)、[PaperCard](./paper-card) |
+| 结果和证据 | [MetricCard](./metric-card)、[MetricGrid](./metric-grid)、[EvidenceBlock](./evidence-block)、[ResultTable](./result-table) |
+| 方法和数据 | [EquationBlock](./equation-block)、[DatasetCard](./dataset-card)、[Steps](./steps) |
+| 贡献和局限 | [ContributionList](./contribution-list)、[CaveatList](./caveat-list) |
+| 页面组织 | [Columns](./columns)、[Keywords](./keywords)、[ThemePreview](./theme-preview) |
 
-- 自动为定理编号
-- 专业的样式设计
-- 支持多种语言
+## 使用组件
 
-### 基本用法
+组件可以包裹 Markdown 内容：
 
 ```markdown
 <Theorem type="theorem" title="勾股定理">
 
-对于直角三角形, 设两直角边为 $a$ 和 $b$, 斜边为 $c$：
-
-$$a^2 + b^2 = c^2$$
+对于直角三角形，$a^2 + b^2 = c^2$。
 
 </Theorem>
 ```
 
-**结果：** 一个格式精美的框, 标题为"定理 1（勾股定理）", 内部是你的内容.
-
-### 可用类型
-
-每种类型都有不同的颜色：
-
-| 类型 | 中文 | 英文 | 颜色 |
-|------|------|------|------|
-| `theorem` | 定理 | Theorem | 蓝色 |
-| `lemma` | 引理 | Lemma | 紫色 |
-| `proposition` | 命题 | Proposition | 青色 |
-| `corollary` | 推论 | Corollary | 绿色 |
-| `definition` | 定义 | Definition | 琥珀色 |
-| `example` | 例 | Example | 粉色 |
-| `remark` | 注 | Remark | 灰色 |
-
-### 示例
-
-**简单定理：**
+组件也可以通过属性接收数据：
 
 ```markdown
-<Theorem type="theorem">
-
-每个有界序列都有一个收敛的子序列.
-
-</Theorem>
+<MetricCard label="准确率" value="94.7" unit="%" />
 ```
 
-**带标题的定理：**
-
-```markdown
-<Theorem type="definition" title="连续性">
-
-函数 $f$ 在 $x = a$ 处连续, 如果...
-
-</Theorem>
-```
-
-**手动编号：**
-
-```markdown
-<Theorem type="lemma" number="3.2">
-
-这将被编号为"引理 3.2", 而不是自动编号.
-
-</Theorem>
-```
-
-**无编号：**
-
-```markdown
-<Theorem type="remark" :autoNumber="false">
-
-此注记没有编号.
-
-</Theorem>
-```
-
----
-
-## 其他组件
-
-更多组件文档：
-
-- [Block](./block.md) - Beamer 风格彩色块
-- [Steps](./steps.md) - 工作流程可视化
-- [Keywords](./keywords.md) - 关键词标签
-- [Columns](./columns.md) - 多列布局
-- [Highlight](./highlight.md) - 文本高亮
-- [MetricCard](./metric-card.md) - 单个关键指标
-- [MetricGrid](./metric-grid.md) - 结果指标网格
-- [EvidenceBlock](./evidence-block.md) - 证据、来源和可信度说明
-- [EquationBlock](./equation-block.md) - 带标题、编号和说明的公式块
-- [DatasetCard](./dataset-card.md) - 数据集规模、划分、任务和来源摘要
-- [PaperCard](./paper-card.md) - 论文元数据和贡献摘要
-- [ContributionList](./contribution-list.md) - 带证据的贡献列表
-- [CaveatList](./caveat-list.md) - 局限性和缓解方案
-- [Cite](./cite.md) - 学术引用
-- [ThemePreview](./theme-preview.md) - 主题配色预览
+每个组件页面都提供属性说明和完整示例。如果希望进一步缩短写法，请查看[语法糖](../syntax-sugar)。

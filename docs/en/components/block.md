@@ -4,23 +4,23 @@ title: Block
 
 # Block Component
 
-The `Block` component creates Beamer-style colored blocks for highlighting important content.
+`Block` gives notes, findings, examples, and warnings a consistent visual hierarchy.
 
 ## Basic Usage
 
 ```markdown
 <Block type="info" title="Important Note">
 
-Your content here...
+Add the note here.
 
 </Block>
 ```
 
-Or using the syntax sugar:
+The Markdown directive is equivalent:
 
 ```markdown
 :::block{type="info" title="Important Note"}
-Your content here...
+Add the note here.
 :::
 ```
 
@@ -68,3 +68,4 @@ Consider the function $f(x) = x^2$...
 |------|------|---------|-------------|
 | `type` | `string` | `'default'` | Block style type |
 | `title` | `string` | - | Optional title for the block |
+| `compact` | `boolean` | `false` | Reduces the outer margin and inner padding |

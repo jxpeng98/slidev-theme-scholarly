@@ -10,14 +10,8 @@ const __dirname = path.dirname(__filename);
 const extensionRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(extensionRoot, '..');
 
-const srcLayouts = path.join(repoRoot, 'docs', 'public', 'images', 'layouts');
-const srcThemes = path.join(repoRoot, 'docs', 'public', 'images', 'themes');
-const srcComponents = path.join(repoRoot, 'docs', 'public', 'images', 'components');
-
+const srcRoot = path.join(repoRoot, 'docs', 'public', 'images');
 const destRoot = path.join(extensionRoot, 'media', 'previews');
-const destLayouts = path.join(destRoot, 'layouts');
-const destThemes = path.join(destRoot, 'themes');
-const destComponents = path.join(destRoot, 'components');
 const manifestPath = path.join(destRoot, 'manifest.json');
 const checkMode = process.argv.includes('--check');
 
@@ -108,27 +102,14 @@ async function createManifestEntry(src, dest) {
 }
 
 async function collectSourceImages() {
-  const groups = [
-    { source: srcLayouts, dest: destLayouts },
-    { source: srcThemes, dest: destThemes },
-    { source: srcComponents, dest: destComponents }
-  ];
+  if (!(await exists(srcRoot)))
+    return [];
 
-  const images = [];
-  for (const group of groups) {
-    if (!(await exists(group.source)))
-      continue;
-
-    const files = await getFiles(group.source);
-    for (const file of files) {
-      images.push({
-        source: file,
-        dest: path.join(group.dest, path.relative(group.source, file))
-      });
-    }
-  }
-
-  return images.sort((a, b) => toRootRelative(a.source).localeCompare(toRootRelative(b.source)));
+  const files = await getFiles(srcRoot);
+  return files.map(source => ({
+    source,
+    dest: path.join(destRoot, path.relative(srcRoot, source))
+  })).sort((a, b) => toRootRelative(a.source).localeCompare(toRootRelative(b.source)));
 }
 
 async function writeManifest(entries) {
@@ -205,23 +186,14 @@ async function main() {
 
   console.log('Syncing preview images...\n');
 
-  if (!(await exists(srcLayouts))) {
-    console.warn(`Warning: Layout images not found at ${srcLayouts}`);
-  }
-  if (!(await exists(srcThemes))) {
-    console.warn(`Warning: Theme images not found at ${srcThemes}`);
-  }
-  if (!(await exists(srcComponents))) {
-    console.warn(`Warning: Component images not found at ${srcComponents}`);
-  }
+  if (!(await exists(srcRoot)))
+    console.warn(`Warning: Preview images not found at ${srcRoot}`);
 
   // Clean destination
   if (await exists(destRoot)) {
     await fs.rm(destRoot, { recursive: true, force: true });
   }
-  await ensureDir(destLayouts);
-  await ensureDir(destThemes);
-  await ensureDir(destComponents);
+  await ensureDir(destRoot);
 
   let totalOriginal = 0;
   let totalCompressed = 0;
@@ -245,9 +217,8 @@ async function main() {
 
   await writeManifest(entries);
 
-  console.log(`Layouts: ${counts.get('layouts') || 0} files processed`);
-  console.log(`Themes: ${counts.get('themes') || 0} files processed`);
-  console.log(`Components: ${counts.get('components') || 0} files processed`);
+  for (const [kind, count] of [...counts].sort(([a], [b]) => a.localeCompare(b)))
+    console.log(`${kind}: ${count} files processed`);
 
   console.log(`\nTotal: ${fileCount} files`);
 

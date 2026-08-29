@@ -1,8 +1,8 @@
 # __PROJECT_NAME__
 
-Academic template created by `scholarly` with BibTeX support.
+This academic starter includes BibTeX citation support.
 
-## Run
+## Start
 
 ```bash
 pnpm install
@@ -11,6 +11,6 @@ pnpm run dev
 
 ## Notes
 
-- Add references to `references.bib`
-- Use `@citekey` in slides
-- Add a `layout: references` slide when you want the bibliography page
+- Add references to `references.bib`.
+- Use `@citekey` in slides.
+- Add a `layout: references` slide where you want the bibliography to appear.

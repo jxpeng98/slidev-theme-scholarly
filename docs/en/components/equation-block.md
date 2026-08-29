@@ -4,7 +4,7 @@ title: EquationBlock
 
 # EquationBlock
 
-`EquationBlock` wraps an equation with a title, label, reference number, and caption. It keeps math blocks visually connected to the surrounding argument without relying on raw color styling.
+`EquationBlock` adds a title, label, reference, and caption when an equation needs more context.
 
 ![EquationBlock example](/images/components/equation-block.png)
 

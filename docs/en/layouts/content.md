@@ -4,11 +4,11 @@ title: Content Layouts
 
 # Content Layouts
 
-Layouts for displaying content with images, columns, and lists.
+These layouts arrange images, columns, and lists.
 
-## two-cols - Two Columns
+## two-cols - Two Columns {#two-cols}
 
-**Use for:** Comparing or showing parallel content
+**Use for:** Comparing two groups or showing related material side by side
 
 ![Two Columns Layout Example](/images/layouts/two-cols.png)
 
@@ -21,7 +21,7 @@ title: Two Columns Layout
 
 ## Left Column (2fr)
 
-This column takes 2 parts of the width.
+The left column takes two fifths of the available width.
 
 - Point 1
 - Point 2
@@ -30,11 +30,12 @@ This column takes 2 parts of the width.
 
 ## Right Column (3fr)
 
-This column takes 3 parts of the width.
+The right column takes three fifths of the available width.
 ```
 
 **Props:**
 - `ratio`: Column width ratio, e.g., "1:1", "2:3" (default: "1:1")
+- `gap`: CSS gap between the two columns (default: `1rem`)
 - `title`, `subtitle`: Optional header content
 
 **What it shows:**
@@ -45,7 +46,7 @@ This column takes 3 parts of the width.
 
 ---
 
-## image-left - Image on Left
+## image-left - Image on Left {#image-left}
 
 **Use for:** Explaining visuals with text
 
@@ -65,13 +66,14 @@ title: Image Left Layout
 - Equipment B
 - Equipment C
 
-Description of the setup...
+Add a short description of the setup.
 ```
 
 **Props:**
 - `image`: Image URL or path
 - `ratio`: Image:content ratio (default: "1:1")
 - `fit`: `cover`, `contain`, `fill` (default: `cover`)
+- `position`: CSS image position (default: `center`)
 - `title`, `subtitle`: Optional header content
 
 **What it shows:**
@@ -81,7 +83,7 @@ Description of the setup...
 
 ---
 
-## image-right - Image on Right
+## image-right - Image on Right {#image-right}
 
 **Use for:** Text with supporting visual
 
@@ -98,7 +100,7 @@ title: Image Right Layout
 
 ## Content on Left (3fr)
 
-Our findings show...
+Summarize the main finding here.
 
 - Finding 1
 - Finding 2
@@ -108,6 +110,7 @@ Our findings show...
 - `image`: Image URL or path
 - `ratio`: Content:image ratio (default: "1:1")
 - `fit`: `cover`, `contain`, `fill` (default: `cover`)
+- `position`: CSS image position (default: `center`)
 - `title`, `subtitle`: Optional header content
 
 **What it shows:**
@@ -117,9 +120,9 @@ Our findings show...
 
 ---
 
-## bullets - Enhanced List
+## bullets - Enhanced List {#bullets}
 
-**Use for:** Professional bullet point styling with custom markers
+**Use for:** A clear list with custom markers
 
 ![Bullets Layout Example](/images/layouts/bullets.png)
 
@@ -133,9 +136,9 @@ icon: "→"
 
 ## Main Findings
 
-- **Point 1** - Description
-- **Point 2** - Description
-- **Point 3** - Description
+- **Point 1:** Description
+- **Point 2:** Description
+- **Point 3:** Description
 ```
 
 **Props:**
@@ -150,9 +153,9 @@ icon: "→"
 
 ---
 
-## figure - Academic Figure
+## figure - Academic Figure {#figure}
 
-**Use for:** Display figures with proper academic captions and labels
+**Use for:** A figure with a number and caption
 
 ![Figure Layout Example](/images/layouts/figure.png)
 
@@ -182,9 +185,9 @@ Use `image` instead of `src` in Slidev frontmatter. `src` is reserved by Slidev 
 
 ---
 
-## split-image - Image Comparison
+## split-image - Image Comparison {#split-image}
 
-**Use for:** Display multiple images side by side with captions
+**Use for:** Comparing several captioned images side by side
 
 ![Split Image Layout Example](/images/layouts/split-image.png)
 

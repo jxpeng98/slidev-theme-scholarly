@@ -4,7 +4,7 @@ title: 引用
 
 # 引用
 
-主题内置了使用 BibTeX 文件的学术引用支持。引用会自动收集并生成参考文献。
+Scholarly 可以直接读取 BibTeX 文件。正文中的引用会自动汇总到参考文献页。
 
 ## 配置
 
@@ -32,42 +32,42 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 
 ### 括号引用
 
-使用 `@citekey` 进行括号引用：
+括号引用使用 `@citekey`：
 
 ```markdown
 深度学习已经革新了人工智能 @lecun2015deep。
 ```
 
-渲染为：深度学习已经革新了人工智能 (LeCun 等, 2015)。
+渲染为：深度学习已经革新了人工智能（LeCun 等，2015）。
 
 ### 叙述性引用
 
-使用 `!@citekey` 进行叙述性（作者突出）引用：
+需要把作者写进句子时，使用 `!@citekey`：
 
 ```markdown
 !@vaswani2017attention 提出了 Transformer 架构。
 ```
 
-渲染为：Vaswani 等 (2017) 提出了 Transformer 架构。
+渲染为：Vaswani 等（2017）提出了 Transformer 架构。
 
 ### 多个引用
 
 ```markdown
-最近的进展 @smith2023deep @wang2022attention 表明...
+近期研究 @smith2023deep @wang2022attention 表明……
 ```
 
 ### 分组引用
 
-当一个 claim 由多篇论文共同支持时，可以在同一句中连续写多个 BibTeX key：
+如果一个结论有多篇论文支持，可以在同一句中连续写多个 BibTeX key：
 
 ```markdown
 高效适配通常需要结合多篇工作的证据 @smith2023deep @wang2022attention。
 ```
 
-### 类注脚引用说明
+### 补充说明
 
-如果需要一条简短的手动阅读注记或脚注式说明，可以使用 `<Cite :inline="false">`。
-它不会接入 BibTeX bibliography，适合补充上下文。
+需要补充一条简短的阅读说明时，可以使用 `<Cite :inline="false">`。
+这类说明不会写入 BibTeX 参考文献，只用于补充上下文。
 
 ```markdown
 <Cite :inline="false" author="Smith 等" year="2026">
@@ -77,7 +77,7 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 
 ## Markdown 注脚
 
-标准 Markdown 注脚开箱即用，不需要额外的主题语法：
+标准 Markdown 注脚可以直接使用，不需要额外的主题语法：
 
 ```markdown
 我们的紧凑模型在五个随机种子下依然稳定[^1]。
@@ -85,13 +85,13 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 [^1]: 验证集准确率波动小于 0.3 个百分点。
 ```
 
-在 Slidev 的交互视图中，主题会自动为注脚应用学术化样式：
+在 Slidev 的交互视图中，注脚支持以下操作：
 
 - 桌面端悬停注脚标记即可预览内容
 - 点击标记可固定浮窗
 - 按 `Esc` 或点击外部即可关闭
 
-你也可以先在首页 headmatter 中设置全局默认值：
+可以先在文件开头的 headmatter 中设置全局默认值：
 
 ```yaml
 ---
@@ -107,18 +107,18 @@ footnoteDisplay: notes-only
 ---
 ```
 
-- `footnoteDisplay: both` 同时保留底部注脚和行内 hover / click 预览
+- `footnoteDisplay: both` 同时保留底部注脚和行内悬停、点击预览
 - `footnoteDisplay: hover-only` 隐藏底部注脚，只保留行内预览
-- `footnoteDisplay: notes-only` 保留底部注脚，并关闭 hover / click 浮窗
+- `footnoteDisplay: notes-only` 保留底部注脚，同时关闭悬停和点击浮窗
 
 优先级顺序：
 
 - 单页 `footnoteDisplay`
-- 首页 headmatter `footnoteDisplay`
+- 文件 headmatter 中的 `footnoteDisplay`
 - 兼容旧配置 `themeConfig.footnoteDisplay`
 - 默认值 `both`
 
-打印或导出时，注脚会回退为幻灯片底部的普通注脚列表。
+打印或导出时，注脚会显示为幻灯片底部的普通列表。
 
 ## 参考文献
 
@@ -130,30 +130,30 @@ layout: references
 ---
 ```
 
-参考文献会自动从幻灯片中使用的所有引用生成。
+主题会根据幻灯片中实际使用的引用生成参考文献。
 
-如果这一页的正文为空，或者只包含标题 / 注释，主题会自动插入 bibliography。
+如果页面正文为空，或只包含标题和注释，主题会自动插入参考文献。
 
-如果你想精确控制 bibliography 在该页中的插入位置，可以显式写 `[[bibliography]]`。
+需要指定插入位置时，在相应位置写入 `[[bibliography]]`。
 
-正常使用这个主题时，不需要额外维护项目级 `vite.config.ts`；Scholarly 会从主题包内部自动注册 citation 相关 hook。
+项目无需为引用功能额外配置 `vite.config.ts`；所需的处理逻辑已经包含在主题包中。
 
-## Doctor 诊断
+## 运行诊断
 
-当 citation 没有按预期渲染时，可以运行：
+引用没有按预期显示时，运行：
 
 ```bash
 npx -y slidev-theme-scholarly doctor
 ```
 
-citation 检查会报告：
+检查结果包括：
 
 - `Citation setup`：是否存在 `bibFile` 或默认 `references.bib`
-- `Citation bibliography`：`.bib` 文件是否存在，以及是否有重复 key
-- `Citation keys`：slides 中使用但无法解析的 `@citekey`
+- `Citation bibliography`：`.bib` 文件是否存在，是否包含重复 key
+- `Citation keys`：幻灯片中无法解析的 `@citekey`
 - `References slide`：是否存在 `layout: references` 页面
 
-常见 warning：
+常见警告：
 
 ```text
 - Citation setup: [WARN] citations found but no bibFile or references.bib
@@ -164,13 +164,13 @@ citation 检查会报告：
 
 ## 内部锚点跳转
 
-在 Slidev 的交互式浏览视图中，Scholarly 会把内部 `href="#..."` 链接升级成支持跨页的跳转：
+在 Slidev 的交互视图中，Scholarly 会将内部 `href="#..."` 链接识别为跨页跳转：
 
-- 文中的 BibTeX citation 可以直接跳到对应的参考文献条目，即使参考文献列表在另一页
+- 正文中的 BibTeX 引用可以直接跳到对应条目，即使参考文献在另一页
 - 普通内部链接如 `[跳转](#appendix-proof)` 也可以跨页工作，只要目标位置使用了 `## 标题 {#appendix-proof}`、`::anchor{#appendix-proof}`，或者显式声明了 `id="appendix-proof"`
-- 跳转后会出现一个浮动的 `Back to source` 按钮，用来回到之前的 citation 或链接位置
+- 跳转后会显示 `Back to source` 按钮，点击即可回到原来的引用或链接位置
 
-这个能力主要用于现场演示和浏览器中的交互式查看；打印和导出结果仍然保持静态内容。
+跨页跳转只在现场演示和浏览器中生效；打印和导出仍使用静态内容。
 
 ## 分页
 
@@ -215,15 +215,15 @@ title: "参考文献（续）"
 
 ## Cite 组件（手动）
 
-`<Cite>` 组件是一个轻量的手动引用/注记组件（非 BibTeX）。BibTeX 引用请优先使用 `@citekey` / `!@citekey`。
+`<Cite>` 是轻量的手动引用和注记组件，不会写入 BibTeX。正式引用优先使用 `@citekey` 或 `!@citekey`。
 
-### 作者-年份标记（传统写法）
+### 作者—年份标记（旧写法）
 
 ```markdown
 <Cite author="张三等" year="2024" />
 ```
 
-渲染为：(张三等, 2024)
+渲染为：（张三等，2024）
 
 也可以附带引用上下文：
 
@@ -248,3 +248,12 @@ title: "参考文献（续）"
 参考条目
 </Cite>
 ```
+
+### 属性
+
+| 属性 | 类型 | 默认值 | 描述 |
+|---|---|---|---|
+| `id` | `string \| number` | 自动生成 | 固定的数字标记或键 |
+| `inline` | `boolean` | `true` | 使用行内样式，而不是块级样式 |
+| `author` | `string` | - | 手动作者—年份标记中的作者文字 |
+| `year` | `string \| number` | - | 手动作者—年份标记中的年份 |

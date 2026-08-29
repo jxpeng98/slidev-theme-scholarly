@@ -1,135 +1,129 @@
 ---
 title: Quick Start
+description: Create, write, check, and export a Scholarly presentation.
 ---
 
 # Quick Start
 
-## Requirements
+Follow these five steps to create a deck you can preview and export. You will need Node.js 20 or newer.
 
-Install Node.js 20 or newer. The generated projects use `pnpm`.
-
-## Create A Deck
-
-Use the CLI without a global install:
+## 1. Prepare the environment
 
 ```bash
-npx -y slidev-theme-scholarly init my-talk
-cd my-talk
-pnpm install
-pnpm run dev
+node --version
+pnpm --version
 ```
 
-The browser opens with a live Slidev preview. Edit `slides.md` to start writing.
+If `pnpm` is missing, install it with `npm install -g pnpm`.
 
-The first `npx` run may need to download Scholarly before it can execute the
-CLI. npm stores that temporary installation in its cache rather than adding it
-to your project or global packages. The `-y` flag accepts the cache installation
-without prompting.
+## 2. Create the project
 
-## Pick A Template
-
-List available templates:
+### Choose a template
 
 ```bash
 npx -y slidev-theme-scholarly template list
 ```
 
-Common choices:
+The `academic` template is a good default. The other templates cover paper talks, seminars, thesis defenses, reading groups, lightning talks, and Chinese decks. See [Academic Workflows](./workflows/) for help choosing one.
 
-| Template | Use it for |
-| --- | --- |
-| `basic` | Minimal English starter |
-| `academic` | General academic deck with BibTeX |
-| `paper-talk` | Paper presentations with summary, method, results, and references |
-| `seminar` | Research seminars with agenda, related work, method, and discussion |
-| `thesis-defense` | Defense decks with experiments, limitations, Q&A, and appendix map |
-| `reading-group` | Paper critique and group discussion |
-| `conference-lightning` | Short talks focused on one result |
-| `zh` | Minimal Chinese starter |
-
-Create from a specific template:
+### Generate the project
 
 ```bash
-npx -y slidev-theme-scholarly init paper-session --template paper-talk
-npx -y slidev-theme-scholarly init defense --template thesis-defense
+npx -y slidev-theme-scholarly init my-talk --template academic
+cd my-talk
+pnpm install
 ```
 
-If you are unsure, start with the [academic workflow guide](./workflows/).
+## 3. Preview and write
 
-## Useful CLI Commands
-
-After `pnpm install`, run the project-local `sch` binary with `pnpm exec`.
-This keeps the CLI version aligned with the version declared by the project.
-
-Discover what the theme provides:
+### Start the preview
 
 ```bash
-pnpm exec sch theme list
+pnpm run dev
+```
+
+The browser opens automatically and refreshes whenever you save `slides.md`.
+
+### Edit slides.md
+
+Edit `slides.md` and separate slides with `---`:
+
+```markdown
+---
+theme: scholarly
+---
+
+# Presentation title
+
+The main idea
+
+---
+layout: section
+---
+
+# Methods
+```
+
+## 4. Add structure and content
+
+### List layouts, components, and snippets
+
+```bash
 pnpm exec sch layout list
 pnpm exec sch component list
 pnpm exec sch snippet list
 ```
 
-Apply a theme preset or append common content:
+[Layouts](../layouts/) define the whole slide; [Components](../components/) add structured content within it.
+
+### Apply a snippet, workflow, or theme
 
 ```bash
-pnpm exec sch theme preset apply cambridge --file slides.md
 pnpm exec sch snippet append theorem --file slides.md
 pnpm exec sch workflow apply paper --file slides.md
+pnpm exec sch theme preset apply oxford --file slides.md
 ```
 
-Check the project setup:
+Each command edits `slides.md`, so run only the one you need.
+
+## 5. Check and export
+
+### Check the project
 
 ```bash
 pnpm exec sch doctor
-pnpm exec sch doctor --json
 ```
 
-`sch doctor` reports `OK`, `WARN`, and `ERROR` items with concrete next actions.
-Use `--json` for CI, scripts, or editor integrations.
+Resolve every `ERROR` before presenting. Review `WARN` items and act on those that apply.
 
-With npm, install `slidev-theme-scholarly` locally and use `npx sch`. A global
-install is optional:
+### Export a PDF or website
 
 ```bash
-npm i -g slidev-theme-scholarly
-sch template list
+pnpm run export  # PDF
+pnpm run build   # website in dist/
 ```
 
-## Manual Setup For An Existing Slidev Project
-
-Install the theme:
+## Add Scholarly to an existing Slidev project
 
 ```bash
-npm i -D slidev-theme-scholarly
+pnpm add -D slidev-theme-scholarly
 ```
 
-Set the frontmatter in `slides.md`:
+Add the theme to `slides.md`, then use the existing project commands:
 
 ```markdown
 ---
 theme: scholarly
-bibFile: references.bib
-bibStyle: apa
 ---
 ```
 
-Run Slidev:
+Scholarly loads citation support from the theme package. A project-level `vite.config.ts` is not required.
+
+## Optional global CLI
+
+You only need a global install if you want to run `sch` outside a project:
 
 ```bash
-npx slidev
+npm i -g slidev-theme-scholarly
+sch help
 ```
-
-Scholarly registers its citation hooks from the theme package. Normal usage does
-not require a project-level `vite.config.ts`.
-
-Add a references slide:
-
-```markdown
----
-layout: references
----
-```
-
-Use `[[bibliography]]` only when you need to choose the exact bibliography
-position inside that slide.

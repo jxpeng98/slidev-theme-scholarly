@@ -1,132 +1,129 @@
 ---
 title: 快速开始
+description: 创建、编写、检查并导出 Scholarly 演示。
 ---
 
 # 快速开始
 
-## 前置要求
+按下面五步操作，就能从空目录创建一份可预览、可导出的演示。开始前请确认 Node.js 版本不低于 20。
 
-安装 Node.js 20 或更新版本。生成的项目使用 `pnpm`。
-
-## 创建演示
-
-不需要全局安装 CLI：
+## 1. 准备环境
 
 ```bash
-npx -y slidev-theme-scholarly init my-talk
-cd my-talk
-pnpm install
-pnpm run dev
+node --version
+pnpm --version
 ```
 
-浏览器会打开 Slidev 实时预览。编辑 `slides.md` 即可开始写作。
+如果没有 `pnpm`，运行 `npm install -g pnpm`。
 
-第一次运行 `npx` 时，npm 可能需要先下载 Scholarly 才能执行 CLI。这个临时
-安装保存在 npm 缓存中，不会写入当前项目，也不是全局安装。`-y` 会自动确认
-这次缓存安装，避免交互式询问。
+## 2. 创建项目
 
-## 选择模板
-
-查看可用模板：
+### 选择模板
 
 ```bash
 npx -y slidev-theme-scholarly template list
 ```
 
-常用选择：
+拿不准时，先用 `academic`。其他模板分别适合论文报告、研讨会、学位答辩、读书会、短报告和中文演示；选择建议见[学术工作流](./workflows/)。
 
-| 模板 | 适用场景 |
-| --- | --- |
-| `basic` | 最小英文起步模板 |
-| `academic` | 带 BibTeX 的通用学术演示 |
-| `paper-talk` | 论文报告：摘要、方法、结果与参考文献 |
-| `seminar` | 学术研讨：议程、相关工作、方法与讨论 |
-| `thesis-defense` | 学位答辩：实验、局限、问答与附录索引 |
-| `reading-group` | 论文批判和小组讨论 |
-| `conference-lightning` | 聚焦单个结果的短报告 |
-| `zh` | 最小中文起步模板 |
-
-用指定模板创建：
+### 生成项目
 
 ```bash
-npx -y slidev-theme-scholarly init paper-session --template paper-talk
-npx -y slidev-theme-scholarly init defense --template thesis-defense
+npx -y slidev-theme-scholarly init my-talk --template academic
+cd my-talk
+pnpm install
 ```
 
-如果不确定该选哪个模板，先看[学术工作流指南](./workflows/)。
+## 3. 预览并编写
 
-## 常用 CLI 命令
-
-执行 `pnpm install` 后，通过 `pnpm exec` 调用项目本地的 `sch` 命令。
-这样使用的 CLI 版本会与项目声明的版本保持一致。
-
-查看主题提供的资源：
+### 启动预览
 
 ```bash
-pnpm exec sch theme list
+pnpm run dev
+```
+
+命令会自动打开浏览器；之后每次保存 `slides.md`，页面都会刷新。
+
+### 编辑 slides.md
+
+编辑 `slides.md`，用 `---` 分隔幻灯片：
+
+```markdown
+---
+theme: scholarly
+---
+
+# 演示标题
+
+希望听众记住的内容
+
+---
+layout: section
+---
+
+# 研究方法
+```
+
+## 4. 选择并添加内容
+
+### 查看布局、组件和片段
+
+```bash
 pnpm exec sch layout list
 pnpm exec sch component list
 pnpm exec sch snippet list
 ```
 
-应用主题预设或追加常用内容：
+[布局](../layouts/)决定整张幻灯片的结构，[组件](../components/)负责定理、指标、证据等页面内容。
+
+### 应用片段、工作流或主题
 
 ```bash
-pnpm exec sch theme preset apply cambridge --file slides.md
 pnpm exec sch snippet append theorem --file slides.md
 pnpm exec sch workflow apply paper --file slides.md
+pnpm exec sch theme preset apply oxford --file slides.md
 ```
 
-检查项目配置：
+这些命令都会直接修改 `slides.md`，按需要选择一条运行。
+
+## 5. 检查并导出
+
+### 检查项目
 
 ```bash
 pnpm exec sch doctor
-pnpm exec sch doctor --json
 ```
 
-`sch doctor` 会用 `OK`、`WARN` 和 `ERROR` 报告检查结果，并给出可执行的下一步。
-如果要给 CI、脚本或编辑器集成消费同一份诊断，使用 `--json`。
+演示前请修复所有 `ERROR`。`WARN` 是建议项，可以按实际需要处理。
 
-使用 npm 时，请先在项目中安装 `slidev-theme-scholarly`，再运行 `npx sch`。
-全局安装是可选的：
+### 导出 PDF 或网站
 
 ```bash
-npm i -g slidev-theme-scholarly
-sch template list
+pnpm run export  # 导出 PDF
+pnpm run build   # 构建网站到 dist/
 ```
 
-## 手动方式
-
-安装主题：
+## 添加到已有 Slidev 项目
 
 ```bash
-npm i -D slidev-theme-scholarly
+pnpm add -D slidev-theme-scholarly
 ```
 
-在 `slides.md` 的 frontmatter 中设置：
+在 `slides.md` 中启用主题，然后继续使用原项目的命令：
 
 ```markdown
 ---
 theme: scholarly
-bibFile: references.bib
-bibStyle: apa
 ---
 ```
 
-运行 Slidev：
+Scholarly 会从主题包加载引用支持，不需要项目级 `vite.config.ts`。
+
+## 可选的全局 CLI
+
+正常使用不需要全局安装。只有需要在项目外运行 `sch` 时，才执行：
 
 ```bash
-npx slidev
+npm i -g slidev-theme-scholarly
+sch help
 ```
-
-Scholarly 会从主题包内部注册 citation hook。正常使用时不需要项目级 `vite.config.ts`。
-
-添加参考文献页：
-
-```markdown
----
-layout: references
----
-```
-
-只有当你需要精确控制 bibliography 在该页中的插入位置时，才需要写 `[[bibliography]]`。

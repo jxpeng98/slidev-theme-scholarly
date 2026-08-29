@@ -19,3 +19,22 @@ test('wires the GUI Builder command during extension activation', async () => {
   assert.match(source, /openGuiBuilder/);
   assert.match(source, new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
+
+test('orders sidebar views by the documentation workflow', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  const views = manifest.contributes.views['slidev-scholarly'];
+
+  assert.deepEqual(
+    views.map(item => item.name),
+    [
+      'Start · Templates',
+      'Build · Layouts',
+      'Build · Components',
+      'Build · Citations & Anchors',
+      'Customize · Themes',
+      'Reference · CLI Actions',
+      'Preview'
+    ]
+  );
+  assert.ok(manifest.contributes.commands.every(item => item.category === 'Slidev Scholarly'));
+});

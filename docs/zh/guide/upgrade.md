@@ -4,18 +4,18 @@ title: 重大升级说明
 
 # 重大升级说明
 
-本主题正在准备一次**重大升级**。接下来的版本可能包含**不兼容变更**，从而影响你已有的 Slidev 演示文稿。
+Scholarly 正在准备一次重大升级。后续版本可能包含不兼容变更，已有的 Slidev 演示也可能需要相应调整。
 
 ## 可能受影响的内容
 
 不同项目情况不同，但常见影响点包括：
 
-- **Slidev / Node.js 版本要求**：请确保本地环境满足主题要求。
-- **主题配置**：部分 frontmatter 字段、`themeConfig` 配置项可能调整。
-- **布局 / 组件**：布局名称、组件 props、默认行为或样式变量可能变化。
-- **构建/导出**：PDF 导出、资源路径等行为可能随上游 Slidev 调整。
+- **Slidev 和 Node.js 版本**：本地环境需要满足新版要求。
+- **主题配置**：部分 frontmatter 字段和 `themeConfig` 选项可能调整。
+- **布局和组件**：名称、属性、默认行为或样式变量可能变化。
+- **构建和导出**：PDF 导出和资源路径可能随 Slidev 调整。
 
-## 建议升级步骤（Checklist）
+## 升级步骤
 
 1. 检查 Node.js 版本（本主题要求 Node.js 20+）：
 
@@ -35,40 +35,40 @@ title: 重大升级说明
    npm i -D slidev-theme-scholarly
    ```
 
-4. 启动 Slidev，按报错提示逐项修复：
+4. 启动 Slidev，根据报错逐项修复：
 
    ```bash
    npx slidev
    ```
 
-如果升级后短期内无法迁移完毕，建议先临时 **pin 到旧版本**，等迁移完成再升级。
+如果暂时无法完成迁移，可以先固定在旧版本，准备好后再升级。
 
-## 使用预发布版本（Pre-release）进行提前验证
+## 提前试用预发布版本
 
-我们会先发布 **预发布版本**，用于在正式发布前验证重大改动。
+重大改动会先通过预发布版本验证，再进入正式版。
 
-### Tag / 版本号格式
+### 标签和版本号
 
-| 类型 | Tag 格式 | 示例 |
+| 类型 | 标签格式 | 示例 |
 |------|----------|------|
 | 正式版 | `vX.Y.Z` | `v2.0.0` |
 | 预发布 | `vX.Y.Z-<pre>` | `v2.0.0-beta.1`、`v2.0.0-rc.0` |
 
-预发布版本遵循 SemVer，**必须包含** `-<pre>` 预发布标识，否则 CI 会当作正式版本处理。
+预发布版本遵循 SemVer，版本号必须包含 `-<pre>` 标识，否则 CI 会将其视为正式版本。
 
-- 安装预发布通道（dist-tag: `next`）：
+- 安装预发布版（`next`）：
 
   ```bash
   npm i -D slidev-theme-scholarly@next
   ```
 
-- 切回稳定版本（dist-tag: `latest`）：
+- 切回稳定版（`latest`）：
 
   ```bash
   npm i -D slidev-theme-scholarly
   ```
 
-## 变更详情在哪里看
+## 查看变更详情
 
-- GitHub Releases：https://github.com/jxpeng98/slidev-theme-scholarly/releases
-- Changelog：https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md
+- [GitHub Releases](https://github.com/jxpeng98/slidev-theme-scholarly/releases)
+- [更新日志](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md)

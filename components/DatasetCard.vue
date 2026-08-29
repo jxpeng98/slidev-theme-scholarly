@@ -115,7 +115,7 @@ const metaItems = computed(() => [
   display: block;
   margin-bottom: 0.12rem;
   color: var(--dataset-accent);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
@@ -137,7 +137,7 @@ const metaItems = computed(() => [
   border-radius: 999px;
   background: var(--dataset-soft-bg);
   color: var(--dataset-accent);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
   line-height: 1.2;
 }
@@ -145,7 +145,7 @@ const metaItems = computed(() => [
 .dataset-description {
   margin: 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.85rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -166,7 +166,7 @@ const metaItems = computed(() => [
 
 .dataset-meta-item dt {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.65rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
@@ -185,7 +185,7 @@ const metaItems = computed(() => [
 
 .dataset-content {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.4;
 }
 
@@ -214,7 +214,7 @@ const metaItems = computed(() => [
   padding-top: 0.55rem;
   border-top: 1px solid var(--scholarly-content-border);
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   line-height: 1.25;
 }
 
