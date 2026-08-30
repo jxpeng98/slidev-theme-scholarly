@@ -6,6 +6,8 @@ title: VS Code Extension
 
 The extension brings Scholarly's templates, layouts, components, citations, theme controls, and project checks into VS Code. Its sidebar follows the usual workflow: start, build, customize, then check.
 
+The interface follows the VS Code display language. English and Simplified Chinese are included.
+
 ## Install
 
 Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets).
@@ -42,20 +44,19 @@ Slidev Scholarly: Create Presentation
 
 The template creates a regular Markdown file that you can edit directly.
 
-### Use the GUI Builder
+### Build an outline with Deck Builder
 
-To assemble a first draft visually, run `Slidev Scholarly: Open GUI Builder`. The builder can:
+Run `Slidev Scholarly: Open Deck Builder`, then follow the three columns:
 
-- add, reorder, and remove slides;
-- edit common content fields;
-- choose colors, fonts, and surface modes;
-- create a new file or insert the result into the active editor.
+1. Choose a workflow, such as a paper talk or thesis defense.
+2. Check each layout thumbnail, then add or reorder slides.
+3. Select a slide and write its content.
 
-The result is still regular Slidev Markdown.
+Create the Markdown deck when the outline is ready, or insert only the selected slide into the active file. Continue editing and previewing in Slidev.
 
 <figure class="docs-screenshot">
-  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly GUI Builder with deck details, theme settings, layout library, and slide list" loading="lazy">
-  <figcaption>Build the first draft here, then refine the generated Markdown.</figcaption>
+  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder showing workflow choices, a slide outline, and the selected layout content fields" loading="lazy">
+  <figcaption>Choose a workflow, understand the layouts, then write the first draft.</figcaption>
 </figure>
 
 ## 2. Build the slides

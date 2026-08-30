@@ -87,6 +87,33 @@ interface TemplateEntry {
     id: string;
     label: string;
     description: string;
+    deck?: BuilderTemplateDeck;
+}
+
+export interface BuilderTemplateSlide {
+    id: string;
+    layout: string;
+    title: string;
+    body: string;
+    slots?: Record<string, string>;
+    heading?: boolean;
+    titleKey?: string;
+    configSource?: string;
+}
+
+export interface BuilderTemplateDeck {
+    templateId: string;
+    title: string;
+    subtitle: string;
+    footerMiddle: string;
+    lang: string;
+    colorTheme: string;
+    fontTheme: string;
+    contentMode?: 'light' | 'dark';
+    chromeMode: 'light' | 'dark' | 'match' | 'inverse';
+    sectionMode: 'light' | 'dark' | 'match' | 'inverse';
+    frontmatterSource?: string;
+    slides: BuilderTemplateSlide[];
 }
 
 interface ThemesData {
@@ -173,6 +200,15 @@ export const TEMPLATES = templatesData.templates.map(t => ({
     label: t.label,
     description: t.description
 }));
+
+export const BUILDER_TEMPLATES = templatesData.templates
+    .filter((template): template is TemplateEntry & { deck: BuilderTemplateDeck } => Boolean(template.deck))
+    .map(template => ({
+        id: template.id,
+        label: template.label,
+        description: template.description,
+        deck: template.deck
+    }));
 
 // ── Derived exports for providers.ts ────────────────────────────────────────
 // Shape: { value: string; label: string }

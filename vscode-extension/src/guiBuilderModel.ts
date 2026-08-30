@@ -10,6 +10,9 @@ export interface BuilderSlideInput {
   caption?: string;
   config?: Record<string, unknown>;
   slots?: Record<string, string>;
+  heading?: boolean;
+  titleKey?: string;
+  configSource?: string;
 }
 
 export interface BuilderSlide {
@@ -22,17 +25,23 @@ export interface BuilderSlide {
   caption: string;
   config: Record<string, unknown>;
   slots: Record<string, string>;
+  heading: boolean;
+  titleKey: string;
+  configSource: string;
 }
 
 export interface BuilderDeckState {
+  templateId?: string;
   title?: string;
   subtitle?: string;
   footerMiddle?: string;
+  lang?: string;
   colorTheme?: string;
   fontTheme?: string;
   contentMode?: 'light' | 'dark';
   chromeMode?: 'light' | 'dark' | 'match' | 'inverse';
   sectionMode?: 'light' | 'dark' | 'match' | 'inverse';
+  frontmatterSource?: string;
   slides?: BuilderSlideInput[];
 }
 
@@ -52,7 +61,10 @@ export function createBuilderSlide(
     image: values.image || '',
     caption: values.caption || '',
     config: normalizeRecord(values.config),
-    slots: normalizeSlots(values.slots)
+    slots: normalizeSlots(values.slots),
+    heading: values.heading !== false,
+    titleKey: values.titleKey || '',
+    configSource: values.configSource?.trim() || ''
   };
 }
 
@@ -63,8 +75,16 @@ export function renderBuilderMarkdown(state: BuilderDeckState): string {
 
   return [
     renderFrontmatter(state),
-    ...slides.map(renderSlide)
+    ...slides.map(slide => renderSlide(slide, isChinese(state.lang)))
   ].join('\n\n').trimEnd() + '\n';
+}
+
+export function renderBuilderSlides(slides: BuilderSlideInput[], lang = 'en'): string {
+  return slides
+    .map(slide => createBuilderSlide(slide.layout || 'default', slide))
+    .map(slide => renderSlide(slide, isChinese(lang)))
+    .join('\n\n')
+    .trimEnd() + '\n';
 }
 
 function renderFrontmatter(state: BuilderDeckState): string {
@@ -72,9 +92,9 @@ function renderFrontmatter(state: BuilderDeckState): string {
     '---',
     'theme: scholarly',
     `title: ${yamlScalar(state.title !== undefined ? state.title : 'Scholarly Presentation')}`,
-    `subtitle: ${yamlScalar(state.subtitle !== undefined ? state.subtitle : 'Generated from GUI Builder')}`,
+    `subtitle: ${yamlScalar(state.subtitle !== undefined ? state.subtitle : 'Generated with Deck Builder')}`,
     `footerMiddle: ${yamlScalar(state.footerMiddle || 'Conference Name')}`,
-    'lang: en',
+    `lang: ${yamlScalar(state.lang || 'en')}`,
     'themeConfig:',
     `  colorTheme: ${yamlScalar(state.colorTheme || 'classic-blue')}`,
     `  fontTheme: ${yamlScalar(state.fontTheme || 'classic')}`,
@@ -87,33 +107,40 @@ function renderFrontmatter(state: BuilderDeckState): string {
     `  chromeMode: ${state.chromeMode || 'dark'}`,
     `  sectionMode: ${state.sectionMode || 'dark'}`,
     '  outlineToc: true',
-    '  outlineTocOpen: false',
-    '---'
+    '  outlineTocOpen: false'
   );
+
+  if (state.frontmatterSource?.trim()) lines.push(state.frontmatterSource.trim());
+  lines.push('---');
 
   return lines.join('\n');
 }
 
-function renderSlide(slide: BuilderSlide): string {
-  const title = slide.title.trim() || 'Untitled slide';
-  const body = renderSlideBody(slide);
+function renderSlide(slide: BuilderSlide, chinese: boolean): string {
+  const title = slide.title.trim() || (chinese ? '未命名页面' : 'Untitled slide');
+  const body = renderSlideBody(slide, chinese);
   return [
     '---',
     `layout: ${slide.layout || 'default'}`,
+    ...(slide.titleKey ? [`${slide.titleKey}: ${yamlScalar(title)}`] : []),
+    ...splitConfigSource(slide.configSource),
     ...renderLayoutConfig(slide.layout, slide.config),
     '---',
     '',
-    `# ${title}`,
-    '',
+    ...(slide.heading ? [`# ${title}`, ''] : []),
     body
   ].join('\n').trimEnd();
 }
 
-function renderSlideBody(slide: BuilderSlide): string {
+function splitConfigSource(source: string): string[] {
+  return source.trim() ? source.trim().split(/\r?\n/) : [];
+}
+
+function renderSlideBody(slide: BuilderSlide, chinese: boolean): string {
   const blocks: string[] = [];
 
   if (slide.image.trim()) {
-    const title = slide.title.trim() || 'Slide image';
+    const title = slide.title.trim() || (chinese ? '页面图片' : 'Slide image');
     blocks.push(`![${title}](${slide.image.trim()})`);
   }
 
@@ -140,7 +167,11 @@ function renderSlideBody(slide: BuilderSlide): string {
     blocks.push(`::${name}::\n\n${trimmed}`);
   }
 
-  return blocks.length ? blocks.join('\n\n') : 'Add content here.';
+  return blocks.length ? blocks.join('\n\n') : chinese ? '在这里填写内容。' : 'Add content here.';
+}
+
+function isChinese(lang: string | undefined): boolean {
+  return Boolean(lang?.toLowerCase().startsWith('zh'));
 }
 
 function renderLayoutConfig(layout: string, config: Record<string, unknown>): string[] {

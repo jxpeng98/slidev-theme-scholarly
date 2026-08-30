@@ -6,6 +6,8 @@ title: VS Code 插件
 
 这款插件让你可以直接在 VS Code 中使用 Scholarly 的模板、布局、组件、引用、主题设置和项目检查。侧边栏按照创建、制作、定制和检查的顺序组织。
 
+插件会跟随 VS Code 的显示语言，当前提供英文和简体中文界面。
+
 ## 安装
 
 从 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets) 安装 **Slidev Scholarly**。
@@ -42,20 +44,19 @@ Slidev Scholarly: Create Presentation
 
 模板生成的是普通 Markdown 文件，可以直接编辑。
 
-### 使用 GUI Builder
+### 用 Deck Builder 搭好大纲
 
-想先通过界面搭一份初稿，可以运行 `Slidev Scholarly: Open GUI Builder`。它支持：
+运行 `Slidev Scholarly: Open Deck Builder`，按三栏从左往右操作：
 
-- 添加、排序和删除幻灯片；
-- 编辑常用内容字段；
-- 选择颜色、字体和页面模式；
-- 新建文件，或将结果插入当前编辑器。
+1. 选择一种工作流，例如论文汇报或答辩。
+2. 查看每张幻灯片的布局缩略图，再补充或调整顺序。
+3. 选中幻灯片，填写这一页的内容。
 
-生成的内容仍是普通的 Slidev Markdown。
+大纲完成后，可以生成整份 Markdown，也可以只把当前页插入已打开的文件。后续编辑和实时预览仍在 Slidev 中完成。
 
 <figure class="docs-screenshot">
-  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly GUI Builder，包含演示信息、主题设置、布局库和幻灯片列表" loading="lazy">
-  <figcaption>先在这里搭好初稿，再编辑生成的 Markdown。</figcaption>
+  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder，依次显示工作流、幻灯片大纲和当前布局的内容输入区" loading="lazy">
+  <figcaption>先选工作流并看懂布局，再填写初稿。</figcaption>
 </figure>
 
 ## 2. 制作幻灯片

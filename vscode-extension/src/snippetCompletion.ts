@@ -8,6 +8,7 @@ import {
   CONTENT_MODE_IDS as CONTENT_MODES,
   SURFACE_MODE_IDS as SURFACE_MODES
 } from './sharedData';
+import { localizeDetail, t } from './localization';
 
 type SnippetDefinition = {
   name: string;
@@ -19,95 +20,6 @@ type SnippetDefinition = {
 // LAYOUT_NAMES, COLOR_THEMES, FONT_THEMES, CONTENT_MODES, SURFACE_MODES imported from ./sharedData
 
 const BIB_STYLES = ['apa', 'harvard1', 'vancouver', 'ieee', 'mla', 'chicago-author-date'];
-
-const LEGACY_COMPONENT_SNIPPETS: Array<{
-  name: string;
-  description: string;
-  insertBody: string;
-}> = [
-    {
-      name: 'Block',
-      description: 'Beamer-style information block',
-      insertBody: 'Block type="${1|info,default,success,warning,danger,example|}" title="${2:Block Title}">\n${3:Block content}\n</Block>'
-    },
-    {
-      name: 'Theorem',
-      description: 'Theorem/lemma/definition container',
-      insertBody: 'Theorem type="${1|theorem,lemma,definition,corollary,claim,example,proof,note|}" title="${2:Theorem Title}">\n${3:Statement}\n</Theorem>'
-    },
-    {
-      name: 'Highlight',
-      description: 'Inline highlight',
-      insertBody: 'Highlight type="${1|primary,success,warning,danger,info|}">${2:highlighted text}</Highlight>'
-    },
-    {
-      name: 'Cite',
-      description: 'Citation helper component',
-      insertBody: 'Cite :inline="${1|true,false|}">\n${2:Citation text}\n</Cite>'
-    },
-    {
-      name: 'Steps',
-      description: 'Step-by-step process',
-      insertBody: 'Steps :steps="[\n  { title: \'${1:Step 1}\', description: \'${2:Description 1}\' },\n  { title: \'${3:Step 2}\', description: \'${4:Description 2}\' }\n]" :activeStep="${5:1}" />'
-    },
-    {
-      name: 'Columns',
-      description: 'Multi-column container',
-      insertBody: 'Columns :columns="${1:2}" :gap="${2:2}">\n${3:Column 1}\n\n<template #col2>\n\n${4:Column 2}\n\n</template>\n\n</Columns>'
-    },
-    {
-      name: 'Keywords',
-      description: 'Keyword tags',
-      insertBody: 'Keywords :keywords="[\'${1:Keyword 1}\', \'${2:Keyword 2}\']" />'
-    },
-    {
-      name: 'ThemePreview',
-      description: 'Preview a theme color set',
-      insertBody: 'ThemePreview colorTheme="${1|classic-blue,oxford-burgundy,cambridge-green,yale-blue,princeton-orange,nordic-blue,warm-sepia,monochrome,high-contrast|}">\n${2:Preview content}\n</ThemePreview>'
-    }
-  ];
-
-const LEGACY_DIRECTIVE_SNIPPETS: Array<{
-  name: string;
-  description: string;
-  insertBody: string;
-}> = [
-    {
-      name: 'block',
-      description: 'Block directive',
-      insertBody: 'block{type="${1|info,default,success,warning,danger,example|}" title="${2:Block Title}"}\n${3:Block content}\n:::'
-    },
-    {
-      name: 'theorem',
-      description: 'Theorem directive',
-      insertBody: 'theorem{type="${1|theorem,lemma,definition,corollary,claim,example,proof,note|}" title="${2:Theorem Title}"}\n${3:Statement}\n:::'
-    },
-    {
-      name: 'highlight',
-      description: 'Highlight directive',
-      insertBody: 'highlight{type="${1|primary,success,warning,danger,info|}"}\n${2:highlighted text}\n:::'
-    },
-    {
-      name: 'cite',
-      description: 'Cite directive',
-      insertBody: 'cite{:inline="${1|true,false|}"}\n${2:Citation text}\n:::'
-    },
-    {
-      name: 'steps',
-      description: 'Steps directive',
-      insertBody: 'steps{:steps=\'[\n  { title: "${1:Step 1}", description: "${2:Description 1}" },\n  { title: "${3:Step 2}", description: "${4:Description 2}" }\n]\' :activeStep="${5:1}"}\n:::'
-    },
-    {
-      name: 'columns',
-      description: 'Columns directive',
-      insertBody: 'columns{columns="${1|2,3,4|}" gap="${2:2rem}" ratio="${3:1:1}"}\n${4:Column 1}\n\n+++\n\n${5:Column 2}\n:::'
-    },
-    {
-      name: 'keywords',
-      description: 'Keywords directive',
-      insertBody: 'keywords{:keywords=\'["${1:Keyword 1}", "${2:Keyword 2}"]\' color="${3|primary,blue,green,purple,gray|}"}\n:::'
-    }
-  ];
 
 type SnippetCompletionDefinition = {
   name: string;
@@ -245,70 +157,70 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
     if (layoutMatch) {
       const partial = layoutMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(LAYOUT_NAMES, partial, range, 'Scholarly layout'));
+      items.push(...createValueItems(LAYOUT_NAMES, partial, range, t('Scholarly layout')));
     }
 
     const colorThemeMatch = linePrefix.match(/\bcolorTheme:\s*([a-z-]*)$/);
     if (colorThemeMatch) {
       const partial = colorThemeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(COLOR_THEMES, partial, range, 'Scholarly color theme'));
+      items.push(...createValueItems(COLOR_THEMES, partial, range, t('Scholarly color theme')));
     }
 
     const fontThemeMatch = linePrefix.match(/\bfontTheme:\s*([a-z-]*)$/);
     if (fontThemeMatch) {
       const partial = fontThemeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(FONT_THEMES, partial, range, 'Scholarly font theme'));
+      items.push(...createValueItems(FONT_THEMES, partial, range, t('Scholarly font theme')));
     }
 
     const colorModeMatch = linePrefix.match(/\bcolorMode:\s*([a-z-]*)$/);
     if (colorModeMatch) {
       const partial = colorModeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(CONTENT_MODES, partial, range, 'Legacy Scholarly color mode'));
+      items.push(...createValueItems(CONTENT_MODES, partial, range, t('Legacy Scholarly color mode')));
     }
 
     const contentModeMatch = linePrefix.match(/\bcontentMode:\s*([a-z-]*)$/);
     if (contentModeMatch) {
       const partial = contentModeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(CONTENT_MODES, partial, range, 'Scholarly content mode'));
+      items.push(...createValueItems(CONTENT_MODES, partial, range, t('Scholarly content mode')));
     }
 
     const chromeModeMatch = linePrefix.match(/\bchromeMode:\s*([a-z-]*)$/);
     if (chromeModeMatch) {
       const partial = chromeModeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(SURFACE_MODES, partial, range, 'Scholarly chrome mode'));
+      items.push(...createValueItems(SURFACE_MODES, partial, range, t('Scholarly header and footer mode')));
     }
 
     const sectionModeMatch = linePrefix.match(/\bsectionMode:\s*([a-z-]*)$/);
     if (sectionModeMatch) {
       const partial = sectionModeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(SURFACE_MODES, partial, range, 'Scholarly section mode'));
+      items.push(...createValueItems(SURFACE_MODES, partial, range, t('Scholarly section mode')));
     }
 
     const themeMatch = linePrefix.match(/\btheme:\s*([a-z-]*)$/);
     if (themeMatch) {
       const partial = themeMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(['scholarly'], partial, range, 'Slidev theme'));
+      items.push(...createValueItems(['scholarly'], partial, range, t('Slidev theme')));
     }
 
     const bibStyleMatch = linePrefix.match(/\bbibStyle:\s*([a-z-]*)$/);
     if (bibStyleMatch) {
       const partial = bibStyleMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(BIB_STYLES, partial, range, 'Bibliography style'));
+      items.push(...createValueItems(BIB_STYLES, partial, range, t('Bibliography style')));
     }
 
     const bibShowNumMatch = linePrefix.match(/\bbibShowNum:\s*([a-z]*)$/);
     if (bibShowNumMatch) {
       const partial = bibShowNumMatch[1] ?? '';
       const range = asRange(position, linePrefix.length - partial.length);
-      items.push(...createValueItems(['true', 'false'], partial, range, 'Show numbered bibliography markers'));
+      items.push(...createValueItems(['true', 'false'], partial, range, t('Show numbered bibliography markers')));
     }
 
     const componentMatch = linePrefix.match(/<([A-Za-z-]*)$/);
@@ -322,9 +234,9 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
         const item = new vscode.CompletionItem(component.name, vscode.CompletionItemKind.Class);
         item.range = range;
         item.insertText = new vscode.SnippetString(component.insertBody);
-        item.detail = component.description;
+        item.detail = localizeDetail(component.description, t('{0} component', component.name));
         item.documentation = new vscode.MarkdownString(
-          `Scholarly component: \`<${component.name}>\``
+          `${t('Scholarly component')}: \`<${component.name}>\``
         );
         items.push(item);
       }
@@ -341,9 +253,9 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
         const item = new vscode.CompletionItem(directive.name, vscode.CompletionItemKind.Snippet);
         item.range = range;
         item.insertText = new vscode.SnippetString(directive.insertBody);
-        item.detail = directive.description;
+        item.detail = localizeDetail(directive.description, t('{0} directive', directive.name));
         item.documentation = new vscode.MarkdownString(
-          `Scholarly directive: \`:::${directive.name}\``
+          `${t('Scholarly directive')}: \`:::${directive.name}\``
         );
         items.push(item);
       }
@@ -370,9 +282,9 @@ export class ScholarlyCompletionProvider implements vscode.CompletionItemProvide
         const item = new vscode.CompletionItem(preferredPrefix, vscode.CompletionItemKind.Snippet);
         item.range = range;
         item.insertText = new vscode.SnippetString(def.body);
-        item.detail = def.description;
+        item.detail = localizeDetail(def.description, t('{0} snippet', def.name));
         item.documentation = new vscode.MarkdownString(
-          `**${def.name}**\n\nAliases: ${def.prefixes.join(', ')}`
+          `**${def.name}**\n\n${t('Aliases')}: ${def.prefixes.join(', ')}`
         );
         items.push(item);
       }

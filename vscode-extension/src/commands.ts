@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import {
   COLOR_THEMES,
   FONT_THEMES,
@@ -18,6 +19,7 @@ import {
   type AnchorTarget,
   type BibEntry
 } from './bibtex';
+import { localizeDetail, t } from './localization';
 
 type ThemeConfigUpdate = {
   colorTheme?: string
@@ -73,7 +75,12 @@ type ThemeApplyOptions = {
 export function insertSnippet(snippet: string) {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('No active editor found');
+    vscode.window.showWarningMessage(t('Open a Markdown file first'));
+    return;
+  }
+
+  if (editor.document.languageId !== 'markdown') {
+    vscode.window.showWarningMessage(t('Open a Markdown file before inserting Scholarly content'));
     return;
   }
 
@@ -83,12 +90,12 @@ export function insertSnippet(snippet: string) {
 function getActiveMarkdownEditor(): vscode.TextEditor | undefined {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('No active editor found');
+    vscode.window.showWarningMessage(t('Open a Markdown file first'));
     return undefined;
   }
 
   if (editor.document.languageId !== 'markdown') {
-    vscode.window.showWarningMessage('Open a Markdown file to use Slidev Scholarly anchor tools');
+    vscode.window.showWarningMessage(t('Open a Markdown file to use the anchor tools'));
     return undefined;
   }
 
@@ -102,10 +109,10 @@ function normalizeAnchorId(value: string): string {
 function validateAnchorId(value: string): string | null {
   const normalized = normalizeAnchorId(value);
   if (!normalized)
-    return 'Anchor id cannot be empty';
+    return t('Enter an anchor id');
 
   if (!/^[A-Za-z0-9][\w:.-]*$/.test(normalized))
-    return 'Use letters, numbers, hyphens, underscores, colons, or periods';
+    return t('Use letters, numbers, hyphens, underscores, colons, or periods');
 
   return null;
 }
@@ -113,11 +120,11 @@ function validateAnchorId(value: string): string | null {
 function getAnchorSyntaxLabel(syntax: AnchorTarget['syntax']): string {
   switch (syntax) {
     case 'heading':
-      return 'Heading anchor';
+      return t('Heading anchor');
     case 'anchor':
-      return 'Standalone anchor';
+      return t('Standalone anchor');
     case 'named-anchor':
-      return 'Named anchor';
+      return t('Named anchor');
     default:
       return 'HTML id';
   }
@@ -128,7 +135,7 @@ export async function insertInternalAnchor(): Promise<void> {
     return;
 
   const rawAnchorId = await vscode.window.showInputBox({
-    prompt: 'Enter internal anchor id',
+    prompt: t('Enter an internal anchor id'),
     placeHolder: 'appendix-proof',
     value: 'anchor-id',
     validateInput: validateAnchorId
@@ -141,26 +148,26 @@ export async function insertInternalAnchor(): Promise<void> {
   const selected = await vscode.window.showQuickPick(
     [
       {
-        label: 'Standalone anchor',
+        label: t('Standalone anchor'),
         description: '::anchor{#id}',
-        detail: 'Insert a dedicated anchor marker on its own line',
+        detail: t('Add an anchor on its own line'),
         snippet: `::anchor{#${anchorId}}$0`
       },
       {
-        label: 'Heading suffix',
+        label: t('Heading suffix'),
         description: '{#id}',
-        detail: 'Append an id suffix to the current heading text',
+        detail: t('Add the id to the current heading'),
         snippet: ` {#${anchorId}}$0`
       },
       {
-        label: 'HTML id attribute',
+        label: t('HTML id attribute'),
         description: 'id="id"',
-        detail: 'Insert an HTML/Vue id attribute at the cursor',
+        detail: t('Add an HTML or Vue id at the cursor'),
         snippet: `id="${anchorId}"$0`
       }
     ],
     {
-      placeHolder: 'Select how to insert the internal anchor',
+      placeHolder: t('Choose how to add the anchor'),
       matchOnDescription: true,
       matchOnDetail: true
     }
@@ -179,19 +186,19 @@ export async function insertAnchorReference(): Promise<void> {
 
   const anchors = parseAnchorTargets(editor.document);
   if (anchors.length === 0) {
-    vscode.window.showInformationMessage('No internal anchors found in the current document');
+    vscode.window.showInformationMessage(t('This document has no internal anchors'));
     return;
   }
 
   const selected = await vscode.window.showQuickPick(
     anchors.map(anchor => ({
       label: `#${anchor.id}`,
-      description: `${getAnchorSyntaxLabel(anchor.syntax)} · line ${anchor.line + 1}`,
+      description: t('{0} · line {1}', getAnchorSyntaxLabel(anchor.syntax), anchor.line + 1),
       detail: anchor.label,
       anchor
     })),
     {
-      placeHolder: 'Select an internal anchor to insert as a reference',
+      placeHolder: t('Choose an internal anchor to reference'),
       matchOnDescription: true,
       matchOnDetail: true
     }
@@ -214,7 +221,7 @@ export async function insertPaperSummary(item?: { entry?: BibEntry } | BibEntry)
 
   if (!entry) {
     if (entries.length === 0) {
-      vscode.window.showInformationMessage('No BibTeX entries found for the active Markdown file');
+      vscode.window.showInformationMessage(t('No BibTeX entries were found for this Markdown file'));
       return;
     }
 
@@ -226,7 +233,7 @@ export async function insertPaperSummary(item?: { entry?: BibEntry } | BibEntry)
         entry: candidate
       })),
       {
-        placeHolder: 'Select a BibTeX entry to insert',
+        placeHolder: t('Choose a BibTeX entry'),
         matchOnDescription: true,
         matchOnDetail: true
       }
@@ -241,17 +248,17 @@ export async function insertPaperSummary(item?: { entry?: BibEntry } | BibEntry)
     [
       {
         label: 'paper-summary',
-        description: 'Slide frontmatter layout',
+        description: t('Full-slide paper summary'),
         value: 'paper-summary' as const
       },
       {
         label: 'paper-card',
-        description: 'PaperCard component',
+        description: t('PaperCard inside the current slide'),
         value: 'paper-card' as const
       }
     ],
     {
-      placeHolder: 'Select Markdown output'
+      placeHolder: t('Choose how to insert the paper')
     }
   );
 
@@ -271,11 +278,14 @@ export async function createNewPresentation(template?: string) {
   const workspaceFolders = vscode.workspace.workspaceFolders;
 
   const fileName = await vscode.window.showInputBox({
-    prompt: 'Enter presentation file name',
+    prompt: t('Name the presentation file'),
     value: 'slides.md',
     validateInput: (value) => {
       if (!value.endsWith('.md')) {
-        return 'File must have .md extension';
+        return t('Use a .md file name');
+      }
+      if (path.isAbsolute(value) || value.split(/[\\/]/).includes('..')) {
+        return t('Choose a file inside the current workspace');
       }
       return null;
     }
@@ -290,6 +300,14 @@ export async function createNewPresentation(template?: string) {
   try {
     if (workspaceFolders && workspaceFolders.length > 0) {
       const uri = vscode.Uri.joinPath(workspaceFolders[0].uri, fileName);
+      try {
+        await vscode.workspace.fs.stat(uri);
+        vscode.window.showWarningMessage(t('{0} already exists. Choose another file name.', fileName));
+        return;
+      } catch (error) {
+        if (!(error instanceof vscode.FileSystemError) || error.code !== 'FileNotFound')
+          throw error;
+      }
       const encoder = new TextEncoder();
       await vscode.workspace.fs.writeFile(uri, encoder.encode(content));
       const doc = await vscode.workspace.openTextDocument(uri);
@@ -304,18 +322,18 @@ export async function createNewPresentation(template?: string) {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    vscode.window.showErrorMessage(`Failed to create presentation: ${message}`);
+    vscode.window.showErrorMessage(t('Could not create the presentation: {0}', message));
   }
 }
 
 async function createPresentationFromCliTemplate(template: string): Promise<void> {
   const meta = TEMPLATES.find(item => item.id === template);
   const targetDir = await vscode.window.showInputBox({
-    prompt: `Target directory for ${meta?.label ?? template}`,
+    prompt: t('Choose a folder for {0}', meta ? t(meta.label) : template),
     value: template === 'basic' ? 'my-talk' : template,
     validateInput: (value) => {
       const trimmed = value.trim();
-      if (!trimmed) return 'Directory cannot be empty';
+      if (!trimmed) return t('Enter a folder name');
       return null;
     }
   });
@@ -594,7 +612,7 @@ async function runCliArgs(args: string[], message?: string): Promise<void> {
   terminal.sendText(finalCommand, true);
 
   if (message) {
-    await vscode.window.showInformationMessage(`Slidev Scholarly CLI: ${message}`);
+    await vscode.window.showInformationMessage(t('Running in the Scholarly CLI: {0}', message));
   }
 }
 
@@ -604,7 +622,7 @@ async function pickOptionalQuickValue<T extends string>(
 ): Promise<T | undefined> {
   const selected = await vscode.window.showQuickPick(
     [
-      { label: 'Skip', description: 'Do not set', value: '' },
+      { label: t('Skip'), description: t('Leave this unchanged'), value: '' },
       ...items
     ],
     {
@@ -619,11 +637,11 @@ async function pickOptionalQuickValue<T extends string>(
 
 async function runInitPresentationAction(): Promise<void> {
   const targetDir = await vscode.window.showInputBox({
-    prompt: 'Target directory for new presentation',
+    prompt: t('Choose a folder for the new presentation'),
     value: 'my-talk',
     validateInput: (value) => {
       const trimmed = value.trim();
-      if (!trimmed) return 'Directory cannot be empty';
+      if (!trimmed) return t('Enter a folder name');
       return null;
     }
   });
@@ -631,14 +649,14 @@ async function runInitPresentationAction(): Promise<void> {
   if (!targetDir) return;
 
   const template = await vscode.window.showQuickPick(
-    TEMPLATES.map(t => ({
-      label: t.label,
-      description: t.id,
-      detail: t.description,
-      value: t.id
+    TEMPLATES.map(template => ({
+      label: t(template.label),
+      description: template.id,
+      detail: localizeDetail(template.description, t('Ready-to-use presentation template')),
+      value: template.id
     })),
     {
-      placeHolder: 'Select a template'
+      placeHolder: t('Choose a template')
     }
   );
 
@@ -651,45 +669,45 @@ async function runThemeApplyAction(): Promise<void> {
   if (!colorTheme) return;
 
   const fontTheme = await pickOptionalQuickValue(
-    'Optional: choose a font theme',
-    FONT_THEMES.map(t => ({
-      label: t.label,
-      description: t.value,
-      value: t.value
+    t('Optional: choose a font theme'),
+    FONT_THEMES.map(theme => ({
+      label: t(theme.label),
+      description: theme.value,
+      value: theme.value
     }))
   );
 
   const contentMode = await pickOptionalQuickValue<ContentMode>(
-    'Optional: choose content mode',
-    CONTENT_MODES.map(t => ({
-      label: t.label,
-      description: t.value,
-      value: t.value
+    t('Optional: choose a content mode'),
+    CONTENT_MODES.map(mode => ({
+      label: t(mode.label),
+      description: mode.value,
+      value: mode.value
     }))
   );
 
   const chromeMode = await pickOptionalQuickValue<SurfaceMode>(
-    'Optional: choose chrome mode',
-    SURFACE_MODES.map(t => ({
-      label: t.label,
-      description: t.value,
-      detail: t.description,
-      value: t.value
+    t('Optional: choose a header and footer mode'),
+    SURFACE_MODES.map(mode => ({
+      label: t(mode.label),
+      description: mode.value,
+      detail: localizeDetail(mode.description, t('Controls headers, footers, and navigation')),
+      value: mode.value
     }))
   );
 
   const sectionMode = await pickOptionalQuickValue<SurfaceMode>(
-    'Optional: choose section mode',
-    SURFACE_MODES.map(t => ({
-      label: `${t.label} sections`,
-      description: t.value,
-      detail: t.description,
-      value: t.value
+    t('Optional: choose a section mode'),
+    SURFACE_MODES.map(mode => ({
+      label: t('{0} sections', t(mode.label)),
+      description: mode.value,
+      detail: localizeDetail(mode.description, t('Controls section divider slides')),
+      value: mode.value
     }))
   );
 
   const file = await vscode.window.showInputBox({
-    prompt: 'Target slide file',
+    prompt: t('Choose the slide file to update'),
     value: 'slides.md'
   });
   if (!file) return;
@@ -719,18 +737,18 @@ async function runThemePresetApplyAction(): Promise<void> {
   const preset = await vscode.window.showQuickPick(
     THEME_PRESET_IDS.map(name => ({
       label: name,
-      description: `theme preset: ${name}`,
+      description: t('Theme preset: {0}', name),
       value: name
     })),
     {
-      placeHolder: 'Select a theme preset'
+      placeHolder: t('Choose a theme preset')
     }
   );
 
   if (!preset) return;
 
   const file = await vscode.window.showInputBox({
-    prompt: 'Target slide file',
+    prompt: t('Choose the slide file to update'),
     value: 'slides.md'
   });
 
@@ -742,18 +760,18 @@ async function runSnippetAppendAction(): Promise<void> {
   const snippet = await vscode.window.showQuickPick(
     CLI_SNIPPETS.map(name => ({
       label: name,
-      description: `append snippet: ${name}`,
+      description: t('Append snippet: {0}', name),
       value: name
     })),
     {
-      placeHolder: 'Select snippet to append'
+      placeHolder: t('Choose a snippet to append')
     }
   );
 
   if (!snippet) return;
 
   const file = await vscode.window.showInputBox({
-    prompt: 'Target slide file',
+    prompt: t('Choose the slide file to update'),
     value: 'slides.md'
   });
 
@@ -765,11 +783,11 @@ async function runSnippetShowAction(): Promise<void> {
   const snippet = await vscode.window.showQuickPick(
     CLI_SNIPPETS.map(name => ({
       label: name,
-      description: `show snippet: ${name}`,
+      description: t('Show snippet: {0}', name),
       value: name
     })),
     {
-      placeHolder: 'Select snippet to show'
+      placeHolder: t('Choose a snippet to show')
     }
   );
 
@@ -781,18 +799,18 @@ async function runWorkflowApplyAction(): Promise<void> {
   const workflow = await vscode.window.showQuickPick(
     CLI_WORKFLOWS.map(name => ({
       label: name,
-      description: `workflow: ${name}`,
+      description: t('Workflow: {0}', name),
       value: name
     })),
     {
-      placeHolder: 'Select workflow to append'
+      placeHolder: t('Choose a workflow to append')
     }
   );
 
   if (!workflow) return;
 
   const file = await vscode.window.showInputBox({
-    prompt: 'Target slide file',
+    prompt: t('Choose the slide file to update'),
     value: 'slides.md'
   });
 
@@ -854,29 +872,29 @@ export async function runCliAction(action: CliActionId): Promise<void> {
 
 export async function openCliActionMenu(): Promise<void> {
   const items: Array<vscode.QuickPickItem & { action?: CliActionId }> = [
-    { label: 'Start', kind: vscode.QuickPickItemKind.Separator },
-    { label: 'New Presentation...', description: 'Create a deck with guided prompts', detail: 'sch init', action: 'initPresentation' },
-    { label: 'List Templates', description: 'See every starting template', detail: 'sch template list', action: 'templateList' },
-    { label: 'Build', kind: vscode.QuickPickItemKind.Separator },
-    { label: 'List Layouts', description: 'See available slide structures', detail: 'sch layout list', action: 'layoutList' },
-    { label: 'List Components', description: 'See available content blocks', detail: 'sch component list', action: 'componentList' },
-    { label: 'Append Snippet...', description: 'Add a ready-made block to slides.md', detail: 'sch snippet append', action: 'snippetAppend' },
-    { label: 'Apply Workflow...', description: 'Add a paper, seminar, or quick workflow', detail: 'sch workflow apply', action: 'workflowApply' },
-    { label: 'Show Snippet...', description: 'Print a block without changing a file', detail: 'sch snippet show', action: 'snippetShow' },
-    { label: 'List Snippets', description: 'See every reusable block', detail: 'sch snippet list', action: 'snippetList' },
-    { label: 'List Workflows', description: 'See every presentation workflow', detail: 'sch workflow list', action: 'workflowList' },
-    { label: 'Customize', kind: vscode.QuickPickItemKind.Separator },
-    { label: 'Set Theme...', description: 'Choose colors, fonts, and surface modes', detail: 'sch theme apply', action: 'themeApply' },
-    { label: 'Apply Curated Preset...', description: 'Apply a ready-made theme combination', detail: 'sch theme preset apply', action: 'themePresetApply' },
-    { label: 'List Color Themes', description: 'See every color theme', detail: 'sch theme list', action: 'themeList' },
-    { label: 'List Curated Presets', description: 'See every preset combination', detail: 'sch theme preset list', action: 'themePresetList' },
-    { label: 'Check & Help', kind: vscode.QuickPickItemKind.Separator },
-    { label: 'Doctor', description: 'Check setup, citations, and project files', detail: 'sch doctor', action: 'doctor' },
-    { label: 'Help', description: 'List every CLI command', detail: 'sch help', action: 'help' }
+    { label: t('Start'), kind: vscode.QuickPickItemKind.Separator },
+    { label: t('New Presentation...'), description: t('Create a deck with guided prompts'), detail: 'sch init', action: 'initPresentation' },
+    { label: t('List Templates'), description: t('See every starting template'), detail: 'sch template list', action: 'templateList' },
+    { label: t('Build'), kind: vscode.QuickPickItemKind.Separator },
+    { label: t('List Layouts'), description: t('See available slide structures'), detail: 'sch layout list', action: 'layoutList' },
+    { label: t('List Components'), description: t('See available content blocks'), detail: 'sch component list', action: 'componentList' },
+    { label: t('Append Snippet...'), description: t('Add a ready-made block to slides.md'), detail: 'sch snippet append', action: 'snippetAppend' },
+    { label: t('Apply Workflow...'), description: t('Add a paper, seminar, or quick workflow'), detail: 'sch workflow apply', action: 'workflowApply' },
+    { label: t('Show Snippet...'), description: t('Print a block without changing a file'), detail: 'sch snippet show', action: 'snippetShow' },
+    { label: t('List Snippets'), description: t('See every reusable block'), detail: 'sch snippet list', action: 'snippetList' },
+    { label: t('List Workflows'), description: t('See every presentation workflow'), detail: 'sch workflow list', action: 'workflowList' },
+    { label: t('Customize'), kind: vscode.QuickPickItemKind.Separator },
+    { label: t('Set Theme...'), description: t('Choose colors, fonts, and surface modes'), detail: 'sch theme apply', action: 'themeApply' },
+    { label: t('Apply Curated Preset...'), description: t('Apply a ready-made theme combination'), detail: 'sch theme preset apply', action: 'themePresetApply' },
+    { label: t('List Color Themes'), description: t('See every color theme'), detail: 'sch theme list', action: 'themeList' },
+    { label: t('List Curated Presets'), description: t('See every preset combination'), detail: 'sch theme preset list', action: 'themePresetList' },
+    { label: t('Check & Help'), kind: vscode.QuickPickItemKind.Separator },
+    { label: t('Doctor'), description: t('Check setup, citations, and project files'), detail: 'sch doctor', action: 'doctor' },
+    { label: t('Help'), description: t('List every CLI command'), detail: 'sch help', action: 'help' }
   ];
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Choose the next Scholarly task',
+    placeHolder: t('What do you want to do next?'),
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -889,42 +907,42 @@ export async function setColorTheme(colorTheme?: string) {
   const value = colorTheme ?? await pickColorTheme();
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ colorTheme: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: colorTheme → ${value}`);
+  vscode.window.showInformationMessage(t('Color theme set to {0}', value));
 }
 
 export async function setFontTheme(fontTheme?: string) {
   const value = fontTheme ?? await pickFontTheme();
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ fontTheme: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: fontTheme → ${value}`);
+  vscode.window.showInformationMessage(t('Font theme set to {0}', value));
 }
 
 export async function setContentMode(contentMode?: ContentMode) {
   const value = contentMode ?? await pickContentMode();
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ contentMode: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: contentMode → ${value}`);
+  vscode.window.showInformationMessage(t('Content mode set to {0}', value));
 }
 
 export async function setChromeMode(chromeMode?: SurfaceMode) {
-  const value = chromeMode ?? await pickSurfaceMode('Select a Slidev Scholarly chrome mode');
+  const value = chromeMode ?? await pickSurfaceMode(t('Choose a header and footer mode'));
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ chromeMode: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: chromeMode → ${value}`);
+  vscode.window.showInformationMessage(t('Header and footer mode set to {0}', value));
 }
 
 export async function setSectionMode(sectionMode?: SurfaceMode) {
-  const value = sectionMode ?? await pickSurfaceMode('Select a Slidev Scholarly section mode');
+  const value = sectionMode ?? await pickSurfaceMode(t('Choose a section mode'));
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ sectionMode: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: sectionMode → ${value}`);
+  vscode.window.showInformationMessage(t('Section mode set to {0}', value));
 }
 
 export async function setColorMode(colorMode?: ContentMode) {
   const value = colorMode ?? await pickColorMode();
   if (!value) return;
   await upsertThemeConfigInActiveDocument({ colorMode: value });
-  vscode.window.showInformationMessage(`Slidev Scholarly: contentMode → ${value}`);
+  vscode.window.showInformationMessage(t('Content mode set to {0}', value));
 }
 
 export async function applyThemePreset(preset?: ThemePreset | string) {
@@ -944,20 +962,20 @@ export async function applyThemePreset(preset?: ThemePreset | string) {
     fontTheme: selected.fontTheme
   });
   vscode.window.showInformationMessage(
-    `Slidev Scholarly: preset → ${selected.label} (${selected.colorTheme}, ${selected.fontTheme})`
+    t('Applied {0} ({1}, {2})', t(selected.label), selected.colorTheme, selected.fontTheme)
   );
 }
 
 async function pickColorTheme(): Promise<string | undefined> {
-  const items: Array<vscode.QuickPickItem & { value: string }> = COLOR_THEMES.map(t => ({
-    label: t.label,
-    description: t.value,
-    detail: t.description,
-    value: t.value
+  const items: Array<vscode.QuickPickItem & { value: string }> = COLOR_THEMES.map(theme => ({
+    label: t(theme.label),
+    description: theme.value,
+    detail: localizeDetail(theme.description, t('Color palette for the presentation')),
+    value: theme.value
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select a Slidev Scholarly color theme',
+    placeHolder: t('Choose a color theme'),
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -966,15 +984,15 @@ async function pickColorTheme(): Promise<string | undefined> {
 }
 
 async function pickFontTheme(): Promise<string | undefined> {
-  const items: Array<vscode.QuickPickItem & { value: string }> = FONT_THEMES.map(t => ({
-    label: t.label,
-    description: t.value,
-    detail: t.description,
-    value: t.value
+  const items: Array<vscode.QuickPickItem & { value: string }> = FONT_THEMES.map(theme => ({
+    label: t(theme.label),
+    description: theme.value,
+    detail: localizeDetail(theme.description, t('Font pairing for the presentation')),
+    value: theme.value
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select a Slidev Scholarly font theme',
+    placeHolder: t('Choose a font theme'),
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -983,15 +1001,15 @@ async function pickFontTheme(): Promise<string | undefined> {
 }
 
 async function pickColorMode(): Promise<'light' | 'dark' | undefined> {
-  const items: Array<vscode.QuickPickItem & { value: 'light' | 'dark' }> = COLOR_MODES.map(t => ({
-    label: t.label,
-    description: t.value,
-    detail: t.description,
-    value: t.value
+  const items: Array<vscode.QuickPickItem & { value: 'light' | 'dark' }> = COLOR_MODES.map(mode => ({
+    label: t(mode.label),
+    description: mode.value,
+    detail: localizeDetail(mode.description, t('Controls the slide background and text contrast')),
+    value: mode.value
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select a Slidev Scholarly color mode',
+    placeHolder: t('Choose a color mode'),
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -1000,15 +1018,15 @@ async function pickColorMode(): Promise<'light' | 'dark' | undefined> {
 }
 
 async function pickContentMode(): Promise<ContentMode | undefined> {
-  const items: Array<vscode.QuickPickItem & { value: ContentMode }> = CONTENT_MODES.map(t => ({
-    label: t.label,
-    description: t.value,
-    detail: t.description,
-    value: t.value
+  const items: Array<vscode.QuickPickItem & { value: ContentMode }> = CONTENT_MODES.map(mode => ({
+    label: t(mode.label),
+    description: mode.value,
+    detail: localizeDetail(mode.description, t('Controls the slide background and text contrast')),
+    value: mode.value
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Select a Slidev Scholarly content mode',
+    placeHolder: t('Choose a content mode'),
     matchOnDescription: true,
     matchOnDetail: true
   });
@@ -1017,11 +1035,11 @@ async function pickContentMode(): Promise<ContentMode | undefined> {
 }
 
 async function pickSurfaceMode(placeHolder: string): Promise<SurfaceMode | undefined> {
-  const items: Array<vscode.QuickPickItem & { value: SurfaceMode }> = SURFACE_MODES.map(t => ({
-    label: t.label,
-    description: t.value,
-    detail: t.description,
-    value: t.value
+  const items: Array<vscode.QuickPickItem & { value: SurfaceMode }> = SURFACE_MODES.map(mode => ({
+    label: t(mode.label),
+    description: mode.value,
+    detail: localizeDetail(mode.description, t('Controls the surface background and text contrast')),
+    value: mode.value
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
@@ -1035,13 +1053,13 @@ async function pickSurfaceMode(placeHolder: string): Promise<SurfaceMode | undef
 
 async function pickThemePreset(): Promise<ThemePreset | undefined> {
   const items: Array<vscode.QuickPickItem & { preset: ThemePreset }> = THEME_PRESETS.map(preset => ({
-    label: preset.label,
-    description: preset.description,
+    label: t(preset.label),
+    description: localizeDetail(preset.description, t('Ready-made color and font combination')),
     preset
   }));
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: 'Apply a Slidev Scholarly theme preset',
+    placeHolder: t('Choose a theme preset'),
     matchOnDescription: true
   });
 
@@ -1051,13 +1069,13 @@ async function pickThemePreset(): Promise<ThemePreset | undefined> {
 async function upsertThemeConfigInActiveDocument(update: ThemeConfigUpdate) {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage('No active editor found');
+    vscode.window.showWarningMessage(t('Open a Markdown file first'));
     return;
   }
 
   const document = editor.document;
   if (document.languageId !== 'markdown') {
-    vscode.window.showWarningMessage('Open a Markdown file to edit Slidev frontmatter');
+    vscode.window.showWarningMessage(t('Open a Markdown file to edit Slidev frontmatter'));
     return;
   }
 
@@ -1074,7 +1092,7 @@ async function upsertThemeConfigInActiveDocument(update: ThemeConfigUpdate) {
         editBuilder.insert(new vscode.Position(0, 0), insertion);
       });
       if (!success) {
-        vscode.window.showErrorMessage('Failed to insert frontmatter');
+        vscode.window.showErrorMessage(t('Could not insert the frontmatter'));
       }
       return;
     }
@@ -1095,11 +1113,11 @@ async function upsertThemeConfigInActiveDocument(update: ThemeConfigUpdate) {
       );
     });
     if (!success) {
-      vscode.window.showErrorMessage('Failed to update frontmatter');
+      vscode.window.showErrorMessage(t('Could not update the frontmatter'));
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    vscode.window.showErrorMessage(`Failed to update theme config: ${message}`);
+    vscode.window.showErrorMessage(t('Could not update the theme settings: {0}', message));
   }
 }
 
@@ -1156,10 +1174,15 @@ function upsertThemeConfigYaml(yaml: string, update: ThemeConfigUpdate): string 
   }
 
   const updated = [...lines];
+  const childIndent = updated
+    .slice(blockStart, blockEnd)
+    .find(line => line.trim())
+    ?.match(/^\s+/)?.[0] ?? '  ';
+  const escapedIndent = childIndent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const upsertChild = (key: keyof ThemeConfigUpdate, value: string | undefined) => {
     if (!value) return;
-    const childRegex = new RegExp(`^\\s{2}${key}:\\s*`);
+    const childRegex = new RegExp(`^${escapedIndent}${key}:\\s*`);
     let foundIndex = -1;
     for (let i = blockStart; i < blockEnd; i++) {
       if (childRegex.test(updated[i])) {
@@ -1169,11 +1192,11 @@ function upsertThemeConfigYaml(yaml: string, update: ThemeConfigUpdate): string 
     }
 
     if (foundIndex !== -1) {
-      updated[foundIndex] = `  ${key}: ${value}`;
+      updated[foundIndex] = `${childIndent}${key}: ${value}`;
       return;
     }
 
-    updated.splice(blockEnd, 0, `  ${key}: ${value}`);
+    updated.splice(blockEnd, 0, `${childIndent}${key}: ${value}`);
     blockEnd++;
   };
 

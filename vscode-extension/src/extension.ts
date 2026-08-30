@@ -22,6 +22,7 @@ import { registerPreviewCommand, registerPreviewView } from './preview';
 import { ScholarlyCompletionProvider } from './snippetCompletion';
 import { DevModeController } from './devMode';
 import { openGuiBuilder } from './guiBuilder';
+import { t } from './localization';
 
 export function activate(context: vscode.ExtensionContext) {
   const activationStarted = process.hrtime.bigint();
@@ -36,8 +37,11 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (!event.affectsConfiguration('slidevScholarly.devMode')) return;
       devMode.reload();
-      const mode = devMode.enabled ? 'enabled' : 'disabled';
-      vscode.window.showInformationMessage(`Slidev Scholarly dev mode ${mode}`);
+      vscode.window.showInformationMessage(
+        devMode.enabled
+          ? t('Slidev Scholarly dev mode is on')
+          : t('Slidev Scholarly dev mode is off')
+      );
     })
   );
   devMode.log(`Dev mode enabled (slow threshold: ${devMode.slowThresholdMs}ms)`);
@@ -50,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
       const message = err instanceof Error ? err.message : String(err);
       output.appendLine(`Failed to register tree view "${viewId}": ${message}`);
       vscode.window.showErrorMessage(
-        `Slidev Scholarly: view "${viewId}" not found. Please reinstall the VSIX and reload VS Code.`
+        t('Slidev Scholarly could not find the view "{0}". Reinstall the VSIX, then reload VS Code.', viewId)
       );
     }
   };
@@ -113,7 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Register BibTeX completion and hover providers
-  const mdSelector: vscode.DocumentSelector = { language: 'markdown', scheme: 'file' };
+  const markdownSelector: vscode.DocumentSelector = { language: 'markdown' };
   const bibCompletionProvider = devMode.wrapCompletionProvider(
     'bib',
     new BibCompletionProvider()
@@ -129,7 +133,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
-      mdSelector,
+      markdownSelector,
       bibCompletionProvider,
       '@' // Trigger on @
     )
@@ -137,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
-      mdSelector,
+      markdownSelector,
       scholarlyCompletionProvider,
       ':', '-', '<'
     )
@@ -145,7 +149,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
-      mdSelector,
+      markdownSelector,
       anchorCompletionProvider,
       '#'
     )
@@ -153,7 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.languages.registerHoverProvider(
-      mdSelector,
+      markdownSelector,
       new BibHoverProvider()
     )
   );
@@ -168,14 +172,14 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('slidev-scholarly.insertLayout', (item) => {
       if (!item?.snippet) {
-        vscode.window.showWarningMessage('No layout selected');
+        vscode.window.showWarningMessage(t('Choose a layout first'));
         return;
       }
       insertSnippet(item.snippet);
     }),
     vscode.commands.registerCommand('slidev-scholarly.insertComponent', (item) => {
       if (!item?.snippet) {
-        vscode.window.showWarningMessage('No component selected');
+        vscode.window.showWarningMessage(t('Choose a component first'));
         return;
       }
       insertSnippet(item.snippet);
@@ -197,14 +201,14 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand('slidev-scholarly.insertBibKey', (key: string) => {
       if (!key) {
-        vscode.window.showWarningMessage('No citation key provided');
+        vscode.window.showWarningMessage(t('Choose a citation first'));
         return;
       }
       insertSnippet(`@${key}`);
     }),
     vscode.commands.registerCommand('slidev-scholarly.insertAnchorKey', (key: string) => {
       if (!key) {
-        vscode.window.showWarningMessage('No anchor key provided');
+        vscode.window.showWarningMessage(t('Choose an anchor first'));
         return;
       }
       insertSnippet(`#${key}`);
@@ -238,7 +242,7 @@ export function activate(context: vscode.ExtensionContext) {
     ),
     vscode.commands.registerCommand('slidev-scholarly.refreshReferences', () => {
       bibTreeProvider.refresh();
-      vscode.window.showInformationMessage('References refreshed');
+      vscode.window.showInformationMessage(t('References refreshed'));
     }),
     vscode.commands.registerCommand('slidev-scholarly.cliAction', (action) =>
       runCliAction(action)
@@ -255,8 +259,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       await config.update('devMode.enabled', !current, target);
       devMode.reload();
-      const mode = devMode.enabled ? 'enabled' : 'disabled';
-      vscode.window.showInformationMessage(`Slidev Scholarly dev mode ${mode}`);
+      vscode.window.showInformationMessage(
+        devMode.enabled
+          ? t('Slidev Scholarly dev mode is on')
+          : t('Slidev Scholarly dev mode is off')
+      );
     })
   );
 
@@ -270,19 +277,21 @@ export function activate(context: vscode.ExtensionContext) {
 
 async function insertCitationDialog() {
   const citeKey = await vscode.window.showInputBox({
-    prompt: 'Enter citation key (e.g., smith2023)',
+    prompt: t('Enter a citation key, for example smith2023'),
     placeHolder: 'citekey'
   });
 
   if (citeKey) {
     const style = await vscode.window.showQuickPick(
-      ['Parenthetical @citekey', 'Narrative !@citekey'],
-      { placeHolder: 'Select citation style' }
+      [
+        { label: t('Parenthetical citation'), description: '@citekey', prefix: '@' },
+        { label: t('Narrative citation'), description: '!@citekey', prefix: '!@' }
+      ],
+      { placeHolder: t('Choose a citation style') }
     );
 
     if (style) {
-      const prefix = style.startsWith('Narrative') ? '!@' : '@';
-      insertSnippet(`${prefix}${citeKey}`);
+      insertSnippet(`${style.prefix}${citeKey}`);
     }
   }
 }

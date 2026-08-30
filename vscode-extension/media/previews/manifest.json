@@ -800,9 +800,9 @@
       "id": "vscode/gui-builder",
       "source": "docs/public/images/vscode/gui-builder.png",
       "output": "vscode-extension/media/previews/vscode/gui-builder.png",
-      "sourceSha256": "efb6f99763d4ceef3077231c92e069d0028854c65d4685884d7450673ba67a34",
-      "outputSha256": "611ccfb9c585571a1646cd75695169d5020e7ca90f1ffa5215fc29d32084c234",
-      "bytes": 42864
+      "sourceSha256": "a1bfce49ccd718823118edad4a6889a8b9ec7d02c4d0a2c33037a442a4feadb0",
+      "outputSha256": "09751f2f049e8c41cffaa6428c14a0e14393c9fe299b070baa07e92dff6a1b6e",
+      "bytes": 121363
     },
     {
       "kind": "vscode",

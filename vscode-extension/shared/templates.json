@@ -3,42 +3,670 @@
         {
             "id": "basic",
             "label": "Basic",
-            "description": "Minimal English starter deck"
+            "description": "Minimal English starter deck",
+            "deck": {
+                "templateId": "basic",
+                "title": "My Scholarly Deck",
+                "subtitle": "Subtitle or conference name",
+                "footerMiddle": "Slidev Theme Scholarly",
+                "lang": "en",
+                "colorTheme": "classic-blue",
+                "fontTheme": "contemporary",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "info: |\n  Presentation created with slidev-theme-scholarly\naspectRatio: 4/3\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Research Presentation Title",
+                        "body": "Subtitle or conference name",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "intro-2",
+                        "layout": "intro",
+                        "title": "Introduction",
+                        "body": "- Background\n- Problem\n- Goal",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "two-cols-3",
+                        "layout": "two-cols",
+                        "title": "Methods and Highlights",
+                        "body": "",
+                        "slots": {
+                            "left": "## Methods\n\n- Method 1\n- Method 2\n- Method 3",
+                            "right": "## Highlights\n\n- Result A\n- Result B\n- Result C"
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "end-4",
+                        "layout": "end",
+                        "title": "Thank You",
+                        "body": "Questions?",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "academic",
             "label": "Academic",
-            "description": "Academic deck with BibTeX citations"
+            "description": "Academic deck with BibTeX citations",
+            "deck": {
+                "templateId": "academic",
+                "title": "Academic Talk",
+                "subtitle": "Author Name, Institution",
+                "footerMiddle": "Academic Presentation",
+                "lang": "en",
+                "colorTheme": "oxford-burgundy",
+                "fontTheme": "traditional",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Scholarly deck with citations\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your University",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Paper Title",
+                        "body": "Author Name, Institution",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "section-2",
+                        "layout": "section",
+                        "title": "Background",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "default-3",
+                        "layout": "default",
+                        "title": "Default",
+                        "body": "## Motivation\n\n- Prior work shows strong gains @smith2025llm.\n- Design patterns can improve clarity @lee2024design.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "methodology-4",
+                        "layout": "methodology",
+                        "title": "Methodology",
+                        "body": "## Pipeline\n\n1. Data collection\n2. Analysis\n3. Validation",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "results-5",
+                        "layout": "results",
+                        "title": "Main Results",
+                        "body": "## Key Outcomes\n\n- Metric A: +12%\n- Metric B: +8%\n- Metric C: +4%",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "references-6",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "paper-talk",
             "label": "Paper Talk",
-            "description": "Paper presentation with summary, method, results, and references"
+            "description": "Paper presentation with summary, method, results, and references",
+            "deck": {
+                "templateId": "paper-talk",
+                "title": "Paper Talk",
+                "subtitle": "Author Name, Venue 2026",
+                "footerMiddle": "Paper Talk",
+                "lang": "en",
+                "colorTheme": "oxford-burgundy",
+                "fontTheme": "traditional",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Structured academic paper presentation\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Paper Title",
+                        "body": "Author Name, Venue 2026",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "paper-summary-2",
+                        "layout": "paper-summary",
+                        "title": "Efficient Adaptation for Scientific Models",
+                        "body": "",
+                        "slots": {
+                            "problem": "Large models adapt well but make iteration expensive for small research groups @smith2025llm.",
+                            "method": "The paper adds lightweight routing before fine-tuning, then evaluates against strong baselines @nguyen2026routing.",
+                            "finding": "Accuracy improves while inference cost remains stable."
+                        },
+                        "heading": false,
+                        "titleKey": "paperTitle",
+                        "configSource": "authors:\n  - A. Smith\n  - B. Lee\nvenue: ICML\nyear: 2026\nkeywords:\n  - efficient learning\n  - adaptation\n  - reproducibility"
+                    },
+                    {
+                        "id": "section-3",
+                        "layout": "section",
+                        "title": "Research Question",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": "sectionMode: dark"
+                    },
+                    {
+                        "id": "default-4",
+                        "layout": "default",
+                        "title": "Why This Paper Matters",
+                        "body": "## Motivation\n\n- Prior slide and paper workflows often separate evidence from narrative @lee2024design.\n- This paper makes the trade-off explicit: better adaptation without a larger deployment footprint.\n- The key question: can routing improve specialization without destabilizing the base representation?",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "method-pipeline-5",
+                        "layout": "method-pipeline",
+                        "title": "Method Pipeline",
+                        "body": "The routing stage is the main intervention; the rest of the pipeline keeps the evaluation controlled.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "activeStep: 2\nsteps:\n  - title: Curate\n    description: Build task-specific data splits\n    detail: 12k examples\n  - title: Route\n    description: Select lightweight adaptation paths\n    detail: learned gates\n  - title: Validate\n    description: Compare with fine-tuning baselines\n    detail: 5 random seeds"
+                    },
+                    {
+                        "id": "result-highlight-6",
+                        "layout": "result-highlight",
+                        "title": "Main Result",
+                        "body": "- The gain is largest on low-resource task families.\n- Reported variance remains narrow across repeated runs.",
+                        "slots": {
+                            "evidence": "- Benchmark: Scientific Adaptation Suite\n- Baseline: full fine-tuning with matched compute"
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "heading: Routing improves adaptation without increasing inference cost\nlabel: Accuracy\nmetric: 94.7\nunit: \"%\"\ndelta: +3.2 over baseline\nbaseline: 5-seed average\nvariant: success"
+                    },
+                    {
+                        "id": "limitation-7",
+                        "layout": "limitation",
+                        "title": "Limitations",
+                        "body": "",
+                        "slots": {
+                            "limitation": "- Requires labeled target-task examples.\n- Does not evaluate severe out-of-domain shift.",
+                            "mitigation": "- Treat the result as evidence for efficient supervised adaptation.\n- Use the appendix to separate robustness claims from the main contribution."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "heading: Boundary Conditions\ndescription: Scope the claim before moving to discussion."
+                    },
+                    {
+                        "id": "references-8",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "seminar",
             "label": "Seminar",
-            "description": "Research seminar deck with agenda, related work, method, and discussion"
+            "description": "Research seminar deck with agenda, related work, method, and discussion",
+            "deck": {
+                "templateId": "seminar",
+                "title": "Research Seminar",
+                "subtitle": "Speaker Name",
+                "footerMiddle": "Research Seminar",
+                "lang": "en",
+                "colorTheme": "cambridge-green",
+                "fontTheme": "elegant",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Seminar deck with agenda, related work, method, and discussion\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Lab",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Research Seminar Title",
+                        "body": "Speaker Name",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "agenda-2",
+                        "layout": "agenda",
+                        "title": "Agenda",
+                        "body": "",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "items:\n  - label: 1\n    title: Context\n    description: Why the problem matters\n  - label: 2\n    title: Related Work\n    description: Where the current project fits\n  - label: 3\n    title: Method\n    description: What we changed and measured\n  - label: 4\n    title: Discussion\n    description: What feedback would help most"
+                    },
+                    {
+                        "id": "default-3",
+                        "layout": "default",
+                        "title": "Context",
+                        "body": "## Why This Topic Is Worth A Seminar\n\n- The field has converged on similar evaluation patterns @brown2025seminar.\n- Tooling decisions affect reproducibility and review quality @garcia2024bench.\n- The seminar goal is to sharpen the problem framing, not only present results.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "related-work-matrix-4",
+                        "layout": "related-work-matrix",
+                        "title": "Related Work",
+                        "body": "| Work | Setting | Method | Limitation |\n| --- | --- | --- | --- |\n| Brown et al. 2025 | Seminar practice | Structured critique | Limited tooling focus |\n| Garcia et al. 2024 | Workflow benchmark | Reproducibility checklist | No talk-level template |\n| This project | Academic Slidev | Integrated authoring workflow | Needs user validation |",
+                        "slots": {
+                            "notes": "Use this slide to invite early disagreement about the framing."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "description: Position the project before introducing the method."
+                    },
+                    {
+                        "id": "method-pipeline-5",
+                        "layout": "method-pipeline",
+                        "title": "Proposed Approach",
+                        "body": "Keep the method concrete enough for discussion but short enough to leave room for questions.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "activeStep: 3\nsteps:\n  - title: Scope\n    description: Define the talk use case\n    detail: seminar audience\n  - title: Build\n    description: Compose layouts and components\n    detail: reusable slides\n  - title: Validate\n    description: Run doctor and citation checks\n    detail: release gate"
+                    },
+                    {
+                        "id": "default-6",
+                        "layout": "default",
+                        "title": "Discussion Prompts",
+                        "body": "## Open Questions\n\n- Which claim needs stronger evidence?\n- Which assumption should move into the limitation slide?\n- What would make this workflow easier for a new presenter?",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "references-7",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "thesis-defense",
             "label": "Thesis Defense",
-            "description": "Thesis defense deck with experiments, limitations, Q&A, and appendix map"
+            "description": "Thesis defense deck with experiments, limitations, Q&A, and appendix map",
+            "deck": {
+                "templateId": "thesis-defense",
+                "title": "Thesis Defense",
+                "subtitle": "Your Name",
+                "footerMiddle": "Thesis Defense",
+                "lang": "en",
+                "colorTheme": "yale-blue",
+                "fontTheme": "traditional",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Defense deck with experiments, limitations, Q&A, and appendix map\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Department",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Thesis Title",
+                        "body": "Your Name",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "paper-summary-2",
+                        "layout": "paper-summary",
+                        "title": "Reliable Academic Presentation Systems",
+                        "body": "",
+                        "slots": {
+                            "problem": "Academic talks need dense evidence, but tooling often leaves consistency and verification to manual review @chen2026thesis.",
+                            "method": "This thesis combines semantic theme tokens, workflow templates, and release checks.",
+                            "finding": "The resulting system reduces authoring drift while preserving Slidev flexibility."
+                        },
+                        "heading": false,
+                        "titleKey": "paperTitle",
+                        "configSource": "authors:\n  - Your Name\nvenue: Thesis Defense\nyear: 2026\nkeywords:\n  - reliability\n  - academic tooling\n  - evaluation"
+                    },
+                    {
+                        "id": "experiment-grid-3",
+                        "layout": "experiment-grid",
+                        "title": "Evaluation Plan",
+                        "body": "The evaluation pairs mechanical checks with workflow-level review @smith2025llm.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "cols: 2\nexperiments:\n  - name: Visual QA\n    setup: Theme matrix across modes\n    result: 72\n    metric: screenshots\n    note: Covers quote, code, table, and highlight states\n  - name: Citation QA\n    setup: Doctor and VS Code diagnostics\n    result: 5\n    metric: issue classes\n    note: Catches missing setup and unresolved keys\n  - name: Template QA\n    setup: Initialize every curated workflow\n    result: 5\n    metric: templates\n    note: Validates package replacement and references\n  - name: User Fit\n    setup: Paper talk and defense dry runs\n    result: qualitative\n    metric: feedback\n    note: Focuses on presenter friction"
+                    },
+                    {
+                        "id": "limitation-4",
+                        "layout": "limitation",
+                        "title": "Limitations",
+                        "body": "",
+                        "slots": {
+                            "limitation": "- The system focuses on academic Slidev decks, not general web design.\n- The templates encode common workflows but cannot replace domain-specific judgment.",
+                            "mitigation": "- Keep APIs narrow and documented.\n- Use the appendix to separate implementation details from the main argument."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "heading: Boundary Conditions\ndescription: State what the thesis does not claim."
+                    },
+                    {
+                        "id": "defense-question-5",
+                        "layout": "defense-question",
+                        "title": "Defense Question",
+                        "body": "The checks were derived from observed failures in color contrast, citation setup, and stale authoring metadata.",
+                        "slots": {
+                            "evidence": "- Semantic token checks prevent dark highlight backgrounds from inheriting dark text.\n- Citation diagnostics catch missing bibliography files before presenting.\n- Curated templates are initialized and checked as real projects.",
+                            "followup": "The next evaluation should include external users building one deck from scratch."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "question: How do you know these checks catch real presentation failures?\nsource: Committee prompt"
+                    },
+                    {
+                        "id": "appendix-index-6",
+                        "layout": "appendix-index",
+                        "title": "Appendix",
+                        "body": "Use this map to jump quickly during Q&A.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "description: Backup slide map for committee questions.\nitems:\n  - label: A1\n    title: Additional Experiments\n    description: Full matrix screenshots and release gate logs\n    page: 31\n  - label: A2\n    title: Citation Diagnostics\n    description: CLI and VS Code failure examples\n    page: 34\n  - label: A3\n    title: Template Inventory\n    description: Paper, seminar, defense, reading group, and lightning decks\n    page: 37"
+                    },
+                    {
+                        "id": "references-7",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "reading-group",
             "label": "Reading Group",
-            "description": "Reading group deck for paper critique and discussion"
+            "description": "Reading group deck for paper critique and discussion",
+            "deck": {
+                "templateId": "reading-group",
+                "title": "Reading Group",
+                "subtitle": "Paper Title And Discussion",
+                "footerMiddle": "Reading Group",
+                "lang": "en",
+                "colorTheme": "nordic-blue",
+                "fontTheme": "classic",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Reading group deck for paper critique and discussion\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Discussion Lead\n    institution: Reading Group",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "Reading Group",
+                        "body": "Paper Title And Discussion",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "paper-summary-2",
+                        "layout": "paper-summary",
+                        "title": "Lightweight Routing for Efficient Model Adaptation",
+                        "body": "",
+                        "slots": {
+                            "problem": "The paper studies adaptation when compute and labeled examples are constrained @nguyen2026routing.",
+                            "method": "It introduces a routing stage and compares it with full fine-tuning.",
+                            "finding": "The method improves average accuracy, but the robustness story needs closer reading."
+                        },
+                        "heading": false,
+                        "titleKey": "paperTitle",
+                        "configSource": "authors:\n  - K. Nguyen\n  - M. Patel\nvenue: ICLS\nyear: 2026\nkeywords:\n  - model adaptation\n  - routing\n  - efficiency"
+                    },
+                    {
+                        "id": "related-work-matrix-3",
+                        "layout": "related-work-matrix",
+                        "title": "Positioning",
+                        "body": "| Work | Main Question | Evidence | Discussion Gap |\n| --- | --- | --- | --- |\n| Miller et al. 2025 | How reading groups critique papers | Survey | Does not cover technical slide design |\n| Lee 2024 | How slides structure evidence | Design patterns | Less focus on paper discussion |\n| Nguyen 2026 | How routing changes adaptation | Benchmark | Robustness limits need unpacking |",
+                        "slots": {
+                            "notes": "Use the final column as the discussion agenda."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "description: Compare what this paper assumes against adjacent work."
+                    },
+                    {
+                        "id": "limitation-4",
+                        "layout": "limitation",
+                        "title": "Critique",
+                        "body": "",
+                        "slots": {
+                            "limitation": "- The evaluation uses a narrow set of target tasks.\n- The method may require labels unavailable in some deployment settings.\n- The paper reports aggregate gains but fewer qualitative failure cases.",
+                            "mitigation": "- Ask whether the setup matches our group's target domain.\n- Track what evidence would change our conclusion."
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "heading: What We Should Debate\ndescription: Separate paper limitations from presentation questions."
+                    },
+                    {
+                        "id": "default-5",
+                        "layout": "default",
+                        "title": "Discussion Prompts",
+                        "body": "## Questions For The Room\n\n- Which baseline would you add?\n- Which claim is strongest?\n- Which limitation would matter most in our own work?",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "references-6",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "conference-lightning",
             "label": "Conference Lightning",
-            "description": "Short conference talk focused on one claim and supporting evidence"
+            "description": "Short conference talk focused on one claim and supporting evidence",
+            "deck": {
+                "templateId": "conference-lightning",
+                "title": "Conference Lightning Talk",
+                "subtitle": "Your Name",
+                "footerMiddle": "Lightning Talk",
+                "lang": "en",
+                "colorTheme": "high-contrast",
+                "fontTheme": "sans-default",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: Short conference talk with one claim and one result\naspectRatio: 16/9\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "One Result In Five Minutes",
+                        "body": "Your Name",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "statement-2",
+                        "layout": "statement",
+                        "title": "Academic decks should be checked like software artifacts.",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "result-highlight-3",
+                        "layout": "result-highlight",
+                        "title": "Main Result",
+                        "body": "- Contrast regressions are caught before export.\n- Citation setup failures are caught before presenting @smith2025llm.\n- Templates initialize as real Slidev projects.",
+                        "slots": {
+                            "evidence": "- Command: `pnpm run check`\n- Output: release gate plus theme matrix dry run"
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": "heading: A single release gate catches the highest-risk authoring failures\nlabel: Checks\nmetric: 8\nunit: \"\"\ndelta: theme, docs, CLI, VS Code, screenshots\nbaseline: local release readiness\nvariant: info"
+                    },
+                    {
+                        "id": "default-4",
+                        "layout": "default",
+                        "title": "Takeaway",
+                        "body": "## What To Remember\n\n- Make the first slide useful immediately.\n- Keep one claim per lightning talk.\n- Use references only for claims the audience may want to inspect later.",
+                        "slots": {},
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "references-5",
+                        "layout": "references",
+                        "title": "References",
+                        "body": "",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         },
         {
             "id": "zh",
             "label": "Chinese Starter",
-            "description": "Chinese starter deck"
+            "description": "Chinese starter deck",
+            "deck": {
+                "templateId": "zh",
+                "title": "学术演示",
+                "subtitle": "副标题或会议信息",
+                "footerMiddle": "Slidev 学术主题",
+                "lang": "zh-CN",
+                "colorTheme": "cambridge-green",
+                "fontTheme": "elegant",
+                "contentMode": "",
+                "chromeMode": "dark",
+                "sectionMode": "dark",
+                "frontmatterSource": "description: 使用 slidev-theme-scholarly 创建\naspectRatio: 4/3\nauthors:\n  - name: 你的名字\n    institution: 你的单位",
+                "slides": [
+                    {
+                        "id": "cover-1",
+                        "layout": "cover",
+                        "title": "报告标题",
+                        "body": "副标题或会议信息",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "intro-2",
+                        "layout": "intro",
+                        "title": "研究背景",
+                        "body": "- 问题定义\n- 相关工作\n- 研究目标",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "two-cols-3",
+                        "layout": "two-cols",
+                        "title": "方法与结果",
+                        "body": "",
+                        "slots": {
+                            "left": "## 方法\n\n- 方法一\n- 方法二\n- 方法三",
+                            "right": "## 结果\n\n- 结果 A\n- 结果 B\n- 结果 C"
+                        },
+                        "heading": false,
+                        "titleKey": "title",
+                        "configSource": ""
+                    },
+                    {
+                        "id": "end-4",
+                        "layout": "end",
+                        "title": "感谢聆听",
+                        "body": "欢迎提问",
+                        "slots": {},
+                        "heading": true,
+                        "titleKey": "",
+                        "configSource": ""
+                    }
+                ]
+            }
         }
     ],
     "aliases": {

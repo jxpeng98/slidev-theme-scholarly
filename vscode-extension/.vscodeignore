@@ -1,9 +1,14 @@
 node_modules
 src
 scripts
+test
 .vscode
 .vscode-test
 *.map
+*.vsix
 tsconfig.json
 .gitignore
 .eslintrc.json
+eslint.config.mjs
+pnpm-lock.yaml
+pnpm-workspace.yaml

@@ -109,7 +109,7 @@ pnpm add -D slidev-theme-scholarly
 侧边栏中可以选择模板，插入布局、组件和引用，调整主题，或运行项目检查。以下操作也可以直接从命令面板启动：
 
 - `Slidev Scholarly: Create Presentation`
-- `Slidev Scholarly: Open GUI Builder`
+- `Slidev Scholarly: Open Deck Builder`
 - `Slidev Scholarly: Insert Citation`
 
 其余用法见 [VS Code 插件指南](https://scholarly-docs.jxpeng.dev/zh/guide/vscode-extension)。

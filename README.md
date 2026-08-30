@@ -109,7 +109,7 @@ Install [Slidev Scholarly for VS Code](https://marketplace.visualstudio.com/item
 The sidebar covers templates, layouts, components, citations, themes, and project checks. These commands are also available from the Command Palette:
 
 - `Slidev Scholarly: Create Presentation`
-- `Slidev Scholarly: Open GUI Builder`
+- `Slidev Scholarly: Open Deck Builder`
 - `Slidev Scholarly: Insert Citation`
 
 The [VS Code extension guide](https://scholarly-docs.jxpeng.dev/en/guide/vscode-extension) covers the rest.

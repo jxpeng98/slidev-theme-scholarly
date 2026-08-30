@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 
 import {
   createBuilderSlide,
-  renderBuilderMarkdown
+  renderBuilderMarkdown,
+  renderBuilderSlides
 } from '../out/guiBuilderModel.js';
+import { BUILDER_TEMPLATES } from '../out/sharedData.js';
 
 test('renders scholarly frontmatter and ordered slides from GUI state', () => {
   const markdown = renderBuilderMarkdown({
@@ -70,6 +72,16 @@ test('uses practical placeholder text when a GUI slide is incomplete', () => {
   assert.match(markdown, /Add content here\./);
 });
 
+test('uses Chinese placeholders for a Chinese deck', () => {
+  const markdown = renderBuilderMarkdown({
+    lang: 'zh-CN',
+    slides: [createBuilderSlide('default')]
+  });
+
+  assert.match(markdown, /# 未命名页面/);
+  assert.match(markdown, /在这里填写内容。/);
+});
+
 test('renders layout-specific configuration and named slots', () => {
   const markdown = renderBuilderMarkdown({
     slides: [
@@ -117,4 +129,29 @@ test('preserves declared string values instead of coercing YAML-like scalars', (
   assert.match(markdown, /subtitle: "null"/);
   assert.match(markdown, /qrcodeLabel: "2026"/);
   assert.match(markdown, /website: "true"/);
+});
+
+test('builds the paper-talk workflow from the shared CLI template', () => {
+  const workflow = BUILDER_TEMPLATES.find(template => template.id === 'paper-talk');
+
+  assert.ok(workflow);
+  assert.equal(workflow.deck.slides.length, 8);
+
+  const markdown = renderBuilderMarkdown(workflow.deck);
+  assert.match(markdown, /description: Structured academic paper presentation/);
+  assert.match(markdown, /layout: paper-summary/);
+  assert.match(markdown, /paperTitle: Efficient Adaptation for Scientific Models/);
+  assert.match(markdown, /::problem::/);
+  assert.match(markdown, /layout: method-pipeline/);
+  assert.match(markdown, /activeStep: 2/);
+  assert.match(markdown, /layout: references/);
+});
+
+test('renders one selected slide without deck frontmatter', () => {
+  const markdown = renderBuilderSlides([
+    createBuilderSlide('quote', { title: 'Key claim', body: 'Evidence belongs beside the claim.' })
+  ]);
+
+  assert.match(markdown, /^---\nlayout: quote\n---/);
+  assert.doesNotMatch(markdown, /theme: scholarly/);
 });

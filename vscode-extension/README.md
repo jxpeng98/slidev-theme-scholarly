@@ -2,6 +2,8 @@
 
 The Slidev Scholarly extension brings the theme's templates, layouts, components, citations, theme controls, and project checks into VS Code.
 
+The interface follows VS Code's display language and is available in English and Simplified Chinese.
+
 ## Install
 
 Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets), or build a local VSIX:
@@ -44,12 +46,14 @@ Slidev Scholarly: Create Presentation
 
 The template creates regular Slidev Markdown that you can edit directly.
 
-To assemble a first draft visually, run `Slidev Scholarly: Open GUI Builder`. The builder can:
+To shape a first draft before writing Markdown, run `Slidev Scholarly: Open Deck Builder`:
 
-- add, reorder, and remove slides;
-- edit titles, body text, bullets, images, and captions;
-- choose colors, fonts, and surface modes;
-- create a new Markdown file or insert the result into the active editor.
+1. Choose a workflow, such as a paper talk or thesis defense.
+2. Review the layout thumbnails, then add or reorder slides.
+3. Select each slide and write its content.
+4. Create the Markdown deck, or insert the selected slide into the active file.
+
+The builder is a quick starting point. Use Slidev for the live preview and final editing.
 
 ## 2. Build the slides
 
@@ -121,7 +125,7 @@ Citation diagnostics also report missing bibliography settings, missing `.bib` f
 All commands appear under **Slidev Scholarly**, including:
 
 - `Create Presentation`
-- `Open GUI Builder`
+- `Open Deck Builder`
 - `Insert Citation`
 - `Insert Internal Anchor`
 - `Apply Theme Preset`

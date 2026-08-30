@@ -119,6 +119,25 @@ test('upserts new theme mode keys while preserving legacy colorMode tolerance', 
   );
 });
 
+test('preserves the existing themeConfig indentation', () => {
+  const commands = loadCommandsWithVscodeMock();
+  const updateYaml = commands.__test.upsertThemeConfigYaml;
+
+  assert.equal(
+    updateYaml([
+      'theme: scholarly',
+      'themeConfig:',
+      '    colorTheme: classic-blue'
+    ].join('\n'), { colorTheme: 'yale-blue', fontTheme: 'modern' }),
+    [
+      'theme: scholarly',
+      'themeConfig:',
+      '    colorTheme: yale-blue',
+      '    fontTheme: modern'
+    ].join('\n')
+  );
+});
+
 test('builds theme apply CLI args with explicit mode flags', () => {
   const commands = loadCommandsWithVscodeMock();
 
