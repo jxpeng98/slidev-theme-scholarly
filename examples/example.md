@@ -31,22 +31,6 @@ authors:
 
 Professional academic presentations with LaTeX Beamer-inspired styling
 
-<!--
-This example demonstrates the full set of 26 layouts and features of the Scholarly theme.
-
-26 SPECIALIZED LAYOUTS:
-- Structure Layouts (9): cover, default, intro, section, center, auto-center, auto-size, toc, end
-- Content Layouts (6): two-cols, image-left, image-right, bullets, figure, split-image
-- Emphasis Layouts (4): quote, fact, statement, focus
-- Academic Layouts (7): compare, methodology, results, timeline, agenda, acknowledgments, references
-
-THEME CUSTOMIZATION:
-- 9 Color Themes: classic-blue, oxford-burgundy, cambridge-green, yale-blue, princeton-orange, nordic-gray, monochrome, high-contrast, sepia
-- 7 Font Themes: classic, modern, minimal, elegant, tech, academic, contemporary
-- Surface Modes: Independent content, chrome, and section surfaces
-- Section Mode: Per-slide light/dark section dividers
--->
-
 ---
 layout: intro
 ---
@@ -60,9 +44,9 @@ PURPOSE: Introduction or agenda slide
 
 Slidev Theme Scholarly brings LaTeX Beamer aesthetics to modern presentations:
 
-- 🎓 **24 Specialized Layouts** - Structure, Content, Emphasis, and Academic categories
-- 🎨 **9 Color Themes** - Classic Blue, Oxford Burgundy, Cambridge Green, and more
-- ✍️ **7 Font Themes** - From classic serifs to contemporary sans-serifs
+- 🎓 **Specialized Layouts** - Structure, content, emphasis, and academic categories
+- 🎨 **Theme Presets** - Academic color palettes with light and dark surfaces
+- ✍️ **Typography Presets** - Serif, sans-serif, and technical combinations
 - 🧩 **Rich Components** - Theorems, Blocks, Citations, Steps, Keywords
 - 🌓 **Surface Mode Support** - Light content with configurable chrome and section surfaces
 - 📊 **Academic Features** - BibTeX citations, booktabs tables, theorem numbering

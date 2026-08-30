@@ -131,6 +131,10 @@ jobs:
         working-directory: vscode-extension
         run: pnpm run compile
 
+      - name: Test extension
+        working-directory: vscode-extension
+        run: pnpm run test
+
   build:
     name: Build Extension
     needs: [check, validate]

@@ -89,14 +89,24 @@ jobs:
         with:
           node-version: '24'
           cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            vscode-extension/pnpm-lock.yaml
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install extension dependencies
+        working-directory: vscode-extension
+        run: pnpm install --frozen-lockfile
+
+      - name: Run full quality gate
+        run: pnpm run check
 
       - name: Build English example deck
         run: pnpm exec slidev build examples/example.md --out "${RUNNER_TEMP}/slidev-release-example-en" --without-notes
 
-      - name: Build Academic example deck
+      - name: Build Academic 16:9 example deck
         run: pnpm exec slidev build examples/example-academic.md --out "${RUNNER_TEMP}/slidev-release-example-academic" --without-notes
 
       - name: Build Chinese example deck

@@ -3,7 +3,7 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { transformWithEsbuild } from 'vite'
+import { transformWithOxc } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -50,7 +50,7 @@ const importDataHelpers = async () => {
   const source = await readText('utils/data.ts')
   if (!source) return {}
 
-  const transformed = await transformWithEsbuild(source, 'utils/data.ts', {
+  const transformed = await transformWithOxc(source, 'utils/data.ts', {
     loader: 'ts',
     format: 'esm',
     target: 'es2020',

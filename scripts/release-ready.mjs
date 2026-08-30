@@ -57,20 +57,8 @@ const steps = [
     command: ['node', 'scripts/check-data-driven-results.mjs'],
   },
   {
-    name: 'Theorem numbering regression contract',
-    command: ['node', '--test', 'tests/theoremNumbering.test.mjs'],
-  },
-  {
-    name: 'Screenshot export safety contract',
-    command: ['node', '--test', 'tests/screenshotExport.test.mjs'],
-  },
-  {
-    name: 'Theme mode regression contract',
-    command: ['node', '--test', 'tests/themeModes.test.mjs'],
-  },
-  {
-    name: 'CLI theme mode regression contract',
-    command: ['node', '--test', 'tests/cliThemeModes.test.mjs'],
+    name: 'Root test suite',
+    command: ['pnpm', 'run', 'test'],
   },
   {
     name: 'VS Code extension compile',

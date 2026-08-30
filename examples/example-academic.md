@@ -2,6 +2,7 @@
 theme: ../
 title: Efficient Adaptation for Scientific Models
 footerMiddle: Model Research Talk - Sample Data
+aspectRatio: 16/9
 lang: en
 themeConfig:
   contentMode: light

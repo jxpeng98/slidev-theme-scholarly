@@ -61,6 +61,7 @@
   "scripts": {
     "cli": "node cli/scholarly.mjs --help",
     "check": "node scripts/release-ready.mjs",
+    "test": "node --test tests/*.test.mjs",
     "check:tokens": "node scripts/check-color-mode-styles.mjs",
     "check:layouts": "node scripts/check-academic-layout-pack.mjs",
     "check:components": "node scripts/check-academic-components.mjs",
