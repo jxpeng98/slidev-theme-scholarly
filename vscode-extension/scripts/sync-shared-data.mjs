@@ -39,7 +39,7 @@ async function syncTemplates() {
   console.log(`Synced ${path.relative(extensionRoot, destPath)}`);
 }
 
-function parseTemplateDeck(source, templateId) {
+export function parseTemplateDeck(source, templateId) {
   const normalized = source.replace(/\r\n/g, '\n').trim();
   const deckMatch = normalized.match(/^---\n([\s\S]*?)\n---\n?/);
   if (!deckMatch) throw new Error(`Template ${templateId} has no deck frontmatter`);
@@ -188,7 +188,9 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-main().catch(err => {
-  console.error('Error:', err.message);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  main().catch(err => {
+    console.error('Error:', err.message);
+    process.exit(1);
+  });
+}
