@@ -1,6 +1,6 @@
 import { LAYOUT_CATALOG } from './sharedData';
 
-const yaml = require('js-yaml');
+const yaml = require('./vendor/js-yaml');
 const { parseConfigInput } = require('./guiBuilderValidation') as {
   parseConfigInput: typeof scholarlyParseConfigValue;
 };

@@ -373,13 +373,17 @@
     "sync-previews": "node ./scripts/sync-previews.mjs",
     "sync-snippets": "node ./scripts/sync-snippets.mjs",
     "vscode:prepublish": "npm run sync-previews && npm run sync-snippets && npm run compile",
-    "compile": "npm run sync-shared-data && npm run sync-snippets && tsc -p ./",
-    "watch": "npm run sync-shared-data && npm run sync-snippets && tsc -watch -p ./",
+    "compile": "npm run sync-shared-data && npm run sync-snippets && node scripts/copy-yaml-runtime.mjs && tsc -p ./",
+    "watch": "npm run sync-shared-data && npm run sync-snippets && node scripts/copy-yaml-runtime.mjs && tsc -watch -p ./",
     "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext ts",
     "package": "vsce package",
+    "check:package": "node scripts/check-vsix.mjs",
     "publish": "vsce publish",
     "publish:pre": "vsce publish --pre-release"
+  },
+  "vsce": {
+    "dependencies": false
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
@@ -388,13 +392,11 @@
     "@typescript-eslint/parser": "^8.61.1",
     "@vscode/vsce": "3.9.2",
     "eslint": "^10.5.0",
+    "js-yaml": "4.2.0",
     "typescript": "^6.0.3"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/jxpeng98/slidev-theme-scholarly"
-  },
-  "dependencies": {
-    "js-yaml": "4.2.0"
   }
 }
