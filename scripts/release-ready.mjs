@@ -84,6 +84,10 @@ const steps = [
 
 if (fullVisual) {
   steps.push({
+    name: 'Builder browser workflow behavior',
+    command: ['node', 'scripts/check-ui-workflows.mjs'],
+  })
+  steps.push({
     name: 'Theme matrix visual export',
     command: ['node', 'scripts/check-theme-matrix.mjs'],
   })

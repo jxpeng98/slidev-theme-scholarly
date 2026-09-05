@@ -44,7 +44,12 @@ interface ScholarlySlide {
   heading: boolean;
   titleKey: string;
   configSource: string;
+  configInputs: Record<string, string>;
+  layoutDrafts: Record<string, ScholarlyLayoutDraft>;
 }
+
+type ScholarlyLayoutDraft = Pick<ScholarlySlide,
+  'configSource' | 'config' | 'configInputs' | 'slots' | 'heading' | 'titleKey'>;
 
 interface ScholarlyDeckState {
   templateId: string;
@@ -128,7 +133,7 @@ function scholarlySelectedSlide(): ScholarlySlide | undefined {
 function scholarlyNormalizeDeck(deck: ScholarlyDeckState): ScholarlyDeckState {
   const copy = structuredClone(deck);
   copy.templateId ||= '';
-  copy.title ||= scholarlyCopy('Scholarly Presentation', '学术演示');
+  copy.title ??= scholarlyCopy('Scholarly Presentation', '学术演示');
   copy.subtitle ||= '';
   copy.footerMiddle ||= scholarlyCopy('Conference Name', '会议名称');
   copy.lang ||= scholarlyData.language === 'zh-cn' ? 'zh-CN' : 'en';
@@ -141,7 +146,7 @@ function scholarlyNormalizeDeck(deck: ScholarlyDeckState): ScholarlyDeckState {
   copy.slides = Array.isArray(copy.slides) ? copy.slides.map((slide, index) => ({
     id: slide.id || `slide-${index + 1}`,
     layout: slide.layout || 'default',
-    title: slide.title || scholarlyCopy('Untitled slide', '未命名页面'),
+    title: slide.title ?? scholarlyCopy('Untitled slide', '未命名页面'),
     body: slide.body || '',
     bullets: Array.isArray(slide.bullets) ? slide.bullets : [],
     image: slide.image || '',
@@ -150,7 +155,9 @@ function scholarlyNormalizeDeck(deck: ScholarlyDeckState): ScholarlyDeckState {
     slots: slide.slots && typeof slide.slots === 'object' ? slide.slots : {},
     heading: slide.heading !== false,
     titleKey: slide.titleKey || '',
-    configSource: slide.configSource || ''
+    configSource: slide.configSource || '',
+    configInputs: slide.configInputs || {},
+    layoutDrafts: slide.layoutDrafts || {}
   })) : [];
   return copy;
 }
@@ -323,14 +330,14 @@ function scholarlyRenderConfig(slide: ScholarlySlide, layout?: ScholarlyLayout):
   }
   const config = layout?.config || [];
   container.innerHTML = config.length
-    ? config.map(item => scholarlyConfigMarkup(item, slide.config[item.name])).join('')
+    ? config.map(item => scholarlyConfigMarkup(item, slide.config[item.name], slide.configInputs[item.name])).join('')
     : `<p class="details-note">${scholarlyCopy('This layout has no additional settings.', '这个布局没有额外设置。')}</p>`;
 }
 
-function scholarlyConfigMarkup(item: ScholarlyConfigEntry, value: unknown): string {
-  const raw = value === undefined || value === null
+function scholarlyConfigMarkup(item: ScholarlyConfigEntry, value: unknown, input?: string): string {
+  const raw = input ?? (value === undefined || value === null
     ? ''
-    : typeof value === 'object' ? JSON.stringify(value) : String(value);
+    : typeof value === 'object' ? JSON.stringify(value) : String(value));
   const values = item.options?.length
     ? item.options
     : scholarlyBooleanOnly(item.type) ? ['true', 'false'] : [];
@@ -379,7 +386,9 @@ function scholarlyAddSlide(layoutId: string): void {
     slots: {},
     heading: !usesTitleConfig,
     titleKey: usesTitleConfig ? 'title' : '',
-    configSource: ''
+    configSource: '',
+    configInputs: {},
+    layoutDrafts: {}
   };
   scholarlyState.slides.push(slide);
   scholarlySelectedId = slide.id;
@@ -418,12 +427,25 @@ function scholarlyChangeLayout(layoutId: string): void {
   const layout = scholarlyLayoutById(layoutId);
   if (!slide || !layout || slide.layout === layoutId) return;
   const usesTitleConfig = layout.id !== 'cover' && Boolean(layout.config?.some(item => item.name === 'title'));
+  slide.layoutDrafts[slide.layout] = structuredClone({
+    configSource: slide.configSource,
+    config: slide.config,
+    configInputs: slide.configInputs,
+    slots: slide.slots,
+    heading: slide.heading,
+    titleKey: slide.titleKey
+  });
+  const draft = slide.layoutDrafts[layoutId];
   slide.layout = layout.id;
-  slide.heading = !usesTitleConfig;
-  slide.titleKey = usesTitleConfig ? 'title' : '';
-  slide.configSource = '';
-  slide.config = {};
-  slide.slots = {};
+  Object.assign(slide, draft ? structuredClone(draft) : {
+    heading: !usesTitleConfig,
+    titleKey: usesTitleConfig ? 'title' : '',
+    configSource: '',
+    config: {},
+    configInputs: {},
+    slots: {}
+  });
+  slide.configInputs ||= {};
   scholarlyMarkDirty();
   scholarlyRenderSlides();
   scholarlyRenderInspector();
@@ -433,6 +455,7 @@ function scholarlyUpdateConfig(input: HTMLInputElement | HTMLTextAreaElement | H
   const slide = scholarlySelectedSlide();
   if (!slide || !input.dataset.configName || !input.dataset.configType) return;
   const parsed = scholarlyParseConfig(input.value, input.dataset.configType);
+  slide.configInputs[input.dataset.configName] = input.value;
   input.setCustomValidity(parsed.error);
   input.setAttribute('aria-invalid', parsed.error ? 'true' : 'false');
   if (input.value.trim()) slide.config[input.dataset.configName] = parsed.value;

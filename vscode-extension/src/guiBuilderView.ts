@@ -211,6 +211,7 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
             <label class="field">
               <span>${copy('Layout', '布局')}</span>
               <select id="slide-layout"></select>
+              <small>${copy('Switch back to restore a layout’s settings and sections.', '切回原布局可恢复该布局的设置与分区内容。')}</small>
             </label>
             <label class="field">
               <span>${copy('Slide title', '页面标题')}</span>
@@ -225,7 +226,7 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
 
           <details id="layout-settings" class="inspector-details">
             <summary>${copy('Layout settings', '布局设置')}</summary>
-            <p id="template-settings-note" class="details-note" hidden>${copy('Settings supplied by the workflow are kept in the generated Markdown. Edit them there, or choose another layout to reset them.', '工作流自带的设置会原样写入 Markdown。生成后可直接修改，也可以更换布局并重新设置。')}</p>
+            <p id="template-settings-note" class="details-note" hidden>${copy('Workflow settings are kept in the generated Markdown. Edit them there. Switching layouts keeps each layout’s draft.', '工作流自带的设置会保留在 Markdown 中，生成后可直接修改。切换布局会分别保留各布局的草稿。')}</p>
             <div id="config-fields" class="config-fields"></div>
           </details>
 
