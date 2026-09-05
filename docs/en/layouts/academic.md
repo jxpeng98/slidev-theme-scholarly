@@ -110,6 +110,8 @@ Optional note about assumptions, controls, or reproducibility.
 
 **Use for:** Leading with one main result, then supporting it with evidence or caveats.
 
+Keep one headline metric and a short claim on this slide. Use the evidence slot for concise benchmark, dataset, or uncertainty notes; move detailed tables and long explanations to a following slide. Check both playback and the exported PNG or PDF after changing the aspect ratio or adding content.
+
 ```markdown
 ---
 layout: result-highlight
@@ -143,6 +145,8 @@ variant: success
 ## experiment-grid - Experiment Grid {#experiment-grid}
 
 **Use for:** Comparing experimental settings, metrics, and notes in a compact grid.
+
+The academic example uses four concise experiments in two columns and is checked at 16:9 and 4:3. This is a reference example, not an unlimited content guarantee: long names, settings, or notes need more room. Keep the metric and its unit together, and split a dense comparison across slides instead of shrinking key text. `cols` controls the column count; it does not automatically paginate overflowing content.
 
 ```markdown
 ---

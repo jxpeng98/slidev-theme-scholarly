@@ -12,7 +12,7 @@ let browser
 try {
   await server.listen()
   browser = await chromium.launch()
-  const page = await browser.newPage()
+  const page = await browser.newPage({ reducedMotion: 'reduce' })
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
   for (const lang of ['en', 'zh']) {
@@ -23,6 +23,10 @@ try {
         await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/${lang}/`)
         await page.locator('.VPHomeHero .image-src').evaluate(image => image.decode())
         await page.evaluate(() => document.fonts.ready)
+        await page.evaluate(async () => {
+          window.scrollTo(0, 0)
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+        })
         await page.screenshot({ path: path.join(output, `docs-${lang}-${theme}-${width}.png`) })
         const geometry = await page.evaluate(() => {
           const image = document.querySelector('.VPHomeHero .image-src').getBoundingClientRect()
