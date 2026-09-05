@@ -184,9 +184,14 @@ highlightCurrent: true # 可选，默认：true
 | 属性 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
 | `title` | `string \| false` | `目录` | 标题文本，设为 `false` 可隐藏 |
+| `heading` | `string \| false` | - | 优先于 `title`，单独设置可见的目录标题 |
 | `showNumbers` | `boolean` | `true` | 是否显示序号圆点 |
 | `highlightCurrent` | `boolean` | `true` | 是否高亮当前章节 |
 | `sections` | `string[]` | - | 手动指定章节标题（覆盖自动提取） |
+
+目录作为第一页时，`title` 保留为演示名称，用 `heading: false` 隐藏目录标题，
+或用 `heading: 目录` 单独命名。Deck Builder 会自动转换首页的隐藏标题设置。
+后续页面仍支持原有的 `title: false` 写法。
 
 ---
 

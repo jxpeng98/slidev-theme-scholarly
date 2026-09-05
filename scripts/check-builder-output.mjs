@@ -63,3 +63,16 @@ assert.throws(
   /duplicated mapping key/,
 )
 console.log('Builder output checks passed: templates, arbitrary first page, metadata, slots and standalone insertion.')
+
+for (const config of [{}, { title: undefined }, { title: false }, { heading: false }, { title: 'Agenda' }]) {
+  const toc = { layout: 'toc', heading: false, config, body: '', title: '' }
+  const rendered = await parse(renderBuilderMarkdown({ title: 'Research deck', slides: [toc] }))
+  assert.equal(rendered.slides.length, 1)
+  const head = rendered.slides[0].frontmatter
+  assert.equal(typeof head.title, 'string', 'Slidev global title remains a string')
+  assert.equal(head.heading, config.heading ?? config.title ?? 'Outline')
+}
+const hiddenTitle = { layout: 'toc', title: 'Outline', titleKey: 'title', heading: false, config: { title: false } }
+assert.match(renderBuilderSlides([hiddenTitle]), /title: false/, 'a named Builder page can still hide its visible title')
+assert.equal((await parse(renderBuilderMarkdown({ title: '研究报告', lang: 'zh', slides: [{ layout: 'toc', heading: false }] }))).slides[0].frontmatter.heading, '目录')
+console.log('TOC first-page checks passed: default, custom, hidden and localized headings.')

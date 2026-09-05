@@ -88,6 +88,10 @@ if (fullVisual) {
     command: ['node', 'scripts/check-ui-workflows.mjs'],
   })
   steps.push({
+    name: 'TOC first-page title compatibility',
+    command: ['node', 'scripts/check-toc-headings.mjs'],
+  })
+  steps.push({
     name: 'Research slide content visibility and export',
     command: ['node', 'scripts/check-slide-content.mjs'],
   })

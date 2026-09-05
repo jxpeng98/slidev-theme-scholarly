@@ -125,6 +125,14 @@ function renderFrontmatter(state: BuilderDeckState, firstSlide: BuilderSlide): s
     themeConfig
   };
   config.theme = 'scholarly';
+  if (config.title === undefined) config.title = deckTitle;
+  if (firstSlide.layout === 'toc') {
+    // A TOC heading may be false, but Slidev's global title must be a string.
+    const heading = first.heading ?? first.title;
+    config.heading = heading === undefined || (typeof heading === 'string' && !heading.trim())
+      ? (isChinese(state.lang) ? '目录' : 'Outline') : heading;
+    if (first.title === false) config.title = deckTitle;
+  }
   // Slidev shares headmatter with page one. Keep its explicit title and retain
   // the presentation name in the native browser-title template when they differ.
   if (typeof first.title === 'string' && first.title !== deckTitle) {
@@ -148,9 +156,10 @@ function slideFrontmatter(slide: BuilderSlide, chinese: boolean): Record<string,
   const config: Record<string, unknown> = {
     layout: slide.layout || 'default',
     ...parseBuilderConfigSource(slide.configSource),
-    ...slide.config,
-    ...(slide.titleKey ? { [slide.titleKey]: title } : {})
+    ...slide.config
   };
+  if (slide.titleKey && config[slide.titleKey] !== false)
+    config[slide.titleKey] = title;
   // A saved source block must not override the currently selected layout.
   config.layout = slide.layout || 'default';
   return config;
