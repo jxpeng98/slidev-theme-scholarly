@@ -11,8 +11,11 @@ type BuilderMessage = {
 };
 
 let currentPanel: vscode.WebviewPanel | undefined;
+let insertionTarget: vscode.TextEditor | undefined;
 
 export function openGuiBuilder(context: vscode.ExtensionContext): void {
+  if (vscode.window.activeTextEditor || !currentPanel)
+    insertionTarget = vscode.window.activeTextEditor;
   if (currentPanel) {
     currentPanel.reveal(vscode.ViewColumn.One);
     return;
@@ -33,8 +36,19 @@ export function openGuiBuilder(context: vscode.ExtensionContext): void {
   );
 
   currentPanel = panel;
+  const editorChanges = vscode.window.onDidChangeActiveTextEditor(editor => {
+    // A Webview clears activeTextEditor. Keep the last explicit target, including
+    // non-Markdown editors so they cannot silently fall back to an older file.
+    if (editor) insertionTarget = editor;
+  });
+  const documentClosures = vscode.workspace.onDidCloseTextDocument(document => {
+    if (insertionTarget?.document === document) insertionTarget = undefined;
+  });
   panel.onDidDispose(() => {
     currentPanel = undefined;
+    insertionTarget = undefined;
+    editorChanges.dispose();
+    documentClosures.dispose();
   }, null, context.subscriptions);
 
   panel.webview.html = renderGuiBuilderHtml({
@@ -103,8 +117,8 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
     }
 
     if (message.type === 'insertSelectedSlide') {
-      const editor = vscode.window.activeTextEditor;
-      if (!editor || editor.document.languageId !== 'markdown') {
+      const target = vscode.window.activeTextEditor || insertionTarget;
+      if (!target || target.document.isClosed || target.document.languageId !== 'markdown') {
         vscode.window.showWarningMessage(t('Open a Markdown file before inserting a slide'));
         return;
       }
@@ -112,15 +126,21 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
       const slide = message.state.slides?.[0];
       if (!slide) return;
       const markdown = renderBuilderSlides([slide], message.state.lang).trim();
+      const selection = target.selection;
+      const editor = await vscode.window.showTextDocument(target.document, {
+        viewColumn: target.viewColumn,
+        selection
+      });
       const offset = editor.document.offsetAt(editor.selection.active);
       const before = editor.document.getText().slice(0, offset).trimEnd();
       const after = editor.document.getText().slice(offset).trimStart();
-      await editor.edit(editBuilder => {
+      const inserted = await editor.edit(editBuilder => {
         editBuilder.insert(
           editor.selection.active,
           `${before ? '\n\n' : ''}${markdown}${after ? '\n\n' : '\n'}`
         );
       });
+      if (!inserted) throw new Error(t('The slide could not be inserted. Try again in the target Markdown file.'));
     }
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);

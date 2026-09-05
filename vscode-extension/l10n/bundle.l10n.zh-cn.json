@@ -147,6 +147,7 @@
   "Open Preview to see the full theme gallery.": "打开预览可查看完整主题图集。",
   "Open a Markdown file before inserting Scholarly content": "请先打开 Markdown 文件，再插入 Scholarly 内容",
   "Open a Markdown file before inserting a slide": "请先打开 Markdown 文件，再插入页面",
+  "The slide could not be inserted. Try again in the target Markdown file.": "页面插入失败。请在目标 Markdown 文件中重试。",
   "Open a Markdown file first": "请先打开 Markdown 文件",
   "Open a Markdown file to edit Slidev frontmatter": "请打开 Markdown 文件后再修改 Slidev frontmatter",
   "Open a Markdown file to use the anchor tools": "请打开 Markdown 文件后再使用锚点工具",

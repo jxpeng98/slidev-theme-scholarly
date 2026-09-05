@@ -355,3 +355,10 @@ pnpm --dir vscode-extension run check:package
 - 预览目检发现阶段 3 的 `grid-row: 3` 被错误应用到卡片与底部说明的共享选择器，导致 `cols: 2` 生成四个隐式列。已将定位规则限制到说明区，恢复卡片自然换行。
 - 现有内容检查增加实际渲染列数断言；修复前以 `4 !== 2` 失败，修复后两种画幅、浅深模式的播放与打印几何、PNG/PDF 导出均通过，超量内容负例继续失败。已目检 16:9 导出，四实验为两列两行，指标与备注完整。
 - 证据：`phase-5-columns-before.log`、`phase-5-columns-after.log`、`content-columns-after/`。已重新执行全部 34 个布局截图生成，派生资源随 UI 文档批次统一提交。
+
+### 阶段 5C · 原生插入目标修复 · 2026-09-05
+
+- 在真实 VS Code 配置 `Scholarly-Acceptance-20260905` 中复现：打开 Builder 后 `activeTextEditor` 为空，已打开 Markdown 仍收到“请先打开 Markdown”警告。修复为保留最近的明确文本编辑目标；非 Markdown 编辑器也会更新目标，防止回退误写旧文件；目标关闭和面板销毁会清理引用与监听。
+- 插入前恢复目标编辑器与选择位置，失败的 edit 返回值会显示本地化错误。新增宿主回归覆盖 Webview 焦点、非 Markdown 拦截、未保存目标、目标关闭、新建、空环境与编辑失败；插件 33/33 测试、编译、lint、重新打包和独立包检查通过。
+- 真实宿主复验：从 Webview 插入成功，原 Markdown 内容保留；切换到 `unrelated.txt` 后插入被拦截，未回退修改旧 Markdown；新建文件经实际 Slidev parser 解析为 8 页。临时文件位于 `/tmp/scholarly-vscode-acceptance/fixtures/`；证据为 `phase-5-native-files.log` 及本任务原生 UI 操作记录。
+- `phase-5-host-*.log` 保存当前宿主修复的检查结果。真实未保存目标与关闭后的空环境、高对比、读屏抽查仍待补齐；自动化宿主回归不替代这些原生场景。
