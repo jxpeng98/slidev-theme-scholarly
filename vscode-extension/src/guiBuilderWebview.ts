@@ -342,16 +342,19 @@ function scholarlyConfigMarkup(item: ScholarlyConfigEntry, value: unknown, input
     ? item.options
     : scholarlyBooleanOnly(item.type) ? ['true', 'false'] : [];
   const requirement = item.required ? scholarlyCopy('required', '必填') : scholarlyCopy('optional', '可选');
+  const error = scholarlyParseConfig(raw, item.type, item.required).error;
+  const errorId = `config-error-${item.name}`;
+  const feedback = `<small id="${scholarlyEscape(errorId)}" class="config-error" ${error ? '' : 'hidden'}>${scholarlyEscape(error)}</small>`;
   const label = `<div class="config-heading"><code>${scholarlyEscape(item.name)}</code><span>${scholarlyEscape(item.type)} · ${requirement}</span></div><span class="config-description">${scholarlyEscape(item.description)}</span>`;
-  const attributes = `data-config-name="${scholarlyEscape(item.name)}" data-config-type="${scholarlyEscape(item.type)}" ${item.required ? 'required' : ''}`;
+  const attributes = `data-config-name="${scholarlyEscape(item.name)}" data-config-type="${scholarlyEscape(item.type)}" aria-invalid="${Boolean(error)}" aria-describedby="${scholarlyEscape(errorId)}" ${item.required ? 'required' : ''}`;
 
   if (values.length) {
-    return `<label class="config-item">${label}<select ${attributes}><option value="">${item.default !== undefined ? `${scholarlyCopy('Default', '默认值')}: ${scholarlyEscape(item.default)}` : scholarlyCopy('Leave blank', '留空')}</option>${values.map(option => `<option value="${scholarlyEscape(option)}" ${raw === option ? 'selected' : ''}>${scholarlyEscape(option)}</option>`).join('')}</select></label>`;
+    return `<label class="config-item">${label}<select ${attributes}><option value="">${item.default !== undefined ? `${scholarlyCopy('Default', '默认值')}: ${scholarlyEscape(item.default)}` : scholarlyCopy('Leave blank', '留空')}</option>${values.map(option => `<option value="${scholarlyEscape(option)}" ${raw === option ? 'selected' : ''}>${scholarlyEscape(option)}</option>`).join('')}</select>${feedback}</label>`;
   }
   if (scholarlyStructuredType(item.type)) {
-    return `<label class="config-item">${label}<textarea rows="4" ${attributes} placeholder="${scholarlyCopy('JSON, for example [...] or {...}', '填写 JSON，例如 [...] 或 {...}')}">${scholarlyEscape(raw)}</textarea></label>`;
+    return `<label class="config-item">${label}<textarea rows="4" ${attributes} placeholder="${scholarlyCopy('JSON, for example [...] or {...}', '填写 JSON，例如 [...] 或 {...}')}">${scholarlyEscape(raw)}</textarea>${feedback}</label>`;
   }
-  return `<label class="config-item">${label}<input type="${scholarlyNumberOnly(item.type) ? 'number' : 'text'}" ${attributes} value="${scholarlyEscape(raw)}" placeholder="${item.default !== undefined ? `${scholarlyCopy('Default', '默认值')}: ${scholarlyEscape(item.default)}` : scholarlyCopy('Leave blank', '留空')}" /></label>`;
+  return `<label class="config-item">${label}<input type="${scholarlyNumberOnly(item.type) ? 'number' : 'text'}" ${attributes} value="${scholarlyEscape(raw)}" placeholder="${item.default !== undefined ? `${scholarlyCopy('Default', '默认值')}: ${scholarlyEscape(item.default)}` : scholarlyCopy('Leave blank', '留空')}" />${feedback}</label>`;
 }
 
 function scholarlyFilterLayouts(): void {
@@ -454,58 +457,68 @@ function scholarlyChangeLayout(layoutId: string): void {
 function scholarlyUpdateConfig(input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement): void {
   const slide = scholarlySelectedSlide();
   if (!slide || !input.dataset.configName || !input.dataset.configType) return;
-  const parsed = scholarlyParseConfig(input.value, input.dataset.configType);
+  const entry = scholarlyLayoutById(slide.layout)?.config?.find(item => item.name === input.dataset.configName);
+  if (!entry) return;
+  const parsed = scholarlyParseConfig(input.value, entry.type, entry.required);
   slide.configInputs[input.dataset.configName] = input.value;
   input.setCustomValidity(parsed.error);
   input.setAttribute('aria-invalid', parsed.error ? 'true' : 'false');
+  const feedback = scholarlyById(`config-error-${entry.name}`);
+  feedback.textContent = parsed.error;
+  feedback.hidden = !parsed.error;
   if (input.value.trim()) slide.config[input.dataset.configName] = parsed.value;
   else delete slide.config[input.dataset.configName];
   scholarlyMarkDirty();
   scholarlyRequestPreview();
 }
 
-function scholarlyValidateDeck(): boolean {
-  if (!scholarlyState.title.trim()) {
+function scholarlyFindSlideError(slide: ScholarlySlide): { name: string; error: string } | undefined {
+  for (const entry of scholarlyLayoutById(slide.layout)?.config || []) {
+    const value = slide.configInputs[entry.name] ?? slide.config[entry.name];
+    // Original workflow YAML is checked by the host after parsing it.
+    if (slide.configSource && value === undefined) continue;
+    const parsed = scholarlyParseConfigValue(value, entry.type, entry.required, scholarlyData.language);
+    if (parsed.error) return { name: entry.name, error: parsed.error };
+  }
+  return undefined;
+}
+
+function scholarlyValidateDeck(selectedOnly = false): boolean {
+  if (!selectedOnly && !scholarlyState.title.trim()) {
     scholarlyShowMessage(scholarlyCopy(
       'Add a presentation title before creating the Markdown file.',
       '请先填写演示标题，再生成 Markdown。'
     ), true);
-    scholarlyById<HTMLInputElement>('deck-title').focus();
+    const input = scholarlyById<HTMLInputElement>('deck-title');
+    const details = input.closest('details');
+    if (details) details.open = true;
+    input.focus();
     return false;
   }
-  if (!scholarlyState.slides.length) {
+  const selected = scholarlySelectedSlide();
+  const slides = selectedOnly ? selected ? [selected] : [] : scholarlyState.slides;
+  if (!slides.length) {
     scholarlyShowMessage(scholarlyCopy(
       'Add at least one slide before creating the Markdown file.',
       '请至少添加一页，再生成 Markdown。'
     ), true);
     return false;
   }
-  for (const slide of scholarlyState.slides) {
-    if (slide.configSource) continue;
-    const layout = scholarlyLayoutById(slide.layout);
-    for (const item of layout?.config || []) {
-      const value = slide.config[item.name];
-      const raw = typeof value === 'object' ? JSON.stringify(value) : String(value ?? '');
-      const error = value === undefined
-        ? item.required
-          ? scholarlyData.language === 'zh-cn'
-            ? `此布局必须填写 ${item.name}。`
-            : `${item.name} is required for this layout.`
-          : ''
-        : scholarlyParseConfig(raw, item.type).error;
-      if (!error) continue;
-      scholarlySelectedId = slide.id;
-      scholarlyRenderSlides();
-      scholarlyRenderInspector();
-      scholarlyById<HTMLDetailsElement>('layout-settings').open = true;
-      scholarlyShowMessage(`${slide.title}: ${error}`, true);
-      const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[data-config-name="${CSS.escape(item.name)}"]`);
-      input?.setCustomValidity(error);
-      input?.setAttribute('aria-invalid', 'true');
-      input?.focus();
-      input?.reportValidity();
-      return false;
-    }
+  for (const slide of slides) {
+    const issue = scholarlyFindSlideError(slide);
+    if (!issue) continue;
+    scholarlySelectedId = slide.id;
+    scholarlySaveState();
+    scholarlyRenderSlides();
+    scholarlyRenderInspector();
+    scholarlyById<HTMLDetailsElement>('layout-settings').open = true;
+    scholarlyShowMessage(`${slide.title}: ${issue.error}`, true);
+    const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[data-config-name="${CSS.escape(issue.name)}"]`);
+    input?.setCustomValidity(issue.error);
+    input?.setAttribute('aria-invalid', 'true');
+    input?.focus();
+    input?.reportValidity();
+    return false;
   }
   return true;
 }
@@ -515,24 +528,8 @@ function scholarlyRevealContentOnNarrowView(): void {
     scholarlyById('content-heading').scrollIntoView({ block: 'start' });
 }
 
-function scholarlyParseConfig(raw: string, type: string): { value: unknown; error: string } {
-  const value = raw.trim();
-  if (!value) return { value: undefined, error: '' };
-  if (scholarlyStructuredType(type)) {
-    try { return { value: JSON.parse(value), error: '' }; }
-    catch { return { value: raw, error: scholarlyCopy('Enter valid JSON.', '请输入有效的 JSON。') }; }
-  }
-  if (scholarlyBooleanOnly(type)) {
-    if (/^(true|false)$/i.test(value)) return { value: value.toLowerCase() === 'true', error: '' };
-    return { value: raw, error: scholarlyCopy('Choose true or false.', '请选择 true 或 false。') };
-  }
-  if (scholarlyNumberOnly(type)) {
-    const number = Number(value);
-    return Number.isFinite(number)
-      ? { value: number, error: '' }
-      : { value: raw, error: scholarlyCopy('Enter a valid number.', '请输入有效数字。') };
-  }
-  return { value, error: '' };
+function scholarlyParseConfig(raw: string, type: string, required = false): { value: unknown; error: string } {
+  return scholarlyParseConfigValue(raw, type, required, scholarlyData.language);
 }
 
 function scholarlyStructuredType(type: string): boolean {
@@ -552,6 +549,11 @@ function scholarlyRequestPreview(): void {
   scholarlyPreviewTimer = window.setTimeout(() => {
     const slide = scholarlySelectedSlide();
     if (!slide) return;
+    const issue = scholarlyFindSlideError(slide);
+    if (issue) {
+      scholarlyById('markdown-preview').textContent = issue.error;
+      return;
+    }
     scholarlyVscode.postMessage({
       type: 'previewSelectedSlide',
       state: { ...scholarlyState, slides: [slide] }
@@ -560,7 +562,7 @@ function scholarlyRequestPreview(): void {
 }
 
 function scholarlyPost(type: 'generateNewDocument' | 'insertSelectedSlide'): void {
-  if (!scholarlyValidateDeck()) return;
+  if (!scholarlyValidateDeck(type === 'insertSelectedSlide')) return;
   if (type === 'insertSelectedSlide') {
     const slide = scholarlySelectedSlide();
     if (!slide) return;
@@ -754,8 +756,9 @@ scholarlyById('create-markdown').addEventListener('click', () => scholarlyPost('
 scholarlyById('insert-selected').addEventListener('click', () => scholarlyPost('insertSelectedSlide'));
 
 window.addEventListener('message', event => {
-  if (event.data?.type === 'selectedSlidePreview')
-    scholarlyById('markdown-preview').textContent = event.data.markdown || '';
+  if (event.data?.type === 'selectedSlidePreview') {
+    scholarlyById('markdown-preview').textContent = event.data.error || event.data.markdown || '';
+  }
 });
 
 document.addEventListener('error', event => {

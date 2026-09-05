@@ -121,6 +121,11 @@ button:disabled {
   color: var(--sch-error);
 }
 
+.config-error {
+  color: var(--sch-error);
+  font-size: 12px;
+}
+
 .workspace {
   display: grid;
   grid-template-columns: minmax(280px, 330px) minmax(330px, 420px) minmax(380px, 1fr);

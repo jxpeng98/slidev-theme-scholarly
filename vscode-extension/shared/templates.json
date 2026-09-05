@@ -287,7 +287,7 @@
                         "slots": {},
                         "heading": false,
                         "titleKey": "title",
-                        "configSource": "items:\n  - label: 1\n    title: Context\n    description: Why the problem matters\n  - label: 2\n    title: Related Work\n    description: Where the current project fits\n  - label: 3\n    title: Method\n    description: What we changed and measured\n  - label: 4\n    title: Discussion\n    description: What feedback would help most"
+                        "configSource": "items:\n  - 'Context: Why the problem matters'\n  - 'Related Work: Where the current project fits'\n  - 'Method: What we changed and measured'\n  - 'Discussion: What feedback would help most'"
                     },
                     {
                         "id": "default-3",
@@ -393,7 +393,7 @@
                         "slots": {},
                         "heading": false,
                         "titleKey": "title",
-                        "configSource": "cols: 2\nexperiments:\n  - name: Visual QA\n    setup: Theme matrix across modes\n    result: 72\n    metric: screenshots\n    note: Covers quote, code, table, and highlight states\n  - name: Citation QA\n    setup: Doctor and VS Code diagnostics\n    result: 5\n    metric: issue classes\n    note: Catches missing setup and unresolved keys\n  - name: Template QA\n    setup: Initialize every curated workflow\n    result: 5\n    metric: templates\n    note: Validates package replacement and references\n  - name: User Fit\n    setup: Paper talk and defense dry runs\n    result: qualitative\n    metric: feedback\n    note: Focuses on presenter friction"
+                        "configSource": "cols: 2\nexperiments:\n  - name: Visual QA\n    setup: Theme matrix across modes\n    result: '72'\n    metric: screenshots\n    note: Covers quote, code, table, and highlight states\n  - name: Citation QA\n    setup: Doctor and VS Code diagnostics\n    result: '5'\n    metric: issue classes\n    note: Catches missing setup and unresolved keys\n  - name: Template QA\n    setup: Initialize every curated workflow\n    result: '5'\n    metric: templates\n    note: Validates package replacement and references\n  - name: User Fit\n    setup: Paper talk and defense dry runs\n    result: qualitative\n    metric: feedback\n    note: Focuses on presenter friction"
                     },
                     {
                         "id": "limitation-4",

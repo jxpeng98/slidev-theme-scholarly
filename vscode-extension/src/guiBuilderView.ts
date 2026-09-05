@@ -48,6 +48,7 @@ export interface GuiBuilderHtmlOptions {
   language?: 'en' | 'zh-cn';
   styleUri: string;
   scriptUri: string;
+  validationScriptUri: string;
   layouts: GuiBuilderLayoutOption[];
   templates: GuiBuilderTemplateOption[];
   colorThemes: GuiBuilderThemeOption[];
@@ -239,6 +240,7 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
     </main>
   </div>
   <script nonce="${options.nonce}">window.scholarlyBuilderData = ${data};</script>
+  <script nonce="${options.nonce}" src="${escapeHtml(options.validationScriptUri)}"></script>
   <script nonce="${options.nonce}" src="${escapeHtml(options.scriptUri)}"></script>
 </body>
 </html>`;

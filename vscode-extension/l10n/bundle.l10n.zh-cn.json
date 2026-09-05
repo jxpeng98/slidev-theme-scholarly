@@ -88,6 +88,8 @@
   "Create bibliography file: {0}": "新建参考文献文件：{0}",
   "Customize": "定制",
   "Deck Builder could not finish the action: {0}": "Deck Builder 无法完成此操作：{0}",
+  "Add a presentation title before creating Markdown.": "请先填写演示标题，再生成 Markdown。",
+  "Add at least one slide before creating Markdown.": "请至少添加一页，再生成 Markdown。",
   "Doctor": "项目检查",
   "Duplicate BibTeX key: {0}": "BibTeX key 重复：{0}",
   "Enter a citation key, for example smith2023": "输入引用 key，例如 smith2023",

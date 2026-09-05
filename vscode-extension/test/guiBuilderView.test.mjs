@@ -10,6 +10,7 @@ test('renders the workflow-driven Deck Builder shell', async () => {
     cspSource: 'vscode-resource:',
     styleUri: 'vscode-resource:/gui-builder.css',
     scriptUri: 'vscode-resource:/guiBuilderWebview.js',
+    validationScriptUri: 'vscode-resource:/guiBuilderValidation.js',
     layouts: [{
       id: 'cover',
       label: 'title-slide',
@@ -60,6 +61,7 @@ test('renders a natural Simplified Chinese Deck Builder shell', () => {
     cspSource: 'vscode-resource:',
     styleUri: 'vscode-resource:/gui-builder.css',
     scriptUri: 'vscode-resource:/guiBuilderWebview.js',
+    validationScriptUri: 'vscode-resource:/guiBuilderValidation.js',
     language: 'zh-cn',
     layouts: [{
       id: 'cover',

@@ -155,3 +155,46 @@ test('renders one selected slide without deck frontmatter', () => {
   assert.match(markdown, /^---\nlayout: quote\n---/);
   assert.doesNotMatch(markdown, /theme: scholarly/);
 });
+
+test('rejects malformed layout settings at both generation boundaries', () => {
+  assert.throws(() => renderBuilderMarkdown({ slides: [{ layout: 'default', config: [] }] }), /mapping/);
+  for (const images of [{}, null, ['valid.png', 2], '["unfinished"', [], undefined]) {
+    const slide = createBuilderSlide('split-image', { title: 'Images', config: { images } });
+    assert.throws(() => renderBuilderSlides([slide]), /images/);
+    assert.throws(() => renderBuilderMarkdown({ title: 'Deck', slides: [slide] }), /images/);
+  }
+  for (const configSource of ['images: {}', 'images: null', 'images: [a.png, 2]']) {
+    const slide = createBuilderSlide('split-image', { configSource });
+    assert.throws(() => renderBuilderSlides([slide]), /images/);
+    assert.throws(() => renderBuilderMarkdown({ slides: [slide] }), /images/);
+  }
+  assert.throws(() => renderBuilderSlides([
+    createBuilderSlide('method-pipeline', { config: { steps: [{ description: 'Missing title' }] } })
+  ]), /steps/);
+  assert.throws(() => renderBuilderSlides([
+    createBuilderSlide('default', { config: { fontsize: { h1: [] } } })
+  ]), /fontsize/);
+  assert.throws(() => renderBuilderMarkdown({ title: '', slides: [createBuilderSlide('cover')] }), /title/);
+  assert.throws(() => renderBuilderMarkdown({ title: 'Deck', slides: [] }), /slide/);
+});
+
+test('preserves supported scalar, union and structured setting values', () => {
+  const images = renderBuilderSlides([createBuilderSlide('split-image', {
+    config: { images: ['a.png', 'b.png'], captions: [] }
+  })]);
+  assert.match(images, /images: \["a.png","b.png"\]/);
+  assert.match(images, /captions: \[\]/);
+  const source = renderBuilderSlides([
+    createBuilderSlide('toc', { config: { title: false, showNumbers: false } }),
+    createBuilderSlide('paper-summary', { config: { year: 2026, authors: 'A. Researcher' } }),
+    createBuilderSlide('auto-size', { config: { minFontSize: '18', fontsize: { h1: '2rem', body: 18 } } }),
+    createBuilderSlide('method-pipeline', { config: { steps: [{ title: 'Collect', detail: 'Source data' }] } })
+  ]);
+  assert.match(source, /title: false/);
+  assert.match(source, /showNumbers: false/);
+  assert.match(source, /year: 2026/);
+  assert.match(source, /authors: A. Researcher/);
+  assert.match(source, /minFontSize: 18/);
+  assert.match(source, /"h1":"2rem","body":18/);
+  assert.match(source, /"title":"Collect"/);
+});

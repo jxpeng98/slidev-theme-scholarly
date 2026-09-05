@@ -64,6 +64,9 @@ export function openGuiBuilder(context: vscode.ExtensionContext): void {
     ).toString(),
     scriptUri: panel.webview.asWebviewUri(
       vscode.Uri.joinPath(context.extensionUri, 'out', 'guiBuilderWebview.js')
+    ).toString(),
+    validationScriptUri: panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, 'out', 'guiBuilderValidation.js')
     ).toString()
   });
 
@@ -75,7 +78,7 @@ export function openGuiBuilder(context: vscode.ExtensionContext): void {
 }
 
 async function handleBuilderMessage(panel: vscode.WebviewPanel, message: BuilderMessage): Promise<void> {
-  if (!message.type || !message.state) return;
+  if (!message?.type || !message.state) return;
   try {
     if (message.type === 'previewSelectedSlide') {
       const slide = message.state.slides?.[0];
@@ -87,6 +90,10 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
     }
 
     if (message.type === 'generateNewDocument') {
+      if (typeof message.state.title !== 'string' || !message.state.title.trim())
+        throw new Error(t('Add a presentation title before creating Markdown.'));
+      if (!Array.isArray(message.state.slides) || !message.state.slides.length)
+        throw new Error(t('Add at least one slide before creating Markdown.'));
       const document = await vscode.workspace.openTextDocument({
         language: 'markdown',
         content: renderBuilderMarkdown(message.state)
@@ -117,6 +124,10 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
     }
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
+    if (message.type === 'previewSelectedSlide') {
+      await panel.webview.postMessage({ type: 'selectedSlidePreview', markdown: '', error: detail });
+      return;
+    }
     vscode.window.showErrorMessage(t('Deck Builder could not finish the action: {0}', detail));
   }
 }

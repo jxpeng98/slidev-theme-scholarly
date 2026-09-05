@@ -3,12 +3,13 @@ import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
 import { renderGuiBuilderHtml } from '../vscode-extension/out/guiBuilderView.js'
-import { renderBuilderSlides } from '../vscode-extension/out/guiBuilderModel.js'
+import { renderBuilderMarkdown, renderBuilderSlides } from '../vscode-extension/out/guiBuilderModel.js'
 import {
   BUILDER_TEMPLATES, LAYOUT_CATALOG, COLOR_THEMES, FONT_THEMES, CONTENT_MODES, SURFACE_MODES,
 } from '../vscode-extension/out/sharedData.js'
 
 const assets = new Map([
+  ['/guiBuilderValidation.js', ['../vscode-extension/out/guiBuilderValidation.js', 'text/javascript']],
   ['/guiBuilderWebview.js', ['../vscode-extension/out/guiBuilderWebview.js', 'text/javascript']],
   ['/gui-builder.css', ['../vscode-extension/media/gui-builder.css', 'text/css']],
 ])
@@ -38,6 +39,7 @@ const server = createServer(async (request, response) => {
       nonce: 'ui-check', cspSource: "'self'",
       language: url.searchParams.get('lang') === 'zh-cn' ? 'zh-cn' : 'en',
       styleUri: '/gui-builder.css', scriptUri: '/guiBuilderWebview.js',
+      validationScriptUri: '/guiBuilderValidation.js',
       layouts: Object.entries(LAYOUT_CATALOG).map(([id, entry]) => ({
         id, ...entry, description: entry.summary,
       })),
@@ -126,8 +128,53 @@ try {
   await page.locator('#deck-title').fill('')
   await page.reload()
   assert.equal((await saved()).state.title, '', 'preserve an unfinished title across reload')
+
+  // Insertion is scoped to the selected page, even with an unfinished deck title
+  // and another page whose images are invalid.
+  const messages = () => page.evaluate(() => window.__messages)
+  await page.evaluate(() => { window.__messages = [] })
+  await page.locator('#insert-selected').click()
+  const insertion = (await messages()).find(message => message.type === 'insertSelectedSlide')
+  assert.ok(insertion, 'a valid selected page can be inserted independently')
+  assert.equal(insertion.state.slides.length, 1)
+  assert.equal(insertion.state.slides[0].id, configured.id)
+  assert.doesNotThrow(() => renderBuilderSlides(insertion.state.slides, insertion.state.lang))
+
+  await page.locator('#create-markdown').click()
+  assert.equal(await page.locator('.deck-settings').getAttribute('open'), '')
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'deck-title')
+  await page.locator('#deck-title').fill('Validated deck')
+  await page.locator('#create-markdown').click()
+  assert.equal((await selected()).id, original.id, 'whole-deck validation selects the invalid page')
+  assert.equal(await page.evaluate(() => document.activeElement.dataset.configName), 'images')
+  assert.ok(!(await messages()).some(message => message.type === 'generateNewDocument'))
+  for (const input of ['{}', 'null', '["a.png", 2]', '["unfinished"', '[]']) {
+    await page.locator('[data-config-name="images"]').fill(input)
+    assert.equal(await page.locator('[data-config-name="images"]').getAttribute('aria-invalid'), 'true')
+    assert.ok(await page.locator('#config-error-images').isVisible())
+    await page.evaluate(() => { window.__messages = [] })
+    await page.locator('#insert-selected').click()
+    assert.ok(!(await messages()).some(message => message.type === 'insertSelectedSlide'))
+    assert.equal(await page.locator('[data-config-name="images"]').inputValue(), input)
+  }
+  await page.waitForFunction(() => document.querySelector('#markdown-preview').textContent.includes('required'))
+  assert.ok(!(await messages()).some(message => message.type === 'previewSelectedSlide'))
+  await page.locator('[data-config-name="images"]').fill('["a.png", "b.png"]')
+  assert.equal(await page.locator('[data-config-name="images"]').getAttribute('aria-invalid'), 'false')
+  await page.locator('#insert-selected').click()
+  const validInsertion = (await messages()).find(message => message.type === 'insertSelectedSlide')
+  assert.ok(validInsertion)
+  assert.doesNotThrow(() => renderBuilderSlides(validInsertion.state.slides))
+  await page.locator('#create-markdown').click()
+  const fullDeck = (await messages()).find(message => message.type === 'generateNewDocument')
+  assert.ok(fullDeck)
+  assert.doesNotThrow(() => renderBuilderMarkdown(fullDeck.state))
+  await page.goto(`http://127.0.0.1:${server.address().port}/?lang=zh-cn`)
+  await page.locator('#layout-settings').evaluate(element => { element.open = true })
+  await page.locator('[data-config-name="images"]').fill('{}')
+  assert.match(await page.locator('#config-error-images').textContent(), /只包含文本/)
   assert.deepEqual(errors, [], 'no unhandled browser errors')
-  console.log('Builder browser checks passed: layout drafts, isolation, invalid input, persistence and active-layout output.')
+  console.log('Builder browser checks passed: drafts, persistence, scoped insertion, whole-deck validation, errors and bilingual feedback.')
 } finally {
   await browser?.close()
   await new Promise(resolve => server.close(resolve))

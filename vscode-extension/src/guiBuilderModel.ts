@@ -1,6 +1,9 @@
 import { LAYOUT_CATALOG } from './sharedData';
 
 const yaml = require('js-yaml');
+const { parseConfigInput } = require('./guiBuilderValidation') as {
+  parseConfigInput: typeof scholarlyParseConfigValue;
+};
 
 export interface BuilderSlideInput {
   id?: string;
@@ -53,6 +56,8 @@ export function createBuilderSlide(
   layout: string,
   values: Omit<BuilderSlideInput, 'layout'> = {}
 ): BuilderSlide {
+  if (values.config !== undefined && (!values.config || typeof values.config !== 'object' || Array.isArray(values.config)))
+    throw new Error('Layout settings must be a mapping of setting names to values.');
   slideCounter += 1;
   return {
     id: values.id || `slide-${slideCounter}`,
@@ -71,6 +76,10 @@ export function createBuilderSlide(
 }
 
 export function renderBuilderMarkdown(state: BuilderDeckState): string {
+  if (state.title !== undefined && !state.title.trim())
+    throw new Error('Add a presentation title before creating Markdown.');
+  if (state.slides && !state.slides.length)
+    throw new Error('Add at least one slide before creating Markdown.');
   const slides = state.slides?.length
     ? state.slides.map(slide => createBuilderSlide(slide.layout || 'default', slide))
     : [createBuilderSlide('default')];
@@ -121,13 +130,13 @@ function renderFrontmatter(state: BuilderDeckState, firstSlide: BuilderSlide): s
   if (typeof first.title === 'string' && first.title !== deckTitle) {
     config.titleTemplate = String(extra.titleTemplate || '%s - Slidev').replace('%s', deckTitle);
   }
-  return ['---', ...renderFrontmatterEntries(firstSlide.layout, config), '---'].join('\n');
+  return ['---', ...renderFrontmatterEntries(firstSlide.layout, config, state.lang), '---'].join('\n');
 }
 
 function renderSlide(slide: BuilderSlide, chinese: boolean): string {
   return [
     '---',
-    ...renderFrontmatterEntries(slide.layout, slideFrontmatter(slide, chinese)),
+    ...renderFrontmatterEntries(slide.layout, slideFrontmatter(slide, chinese), chinese ? 'zh' : 'en'),
     '---',
     '',
     renderSlideContent(slide, chinese)
@@ -201,22 +210,25 @@ function isChinese(lang: string | undefined): boolean {
   return Boolean(lang?.toLowerCase().startsWith('zh'));
 }
 
-function renderFrontmatterEntries(layout: string, config: Record<string, unknown>): string[] {
-  const configTypes = new Map(
-    (LAYOUT_CATALOG[layout]?.config ?? []).map(item => [item.name, item.type])
-  );
+function renderFrontmatterEntries(layout: string, config: Record<string, unknown>, language = 'en'): string[] {
+  for (const entry of LAYOUT_CATALOG[layout]?.config || []) {
+    const parsed = parseConfigInput(config[entry.name], entry.type, entry.required, language);
+    if (parsed.error) throw new Error(`${config.title || layout}: ${entry.name} — ${parsed.error}`);
+    if (parsed.value !== undefined) config[entry.name] = parsed.value;
+    else delete config[entry.name];
+  }
 
   return Object.entries(config).flatMap(([name, value]) => {
     if (!isSafeFrontmatterKey(name)) return [];
     if (name === 'themeConfig' && value && typeof value === 'object' && !Array.isArray(value)) {
       return ['themeConfig:', ...renderFrontmatterEntries('', value as Record<string, unknown>).map(line => `  ${line}`)];
     }
-    const rendered = yamlConfigValue(value, configTypes.get(name));
+    const rendered = yamlConfigValue(value);
     return rendered === undefined ? [] : [`${name}: ${rendered}`];
   });
 }
 
-function yamlConfigValue(value: unknown, declaredType?: string): string | undefined {
+function yamlConfigValue(value: unknown): string | undefined {
   if (value === null || typeof value === 'number' || typeof value === 'boolean')
     return JSON.stringify(value);
 
@@ -227,40 +239,7 @@ function yamlConfigValue(value: unknown, declaredType?: string): string | undefi
   const trimmed = value.trim();
   if (!trimmed) return undefined;
 
-  if (isStructuredType(declaredType)) {
-    try {
-      return JSON.stringify(JSON.parse(trimmed));
-    } catch {
-      // UI validation rejects malformed JSON. Preserve older state safely as a string.
-    }
-  }
-
-  if (isBooleanOnlyType(declaredType) && /^(?:true|false)$/i.test(trimmed))
-    return trimmed.toLowerCase();
-
-  if (isNumberOnlyType(declaredType)) {
-    const parsed = Number(trimmed);
-    if (Number.isFinite(parsed)) return JSON.stringify(parsed);
-  }
-
   return yamlScalar(trimmed);
-}
-
-function isStructuredType(type: string | undefined): boolean {
-  return Boolean(type && (/\[\]|Array<|\{/.test(type)));
-}
-
-function isBooleanOnlyType(type: string | undefined): boolean {
-  return Boolean(type && isTopLevelType(type, 'boolean') && !isTopLevelType(type, 'string'));
-}
-
-function isNumberOnlyType(type: string | undefined): boolean {
-  return Boolean(type && isTopLevelType(type, 'number') && !isTopLevelType(type, 'string'));
-}
-
-function isTopLevelType(type: string, primitive: string): boolean {
-  const escaped = primitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`^\\s*${escaped}(?:\\s*\\||\\s*$)|\\|\\s*${escaped}\\s*(?:\\||$)`, 'i').test(type);
 }
 
 function normalizeRecord(value: unknown): Record<string, unknown> {
