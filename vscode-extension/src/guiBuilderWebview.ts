@@ -225,6 +225,7 @@ function scholarlyRenderSettings(): void {
   section.innerHTML = scholarlyData.surfaceModes.map(scholarlyOptionMarkup).join('');
 
   scholarlyById<HTMLInputElement>('deck-title').value = scholarlyState.title;
+  scholarlySetTitleError('');
   scholarlyById<HTMLInputElement>('deck-subtitle').value = scholarlyState.subtitle;
   color.value = scholarlyState.colorTheme;
   font.value = scholarlyState.fontTheme;
@@ -508,10 +509,12 @@ function scholarlyFindSlideError(slide: ScholarlySlide): { name: string; error: 
 
 function scholarlyValidateDeck(selectedOnly = false): boolean {
   if (!selectedOnly && !scholarlyState.title.trim()) {
-    scholarlyShowMessage(scholarlyCopy(
+    const error = scholarlyCopy(
       'Add a presentation title before creating the Markdown file.',
       '请先填写演示标题，再生成 Markdown。'
-    ), true);
+    );
+    scholarlySetTitleError(error);
+    scholarlyShowMessage(error, true);
     const input = scholarlyById<HTMLInputElement>('deck-title');
     const details = input.closest('details');
     if (details) details.open = true;
@@ -612,6 +615,14 @@ function scholarlyShowMessage(text: string, error = false): void {
   message.hidden = false;
   window.clearTimeout(scholarlyMessageTimer);
   scholarlyMessageTimer = window.setTimeout(() => { message.hidden = true; }, error ? 7000 : 4200);
+}
+
+function scholarlySetTitleError(error: string): void {
+  const input = scholarlyById<HTMLInputElement>('deck-title');
+  input.setAttribute('aria-invalid', String(Boolean(error)));
+  const feedback = scholarlyById('deck-title-error');
+  feedback.textContent = error;
+  feedback.hidden = !error;
 }
 
 function scholarlyHumanize(value: string): string {
@@ -716,6 +727,7 @@ scholarlyById('slide-list').addEventListener('dragend', () => {
 scholarlyById<HTMLInputElement>('deck-title').addEventListener('input', event => {
   const value = (event.target as HTMLInputElement).value;
   scholarlyState.title = value;
+  if (value.trim()) scholarlySetTitleError('');
   const cover = scholarlyState.slides.find(slide => slide.layout === 'cover');
   if (cover) cover.title = value;
   scholarlyMarkDirty();

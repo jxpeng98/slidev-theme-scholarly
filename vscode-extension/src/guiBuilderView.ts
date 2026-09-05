@@ -123,7 +123,8 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
           <div class="settings-fields">
             <div class="field">
               <label for="deck-title">${copy('Presentation title', '演示标题')}</label>
-              <input id="deck-title" />
+              <input id="deck-title" aria-required="true" aria-describedby="deck-title-error" />
+              <small id="deck-title-error" class="config-error" hidden></small>
             </div>
             <div class="field">
               <label for="deck-subtitle">${copy('Subtitle', '副标题')}</label>
