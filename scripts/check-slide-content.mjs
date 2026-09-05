@@ -88,6 +88,12 @@ try {
               await Promise.all([...document.images].map(image => image.decode()))
               await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
             })
+            if (target.layout === 'experiment-grid') {
+              const columns = await slide.locator('.experiment-grid-cards').evaluate(element =>
+                getComputedStyle(element).gridTemplateColumns.split(' ').length)
+              assert.equal(columns, Number(slides[target.number - 1].frontmatter.cols || 2),
+                `${id}: experiment cards must respect the configured column count`)
+            }
             const failures = await slide.evaluate(contentOverflows)
             assert.deepEqual(failures, [], `${id} / ${target.title} / ${print ? 'print' : 'play'}: reduce content or split the slide. ${JSON.stringify(failures)}`)
             if (target.layout === 'references') {

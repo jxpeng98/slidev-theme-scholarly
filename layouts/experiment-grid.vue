@@ -161,7 +161,6 @@ const gridStyle = computed(() => ({
 
 .experiment-grid-card,
 .experiment-grid-body {
-  grid-row: 3;
   min-width: 0;
   border: 1px solid var(--scholarly-content-border);
   border-radius: 0.5rem;
@@ -234,6 +233,7 @@ const gridStyle = computed(() => ({
 }
 
 .experiment-grid-body {
+  grid-row: 3;
   padding: 0;
   border: 0;
   background: transparent;

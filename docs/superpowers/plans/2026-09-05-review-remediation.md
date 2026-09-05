@@ -349,3 +349,9 @@ pnpm --dir vscode-extension run check:package
 - VSCE manifest 统一禁用依赖扫描，覆盖普通与预发布打包入口。新增 `check:package` 命令，在临时目录解包并运行真实模型，核对版本、8 个模板、91 个预览哈希和许可证，最后清理临时目录。
 - 最终配置打包、独立解包检查、插件 32/32 测试、lint 均通过。日志为 `phase-5-package-final.log`、`phase-5-vsix-final.log`、`phase-5-package-tests.log`、`phase-5-package-lint.log`，位于 `artifacts/remediation-2026-09-05/`。
 - 此结果证明包内运行时完整，不能替代真实 VS Code 的插入、新建、高对比和读屏验收。
+
+### 阶段 5B · 列数回归修复 · 2026-09-05
+
+- 预览目检发现阶段 3 的 `grid-row: 3` 被错误应用到卡片与底部说明的共享选择器，导致 `cols: 2` 生成四个隐式列。已将定位规则限制到说明区，恢复卡片自然换行。
+- 现有内容检查增加实际渲染列数断言；修复前以 `4 !== 2` 失败，修复后两种画幅、浅深模式的播放与打印几何、PNG/PDF 导出均通过，超量内容负例继续失败。已目检 16:9 导出，四实验为两列两行，指标与备注完整。
+- 证据：`phase-5-columns-before.log`、`phase-5-columns-after.log`、`content-columns-after/`。已重新执行全部 34 个布局截图生成，派生资源随 UI 文档批次统一提交。
