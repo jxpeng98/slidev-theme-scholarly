@@ -88,6 +88,10 @@ if (fullVisual) {
     command: ['node', 'scripts/check-ui-workflows.mjs'],
   })
   steps.push({
+    name: 'Research slide content visibility and export',
+    command: ['node', 'scripts/check-slide-content.mjs'],
+  })
+  steps.push({
     name: 'Theme matrix visual export',
     command: ['node', 'scripts/check-theme-matrix.mjs'],
   })
