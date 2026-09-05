@@ -84,6 +84,10 @@ const steps = [
 
 if (fullVisual) {
   steps.push({
+    name: 'Documentation responsive layout',
+    command: ['node', 'scripts/check-docs-layout.mjs'],
+  })
+  steps.push({
     name: 'Builder browser workflow behavior',
     command: ['node', 'scripts/check-ui-workflows.mjs'],
   })

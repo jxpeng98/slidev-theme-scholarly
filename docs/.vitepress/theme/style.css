@@ -51,8 +51,13 @@ html[lang^="zh"] .VPHome h1 {
   margin-inline: auto;
 }
 
+.VPHomeHero .image {
+  min-width: 0;
+}
+
 .VPHomeHero .image-container {
   width: min(82vw, 520px);
+  max-width: 100%;
   height: auto;
   aspect-ratio: 4 / 3;
   transform: none;
@@ -72,6 +77,7 @@ html[lang^="zh"] .VPHome h1 {
 
 @media (max-width: 959px) {
   .VPHomeHero .image {
+    margin-top: 0;
     margin-bottom: 32px;
   }
 }
