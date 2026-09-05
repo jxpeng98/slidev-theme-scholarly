@@ -65,6 +65,10 @@ const steps = [
     command: ['pnpm', 'run', 'vscode:compile'],
   },
   {
+    name: 'Builder Markdown page and metadata behavior',
+    command: ['node', 'scripts/check-builder-output.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
   },

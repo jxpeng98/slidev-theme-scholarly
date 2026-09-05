@@ -393,5 +393,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jxpeng98/slidev-theme-scholarly"
+  },
+  "dependencies": {
+    "js-yaml": "4.2.0"
   }
 }

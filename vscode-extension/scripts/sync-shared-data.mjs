@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import yaml from 'js-yaml';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -128,24 +129,14 @@ function extractNamedSlots(source) {
 
 function stripManagedFrontmatter(source) {
   const managed = new Set(['theme', 'title', 'subtitle', 'footerMiddle', 'lang']);
-  const lines = source.split('\n');
-  const kept = [];
-  let skipIndented = false;
-
-  for (const line of lines) {
-    if (/^themeConfig:\s*$/.test(line)) {
-      skipIndented = true;
-      continue;
-    }
-    if (skipIndented && /^\s+/.test(line)) continue;
-    skipIndented = false;
-
-    const key = line.match(/^([A-Za-z_][A-Za-z0-9_-]*):/)?.[1];
-    if (key && managed.has(key)) continue;
-    kept.push(line);
+  const data = yaml.load(source, { schema: yaml.JSON_SCHEMA });
+  for (const key of managed) delete data[key];
+  if (data.themeConfig) {
+    for (const key of ['colorTheme', 'fontTheme', 'contentMode', 'chromeMode', 'sectionMode'])
+      delete data.themeConfig[key];
+    if (!Object.keys(data.themeConfig).length) delete data.themeConfig;
   }
-
-  return kept.join('\n').trim();
+  return yaml.dump(data, { lineWidth: -1 }).trim();
 }
 
 function readIndentedBlock(source, key) {

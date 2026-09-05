@@ -15,7 +15,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "info: |\n  Presentation created with slidev-theme-scholarly\naspectRatio: 4/3\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "frontmatterSource": "info: |\n  Presentation created with slidev-theme-scholarly\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nauthors:\n  - name: Your Name\n    institution: Your Institution",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -78,7 +78,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Scholarly deck with citations\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your University",
+                "frontmatterSource": "description: Scholarly deck with citations\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your University",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -158,7 +158,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Structured academic paper presentation\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "frontmatterSource": "description: Structured academic paper presentation\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -267,7 +267,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Seminar deck with agenda, related work, method, and discussion\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Lab",
+                "frontmatterSource": "description: Seminar deck with agenda, related work, method, and discussion\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Lab",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -359,7 +359,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Defense deck with experiments, limitations, Q&A, and appendix map\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Department",
+                "frontmatterSource": "description: Defense deck with experiments, limitations, Q&A, and appendix map\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Department",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -459,7 +459,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Reading group deck for paper critique and discussion\naspectRatio: 4/3\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Discussion Lead\n    institution: Reading Group",
+                "frontmatterSource": "description: Reading group deck for paper critique and discussion\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Discussion Lead\n    institution: Reading Group",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -548,7 +548,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: Short conference talk with one claim and one result\naspectRatio: 16/9\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
+                "frontmatterSource": "description: Short conference talk with one claim and one result\naspectRatio: 16/9\nthemeConfig:\n  outlineToc: false\nbibFile: ./references.bib\nbibStyle: apa\nauthors:\n  - name: Your Name\n    institution: Your Institution",
                 "slides": [
                     {
                         "id": "cover-1",
@@ -620,7 +620,7 @@
                 "contentMode": "",
                 "chromeMode": "dark",
                 "sectionMode": "dark",
-                "frontmatterSource": "description: 使用 slidev-theme-scholarly 创建\naspectRatio: 4/3\nauthors:\n  - name: 你的名字\n    institution: 你的单位",
+                "frontmatterSource": "description: 使用 slidev-theme-scholarly 创建\naspectRatio: 4/3\nthemeConfig:\n  outlineToc: true\n  outlineTocOpen: false\nauthors:\n  - name: 你的名字\n    institution: 你的单位",
                 "slides": [
                     {
                         "id": "cover-1",

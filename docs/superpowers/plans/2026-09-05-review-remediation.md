@@ -65,13 +65,13 @@ R04 的两种表现需要分开验证：实验页已经证实 PNG 裁切；结�
 
 **A. R02：消除额外首页。**
 
-- [ ] 追踪整份生成、选中页预览、插入当前页三个入口；整份生成把第一页合入 headmatter，后续页继续使用页面分隔符。
-- [ ] 明确演示标题、第一页标题、模板附加 frontmatter 与布局配置之间的优先级，覆盖首页需要 `title` 参数的场景；不得靠重复 YAML 键或丢弃原有配置完成合并。
-- [ ] 保留第一页面的正文、具名 slots、布局，以及演示的语言、主题、作者、参考文献和画幅配置；删除或重排封面后，任意合法布局都能作为首页。
-- [ ] `renderBuilderSlides` 保持可插入片段的语义：不附带整份演示的主题 headmatter，继续保留页面分隔符。
-- [ ] 对全部 8 个模板实际调用已安装的 Slidev parser：输出页数等于大纲页数，第一页内容正确；增加非封面首页、特殊字符、配置和 slots 的回归。
+- [x] 追踪整份生成、选中页预览、插入当前页三个入口；整份生成把第一页合入 headmatter，后续页继续使用页面分隔符。
+- [x] 明确演示标题、第一页标题、模板附加 frontmatter 与布局配置之间的优先级，覆盖首页需要 `title` 参数的场景；不得靠重复 YAML 键或丢弃原有配置完成合并。
+- [x] 保留第一页面的正文、具名 slots、布局，以及演示的语言、主题、作者、参考文献和画幅配置；删除或重排封面后，任意合法布局都能作为首页。
+- [x] `renderBuilderSlides` 保持可插入片段的语义：不附带整份演示的主题 headmatter，继续保留页面分隔符。
+- [x] 对全部 8 个模板实际调用已安装的 Slidev parser：输出页数等于大纲页数，第一页内容正确；增加非封面首页、特殊字符、配置和 slots 的回归。
 
-实际解析检查放在根目录，建议新增 `scripts/check-builder-output.mjs`，接入 `scripts/release-ready.mjs` 的插件编译步骤之后。通过正常模块解析访问现有 Slidev 依赖，不硬编码 `.pnpm` 内部目录；插件独立测试和打包继续不依赖根目录安装的 Slidev。该文件当前尚不存在。
+实际解析检查放在根目录，建议新增 `scripts/check-builder-output.mjs`，接入 `scripts/release-ready.mjs` 的插件编译步骤之后。通过正常模块解析访问现有 Slidev 依赖，不硬编码 `.pnpm` 内部目录；插件独立测试和打包继续不依赖根目录安装的 Slidev。该检查已实现并接入编译后的检查步骤。
 
 **B. R03：按页保留各布局的草稿。**
 
@@ -231,3 +231,12 @@ pnpm run vscode:package
 - 两个针对性检查及完整 `pnpm run check` 通过：根目录 65/65，插件 30/30；文档构建和既有合同检查通过。主题矩阵此阶段仅 dry-run。
 - 负例检查确认公共标签错误、派生正文过期、模板缺失都会失败，验证后已恢复原始模板文件。
 - 本地证据：`artifacts/remediation-2026-09-05/phase-1-check.log`、`phase-1-metadata-negative.log`。
+
+### 阶段 2A · 2026-09-05
+
+- R02 已修复。8 个模板经安装的 Slidev parser 实际解析，basic 4、academic 6、paper-talk 8、seminar 7、thesis-defense 7、reading-group 6、conference-lightning 5、zh 4 页，均与大纲一致。
+- 新增 `scripts/check-builder-output.mjs`，已接入插件编译之后；覆盖首尾重排、双栏首页、具名 slots、特殊字符、元数据和独立插入片段。
+- 明确覆盖顺序：原始配置 → Builder 管理字段 → 首页显式布局字段。首页显式标题优先；与演示名不同时，通过 Slidev 原生 `titleTemplate` 保留演示的浏览器标题。自定义主题字段、作者与引用设置按 YAML 数据保留。
+- 实施调整：把插件工具链已安装的 `js-yaml@4.2.0` 提升为显式运行依赖，以实际解析和合并 YAML，避免手写解析器。未新增状态库或验证框架；插件独立安装仍不依赖根目录 Slidev。
+- 编译、插件 30/30 测试、lint、元数据同步检查和实际解析检查通过；历史失败 `basic: 5 != 4` 已保存。
+- 本地证据：`artifacts/remediation-2026-09-05/phase-2-pages-before.log`、`phase-2-pages-after.log`、`phase-2-compile.log`、`phase-2-extension-tests.log`。
