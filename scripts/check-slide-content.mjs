@@ -14,10 +14,11 @@ const output = process.env.SCHOLARLY_CONTENT_CHECK_OUT || path.join(tmpdir(), 's
 const cli = createRequire(import.meta.url).resolve('@slidev/cli/bin/slidev.mjs')
 const source = await readFile(path.join(root, 'examples/example-academic.md'), 'utf8')
 const slides = (await parser.parse(source)).slides
-const targets = ['result-highlight', 'experiment-grid'].map(layout => {
+assert.equal(slides.length, 13, 'preserve the model talk narrative')
+const targets = ['result-highlight', 'experiment-grid', 'references'].map(layout => {
   const index = slides.findIndex(slide => slide.frontmatter.layout === layout)
   assert.ok(index >= 0, `Missing example layout: ${layout}`)
-  return { layout, number: index + 1, title: slides[index].frontmatter.title }
+  return { layout, number: index + 1, title: slides[index].frontmatter.title || layout }
 })
 
 // Limit geometry checks to these evidence layouts; scrollable editors and tables
@@ -28,7 +29,7 @@ function contentOverflows(root) {
   const header = root.querySelector('.beamer-header')?.getBoundingClientRect()
   const footer = root.querySelector('.beamer-footer')?.getBoundingClientRect()
   const failures = []
-  for (const element of root.querySelectorAll('main *')) {
+  for (const element of root.querySelectorAll('main *, .references-content *')) {
     if (!element.textContent.trim() || getComputedStyle(element).visibility === 'hidden') continue
     const rect = element.getBoundingClientRect()
     if (!rect.width || !rect.height) continue
@@ -89,6 +90,11 @@ try {
             })
             const failures = await slide.evaluate(contentOverflows)
             assert.deepEqual(failures, [], `${id} / ${target.title} / ${print ? 'print' : 'play'}: reduce content or split the slide. ${JSON.stringify(failures)}`)
+            if (target.layout === 'references') {
+              assert.equal(await slide.locator('.csl-entry').count(), 2, 'bibliography must contain both cited works')
+              assert.match(await slide.locator('#ref-lecun2015deep').innerText(), /Deep Learning/)
+              assert.match(await slide.locator('#ref-vaswani2017attention').innerText(), /Attention Is All You Need/)
+            }
             await slide.screenshot({ path: path.join(output, `${id}-${target.layout}-${print ? 'print' : 'play'}.png`) })
             if (!print && target.layout === 'experiment-grid') {
               assert.equal(await slide.locator('article').count(), 4)
@@ -100,6 +106,15 @@ try {
               console.log(`${id}: overflow negative control detected ${excess[0].element}, ${excess[0].overflow}px; reduce content or split the slide.`)
             }
           }
+        }
+        for (const key of ['lecun2015deep', 'vaswani2017attention']) {
+          const citingPage = slides.findIndex(slide => slide.content.includes(`@${key}`)) + 1
+          assert.ok(citingPage > 0, `missing narrative citation: ${key}`)
+          await page.goto(`http://localhost:${port}/${citingPage}`)
+          await page.locator(`.slidev-page-${citingPage} a[href="#ref-${key}"]`).click()
+          const bibliographyPage = targets.find(target => target.layout === 'references').number
+          await page.waitForURL(url => url.pathname === `/${bibliographyPage}`)
+          await page.locator(`.slidev-page-${bibliographyPage} #ref-${key}`).waitFor({ state: 'visible' })
         }
         assert.deepEqual(errors, [], `${id}: browser errors`)
         await page.close()
