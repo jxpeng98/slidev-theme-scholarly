@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
-import { readFile } from 'node:fs/promises'
+import { mkdir, readFile } from 'node:fs/promises'
+import path from 'node:path'
+import { tmpdir } from 'node:os'
 import { chromium } from 'playwright-chromium'
 import { renderGuiBuilderHtml } from '../vscode-extension/out/guiBuilderView.js'
 import { renderBuilderMarkdown, renderBuilderSlides } from '../vscode-extension/out/guiBuilderModel.js'
@@ -13,6 +15,35 @@ const assets = new Map([
   ['/guiBuilderWebview.js', ['../vscode-extension/out/guiBuilderWebview.js', 'text/javascript']],
   ['/gui-builder.css', ['../vscode-extension/media/gui-builder.css', 'text/css']],
 ])
+for (const id of Object.keys(LAYOUT_CATALOG))
+  assets.set(`/previews/${id}.png`, [`../vscode-extension/media/previews/layouts/${id}.png`, 'image/png'])
+
+// Representative host tokens; native VS Code theme checks remain a separate
+// acceptance step. The actual Webview and packaged previews are used below.
+function hostTheme(dark) {
+  const tokens = {
+    'editor-background': dark ? '#1f1f1f' : '#ffffff',
+    'editor-foreground': dark ? '#cccccc' : '#333333',
+    'sideBar-background': dark ? '#181818' : '#f8f8f8',
+    'editorWidget-background': dark ? '#252526' : '#f3f3f3',
+    'descriptionForeground': dark ? '#a8a8a8' : '#616161',
+    'panel-border': dark ? '#454545' : '#d4d4d4',
+    'focusBorder': dark ? '#007fd4' : '#005fb8',
+    'button-background': dark ? '#0078d4' : '#005fb8',
+    'button-foreground': '#ffffff',
+    'button-secondaryBackground': dark ? '#3a3d41' : '#e5e5e5',
+    'input-background': dark ? '#313131' : '#ffffff',
+    'list-hoverBackground': dark ? '#2a2d2e' : '#e8e8e8',
+    'list-activeSelectionBackground': dark ? '#094771' : '#cce8ff',
+    'list-activeSelectionForeground': dark ? '#ffffff' : '#003b66',
+    'textLink-foreground': dark ? '#4daafc' : '#005fb8',
+    'textCodeBlock-background': dark ? '#252526' : '#f3f3f3',
+    'badge-background': dark ? '#4d4d4d' : '#e5e5e5',
+    'badge-foreground': dark ? '#ffffff' : '#333333',
+    'errorForeground': dark ? '#f48771' : '#a1260d',
+  }
+  return `<style nonce="ui-check">:root {${Object.entries(tokens).map(([key, value]) => `--vscode-${key}:${value};`).join('')}}</style>`
+}
 const hostMock = `<script nonce="ui-check">
   window.__messages = [];
   window.acquireVsCodeApi = () => ({
@@ -41,12 +72,14 @@ const server = createServer(async (request, response) => {
       styleUri: '/gui-builder.css', scriptUri: '/guiBuilderWebview.js',
       validationScriptUri: '/guiBuilderValidation.js',
       layouts: Object.entries(LAYOUT_CATALOG).map(([id, entry]) => ({
-        id, ...entry, description: entry.summary,
+        id, ...entry, description: entry.summary, image: `/previews/${id}.png`,
       })),
       templates: BUILDER_TEMPLATES,
       colorThemes: COLOR_THEMES, fontThemes: FONT_THEMES,
       contentModes: CONTENT_MODES, surfaceModes: SURFACE_MODES,
     }).replace('<script nonce="ui-check" src=', hostMock + '<script nonce="ui-check" src=')
+      .replace('</head>', hostTheme(url.searchParams.get('theme') === 'dark') + '</head>')
+      .replace('<body>', `<body class="vscode-${url.searchParams.get('theme') === 'dark' ? 'dark' : 'light'}">`)
     response.setHeader('Content-Type', 'text/html; charset=utf-8')
     response.end(html)
   } catch (error) {
@@ -59,11 +92,39 @@ await new Promise((resolve, reject) => {
 })
 let browser
 try {
+  const output = process.env.SCHOLARLY_UI_CHECK_OUT || path.join(tmpdir(), 'scholarly-ui-check')
+  await mkdir(output, { recursive: true })
   browser = await chromium.launch({ headless: true })
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
   const errors = []
   page.on('pageerror', error => errors.push(error.message))
-  page.on('dialog', dialog => dialog.accept())
+  let acceptDialogs = true
+  page.on('dialog', dialog => acceptDialogs ? dialog.accept() : dialog.dismiss())
+  await page.goto(`http://127.0.0.1:${server.address().port}/`)
+  for (const lang of ['en', 'zh-cn']) {
+   for (const theme of ['light', 'dark']) {
+    for (const [width, height] of [[1280, 800], [980, 800], [1024, 576], [700, 800], [520, 800]]) {
+    await page.setViewportSize({ width, height })
+    await page.goto(`http://127.0.0.1:${server.address().port}/?lang=${lang}&theme=${theme}`)
+    await page.locator('#slide-title').waitFor()
+    await page.locator('#selected-layout-image').evaluate(image => image.decode())
+    await page.screenshot({ path: path.join(output, `builder-${lang}-${theme}-${width}.png`) })
+    const geometry = await page.evaluate(() => ({
+      width: innerWidth, height: innerHeight, contentWidth: document.documentElement.scrollWidth,
+      fields: ['slide-title', 'slide-body', 'create-markdown'].map(id => {
+        const rect = document.getElementById(id).getBoundingClientRect()
+        return { id, top: rect.top, left: rect.left, right: rect.right }
+      }),
+    }))
+    assert.ok(geometry.contentWidth <= width + 1, `horizontal overflow: ${JSON.stringify(geometry)}`)
+    for (const field of geometry.fields)
+      assert.ok(field.top >= 0 && field.top < height - 24 && field.left >= 0 && field.right <= width + 1,
+        `editing must start in the viewport: ${JSON.stringify(geometry)}`)
+    console.log(`${lang}/${theme}/${width}x${height}: editor and actions in view, no horizontal overflow`)
+    }
+   }
+  }
+  await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto(`http://127.0.0.1:${server.address().port}/`)
   const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem('builder-state')))
   const selected = async () => {
@@ -173,8 +234,81 @@ try {
   await page.locator('#layout-settings').evaluate(element => { element.open = true })
   await page.locator('[data-config-name="images"]').fill('{}')
   assert.match(await page.locator('#config-error-images').textContent(), /只包含文本/)
+
+  // Continuous keyboard work must survive DOM replacement in the outline.
+  await page.evaluate(() => localStorage.removeItem('builder-state'))
+  await page.goto(`http://127.0.0.1:${server.address().port}/`)
+  const activeSlide = () => page.evaluate(() => document.activeElement.closest('[data-slide-id]')?.dataset.slideId)
+  const secondId = await page.locator('.slide-item').nth(1).getAttribute('data-slide-id')
+  await page.locator('.slide-item').nth(1).focus()
+  for (const key of ['Enter', 'Space']) {
+    await page.keyboard.press(key)
+    assert.equal((await selected()).id, secondId)
+    assert.equal(await activeSlide(), secondId)
+  }
+  await page.locator(`[data-slide-id="${secondId}"] [data-action="up"]`).focus()
+  await page.keyboard.press('Enter')
+  assert.equal(await page.locator('.slide-item').first().getAttribute('data-slide-id'), secondId)
+  assert.equal(await activeSlide(), secondId, 'focus remains on the moved page at the boundary')
+  await page.locator(`[data-slide-id="${secondId}"] [data-action="down"]`).focus()
+  await page.keyboard.press('Space')
+  assert.equal(await page.locator('.slide-item').nth(1).getAttribute('data-slide-id'), secondId)
+  assert.equal(await activeSlide(), secondId)
+  await page.locator(`[data-slide-id="${secondId}"] [data-action="delete"]`).focus()
+  await page.keyboard.press('Enter')
+  assert.equal(await activeSlide(), (await selected()).id, 'deletion focuses the adjacent page')
+  while (await page.locator('.slide-item').count()) {
+    await page.locator('.slide-item').last().locator('[data-action="delete"]').focus()
+    await page.keyboard.press('Enter')
+  }
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'layout-search')
+  assert.equal(await page.locator('#layout-library').getAttribute('open'), '')
+
+  const beforeCancel = await saved()
+  await page.locator('input[name="workflow"]:checked').focus()
+  acceptDialogs = false
+  await page.keyboard.press('ArrowRight')
+  assert.deepEqual(await saved(), beforeCancel, 'canceling workflow replacement preserves the deck')
+  assert.equal(await page.evaluate(() => document.activeElement.value), beforeCancel.state.templateId)
+  acceptDialogs = true
+  await page.keyboard.press('ArrowRight')
+  assert.notEqual((await saved()).state.templateId, beforeCancel.state.templateId)
+  assert.equal(await page.evaluate(() => document.activeElement.checked), true)
+  await page.keyboard.press('Tab')
+  assert.notEqual(await page.evaluate(() => document.activeElement.getAttribute('name')), 'workflow', 'radio group takes one Tab stop')
+  await page.keyboard.press('Shift+Tab')
+  assert.equal(await page.evaluate(() => document.activeElement.checked), true)
+
+  for (const [width, height] of [[1024, 576], [520, 800]]) {
+    await page.setViewportSize({ width, height })
+    await page.reload()
+    await page.locator('#layout-library > summary').click()
+    await page.locator('[data-layout-id="default"]').click()
+    assert.equal(await page.locator('#layout-library').getAttribute('open'), null)
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'slide-title')
+    await page.locator('#slide-title').fill('Narrow view draft')
+    await page.locator('#slide-body').fill('Preserved after a narrow-view reload')
+    const added = await selected()
+    await page.reload()
+    assert.equal((await selected()).id, added.id)
+    assert.equal(await page.locator('#slide-body').inputValue(), added.body)
+    if (width <= 700) await page.locator('#outline-panel > summary').click()
+    await page.locator('.slide-copy').first().click()
+    await page.locator(`[data-slide-id="${added.id}"] [data-action="delete"]`).click()
+    assert.equal(await activeSlide(), (await selected()).id)
+    const visible = await page.evaluate(() => ['slide-title', 'slide-body', 'create-markdown'].every(id => {
+      const r = document.getElementById(id).getBoundingClientRect()
+      return r.top >= 0 && r.top < innerHeight - 24 && r.left >= 0 && r.right <= innerWidth
+    }))
+    assert.ok(visible, `${width}: editing remains reachable after adding, restoring, selecting and deleting`)
+    assert.ok(await page.locator('#outline-panel > summary').evaluate(element => {
+      const r = element.getBoundingClientRect(), pane = element.parentElement.getBoundingClientRect()
+      return r.top >= pane.top - 1 && r.bottom <= pane.bottom + 1
+    }), 'outline toggle stays reachable while scrolling the page list')
+    await page.screenshot({ path: path.join(output, `builder-narrow-workflow-${width}.png`) })
+  }
   assert.deepEqual(errors, [], 'no unhandled browser errors')
-  console.log('Builder browser checks passed: drafts, persistence, scoped insertion, whole-deck validation, errors and bilingual feedback.')
+  console.log('Builder browser checks passed: responsive views, keyboard focus, native workflow radios, drafts, persistence, validation and bilingual feedback.')
 } finally {
   await browser?.close()
   await new Promise(resolve => server.close(resolve))

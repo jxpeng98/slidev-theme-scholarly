@@ -46,13 +46,23 @@ The template creates a regular Markdown file that you can edit directly.
 
 ### Build an outline with Deck Builder
 
-Run `Slidev Scholarly: Open Deck Builder`, then follow the three columns:
+Run `Slidev Scholarly: Open Deck Builder`, then follow these steps:
 
 1. Choose a workflow, such as a paper talk or thesis defense.
 2. Check each layout thumbnail, then add or reorder slides.
 3. Select a slide and write its content.
 
 Create the Markdown deck when the outline is ready, or insert only the selected slide into the active file. Continue editing and previewing in Slidev.
+
+In a split editor, workflows, deck settings, and the layout library collapse into
+compact controls above the outline and editor. At 700px or narrower, expand the
+outline when needed; the editing area and generation actions remain accessible.
+Adding a layout returns focus to the new slide title.
+
+Switching back to a layout restores that page's layout settings and sections,
+including unfinished input. Only the active layout is generated. Use arrow keys
+to choose a workflow and Tab to leave the group; canceling replacement keeps your
+draft. Selecting, moving, or deleting pages keeps keyboard focus in the outline.
 
 <figure class="docs-screenshot">
   <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder showing workflow choices, a slide outline, and the selected layout content fields" loading="lazy">

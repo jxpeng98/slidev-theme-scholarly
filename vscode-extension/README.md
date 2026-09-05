@@ -55,6 +55,11 @@ To shape a first draft before writing Markdown, run `Slidev Scholarly: Open Deck
 
 The builder is a quick starting point. Use Slidev for the live preview and final editing.
 
+In narrow windows, workflow and layout choices collapse above the editor. The
+outline can also collapse below 701px. Switching layouts preserves each page's
+layout drafts; only the active layout is generated. Workflow choices support
+native radio keyboard navigation, and outline actions preserve keyboard focus.
+
 ## 2. Build the slides
 
 ### Insert from the sidebar

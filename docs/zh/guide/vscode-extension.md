@@ -46,13 +46,21 @@ Slidev Scholarly: Create Presentation
 
 ### 用 Deck Builder 搭好大纲
 
-运行 `Slidev Scholarly: Open Deck Builder`，按三栏从左往右操作：
+运行 `Slidev Scholarly: Open Deck Builder`，按以下步骤操作：
 
 1. 选择一种工作流，例如论文汇报或答辩。
 2. 查看每张幻灯片的布局缩略图，再补充或调整顺序。
 3. 选中幻灯片，填写这一页的内容。
 
 大纲完成后，可以生成整份 Markdown，也可以只把当前页插入已打开的文件。后续编辑和实时预览仍在 Slidev 中完成。
+
+分栏窗口中，工作流、演示设置和布局库会收起为顶部的紧凑入口，大纲与编辑区优先显示。
+宽度不超过 700px 时，大纲按需展开，编辑区和生成操作仍可直接到达。添加布局后，
+焦点会移到新页面的标题输入框。
+
+切回原布局会恢复该页的布局设置和分区内容，尚未写完的输入也会保留；生成时只使用
+当前布局。工作流可用方向键选择、Tab 离开，取消替换会保留草稿。选择、移动或删除
+页面后，键盘焦点会留在大纲的对应位置。
 
 <figure class="docs-screenshot">
   <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder，依次显示工作流、幻灯片大纲和当前布局的内容输入区" loading="lazy">

@@ -109,14 +109,14 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
 
     <main class="workspace">
       <aside class="start-pane" aria-labelledby="workflow-heading">
-        <section class="pane-section workflow-section">
-          <div class="section-heading">
+        <details id="workflow-settings" class="pane-section workflow-section" open>
+          <summary class="section-heading pane-toggle">
             <h2 id="workflow-heading"><span class="step-number">1</span> ${copy('Choose a workflow', '选择工作流')}</h2>
             <span id="workflow-count" class="section-count"></span>
-          </div>
+          </summary>
           <p class="section-help">${copy('Start from a ready-made sequence. Choosing another one replaces the current outline.', '先从一套现成的页面顺序开始。改选其他工作流会替换当前大纲。')}</p>
           <div id="template-list" class="template-list" role="radiogroup" aria-label="${copy('Deck workflow', '演示工作流')}"></div>
-        </section>
+        </details>
 
         <details class="deck-settings">
           <summary>${copy('Deck details and theme', '演示信息与主题')}</summary>
@@ -160,11 +160,11 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
           </div>
         </details>
 
-        <section class="pane-section library-section" aria-labelledby="library-heading">
-          <div class="section-heading">
+        <details id="layout-library" class="pane-section library-section" open>
+          <summary class="section-heading pane-toggle">
             <h2 id="library-heading">${copy('Add another layout', '添加其他布局')}</h2>
             <span id="layout-count" class="section-count">${layouts.length}</span>
-          </div>
+          </summary>
           <div class="library-tools">
             <label class="field">
               <span>${copy('Search', '搜索')}</span>
@@ -180,19 +180,19 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
           </div>
           <div id="layout-grid" class="layout-grid">${layouts.map(layout => renderLayoutCard(layout, language)).join('')}</div>
           <p id="layout-filter-empty" class="empty" hidden>${copy('No layouts match this search.', '没有符合条件的布局。')}</p>
-        </section>
+        </details>
       </aside>
 
-      <section class="outline-pane" aria-labelledby="outline-heading">
-        <div class="section-heading sticky-heading">
+      <details id="outline-panel" class="outline-pane" open>
+        <summary class="section-heading sticky-heading pane-toggle">
           <div>
             <h2 id="outline-heading"><span class="step-number">2</span> ${copy('Arrange the slides', '调整页面顺序')}</h2>
             <p class="section-help">${copy('Choose a slide to check its layout, then add your content.', '选择一页，查看布局用途并填写内容。')}</p>
           </div>
           <span id="slide-count" class="section-count"></span>
-        </div>
+        </summary>
         <div id="slide-list" class="slide-list" role="list" aria-label="${copy('Slides in deck', '演示中的页面')}"></div>
-      </section>
+      </details>
 
       <section class="content-pane" aria-labelledby="content-heading">
         <div class="section-heading sticky-heading">

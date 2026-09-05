@@ -194,10 +194,13 @@ function scholarlyRenderAll(): void {
 function scholarlyRenderTemplates(): void {
   const list = scholarlyById<HTMLDivElement>('template-list');
   list.innerHTML = scholarlyData.templates.map(template =>
-    `<button class="template-option" role="radio" aria-checked="${template.id === scholarlyState.templateId}" data-template-id="${scholarlyEscape(template.id)}">
+    `<label class="template-option">
+      <input type="radio" name="workflow" value="${scholarlyEscape(template.id)}" data-template-id="${scholarlyEscape(template.id)}" ${template.id === scholarlyState.templateId ? 'checked' : ''} />
+      <span class="template-copy">
       <strong>${scholarlyEscape(template.label)} · ${scholarlyData.language === 'zh-cn' ? `${template.deck.slides.length} 页` : `${template.deck.slides.length} slides`}</strong>
       <span>${scholarlyEscape(template.description)}</span>
-    </button>`
+      </span>
+    </label>`
   ).join('');
   scholarlyById('workflow-count').textContent = scholarlyData.language === 'zh-cn'
     ? `${scholarlyData.templates.length} 个工作流`
@@ -253,12 +256,29 @@ function scholarlyRenderThemeSummary(): void {
 
 function scholarlyRenderSlides(): void {
   const list = scholarlyById<HTMLDivElement>('slide-list');
+  const active = document.activeElement as HTMLElement | null;
+  const focused = active?.closest<HTMLElement>('[data-slide-id]');
+  const focusedIndex = Array.from(list.children).indexOf(focused as Element);
+  const action = active?.dataset.action;
+  const restoreFocus = () => {
+    if (!focused) return;
+    const item = list.querySelector<HTMLElement>(`[data-slide-id="${CSS.escape(focused.dataset.slideId || '')}"]`)
+      || list.querySelectorAll<HTMLElement>('[data-slide-id]')[Math.min(focusedIndex, scholarlyState.slides.length - 1)];
+    if (item) {
+      const button = action ? item.querySelector<HTMLButtonElement>(`[data-action="${action}"]`) : null;
+      (button && !button.disabled ? button : item).focus();
+    } else {
+      scholarlyById<HTMLDetailsElement>('layout-library').open = true;
+      scholarlyById('layout-search').focus();
+    }
+  };
   scholarlyById('slide-count').textContent = scholarlyData.language === 'zh-cn'
     ? `${scholarlyState.slides.length} 页`
     : `${scholarlyState.slides.length} slides`;
   if (!scholarlyState.slides.length) {
-    list.innerHTML = `<div class="empty-state">${scholarlyCopy('Add a layout from the left to start the outline.', '从左侧添加一个布局，开始搭建大纲。')}</div>`;
+    list.innerHTML = `<div class="empty-state">${scholarlyCopy('Open the layout library to start the outline.', '打开布局库添加页面，开始搭建大纲。')}</div>`;
     scholarlyById<HTMLButtonElement>('insert-selected').disabled = true;
+    restoreFocus();
     return;
   }
 
@@ -276,6 +296,7 @@ function scholarlyRenderSlides(): void {
     </div>`;
   }).join('');
   scholarlyById<HTMLButtonElement>('insert-selected').disabled = !scholarlySelectedSlide();
+  restoreFocus();
 }
 
 function scholarlyRenderInspector(): void {
@@ -399,6 +420,8 @@ function scholarlyAddSlide(layoutId: string): void {
   scholarlyRenderSlides();
   scholarlyRenderInspector();
   scholarlyRevealContentOnNarrowView();
+  if (!scholarlyWideView.matches) scholarlyById<HTMLDetailsElement>('layout-library').open = false;
+  scholarlyById('slide-title').focus();
 }
 
 function scholarlyMoveSlide(id: string, direction: number): void {
@@ -524,8 +547,9 @@ function scholarlyValidateDeck(selectedOnly = false): boolean {
 }
 
 function scholarlyRevealContentOnNarrowView(): void {
-  if (window.matchMedia('(max-width: 1100px)').matches)
-    scholarlyById('content-heading').scrollIntoView({ block: 'start' });
+  // Keep the outline and its keyboard focus visible; only reset the editor's
+  // own scroll position when switching pages.
+  document.querySelector('.content-pane')?.scrollTo({ top: 0 });
 }
 
 function scholarlyParseConfig(raw: string, type: string, required = false): { value: unknown; error: string } {
@@ -609,10 +633,15 @@ function scholarlyEscape(value: unknown): string {
   })[character] || character);
 }
 
-scholarlyById('template-list').addEventListener('click', event => {
-  const target = event.target as HTMLElement;
-  const option = target.closest<HTMLElement>('[data-template-id]');
-  if (option?.dataset.templateId) scholarlyApplyTemplate(option.dataset.templateId);
+scholarlyById('template-list').addEventListener('change', event => {
+  const option = event.target as HTMLInputElement;
+  if (!option.dataset.templateId) return;
+  scholarlyApplyTemplate(option.dataset.templateId);
+  const selected = scholarlyById('template-list').querySelector<HTMLInputElement>(`[value="${CSS.escape(scholarlyState.templateId)}"]`);
+  if (selected) {
+    selected.checked = true;
+    selected.focus();
+  }
 });
 
 scholarlyById('layout-grid').addEventListener('click', event => {
@@ -764,6 +793,20 @@ window.addEventListener('message', event => {
 document.addEventListener('error', event => {
   if (event.target instanceof HTMLImageElement) event.target.hidden = true;
 }, true);
+
+const scholarlyWideView = window.matchMedia('(min-width: 1101px)');
+const scholarlyOutlineView = window.matchMedia('(min-width: 701px)');
+const scholarlySetLibraryView = () => {
+  scholarlyById<HTMLDetailsElement>('workflow-settings').open = scholarlyWideView.matches;
+  scholarlyById<HTMLDetailsElement>('layout-library').open = scholarlyWideView.matches;
+};
+const scholarlySetOutlineView = () => {
+  scholarlyById<HTMLDetailsElement>('outline-panel').open = scholarlyOutlineView.matches;
+};
+scholarlyWideView.addEventListener('change', scholarlySetLibraryView);
+scholarlyOutlineView.addEventListener('change', scholarlySetOutlineView);
+scholarlySetLibraryView();
+scholarlySetOutlineView();
 
 const scholarlyPrevious = scholarlyVscode.getState();
 if (scholarlyPrevious?.state) {
