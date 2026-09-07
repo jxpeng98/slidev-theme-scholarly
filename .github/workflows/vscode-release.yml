@@ -108,6 +108,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      CI: true
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
     steps:
       - uses: actions/checkout@v4
 
@@ -121,9 +124,14 @@ jobs:
         with:
           node-version: '24'
           cache: pnpm
-          cache-dependency-path: vscode-extension/pnpm-lock.yaml
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            vscode-extension/pnpm-lock.yaml
 
-      - name: Install dependencies
+      - name: Install root dependencies for Slidev parser tests
+        run: pnpm install --frozen-lockfile
+
+      - name: Install extension dependencies
         working-directory: vscode-extension
         run: pnpm install --frozen-lockfile
 

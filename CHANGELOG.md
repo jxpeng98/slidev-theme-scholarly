@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This test release brings the reviewed theme, CLI, documentation, and VS Code
 extension changes together on `dev`. The matching extension test package is
-`1.4.2`, distributed as a pre-release VSIX on GitHub.
+`1.4.3`, distributed as a pre-release VSIX on GitHub.
 
 ### Added
 
@@ -34,12 +34,14 @@ extension changes together on `dev`. The matching extension test package is
 - Restored layout headers, respected explicit grid columns and section modes,
   removed duplicate titles, and kept research evidence visible in exports.
 - Included the YAML runtime in VSIX packages and made validation paths portable.
+- Installed root dependencies in extension release validation so Builder tests
+  can use the real Slidev parser in clean CI environments.
 
 ### Testing and Upgrade Notes
 
 - Install the theme test version with
   `pnpm add slidev-theme-scholarly@1.5.0-beta.1`; the npm channel is `next`.
-- Install `slidev-scholarly-snippets-1.4.2.vsix` through VS Code's **Install from
+- Install `slidev-scholarly-snippets-1.4.3.vsix` through VS Code's **Install from
   VSIX** command. This release does not publish the extension to Marketplace.
 - Use Node.js 24 LTS and pnpm 10 for the documented workflows. CLI PDF and image
   exports also require `playwright-chromium`.
