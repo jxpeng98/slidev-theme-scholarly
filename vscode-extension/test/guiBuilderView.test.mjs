@@ -38,7 +38,7 @@ test('renders the workflow-driven Deck Builder shell', async () => {
   assert.match(html, /Arrange the slides/);
   assert.match(html, /Write the slide/);
   assert.match(html, /Create Markdown/);
-  assert.match(html, /Insert selected slide/);
+  assert.match(html, /Append selected slide/);
   assert.match(html, /data-layout-id="cover"/);
   assert.match(html, /vscode-resource:\/gui-builder\.css/);
   assert.match(html, /vscode-resource:\/guiBuilderWebview\.js/);

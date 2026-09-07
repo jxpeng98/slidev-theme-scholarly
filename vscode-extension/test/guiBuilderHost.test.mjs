@@ -3,14 +3,16 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
+const { parser } = await import('@slidev/cli');
 
 test('Builder retains the explicit insertion target across Webview focus', async () => {
   let receive, disposePanel, changeEditor, closeDocument;
   let disposed = 0;
   let editSucceeds = true;
   const warnings = [], errors = [], insertions = [], shown = [];
-  const editor = (languageId = 'markdown') => ({
-    document: { languageId, isClosed: false, getText: () => '# Original', offsetAt: () => 10 },
+  const original = '---\ntheme: scholarly\ntitle: Original\nbibFile: ./refs.bib\n---\n\n# First\n\nKeep all content.\n\n---\nlayout: default\n---\n\n# Second\n';
+  const editor = (languageId = 'markdown', content = original) => ({
+    document: { languageId, isClosed: false, getText: () => content, offsetAt: () => 0, positionAt: offset => ({ offset }) },
     selection: { active: { line: 0, character: 10 } }, viewColumn: 1,
     edit: async callback => {
       if (!editSucceeds) return false;
@@ -78,6 +80,11 @@ test('Builder retains the explicit insertion target across Webview focus', async
   assert.equal(shown[0].document, first.document);
   assert.equal(shown[0].options.selection, first.selection);
   assert.match(insertions[0].content, /# Inserted/);
+  assert.equal(insertions[0].position.offset, original.length, 'append even when the cursor is inside headmatter');
+  const before = await parser.parse(original);
+  const after = await parser.parse(original + insertions[0].content);
+  assert.equal(after.slides.length, before.slides.length + 1);
+  assert.deepEqual(after.slides.slice(0, -1).map(s => [s.frontmatter, s.content]), before.slides.map(s => [s.frontmatter, s.content]));
   assert.equal(warnings.length, 0);
 
   changeEditor(editor('plaintext'));
@@ -97,6 +104,13 @@ test('Builder retains the explicit insertion target across Webview focus', async
   await insert();
   assert.equal(insertions.length, 2, 'closing the target clears it');
   assert.equal(warnings.length, 2);
+
+  changeEditor(editor('markdown', ''));
+  focusWebview();
+  await insert();
+  const empty = await parser.parse(insertions.at(-1).content);
+  assert.equal(empty.slides.length, 1);
+  assert.equal(empty.slides[0].frontmatter.theme, 'scholarly');
 
   await receive({ type: 'generateNewDocument', state });
   assert.match(shown.at(-1).document.content, /^---\ntheme: scholarly/);

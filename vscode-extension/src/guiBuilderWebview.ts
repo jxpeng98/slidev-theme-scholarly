@@ -350,10 +350,12 @@ function scholarlyRenderConfig(slide: ScholarlySlide, layout?: ScholarlyLayout):
     container.innerHTML = '';
     return;
   }
-  const config = layout?.config || [];
-  container.innerHTML = config.length
+  const config = (layout?.config || []).filter(item => item.name !== slide.titleKey);
+  const canHideTitle = layout?.config?.some(item => item.name === slide.titleKey && item.type.split('|').some(type => type.trim() === 'false'));
+  const titleControl = canHideTitle ? `<label class="field"><span>${scholarlyCopy('Slide heading', '页面标题显示')}</span><select data-title-visibility><option value="show">${scholarlyCopy('Show title', '显示标题')}</option><option value="hide" ${slide.config[slide.titleKey] === false ? 'selected' : ''}>${scholarlyCopy('Hide title', '隐藏标题')}</option></select></label>` : '';
+  container.innerHTML = titleControl + (config.length
     ? config.map(item => scholarlyConfigMarkup(item, slide.config[item.name], slide.configInputs[item.name])).join('')
-    : `<p class="details-note">${scholarlyCopy('This layout has no additional settings.', '这个布局没有额外设置。')}</p>`;
+    : `<p class="details-note">${scholarlyCopy('This layout has no additional settings.', '这个布局没有额外设置。')}</p>`);
 }
 
 function scholarlyConfigMarkup(item: ScholarlyConfigEntry, value: unknown, input?: string): string {
@@ -480,7 +482,16 @@ function scholarlyChangeLayout(layoutId: string): void {
 
 function scholarlyUpdateConfig(input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement): void {
   const slide = scholarlySelectedSlide();
-  if (!slide || !input.dataset.configName || !input.dataset.configType) return;
+  if (!slide) return;
+  if (input.hasAttribute('data-title-visibility')) {
+    if (input.value === 'hide') slide.config[slide.titleKey] = false;
+    else delete slide.config[slide.titleKey];
+    delete slide.configInputs[slide.titleKey];
+    scholarlyMarkDirty();
+    scholarlyRequestPreview();
+    return;
+  }
+  if (!input.dataset.configName || !input.dataset.configType) return;
   const entry = scholarlyLayoutById(slide.layout)?.config?.find(item => item.name === input.dataset.configName);
   if (!entry) return;
   const parsed = scholarlyParseConfig(input.value, entry.type, entry.required);
@@ -498,7 +509,8 @@ function scholarlyUpdateConfig(input: HTMLInputElement | HTMLTextAreaElement | H
 
 function scholarlyFindSlideError(slide: ScholarlySlide): { name: string; error: string } | undefined {
   for (const entry of scholarlyLayoutById(slide.layout)?.config || []) {
-    const value = slide.configInputs[entry.name] ?? slide.config[entry.name];
+    const value = entry.name === slide.titleKey && slide.config[entry.name] !== false
+      ? slide.title : slide.configInputs[entry.name] ?? slide.config[entry.name];
     // Original workflow YAML is checked by the host after parsing it.
     if (slide.configSource && value === undefined) continue;
     const parsed = scholarlyParseConfigValue(value, entry.type, entry.required, scholarlyData.language);
@@ -737,9 +749,10 @@ scholarlyById<HTMLInputElement>('deck-title').addEventListener('input', event =>
 
 scholarlyById<HTMLInputElement>('deck-subtitle').addEventListener('input', event => {
   const value = (event.target as HTMLInputElement).value;
+  const previousSubtitle = scholarlyState.subtitle;
   scholarlyState.subtitle = value;
   const cover = scholarlyState.slides.find(slide => slide.layout === 'cover');
-  if (cover) cover.body = value;
+  if (cover?.body === previousSubtitle) cover.body = value;
   scholarlyMarkDirty();
   if (cover?.id === scholarlySelectedId) scholarlyRenderInspector();
 });

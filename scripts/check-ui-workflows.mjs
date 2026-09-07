@@ -132,6 +132,26 @@ try {
     return value.state.slides.find(slide => slide.id === value.selectedId)
   }
 
+  await page.locator('.deck-settings').evaluate(element => { element.open = true })
+  await page.locator('#slide-body').fill('Author\n\nInstitution\n\nFunding')
+  await page.locator('#deck-subtitle').fill('Updated subtitle')
+  assert.equal((await selected()).body, 'Author\n\nInstitution\n\nFunding', 'subtitle changes must preserve custom cover content')
+  await page.locator('[data-layout-id="result-highlight"]').click()
+  await page.locator('#slide-title').fill('One title source')
+  assert.equal(await page.locator('[data-config-name="title"]').count(), 0)
+  assert.match(renderBuilderSlides([await selected()]), /title: One title source/)
+  await page.locator('[data-layout-id="toc"]').click()
+  await page.locator('#layout-settings').evaluate(element => { element.open = true })
+  await page.locator('[data-title-visibility]').selectOption('hide')
+  assert.match(renderBuilderSlides([await selected()]), /title: false/)
+  await page.locator('#slide-title').fill('Hidden title remains available')
+  assert.match(renderBuilderSlides([await selected()]), /title: false/)
+  await page.locator('[data-title-visibility]').selectOption('show')
+  assert.match(renderBuilderSlides([await selected()]), /title: Hidden title remains available/)
+
+  await page.evaluate(() => localStorage.clear())
+  await page.reload()
+
   // Start with a legacy state (templates have no layout cache), then exercise the UI.
   await page.locator('[data-layout-id="two-cols"]').click()
   await page.locator('#slide-title').fill('Preserved title')

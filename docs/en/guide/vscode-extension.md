@@ -52,7 +52,7 @@ Run `Slidev Scholarly: Open Deck Builder`, then follow these steps:
 2. Check each layout thumbnail, then add or reorder slides.
 3. Select a slide and write its content.
 
-Create the Markdown deck when the outline is ready, or insert only the selected slide into the active file. Continue editing and previewing in Slidev.
+Create the Markdown deck when the outline is ready, or append only the selected slide to the end of the active Markdown file. Appending preserves the existing deck settings and pages. Continue editing and previewing in Slidev.
 
 In a split editor, workflows, deck settings, and the layout library collapse into
 compact controls above the outline and editor. At 700px or narrower, expand the

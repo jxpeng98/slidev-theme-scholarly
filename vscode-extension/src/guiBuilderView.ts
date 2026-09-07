@@ -100,7 +100,7 @@ export function renderGuiBuilderHtml(options: GuiBuilderHtmlOptions): string {
         <p>${copy('Choose a workflow, arrange the slides, then continue in Markdown.', '选择工作流并调整页面，再生成 Markdown 继续编辑。')}</p>
       </div>
       <div class="topbar-actions">
-        <button class="secondary" id="insert-selected" disabled>${copy('Insert selected slide', '插入当前页')}</button>
+        <button class="secondary" id="insert-selected" disabled>${copy('Append selected slide', '追加当前页')}</button>
         <button class="primary" id="create-markdown">${copy('Create Markdown', '生成 Markdown')}</button>
       </div>
     </header>
