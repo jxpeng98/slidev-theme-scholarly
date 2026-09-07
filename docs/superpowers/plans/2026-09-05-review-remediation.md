@@ -389,8 +389,14 @@ pnpm --dir vscode-extension run check:package
 | 原生 VS Code 主流程 | 普通与未保存 Markdown 插入、新建、非 Markdown 拦截、空环境；文件解析与 UI 记录 | 通过 |
 | 原生高对比 | Dark High Contrast，焦点/选中边框、标题错误展开与持久文字 | 抽查通过 |
 | 原生读屏输出 | 实际启用 VoiceOver，但无法可靠取得朗读记录；已恢复 off | 未完成，需四项人工结果 |
-| Ubuntu CI | 本次最终提交尚未推送、未取得其 Node 20/24 和 quality 运行记录 | 未完成，需推送授权后触发现有 CI |
+| Ubuntu CI | 已获授权并推送；首次运行的 Node 20/24 构建通过，quality 因临时目录硬编码失败；修复与复验见下文 | 待修复后远程复验 |
 
 本轮收尾提交：`1e3404f` 打包运行时，`0e90361` 实验列数，`5cb3690` 原生插入目标，`1bf2424` 预览与双语说明，`9ef7f4a` 持久标题错误。已跟踪的实现和派生资源均分阶段提交；原有 `.impeccable/`、`PRODUCT.md` 和 `artifacts/` 保留为本地未跟踪材料。
 
 最终门槛仍为未全部就绪。本地检查完成不替代远程 CI 或人工读屏结果；不创建发布标签，不发布包。
+
+### 阶段 5D · 远程 CI 与跨平台检查修复 · 2026-09-07
+
+- 用户授权推送后，已将分支 `feat/vscode-extension-workflow` 推送至远端并手动触发既有 CI。首次运行 [34158561588](https://github.com/jxpeng98/slidev-theme-scholarly/actions/runs/34158561588) 对应 `9636539`；Ubuntu 的 Node 20/24 三份示例构建均通过。
+- Full Quality Gate 在 curated template 检查创建 `/private/tmp` 临时目录时失败。排查同类路径后，将 curated template 和 doctor actionability 两处改为现有脚本采用的 `node:os` 的 `tmpdir()`，保留原有创建与清理流程。
+- 修复后本地 `pnpm run check` 退出 0，包含上述两项实际 CLI 检查、根目录 65 项和插件 33 项测试；证据为 `artifacts/remediation-2026-09-05/remote-ci-portable-tmp-check.log`。远程复验尚待此修复提交推送后运行；实际读屏输出仍是独立待验收项。

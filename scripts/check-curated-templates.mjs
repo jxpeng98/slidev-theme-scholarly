@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { mkdtempSync, rmSync } from 'node:fs'
 import path from 'node:path'
+import { tmpdir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
@@ -88,7 +89,7 @@ for (const template of expectedTemplates) {
   expect(Boolean(item?.description), `${template.name} should have a description`)
 }
 
-const tempRoot = mkdtempSync(path.join('/private/tmp', 'scholarly-curated-templates-'))
+const tempRoot = mkdtempSync(path.join(tmpdir(), 'scholarly-curated-templates-'))
 
 try {
   for (const template of expectedTemplates) {
