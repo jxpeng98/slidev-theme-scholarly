@@ -58,6 +58,8 @@ type ThemePreset = {
   fontTheme: string
 }
 
+const yamlParser = require('./vendor/js-yaml');
+
 const CLI_COMMAND_PREFIX = ['npx', '-y', '--package', 'slidev-theme-scholarly', 'sch'];
 const CLI_SNIPPETS = ['theorem', 'block', 'cite', 'cover', 'section', 'methodology', 'results', 'references'] as const;
 const CLI_WORKFLOWS = ['paper', 'seminar', 'quick'] as const;
@@ -1143,70 +1145,20 @@ function buildThemeConfigLines(update: ThemeConfigUpdate): string[] {
   return lines;
 }
 
-function upsertThemeConfigYaml(yaml: string, update: ThemeConfigUpdate): string {
-  const lines = yaml.split('\n');
-  const themeConfigIndex = lines.findIndex(line =>
-    line.trim() === 'themeConfig:' && line.match(/^\s*/)?.[0]?.length === 0
-  );
-
-  if (themeConfigIndex === -1) {
-    const themeConfigLines = buildThemeConfigLines(update);
-    if (themeConfigLines.length === 0) return yaml.trimEnd();
-
-    const result = [...lines];
-    if (result.length && result[result.length - 1].trim() !== '') result.push('');
-    result.push('themeConfig:');
-    result.push(...themeConfigLines);
-    return result.join('\n').trimEnd();
+function upsertThemeConfigYaml(source: string, update: ThemeConfigUpdate): string {
+  const data = yamlParser.load(source) ?? {};
+  if (Object.getPrototypeOf(data) !== Object.prototype)
+    throw new Error('Slide frontmatter must be a YAML mapping.');
+  if (data.themeConfig !== undefined && (!data.themeConfig || Object.getPrototypeOf(data.themeConfig) !== Object.prototype))
+    throw new Error('themeConfig must be a YAML mapping.');
+  const config = { ...data.themeConfig };
+  const { colorMode, ...values } = update;
+  values.contentMode ||= colorMode;
+  for (const [key, value] of Object.entries(values)) {
+    if (value) config[key] = value;
   }
-
-  const blockStart = themeConfigIndex + 1;
-  let blockEnd = blockStart;
-  while (blockEnd < lines.length) {
-    const line = lines[blockEnd];
-    if (!line.trim()) {
-      blockEnd++;
-      continue;
-    }
-    const indent = line.match(/^\s*/)?.[0] ?? '';
-    if (indent.length === 0) break;
-    blockEnd++;
-  }
-
-  const updated = [...lines];
-  const childIndent = updated
-    .slice(blockStart, blockEnd)
-    .find(line => line.trim())
-    ?.match(/^\s+/)?.[0] ?? '  ';
-  const escapedIndent = childIndent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-  const upsertChild = (key: keyof ThemeConfigUpdate, value: string | undefined) => {
-    if (!value) return;
-    const childRegex = new RegExp(`^${escapedIndent}${key}:\\s*`);
-    let foundIndex = -1;
-    for (let i = blockStart; i < blockEnd; i++) {
-      if (childRegex.test(updated[i])) {
-        foundIndex = i;
-        break;
-      }
-    }
-
-    if (foundIndex !== -1) {
-      updated[foundIndex] = `${childIndent}${key}: ${value}`;
-      return;
-    }
-
-    updated.splice(blockEnd, 0, `${childIndent}${key}: ${value}`);
-    blockEnd++;
-  };
-
-  upsertChild('colorTheme', update.colorTheme);
-  upsertChild('fontTheme', update.fontTheme);
-  upsertChild('contentMode', update.contentMode ?? update.colorMode);
-  upsertChild('chromeMode', update.chromeMode);
-  upsertChild('sectionMode', update.sectionMode);
-
-  return updated.join('\n').trimEnd();
+  data.themeConfig = config;
+  return yamlParser.dump(data, { lineWidth: -1 }).trimEnd();
 }
 
 export const __test = {

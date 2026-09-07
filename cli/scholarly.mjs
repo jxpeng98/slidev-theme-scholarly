@@ -3,6 +3,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
+import yaml from 'js-yaml'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
@@ -1253,11 +1254,6 @@ function countIndent(line) {
   return match ? match[1].length : 0
 }
 
-function findTopLevelKeyLine(lines, key) {
-  const pattern = new RegExp(`^${key}:\\s*`)
-  return lines.findIndex(line => countIndent(line) === 0 && pattern.test(line))
-}
-
 function findNestedBlockRange(lines, key) {
   const index = lines.findIndex(line => line.trim() === `${key}:`)
   if (index < 0) {
@@ -1281,30 +1277,6 @@ function findNestedBlockRange(lines, key) {
   return { start: index, end, indent }
 }
 
-function upsertTopLevelKey(lines, key, value) {
-  const idx = findTopLevelKeyLine(lines, key)
-  const nextLine = `${key}: ${value}`
-  if (idx >= 0) {
-    lines[idx] = nextLine
-    return
-  }
-
-  lines.push(nextLine)
-}
-
-function removeNestedKeys(lines, range, keys) {
-  for (let i = range.end - 1; i > range.start; i -= 1) {
-    if (countIndent(lines[i]) <= range.indent) {
-      continue
-    }
-
-    if (keys.some(key => new RegExp(`^\\s*${key}:\\s*`).test(lines[i]))) {
-      lines.splice(i, 1)
-      range.end -= 1
-    }
-  }
-}
-
 function getNestedValue(lines, range, key) {
   if (range.start < 0) {
     return ''
@@ -1323,40 +1295,6 @@ function getNestedValue(lines, range, key) {
   }
 
   return ''
-}
-
-function upsertThemeConfig(lines, kv, removeKeys = []) {
-  let range = findNestedBlockRange(lines, 'themeConfig')
-  if (range.start < 0) {
-    lines.push('themeConfig:')
-    range = findNestedBlockRange(lines, 'themeConfig')
-  }
-
-  removeNestedKeys(lines, range, removeKeys)
-
-  const nestedIndent = ' '.repeat(range.indent + 2)
-  for (const [key, value] of Object.entries(kv)) {
-    if (!value) {
-      continue
-    }
-
-    const pattern = new RegExp(`^\\s*${key}:\\s*`)
-    let found = -1
-    for (let i = range.start + 1; i < range.end; i += 1) {
-      if (pattern.test(lines[i])) {
-        found = i
-        break
-      }
-    }
-
-    const rendered = `${nestedIndent}${key}: ${value}`
-    if (found >= 0) {
-      lines[found] = rendered
-    } else {
-      lines.splice(range.end, 0, rendered)
-      range.end += 1
-    }
-  }
 }
 
 function applyThemeToFile(options) {
@@ -1384,37 +1322,23 @@ function applyThemeToFile(options) {
   const eol = detectLineEnding(original || '\n')
   const fm = extractFrontmatter(original)
 
-  let lines = []
-  let rest = original
-
-  if (fm) {
-    lines = fm.body.split(/\r?\n/)
-    rest = fm.rest
-  } else {
-    lines = []
-    rest = original
-  }
-
+  const data = yaml.load(fm?.body || '') ?? {}
+  if (Object.getPrototypeOf(data) !== Object.prototype)
+    throw new Error('Slide frontmatter must be a YAML mapping.')
+  if (data.themeConfig !== undefined && (!data.themeConfig || Object.getPrototypeOf(data.themeConfig) !== Object.prototype))
+    throw new Error('themeConfig must be a YAML mapping.')
+  const config = { ...data.themeConfig }
   let contentMode = inputContentMode
-  const themeConfigRange = findNestedBlockRange(lines, 'themeConfig')
-  const existingContentMode = normalizeId(getNestedValue(lines, themeConfigRange, 'contentMode'))
-  const existingColorMode = normalizeId(getNestedValue(lines, themeConfigRange, 'colorMode'))
-  if (!contentMode && !CONTENT_MODES.includes(existingContentMode) && CONTENT_MODES.includes(existingColorMode)) {
-    contentMode = existingColorMode
+  if (!contentMode && !CONTENT_MODES.includes(normalizeId(config.contentMode)) && CONTENT_MODES.includes(normalizeId(config.colorMode)))
+    contentMode = normalizeId(config.colorMode)
+  delete config.colorMode
+  for (const [key, value] of Object.entries({ colorTheme, fontTheme, contentMode, chromeMode, sectionMode })) {
+    if (value) config[key] = value
   }
-
-  upsertTopLevelKey(lines, 'theme', 'scholarly')
-  upsertThemeConfig(lines, {
-    colorTheme,
-    fontTheme,
-    contentMode,
-    chromeMode,
-    sectionMode,
-  }, ['colorMode'])
-
-  const frontmatter = `---${eol}${lines.join(eol)}${eol}---${eol}`
-  const trimmedRest = rest ? rest.replace(/^\s+/, '') : ''
-  const content = trimmedRest ? `${frontmatter}${trimmedRest}` : frontmatter
+  data.theme = 'scholarly'
+  data.themeConfig = config
+  const frontmatter = `---${eol}${yaml.dump(data, { lineWidth: -1 }).replace(/\n/g, eol)}---${eol}`
+  const content = frontmatter + (fm ? fm.rest : original)
   fs.writeFileSync(targetFile, content, 'utf8')
 
   console.log(`Applied theme config to ${targetFile}`)

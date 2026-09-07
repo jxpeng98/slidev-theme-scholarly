@@ -106,7 +106,8 @@
   "dependencies": {
     "@jxpeng98/markdown-it-citation": "1.2.1",
     "@slidev/client": "^52.16.0",
-    "@slidev/types": "^52.16.0"
+    "@slidev/types": "^52.16.0",
+    "js-yaml": "4.2.0"
   },
   "devDependencies": {
     "@slidev/cli": "^52.16.0",
