@@ -12,7 +12,7 @@ description: 为学术演示的每个部分选择合适的页面结构。
 | 页面任务 | 推荐布局 | 参考文档 |
 |---|---|---|
 | 开始、分隔或结束报告 | `cover`、`section`、`toc`、`end` | [结构布局](./structure) |
-| 排列文字、图片或分栏 | `default`、`two-cols`、`figure`、`image-right` | [内容布局](./content) |
+| 排列文字、图片或分栏 | `default`、`two-cols`、`figure`、`image-right` | [默认页](./structure#default)、[内容布局](./content) |
 | 突出一个核心信息 | `focus`、`fact`、`quote`、`statement` | [强调布局](./emphasis) |
 | 展示方法、证据或结果 | `method-pipeline`、`experiment-grid`、`results`、`references` | [学术布局](./academic) |
 

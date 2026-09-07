@@ -115,3 +115,35 @@ html[lang^="zh"] .VPHome h1 {
     transition-duration: 0.01ms !important;
   }
 }
+
+.theme-gallery {
+  margin-block: 2rem;
+}
+
+.theme-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--vp-c-bg-soft);
+  border-radius: 8px;
+}
+
+.theme-section h3 {
+  margin: 0 0 1rem;
+}
+
+.theme-slides {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.theme-slides img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+@media (max-width: 480px) {
+  .theme-slides {
+    grid-template-columns: 1fr;
+  }
+}

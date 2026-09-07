@@ -4,32 +4,37 @@ title: 贡献指南
 
 # 贡献指南
 
-欢迎提交修复和改进。先安装仓库依赖：
+## 配置仓库
+
+克隆仓库后，在仓库根目录运行以下命令。建议使用 Node.js 24 LTS 和 pnpm 10，与主要 CI 检查环境保持一致：
 
 ```bash
-pnpm install
+git clone https://github.com/jxpeng98/slidev-theme-scholarly.git
+cd slidev-theme-scholarly
+pnpm install --frozen-lockfile
+pnpm --dir vscode-extension install --frozen-lockfile
 ```
 
-开发时启动示例演示：
+主题和 VS Code 插件需要分别安装依赖，仓库检查会同时覆盖两部分。
+
+## 按改动类型开发
+
+| 改动 | 预览 | 验证 |
+|---|---|---|
+| 主题布局、组件或样式 | `pnpm run dev` | 查看示例演示，再运行 `pnpm run check` |
+| 文档 | `pnpm run docs:dev` | `pnpm run check:docs-workflows` 和 `pnpm run docs:build` |
+| VS Code 插件 | `pnpm run vscode:compile`，再启动扩展开发宿主 | `pnpm --dir vscode-extension run test` 和 `pnpm run check` |
+
+文档开发请使用仓库根目录的 `docs:*` 命令，与 CI 保持一致。英文页面在 `docs/en/`，简体中文页面在 `docs/zh/`。两种语言应同步修改，保留已有页面地址和显式锚点，并保证代码示例可运行。`docs/superpowers/` 中的历史计划不会发布到文档站。
+
+运行浏览器检查前，先停止开发服务器。改动影响渲染结果时，安装 Chromium 并运行视觉检查：
 
 ```bash
-pnpm run dev
+pnpm exec playwright install chromium
+pnpm run check:visual
 ```
 
-停止开发服务器后，先运行仓库检查：
-
-```bash
-pnpm run check
-```
-
-如果改动会影响幻灯片的渲染结果或预览图，再重新导出并生成截图：
-
-```bash
-pnpm run export
-pnpm run screenshot
-```
-
-修改 `examples/example.md` 或 `examples/example-zh.md`，确认改动在实际演示中正常显示。
+`check` 包括打包、目录数据、CLI、示例解析、文档构建和单元测试；`check:visual` 还会检查浏览器操作和幻灯片导出。需要更新预览图时，按[脚本说明](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/scripts/README-zh.md)只重新生成受影响的部分。
 
 ## 主题与预览图修改 {#theme-and-preview-changes}
 

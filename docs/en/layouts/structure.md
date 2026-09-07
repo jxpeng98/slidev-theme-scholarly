@@ -91,7 +91,7 @@ Next, we explain the method
 
 **What it shows:**
 
-- Large, centered text
+- Large text, left-aligned by default
 - No header (more space for the title)
 - Footer at the bottom
 

@@ -9,6 +9,8 @@ start with the `conference-lightning` template:
 
 ```bash
 npx -y slidev-theme-scholarly init results-talk --template conference-lightning
+cd results-talk
+pnpm install
 ```
 
 ## Recommended layouts
@@ -28,6 +30,8 @@ npx -y slidev-theme-scholarly init results-talk --template conference-lightning
 - [EquationBlock](../../components/equation-block) when metrics need formulas.
 
 ## Useful snippets
+
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
 
 ```bash
 pnpm exec sch snippet append results --file slides.md

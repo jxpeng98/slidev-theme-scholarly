@@ -1,9 +1,15 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
+import yaml from 'js-yaml'
 
 const root = path.resolve(new URL('..', import.meta.url).pathname)
 const docsRoot = path.join(root, 'docs')
 const failures = []
+const require = createRequire(import.meta.url)
+const slidevRequire = createRequire(require.resolve('@slidev/cli/package.json'))
+const { parse } = await import(pathToFileURL(slidevRequire.resolve('@slidev/parser')).href)
 
 const workflows = [
   'paper-talk',
@@ -146,6 +152,30 @@ expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/zh/guide/them
 for (const [locale, config] of Object.entries(localeConfig))
   await checkLocale(locale, config)
 
+// Validate the examples readers copy, including duplicate YAML keys in headmatter.
+const pages = (await fs.readdir(docsRoot, { recursive: true }))
+  .map(file => file.replaceAll(path.sep, '/'))
+  .filter(file => /^(en|zh)\//.test(file) && file.endsWith('.md')).sort()
+expect(
+  JSON.stringify(pages.filter(file => file.startsWith('en/')).map(file => file.slice(3)))
+    === JSON.stringify(pages.filter(file => file.startsWith('zh/')).map(file => file.slice(3))),
+  'English and Chinese documentation should have matching pages',
+)
+let examples = 0
+for (const file of [...pages.map(file => path.join(docsRoot, file)), path.join(root, 'README.md'), path.join(root, 'README-zh.md')]) {
+  const source = await readText(file)
+  for (const match of source.matchAll(/^```(yaml|yml|markdown)\n([\s\S]*?)^```/gm)) {
+    const [, language, content] = match
+    try {
+      if (language === 'markdown') await parse(content)
+      else yaml.loadAll(content)
+      examples += 1
+    } catch (error) {
+      failures.push(`${path.relative(root, file)}:${source.slice(0, match.index).split('\n').length}: ${error.message}`)
+    }
+  }
+}
+
 if (failures.length) {
   console.error('Documentation workflow IA checks failed:')
   for (const failure of failures)
@@ -153,4 +183,4 @@ if (failures.length) {
   process.exit(1)
 }
 
-console.log('Documentation workflow IA checks passed.')
+console.log(`Documentation workflow IA checks passed: ${pages.length} localized pages, ${examples} parsed examples.`)

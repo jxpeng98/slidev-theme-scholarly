@@ -8,6 +8,8 @@ title: 学位答辩工作流
 
 ```bash
 npx -y slidev-theme-scholarly init defense --template thesis-defense
+cd defense
+pnpm install
 ```
 
 ## 推荐布局
@@ -28,6 +30,8 @@ npx -y slidev-theme-scholarly init defense --template thesis-defense
 - [DatasetCard](../../components/dataset-card) 说明数据集和评测基准。
 
 ## 常用片段
+
+在新项目目录中按需运行，命令会向 `slides.md` 末尾追加内容；追加后请先检查结果。
 
 ```bash
 pnpm exec sch snippet append methodology --file slides.md

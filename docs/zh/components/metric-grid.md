@@ -4,7 +4,7 @@ title: MetricGrid
 
 # MetricGrid
 
-`MetricGrid` 将多个 `MetricCard` 排成响应式网格，适合汇总结果、消融实验和实验概览。
+`MetricGrid` 将多个 `MetricCard` 按指定列数排成网格，适合汇总结果、消融实验和实验概览。
 
 ![MetricGrid 示例](/images/components/metric-grid.png)
 
@@ -36,3 +36,5 @@ title: MetricGrid
 | `gap` | `string \| number` | `'0.75rem'` | 卡片间距 |
 | `variant` | `string` | `'primary'` | 默认卡片样式 |
 | `compact` | `boolean` | `false` | 使用紧凑卡片间距 |
+
+`columns` 不会随浏览器宽度改变；Slidev 会整体缩放画布。标签难以阅读时，应减少列数或拆成多页。数字形式的 `gap` 以 `rem` 为单位。

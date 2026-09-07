@@ -42,7 +42,9 @@ themeConfig:
 # 迁移前
 themeConfig:
   colorMode: dark
+```
 
+```yaml
 # 迁移后
 themeConfig:
   contentMode: dark
@@ -76,20 +78,18 @@ sectionMode: inverse
 
 - [Highlight](../components/highlight) 只用于短语，不用于整段。
 - 需要标题和正文时用 [Block](../components/block) 或 [EvidenceBlock](../components/evidence-block)。
-- `type="warning"` 只用于真正的警告；普通强调优先用 `type="info"` 或 `type="primary"`。
+- `type="warning"` 只用于真正的警告；普通提示块用 `type="info"`，普通行内高亮用 `type="primary"`。
 - 投影环境较差时，导出前用 `high-contrast` 检查一次可读性。
 
 ## 快速检查
 
-分享前运行检查并生成主题预览：
+先按[导出步骤](./quick-start#check-and-export)安装所需工具，再在演示项目中运行：
 
 ```bash
 pnpm exec sch doctor
-pnpm run theme:matrix
+pnpm run export
 ```
 
-如果只想确认主题预览能否生成：
+按实际演示尺寸查看导出结果，重点检查 quote 页面、行内 Highlight、图片、表格和注脚。即使使用高对比度预设，文字过小或图表序列难以区分时，仍需调整内容。
 
-```bash
-node scripts/check-theme-matrix.mjs --dry-run
-```
+维护者可在主题仓库中用 `theme:matrix` 检查全部配色组合，详见[贡献指南](../contributing#theme-and-preview-changes)。

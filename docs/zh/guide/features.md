@@ -40,29 +40,9 @@ Scholarly 在 Slidev 的基础上加入学术演示常用的布局、组件、Bi
 
 ## 数据驱动结果页
 
-少量结果数据可以保存在 JSON 或 CSV 中，再交给主题组件显示。Scholarly 直接使用 Vite 和 Slidev 的导入能力，不额外提供运行时数据加载器，也不引入图表依赖。
+可以将 JSON 或 CSV 导入 `ResultTable` 和 `MetricGrid`，按需使用主题提供的数据辅助函数，无需添加图表依赖。一页只有几个数值时，直接写 Markdown 表格通常更简单。
 
-```ts
-import rows from './results.json'
-import { toMetricItems } from 'slidev-theme-scholarly/utils/data'
-
-const metrics = toMetricItems(rows)
-```
-
-```markdown
-<MetricGrid :metrics="metrics" compact />
-```
-
-CSV 可以使用 `?raw`：
-
-```ts
-import csv from './results.csv?raw'
-import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
-
-const rows = parseCsvTable(csv)
-```
-
-如果数据只在一页使用，直接写 Markdown 表格通常更简单。
+[从数据生成幻灯片](./data-driven)提供完整示例，并说明数据文件和导入语句应该放在哪里。
 
 ## 从 BibTeX 生成论文摘要
 
@@ -82,13 +62,13 @@ pnpm exec sch paper summary --bib references.bib --key sample2026
 
 ## 写作工具
 
-- CLI 模板和工作流可以生成完整起步演示。
-- `sch doctor` 会报告配置问题并给出可执行修复建议。
+- CLI 模板创建完整项目，工作流则向 Markdown 文件追加一组片段。
+- `pnpm exec sch doctor` 会报告配置问题并给出可执行修复建议。
 - VS Code 代码片段可插入布局和组件。
 - VS Code 预览与文档站使用同一批生成截图。
 
 编辑器设置见 [VS Code 插件](./vscode-extension.md)。
 
-## 基础主题边界
+## 离线使用
 
-基础主题只包含离线可用的功能，包括引用、注脚预览、参考文献页、轻量数据导入和 BibTeX 摘要生成。联网功能、大型解析器、图表引擎和第三方 API 由可选扩展提供。
+BibTeX 引用、手动注记、参考文献页和本地数据导入不依赖远程服务。离线演示前，需先安装依赖，并准备所用字体、图片等远程资源。请断开网络后完整预览一次。

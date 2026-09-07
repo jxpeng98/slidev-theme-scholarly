@@ -4,11 +4,13 @@ title: 学术布局
 
 # 学术布局
 
-这些布局围绕论文、方法、实验、答辩和参考文献组织内容。
+这些布局用于组织论文、方法、实验、答辩和参考文献。每个示例对应一张幻灯片，其中的论文名称和数值仅用于演示排版。`title`、`subtitle` 设置页眉；支持 `heading` 的布局还可以单独设置正文标题。部分研究布局的标签默认为英文，中文演示可通过对应的 `*Label` 属性修改。
 
 ## paper-summary - 论文摘要 {#paper-summary}
 
 **适合：** 概括单篇论文的基本信息、问题、方法和主要发现。
+
+![paper-summary 布局预览](/images/layouts/paper-summary.png)
 
 ```markdown
 ---
@@ -49,6 +51,8 @@ keywords:
 
 **适合：** 在介绍贡献前，对比已有工作、方法假设和研究空白。
 
+![related-work-matrix 布局预览](/images/layouts/related-work-matrix.png)
+
 ```markdown
 ---
 layout: related-work-matrix
@@ -77,6 +81,8 @@ description: 将当前工作放到已有方法谱系中定位。
 ## method-pipeline - 方法流程 {#method-pipeline}
 
 **适合：** 按顺序展示研究流程，并突出当前步骤。
+
+![method-pipeline 布局预览](/images/layouts/method-pipeline.png)
 
 ```markdown
 ---
@@ -109,6 +115,8 @@ steps:
 ## result-highlight - 结果强调 {#result-highlight}
 
 **适合：** 先给出核心结果，再补充证据和局限。
+
+![result-highlight 布局预览](/images/layouts/result-highlight.png)
 
 每页聚焦一个主指标和一句简短结论。证据区适合放精简的基准、数据集或不确定性说明；详细表格和长解释移到下一页。更改画幅或增加内容后，应同时检查播放效果与导出的 PNG 或 PDF。
 
@@ -146,7 +154,9 @@ variant: success
 
 **适合：** 集中比较实验设置、指标和备注。
 
-学术示例采用四组简短实验、两列排版，并在 16:9 和 4:3 下验收。这是参考样例，不代表可容纳任意长度的内容：较长的实验名称、设置和备注需要更多空间。指标与单位应一起保留，密集比较应拆页，不要继续缩小关键文字。`cols` 控制列数，不会自动将溢出内容分页。
+![experiment-grid 布局预览](/images/layouts/experiment-grid.png)
+
+学术示例在 16:9 和 4:3 画幅下用两列展示四组简短实验。实验名称、设置或备注较长时，需要减少每页内容。指标与单位应一起保留，密集比较应拆页，不要继续缩小关键文字。`cols` 控制列数，不会自动将溢出内容分页。
 
 ```markdown
 ---
@@ -182,6 +192,8 @@ experiments:
 
 **适合：** 说明结论边界，以及研究如何规避或界定这些局限。
 
+![limitation 布局预览](/images/layouts/limitation.png)
+
 ```markdown
 ---
 layout: limitation
@@ -210,6 +222,8 @@ description: 明确当前研究能支持和不能支持的结论。
 ## defense-question - 答辩问题 {#defense-question}
 
 **适合：** 准备答辩问答，并整理回答、证据和后续讨论。
+
+![defense-question 布局预览](/images/layouts/defense-question.png)
 
 ```markdown
 ---
@@ -242,6 +256,8 @@ source: 答辩委员会问题
 ## appendix-index - 附录索引 {#appendix-index}
 
 **适合：** 为备份页、额外实验和证明建立导航。
+
+![appendix-index 布局预览](/images/layouts/appendix-index.png)
 
 ```markdown
 ---
@@ -300,7 +316,7 @@ rightColor: green
 - `title`：主标题
 - `subtitle`：可选副标题
 - `leftLabel`、`rightLabel`：列标签
-- `leftColor`、`rightColor`：`red`、`green`、`blue`、`amber`、`purple`
+- `leftColor`、`rightColor`：`red`、`green`、`blue` 或 `gray`
 
 ---
 
@@ -347,15 +363,9 @@ cols: 2
 title: 主要结果
 ---
 
-<div class="p-4 bg-white rounded shadow">
-  <h3>准确率</h3>
-  <h1>94.7%</h1>
-</div>
+<MetricCard label="准确率" value="94.7" unit="%" />
 
-<div class="p-4 bg-white rounded shadow">
-  <h3>速度</h3>
-  <h1>2.3x</h1>
-</div>
+<MetricCard label="加速比" value="2.3" unit="×" />
 ```
 
 **属性：**
@@ -494,7 +504,7 @@ layout: references
 
 - `page`：当前页码（用于分页）
 - `perPage`：每页参考文献数量
-- `title`：自定义标题（默认："参考文献"或"参考文献（续）"）
+- `title`：自定义标题（默认："References" 或 "References (cont.)"；中文标题需显式设置）
 - `minFontSize`、`maxFontSize`：字号上下限，单位为像素
 
 **特点：**

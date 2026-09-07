@@ -44,7 +44,7 @@ Mathematical content here...
 :::
 ```
 
-**Types:** `theorem`, `lemma`, `proposition`, `corollary`, `definition`, `example`, `remark`
+**Types:** `theorem`, `lemma`, `proposition`, `corollary`, `definition`, `example`, `remark`, `proof`, `note`, `claim`
 
 ### Highlight
 
@@ -124,4 +124,4 @@ For any $\epsilon > 0$, the algorithm converges in $O(1/\epsilon^2)$ steps.
 - The theme processes these directives at build time.
 - Each directive accepts the same props as its component.
 - Use Vue binding syntax such as `:prop` for arrays and objects.
-- Restart Slidev after changing directive syntax.
+- Saving `slides.md` refreshes directive content. Restart Slidev after changing theme dependencies or configuration if the change is not picked up.

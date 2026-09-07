@@ -1,155 +1,69 @@
 # Slidev Scholarly
 
-The Slidev Scholarly extension brings the theme's templates, layouts, components, citations, theme controls, and project checks into VS Code.
+Create and edit academic Slidev decks in VS Code with templates, layout previews, components, citations, and theme controls. The extension follows VS Code's display language and includes English and Simplified Chinese.
 
-The interface follows VS Code's display language and is available in English and Simplified Chinese.
+[User guide](https://scholarly-docs.jxpeng.dev/en/guide/vscode-extension) · [中文指南](https://scholarly-docs.jxpeng.dev/zh/guide/vscode-extension) · [Theme documentation](https://scholarly-docs.jxpeng.dev/en/)
 
-## Install
+## Install and open
 
-Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets), or build a local VSIX:
+Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets). Requires VS Code 1.106.0 or newer.
+
+Open a Markdown file, run `Slidev Scholarly: Open Sidebar`, and find the views in the Secondary Side Bar. The presentation project needs Slidev and `slidev-theme-scholarly` for preview, build, and export; the extension provides editing tools.
+
+## Choose how to start
+
+| Action | Result |
+|---|---|
+| Choose a template in **Start · Templates** | Creates a complete project through the Scholarly CLI. Choose a new or empty folder, install dependencies, then run `pnpm run dev`. |
+| Run **Slidev Scholarly: Open Deck Builder** | Drafts an outline, then creates an untitled Markdown document or appends the selected slide to the active Markdown file. |
+| Run **Slidev Scholarly: Create Presentation** from the Command Palette | Creates a starter Markdown file in the workspace, or an untitled document when no workspace is open. |
+
+Deck Builder does not create `package.json` or a bibliography. For a workflow with citations, choose **Create template project** in the generation notification, then save the generated outline in that project beside `references.bib`.
+
+## Build and customize
+
+- **Build · Layouts** inserts a whole-slide snippet at the cursor. Use the eye icon to preview it.
+- **Build · Components** inserts theorems, metrics, evidence, and other content within a slide.
+- **Build · Citations & Anchors** lists BibTeX entries and internal destinations.
+- **Customize · Themes** updates the active document's frontmatter with a preset, font, palette, or surface mode.
+- **Reference · CLI Actions** runs project setup, snippet, workflow, theme, and diagnostic commands.
+
+The sidebar inserts snippets at the cursor; Deck Builder's **Append selected slide** adds a page at the end of the file. Check the page boundary when inserting a whole-slide snippet manually.
+
+### Completions and snippets
+
+| Trigger | Suggestions |
+|---|---|
+| `layout:` | Layout names |
+| `colorTheme:`, `fontTheme:` | Palettes and fonts |
+| `contentMode:`, `chromeMode:`, `sectionMode:` | Surface modes |
+| `<` or `:::` | Components or Markdown directives |
+| `](#`, `href="#`, `to="#` | Internal anchors |
+| `ss-` or `scholarly-` | Snippets such as `ss-cover`, `ss-theorem`, and `ss-cite` |
+
+Press `Ctrl+Space` for suggestions. Use Slidev's browser preview to check the rendered deck.
+
+## Check citations
+
+Citation diagnostics report missing bibliography configuration or files, duplicate keys, unresolved citations, and missing reference slides. Quick Fix actions handle common repairs. Use `Slidev Scholarly: Insert Citation` to select a BibTeX entry.
+
+For troubleshooting, Deck Builder details, and theme settings, see the [user guide](https://scholarly-docs.jxpeng.dev/en/guide/vscode-extension).
+
+## Develop the extension
+
+From the repository root:
 
 ```bash
-cd vscode-extension
-pnpm install
-pnpm run compile
-pnpm run package
+pnpm install --frozen-lockfile
+pnpm --dir vscode-extension install --frozen-lockfile
+pnpm --dir vscode-extension run compile
+pnpm --dir vscode-extension run test
+pnpm --dir vscode-extension run package
 ```
 
-In VS Code, run `Extensions: Install from VSIX...` and select the generated file.
+Install the generated `.vsix` with `Extensions: Install from VSIX...`.
 
-## Open the extension
-
-1. Open a Markdown file.
-2. Open the Secondary Side Bar.
-3. Select **Slidev Scholarly**.
-
-The sidebar follows the order in which you will usually work:
-
-| Stage | View | What to do |
-|---|---|---|
-| Start | **Start · Templates** | Create a deck from a template |
-| Build | **Build · Layouts** | Insert a whole-slide structure |
-| Build | **Build · Components** | Insert theorems, metrics, evidence, and other content |
-| Build | **Build · Citations & Anchors** | Insert BibTeX keys, paper summaries, and internal links |
-| Customize | **Customize · Themes** | Apply presets, colors, fonts, and light or dark modes |
-| Reference | **Reference · CLI Actions** | Run setup, build, theme, doctor, and help commands |
-
-Click an item to apply it. Use the eye icon to preview layouts, components, and themes before inserting them.
-
-## 1. Start a deck
-
-Open **Start · Templates** and choose a starting point, or run:
-
-```text
-Slidev Scholarly: Create Presentation
-```
-
-The template creates regular Slidev Markdown that you can edit directly.
-
-To shape a first draft before writing Markdown, run `Slidev Scholarly: Open Deck Builder`:
-
-1. Choose a workflow, such as a paper talk or thesis defense.
-2. Review the layout thumbnails, then add or reorder slides.
-3. Select each slide and write its content.
-4. Create the Markdown deck, or insert the selected slide into the active file.
-
-The builder is a quick starting point. Use Slidev for the live preview and final editing.
-
-In narrow windows, workflow and layout choices collapse above the editor. The
-outline can also collapse below 701px. Switching layouts preserves each page's
-layout drafts; only the active layout is generated. Workflow choices support
-native radio keyboard navigation, and outline actions preserve keyboard focus.
-
-## 2. Build the slides
-
-### Insert from the sidebar
-
-- **Layouts** control the structure of an entire slide.
-- **Components** add research content inside a layout.
-- **Citations & Anchors** connect the deck to BibTeX entries and internal destinations.
-
-Selecting a layout or component inserts its Markdown at the cursor.
-
-### Use completions as you type
-
-Suggestions change with the current editing context:
-
-| Type | Trigger |
-|---|---|
-| Layouts | `layout:` |
-| Color and font themes | `colorTheme:`, `fontTheme:` |
-| Light and dark modes | `contentMode:`, `chromeMode:`, `sectionMode:` |
-| Components | `<` |
-| Markdown directives | `:::` |
-| Internal anchors | `](#`, `href="#`, `to="#` |
-| Snippets | `ss-`, `scholarly-` |
-
-Press `Ctrl+Space` to open suggestions manually.
-
-### Use snippets
-
-Type a prefix and press `Tab`. Common examples:
-
-| Prefix | Inserts |
-|---|---|
-| `ss-cover` | Cover slide |
-| `ss-section` | Section divider |
-| `ss-figure` | Figure with caption |
-| `ss-theorem` | Theorem component |
-| `ss-results` | Results layout |
-| `ss-cite` | Parenthetical BibTeX citation |
-| `ss-anchor` | Internal anchor |
-| `ss-frontmatter` | Scholarly frontmatter |
-
-The full catalog is available from the sidebar and completion list.
-
-## 3. Customize the deck
-
-Open **Customize · Themes** to apply:
-
-- theme presets;
-- individual color themes;
-- individual font themes;
-- content, navigation, and section light or dark modes.
-
-Theme actions update the active document's frontmatter. Existing content stays unchanged.
-
-## 4. Check and get help
-
-Open **Reference · CLI Actions**. Its actions are grouped by task:
-
-- **Start:** create a presentation or list templates;
-- **Build:** list layouts and components, add snippets, or apply a workflow;
-- **Customize:** set a theme or list presets;
-- **Check & Help:** run `doctor` or show CLI help.
-
-Citation diagnostics also report missing bibliography settings, missing `.bib` files, duplicate keys, unresolved citations, and missing reference slides. Quick Fix actions can repair the common cases.
-
-## Command Palette
-
-All commands appear under **Slidev Scholarly**, including:
-
-- `Create Presentation`
-- `Open Deck Builder`
-- `Insert Citation`
-- `Insert Internal Anchor`
-- `Apply Theme Preset`
-- `Open CLI Actions`
-- `Toggle Dev Mode`
-
-## Development diagnostics
-
-Enable `Slidev Scholarly: Toggle Dev Mode` while developing the extension. The status bar shows `Scholarly Dev`, and the **Slidev Scholarly** output channel records timings and marks slow operations.
-
-Settings:
-
-- `slidevScholarly.devMode.enabled`
-- `slidevScholarly.devMode.slowThresholdMs` (default: `25`)
-
-## Requirements
-
-- VS Code 1.106.0 or newer
-- Slidev Theme Scholarly in the presentation project
+`Slidev Scholarly: Toggle Dev Mode` enables timing logs in the **Slidev Scholarly** output channel. Settings are `slidevScholarly.devMode.enabled` and `slidevScholarly.devMode.slowThresholdMs` (default: `25`). See [Contributing](https://scholarly-docs.jxpeng.dev/en/contributing) for the repository workflow.
 
 ## License
 

@@ -9,7 +9,7 @@ research layouts and components, BibTeX citations, theme presets, and editor too
 
 ## Academic Deck Structure
 
-- 34 layout previews covering covers, sections, content slides, figures,
+- 34 layouts covering covers, sections, content slides, figures,
   comparisons, methods, results, timelines, appendices, defenses, and references.
 - Headers and footers with author names, conference text, page numbers, and
   optional Beamer-style navigation.
@@ -45,31 +45,9 @@ For most decks, `bibFile` and `bibStyle` are the only citation settings you need
 
 ## Data-Driven Result Slides
 
-Store small result summaries in JSON or CSV, then render them with theme
-components. Scholarly uses Vite and Slidev imports directly, without a runtime
-data loader or charting dependency.
+Import JSON or CSV into `ResultTable` and `MetricGrid`, using the theme's small data helpers where needed. There is no charting dependency. For a few values on one page, a Markdown table is usually simpler.
 
-```ts
-import rows from './results.json'
-import { toMetricItems } from 'slidev-theme-scholarly/utils/data'
-
-const metrics = toMetricItems(rows)
-```
-
-```markdown
-<MetricGrid :metrics="metrics" compact />
-```
-
-CSV works with `?raw`:
-
-```ts
-import csv from './results.csv?raw'
-import { parseCsvTable } from 'slidev-theme-scholarly/utils/data'
-
-const rows = parseCsvTable(csv)
-```
-
-For data used on one slide, a Markdown table is usually simpler.
+[Data-Driven Slides](./data-driven) shows complete examples, including where to place the files and imports.
 
 ## Paper Metadata Scaffolding
 
@@ -95,16 +73,13 @@ light and dark modes in [Theme Mode and Contrast](./theme-mode-contrast.md).
 
 ## Authoring Tools
 
-- CLI templates and workflows create complete starter decks.
-- `sch doctor` reports setup problems with actionable fixes.
+- CLI templates create complete projects; workflows append a sequence of slide snippets.
+- `pnpm exec sch doctor` reports setup problems with actionable fixes.
 - VS Code snippets insert layouts and components.
 - VS Code previews show the same generated screenshots used by the docs.
 
 See [VS Code Extension](./vscode-extension.md) for editor setup.
 
-## Base Theme Boundary
+## Working offline
 
-The base theme includes only tools that work offline: citations, footnote previews,
-reference slides, lightweight data imports, and BibTeX summary generation.
-Anything that needs a network connection, a large parser, a charting engine, or
-a third-party API belongs in an optional add-on.
+BibTeX citations, manual notes, reference slides, and local data imports do not require a remote service. Install dependencies and download any fonts, images, or other remote assets before presenting offline. Verify the deck with the network disconnected.

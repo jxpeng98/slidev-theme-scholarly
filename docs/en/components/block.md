@@ -28,12 +28,12 @@ Add the note here.
 
 | Type | Color | Use Case |
 |------|-------|----------|
-| `default` | Gray | General information |
-| `info` | Blue | Informational content |
+| `default` | Theme primary | General information |
+| `info` | Cyan | Informational content |
 | `success` | Green | Positive results |
 | `warning` | Yellow | Cautions |
 | `danger` | Red | Critical warnings |
-| `example` | Cyan | Examples |
+| `example` | Purple | Examples |
 | `alert` | Pink | Alerts |
 
 ## Examples

@@ -14,7 +14,7 @@ hero:
       text: 创建演示
       link: /zh/guide/quick-start
     - theme: alt
-      text: 查看示例
+      text: 在线演示
       link: https://scholarly.jxpeng.dev/
 
 features:
@@ -36,29 +36,21 @@ features:
     linkText: 使用插件
 ---
 
-## 选择起点
+## 从一份可运行的演示开始
 
-| 当前情况 | 从这里开始 |
+按[快速开始](./guide/quick-start)创建第一个项目，或用 [VS Code 插件](./guide/vscode-extension)整理大纲。两种方式都会生成 Markdown，之后可以继续在 Slidev 中编辑。
+
+准备论文报告、答辩、综述、结果报告或课程讲义时，[学术工作流](./guide/workflows/)可以帮助你选择模板和页面顺序。已有演示需要更新时，请先看[升级说明](./guide/upgrade)。
+
+## 编写时按需查阅
+
+| 任务 | 文档 |
 |---|---|
-| 第一次创建 Scholarly 演示 | [快速开始](./guide/quick-start) |
-| 更习惯在 VS Code 里操作 | [使用插件](./guide/vscode-extension) |
-| 准备论文报告、答辩、综述、结果报告或课程讲义 | [学术工作流](./guide/workflows/) |
-| 已有 Slidev 项目 | [添加主题](./guide/quick-start#添加到已有-slidev-项目) |
-| 正在升级已有 Scholarly 演示 | [升级说明](./guide/upgrade) |
+| 安排页面结构 | [布局](./layouts/) |
+| 添加定理、指标或研究概览 | [组件](./components/) |
+| 引用论文并整理参考文献 | [引用](./components/cite) |
+| 设置作者、页脚和字体 | [配置](./guide/configurations) |
+| 调整明暗模式，检查文字是否易读 | [主题模式与对比度](./guide/theme-mode-contrast) |
+| 参考现有演示的写法 | [示例](./examples) |
 
-## 制作演示
-
-| 要完成的事 | 对应文档 |
-|---|---|
-| 选择整张幻灯片的结构 | [布局](./layouts/) |
-| 添加定理、指标、证据或论文信息 | [组件](./components/) |
-| 用 BibTeX 引用自动生成参考文献页 | [引用](./components/cite) |
-| 复制一份可以直接运行的演示 | [示例](./examples) |
-
-## 定制与收尾
-
-| 要完成的事 | 对应文档 |
-|---|---|
-| 设置作者、页脚、颜色和字体 | [配置](./guide/configurations) |
-| 检查浅色和深色页面的对比度 | [主题模式与对比度](./guide/theme-mode-contrast) |
-| 查看全部功能和文档入口 | [文档总览](./guide/) |
+完整指南和参考页面见[文档导航](./guide/)。

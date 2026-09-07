@@ -10,7 +10,7 @@ The interface follows the VS Code display language. English and Simplified Chine
 
 ## Install
 
-Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets).
+Install **Slidev Scholarly** from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets). Requires VS Code 1.106.0 or newer. Preview and export also need Slidev and the theme installed in the presentation project; see [Quick start](./quick-start).
 
 ## Open the extension
 
@@ -36,13 +36,14 @@ The sidebar is ordered by task:
 
 ## 1. Start a deck
 
-Choose a template from **Start · Templates**, or run:
+Choose a template in **Start · Templates** to create a complete project through the CLI. Enter a new or empty folder name, then open that folder, install dependencies, and start the preview:
 
-```text
-Slidev Scholarly: Create Presentation
+```bash
+pnpm install
+pnpm run dev
 ```
 
-The template creates a regular Markdown file that you can edit directly.
+The Command Palette action `Slidev Scholarly: Create Presentation` creates a starter Markdown file instead. It writes to the workspace, or opens an untitled document when no workspace is open. Add the file to a Slidev project before previewing it.
 
 ### Build an outline with Deck Builder
 
@@ -52,7 +53,7 @@ Run `Slidev Scholarly: Open Deck Builder`, then follow these steps:
 2. Check each layout thumbnail, then add or reorder slides.
 3. Select a slide and write its content.
 
-Create the Markdown deck when the outline is ready, or append only the selected slide to the end of the active Markdown file. Appending preserves the existing deck settings and pages. Continue editing and previewing in Slidev.
+Create an untitled Markdown deck when the outline is ready, or append only the selected slide to the end of the active Markdown file. Appending preserves the existing deck settings and pages. Continue editing and previewing in Slidev.
 
 Citation workflows also need the `references.bib` file beside the saved Markdown.
 After generating an outline, choose **Create template project** in the notification
@@ -60,15 +61,7 @@ to initialize the complete starter, then save your generated outline into that
 project. The notification can be dismissed without changing the outline; creating
 a project refuses to overwrite a nonempty folder.
 
-In a split editor, workflows, deck settings, and the layout library collapse into
-compact controls above the outline and editor. At 700px or narrower, expand the
-outline when needed; the editing area and generation actions remain accessible.
-Adding a layout returns focus to the new slide title.
-
-Switching back to a layout restores that page's layout settings and sections,
-including unfinished input. Only the active layout is generated. Use arrow keys
-to choose a workflow and Tab to leave the group; canceling replacement keeps your
-draft. Selecting, moving, or deleting pages keeps keyboard focus in the outline.
+Switching layouts keeps each slide's draft fields; only the active layout is generated. In narrow editors, expand the workflow, layout, or outline controls when needed. Use arrow keys to choose a workflow, then Tab to move to the editor.
 
 <figure class="docs-screenshot">
   <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder showing workflow choices, a slide outline, and the selected layout content fields" loading="lazy">
@@ -79,7 +72,7 @@ draft. Selecting, moving, or deleting pages keeps keyboard focus in the outline.
 
 ### Insert layouts and components
 
-Choose a layout or component from the sidebar. Selecting an item inserts its Markdown at the cursor; the eye icon opens a visual preview first.
+Choose a layout or component from the sidebar. Selecting an item inserts its Markdown at the cursor; the eye icon opens a visual preview first. Place whole-slide snippets at a page boundary and check the surrounding `---` separators.
 
 Use:
 

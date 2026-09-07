@@ -1,45 +1,53 @@
 ---
-title: Guide
-description: The shortest path from an empty folder to a finished Scholarly presentation.
+title: Documentation Map
+description: All Scholarly guides and reference pages, organized by task.
 ---
 
-# Guide
+# Documentation Map
 
-Start with what you need to do; each row points to the relevant guide.
+New to Scholarly? Follow [Quick start](./quick-start). Use this page when you need to find a specific guide or reference.
 
-## 1. Start
+## Start and maintain a project
 
-| Situation | Guide |
-|---|---|
-| Create a new presentation | [Quick start](./quick-start) |
-| Choose a structure for a paper talk, defense, review, results talk, or lecture | [Academic workflows](./workflows/) |
-| Add Scholarly to an existing Slidev project | [Add the theme](./quick-start#add-scholarly-to-an-existing-slidev-project) |
-| Move an existing Scholarly deck to a new version | [Upgrade notes](./upgrade) |
+- [Quick start](./quick-start): installation, authoring, PDF export, and static builds.
+- [VS Code extension](./vscode-extension): projects, Deck Builder, completions, and diagnostics.
+- [Upgrade notes](./upgrade): dependency updates and older configurations.
+- [Examples](../examples): complete decks and layout galleries.
+- [Feature overview](./features): capabilities and offline use.
 
-## 2. Build
+## Choose a talk structure
 
-| Task | Guide |
-|---|---|
-| Choose the structure of a slide | [Layouts](../layouts/) |
-| Add theorems, metrics, evidence, and paper details | [Components](../components/) |
-| Add BibTeX citations, footnotes, and a reference slide | [Citations](../components/cite) |
-| Replace common Vue tags with Markdown directives | [Syntax sugar](../syntax-sugar) |
-| Copy a complete working deck | [Examples](../examples) |
+The [Academic Workflows](./workflows/) guide covers [paper talks](./workflows/paper-talk), [thesis defenses](./workflows/thesis-defense), [literature reviews](./workflows/literature-review), [results talks](./workflows/results-heavy), and [course lectures](./workflows/course-lecture).
 
-## 3. Customize
+## Layout reference
 
-| Task | Guide |
-|---|---|
-| Set authors, footers, numbering, and per-slide options | [Configuration](./configurations) |
-| Choose colors and typography | [Colors and typography](./themes) |
-| Control light and dark surfaces | [Theme modes and contrast](./theme-mode-contrast) |
-| Insert layouts, components, and citations from the editor | [VS Code extension](./vscode-extension) |
+[Layouts](../layouts/) arrange a whole slide:
 
-## 4. Reference
+- [Structure](../layouts/structure): cover, outline, section breaks, adaptive content, and closing.
+- [Content](../layouts/content): columns, figures, images, and lists.
+- [Emphasis](../layouts/emphasis): quotes, statistics, statements, and questions.
+- [Academic](../layouts/academic): paper summaries, methods, evidence, Q&A, and references.
 
-| Task | Guide |
-|---|---|
-| Review the full feature set | [Feature overview](./features) |
-| Set up the repository for local development | [Contributing](../contributing) |
+## Component reference
 
-If something breaks, run `pnpm exec sch doctor` first and follow its suggestions.
+[Components](../components/) add content inside a slide:
+
+- Statements: [Theorem](../components/theorem), [Block](../components/block), [Highlight](../components/highlight).
+- Page composition: [Columns](../components/columns), [Steps](../components/steps), [Keywords](../components/keywords).
+- Results: [MetricCard](../components/metric-card), [MetricGrid](../components/metric-grid), [ResultTable](../components/result-table).
+- Evidence: [EvidenceBlock](../components/evidence-block), [EquationBlock](../components/equation-block), [DatasetCard](../components/dataset-card).
+- Research context: [PaperCard](../components/paper-card), [ContributionList](../components/contribution-list), [CaveatList](../components/caveat-list).
+- Sources: [Citations, footnotes, and anchors](../components/cite).
+- Palette samples: [ThemePreview](../components/theme-preview).
+
+For shorter component syntax, see [Markdown directives](../syntax-sugar). For imported values, see [Data-Driven Slides](./data-driven).
+
+## Configure the deck
+
+- [Configuration](./configurations): field locations, authors, footer, numbering, and font sizes.
+- [Colors and typography](./themes): palettes, font pairings, and custom colors.
+- [Theme Mode and Contrast](./theme-mode-contrast): light/dark controls, precedence, and readability.
+
+## Contribute
+
+[Contributing](../contributing) covers the repository setup, checks, bilingual documentation, and preview updates.

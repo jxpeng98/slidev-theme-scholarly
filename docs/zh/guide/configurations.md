@@ -4,7 +4,7 @@ title: 配置指南
 
 # 配置指南
 
-大多数演示只需在 `slides.md` 顶部加入一小段 frontmatter：
+文件开头的第一个 YAML 块称为 headmatter，用于设置整份演示；后续 YAML 块用于单张幻灯片。配色和字体预设写在 `themeConfig` 下，`authors`、`bibFile`、`fontsize`、`themeColors` 等字段则直接写在顶层：
 
 ```yaml
 ---
@@ -32,9 +32,9 @@ themeConfig:
 | --- | --- | --- |
 | `theme` | 启用主题 | `scholarly` |
 | `lang` | 定理和证明标签语言 | `zh`、`en` |
-| `aspectRatio` | 幻灯片尺寸 | `16/9`、`4/3` |
+| `aspectRatio` | 幻灯片尺寸 | `16/9`、`4/3`（默认 `4/3`） |
 | `bibFile` | BibTeX 来源 | `./references.bib` |
-| `bibStyle` | 参考文献样式 | `apa`、`ieee`、`chicago` |
+| `bibStyle` | 参考文献样式 | `apa`、`ieee`、`chicago-author-date` |
 
 ## 作者和页脚
 
@@ -57,7 +57,7 @@ authors:
 | 中间 | 空，除非设置了 `footerMiddle` |
 | 右侧 | 页码 |
 
-要修改页脚内容，请设置 `footerLeft`、`footerMiddle` 或 `footerRight`。
+要修改页脚内容，请设置 `footerLeft`、`footerMiddle` 或 `footerRight`。封面需要显示姓名和单位时，使用结构化的 `authors` 数组。
 
 ## 主题配置
 
@@ -80,18 +80,17 @@ themeConfig:
 | `beamerNav` | 放映模式页脚导航按钮 | `true` |
 | `outlineToc` | 页脚 TOC 按钮和大纲面板 | `false` |
 | `outlineTocOpen` | 加载后默认打开大纲面板 | `false` |
-| `footnoteDisplay` | `both`、`hover-only` 或 `notes-only` | `both` |
+| `footnoteDisplay` | 旧配置位置；新演示请使用下文的顶层字段 | `both` |
 
 配色和区域明暗设置：
 
 | 选项 | 控制范围 | 默认值 |
 | --- | --- | --- |
 | `colorTheme` | 整体配色：主色、强调色、背景和文字颜色 | `classic-blue` |
-| `contentMode` | 普通幻灯片画布、可读内容表面、引用、代码、表格、注脚、Highlight、Block 和 Theorem | 先跟随 `colorMode`，再跟随 Slidev 深色状态 |
-| `chromeMode` | 页眉、页脚、页码、导航按钮、TOC 和工具栏表面 | `dark` |
+| `contentMode` | 页面背景、正文、代码、表格和内容组件 | 先跟随 `colorMode`，再跟随 Slidev 深色状态 |
+| `chromeMode` | 页眉、页脚、页码、导航、大纲和工具栏 | `dark` |
 | `sectionMode` | `layout: section` 幻灯片的默认外观 | `dark` |
 | `colorMode` | `contentMode` 的旧别名 | 已废弃 |
-| `themeColors` | 品牌色和页脚颜色的高级 CSS 变量覆盖 | 未设置 |
 
 说明：
 
@@ -103,15 +102,7 @@ themeConfig:
 
 ## 页面明暗模式
 
-Slidev 的 `colorSchema` 控制整体的浅色和深色切换。Scholarly 还可以分别设置不同页面区域：
-
-- `contentMode` 控制普通幻灯片画布和可读内容表面。
-- `chromeMode` 控制页眉、页脚、页码、导航、TOC 和工具栏表面。
-- `sectionMode` 控制 `layout: section` 幻灯片，可取 `light`、`dark`、`match` 和 `inverse`。
-
-`contentMode` 可设为 `light` 或 `dark`，`chromeMode` 可设为 `light`、`dark`、
-`match` 或 `inverse`。旧的 `colorMode` 仍然可用；新演示请直接设置 `contentMode`
-和 `chromeMode`。如果两项都没有设置，`colorMode` 还会沿用旧版的界面明暗逻辑。
+`contentMode` 控制正文，`chromeMode` 控制页眉和放映控件，`sectionMode` 控制章节页。未设置 `contentMode` 时，正文先读取旧配置 `colorMode`，再跟随 Slidev 当前的明暗状态。
 
 ```yaml
 colorSchema: both
@@ -122,25 +113,24 @@ themeConfig:
   sectionMode: dark
 ```
 
-常见组合：
-
-| 目标 | 配置 |
-| --- | --- |
-| 浅色正文配深色界面和章节页 | `contentMode: light`、`chromeMode: dark`、`sectionMode: dark` |
-| 全浅色演示 | `contentMode: light`、`chromeMode: match`、`sectionMode: match` |
-| 全深色演示 | `contentMode: dark`、`chromeMode: match`、`sectionMode: match` |
-| 优先保证无障碍可读性 | `colorTheme: high-contrast` 并明确设置各区域模式 |
+可选值、优先级和单个章节页的覆盖方式见[主题模式与对比度](./theme-mode-contrast)。自定义配色使用顶层的 [`themeColors`](./themes#自定义颜色)。
 
 ## 定理编号
 
 自定义自动定理编号格式：
 
 ```yaml
-theoremNumberFormat: '{number}'      # 1, 2, 3
-theoremNumberFormat: '({number})'    # (1), (2), (3)
-theoremNumberFormat: '[{number}]'    # [1], [2], [3]
-theoremNumberFormat: '{number}.'     # 1., 2., 3.
+theoremNumberFormat: '({number})'
 ```
+
+每次只设置一种格式：
+
+| 格式 | 显示结果 |
+|---|---|
+| `'{number}'` | 1, 2, 3 |
+| `'({number})'` | (1), (2), (3) |
+| `'[{number}]'` | [1], [2], [3] |
+| `'{number}.'` | 1., 2., 3. |
 
 使用 `number` 属性可以手动设置单个编号；使用 `:autoNumber="false"` 可以关闭某条陈述的编号。
 

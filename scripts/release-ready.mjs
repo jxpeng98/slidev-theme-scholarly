@@ -73,6 +73,10 @@ const steps = [
     command: ['pnpm', 'run', 'docs:build'],
   },
   {
+    name: 'Documentation links and anchors',
+    command: ['node', 'scripts/check-docs-links.mjs'],
+  },
+  {
     name: 'CLI doctor',
     command: ['node', 'cli/scholarly.mjs', 'doctor'],
   },

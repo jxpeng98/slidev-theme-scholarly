@@ -4,33 +4,37 @@ title: Contributing
 
 # Contributing
 
-Fixes and improvements are welcome. Install the repository dependencies first:
+## Set up the repository
+
+Clone the repository and run the following from its root. Use Node.js 24 LTS and pnpm 10, matching the main CI quality gate:
 
 ```bash
-pnpm install
+git clone https://github.com/jxpeng98/slidev-theme-scholarly.git
+cd slidev-theme-scholarly
+pnpm install --frozen-lockfile
+pnpm --dir vscode-extension install --frozen-lockfile
 ```
 
-Start the example deck while you work:
+The theme and extension have separate dependency installs. The repository check includes both.
+
+## Work on the relevant surface
+
+| Change | Preview | Verify |
+|---|---|---|
+| Theme layouts, components, or styles | `pnpm run dev` | Inspect an example deck, then run `pnpm run check` |
+| Documentation | `pnpm run docs:dev` | `pnpm run check:docs-workflows` and `pnpm run docs:build` |
+| VS Code extension | `pnpm run vscode:compile`, then launch the extension development host | `pnpm --dir vscode-extension run test` and `pnpm run check` |
+
+Use the root `docs:*` commands for documentation development and CI parity. English pages live in `docs/en/`; Simplified Chinese pages live in `docs/zh/`. Update both versions, preserve existing URLs and explicit anchors, and keep code examples runnable. Historical plans under `docs/superpowers/` are excluded from the website.
+
+Stop development servers before running browser checks. For rendered changes, install Chromium and run the visual gate:
 
 ```bash
-pnpm run dev
+pnpm exec playwright install chromium
+pnpm run check:visual
 ```
 
-After stopping the development server, run the repository checks:
-
-```bash
-pnpm run check
-```
-
-If the change affects rendered slides or preview images, also regenerate the
-exports and screenshots:
-
-```bash
-pnpm run export
-pnpm run screenshot
-```
-
-Edit `examples/example.md` or `examples/example-zh.md`, then check the change in a real deck.
+`check` runs package, catalog, CLI, example parsing, docs build, and unit checks. `check:visual` also checks browser workflows and exported slides. Use the [script guide](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/scripts/README.md) to regenerate only the previews affected by your change.
 
 ## Theme and preview changes {#theme-and-preview-changes}
 

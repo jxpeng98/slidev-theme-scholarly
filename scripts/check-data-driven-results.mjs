@@ -105,10 +105,13 @@ for (const [name, file, markdownTable, chartingDependency] of [
   ['Chinese features', 'docs/zh/guide/features.md', 'Markdown 表格', '图表依赖'],
 ]) {
   const text = await readText(file)
-  expectContains(name, text, "import rows from './results.json'")
-  expectContains(name, text, "import csv from './results.csv?raw'")
-  expectContains(name, text, "slidev-theme-scholarly/utils/data")
-  expectContains(name, text, 'parseCsvTable')
+  const guide = await readText(file.replace('features.md', 'data-driven.md'))
+  expectContains(name, text, './data-driven')
+  expectContains(name, guide, "import rows from './results.json'")
+  expectContains(name, guide, "import csv from './metrics.csv?raw'")
+  expectContains(name, guide, 'slidev-theme-scholarly/utils/data')
+  expectContains(name, guide, 'parseCsvTable')
+  expectContains(name, guide, '<script setup>')
   expectContains(name, text, 'ResultTable')
   expectContains(name, text, 'MetricGrid')
   expectContains(name, text, markdownTable)

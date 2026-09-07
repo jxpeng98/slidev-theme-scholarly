@@ -8,6 +8,8 @@ title: 论文报告工作流
 
 ```bash
 npx -y slidev-theme-scholarly init paper-session --template paper-talk
+cd paper-session
+pnpm install
 ```
 
 ## 推荐布局
@@ -27,6 +29,8 @@ npx -y slidev-theme-scholarly init paper-session --template paper-talk
 - [Cite](../../components/cite) 和 BibTeX 标记管理引用。
 
 ## 常用片段
+
+在新项目目录中按需运行，命令会向 `slides.md` 末尾追加内容；追加后请先检查结果。
 
 ```bash
 pnpm exec sch snippet append cite --file slides.md

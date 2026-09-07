@@ -8,6 +8,8 @@ title: 课程讲义工作流
 
 ```bash
 npx -y slidev-theme-scholarly init lecture --template basic
+cd lecture
+pnpm install
 ```
 
 ## 推荐布局
@@ -27,6 +29,8 @@ npx -y slidev-theme-scholarly init lecture --template basic
 - [Highlight](../../components/highlight)：高亮短语，不建议用于整段文字。
 
 ## 常用片段
+
+在新项目目录中按需运行，命令会向 `slides.md` 末尾追加内容；追加后请先检查结果。
 
 ```bash
 pnpm exec sch snippet append theorem --file slides.md

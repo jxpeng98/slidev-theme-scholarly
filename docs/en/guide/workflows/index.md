@@ -17,3 +17,5 @@ template and the layouts, components, and theme settings you are most likely to 
 
 Before choosing a palette, check the [theme mode and contrast guide](../theme-mode-contrast)
 for readability recommendations.
+
+These pages describe talk structures. CLI `workflow apply` is a separate action that appends snippets to an existing file. Use `init --template` to create the project shown in each guide.

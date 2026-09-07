@@ -9,6 +9,8 @@ with the `paper-talk` template:
 
 ```bash
 npx -y slidev-theme-scholarly init paper-session --template paper-talk
+cd paper-session
+pnpm install
 ```
 
 ## Recommended layouts
@@ -28,6 +30,8 @@ npx -y slidev-theme-scholarly init paper-session --template paper-talk
 - [Cite](../../components/cite) and BibTeX markers for citations.
 
 ## Useful snippets
+
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
 
 ```bash
 pnpm exec sch snippet append cite --file slides.md

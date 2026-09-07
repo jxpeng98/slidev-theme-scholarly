@@ -9,6 +9,8 @@ limits, and leave room for questions and backup material. Start with:
 
 ```bash
 npx -y slidev-theme-scholarly init defense --template thesis-defense
+cd defense
+pnpm install
 ```
 
 ## Recommended layouts
@@ -29,6 +31,8 @@ npx -y slidev-theme-scholarly init defense --template thesis-defense
 - [DatasetCard](../../components/dataset-card) for benchmark context.
 
 ## Useful snippets
+
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
 
 ```bash
 pnpm exec sch snippet append methodology --file slides.md

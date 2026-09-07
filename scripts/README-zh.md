@@ -11,7 +11,7 @@ pnpm install
 pnpm exec playwright install chromium
 ```
 
-只有导出 PNG 或 PDF 时才需要安装浏览器。
+PNG/PDF 导出和浏览器检查均需要 Chromium。建议使用 Node.js 24 LTS 和 pnpm 10，完整仓库安装步骤见[贡献指南](../docs/zh/contributing.md)。
 
 ## 生成预览图
 
@@ -33,7 +33,7 @@ pnpm run theme:matrix
 ```
 
 明暗模式预览会写入
-`/private/tmp/scholarly-theme-matrix/<color-theme>/<color-mode>/`。只检查矩阵配置、
+`<system-temp>/scholarly-theme-matrix/<color-theme>/<mode>/`。只检查矩阵配置、
 不启动 Playwright 时，运行：
 
 ```bash

@@ -8,6 +8,8 @@ title: 结果密集型报告工作流
 
 ```bash
 npx -y slidev-theme-scholarly init results-talk --template conference-lightning
+cd results-talk
+pnpm install
 ```
 
 ## 推荐布局
@@ -27,6 +29,8 @@ npx -y slidev-theme-scholarly init results-talk --template conference-lightning
 - [EquationBlock](../../components/equation-block) 展示指标公式。
 
 ## 常用片段
+
+在新项目目录中按需运行，命令会向 `slides.md` 末尾追加内容；追加后请先检查结果。
 
 ```bash
 pnpm exec sch snippet append results --file slides.md

@@ -4,7 +4,7 @@ title: 内容布局
 
 # 内容布局
 
-这些布局负责组织图片、分栏和列表内容。
+这些布局用于组织图片、分栏和列表。建议将本地图片放在演示项目的 `public/` 目录中，再以 `/image.png` 引用。下面每个代码块对应一张幻灯片。
 
 ## two-cols - 双栏 {#two-cols}
 
@@ -55,7 +55,7 @@ title: 双栏布局
 ```markdown
 ---
 layout: image-left
-image: ./path/to/image.png
+image: /image.png
 ratio: "1:2"
 title: 左图布局
 ---
@@ -92,7 +92,7 @@ title: 左图布局
 ```markdown
 ---
 layout: image-right
-image: https://example.com/image.jpg
+image: /image.png
 ratio: "3:2"
 fit: contain
 title: 右图布局
@@ -162,7 +162,7 @@ icon: "→"
 ```markdown
 ---
 layout: figure
-image: ./images/architecture.png
+image: /architecture.png
 caption: 我们提出的系统架构概览。
 label: "图 1："
 title: 系统架构
@@ -180,8 +180,8 @@ height: 60%
 - `label`：标签前缀（如 "图 1："）
 - `title`：幻灯片标题
 - `subtitle`：可选副标题
-- `height`：图片高度（默认：`60%`）
-- `fit`：`contain`、`cover`、`fill`（默认：`contain`）
+- `height`：图片最大高度（默认：`55vh`）
+- `fit`：`contain` 或 `cover`（默认：`contain`）
 
 ---
 
@@ -195,8 +195,8 @@ height: 60%
 ---
 layout: split-image
 images:
-  - ./before.png
-  - ./after.png
+  - /before.png
+  - /after.png
 captions:
   - 优化前
   - 优化后

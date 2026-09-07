@@ -15,11 +15,11 @@ These layouts make a quote, number, or conclusion the focus of the slide.
 ```markdown
 ---
 layout: quote
-author: Richard Feynman
-source: The Character of Physical Law, 1965
+author: Research team
+source: Illustrative research note
 ---
 
-The first principle is that you must not fool yourself.
+Report the conditions under which the result holds.
 ```
 
 **Props:**
@@ -70,12 +70,11 @@ Accuracy on benchmark dataset
 ```markdown
 ---
 layout: statement
-author: Einstein
 ---
 
-# Imagination is more important than knowledge
+# State the claim with its scope
 
-The true sign of intelligence is not knowledge but imagination.
+Specify the setting in which your evidence supports the conclusion.
 ```
 
 **Props:**

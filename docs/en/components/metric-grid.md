@@ -4,7 +4,7 @@ title: MetricGrid
 
 # MetricGrid
 
-`MetricGrid` arranges several `MetricCard` items in a responsive grid for result summaries, ablations, or experiment overviews.
+`MetricGrid` arranges several `MetricCard` items in a grid with an explicit column count for result summaries, ablations, or experiment overviews.
 
 ![MetricGrid example](/images/components/metric-grid.png)
 
@@ -36,3 +36,5 @@ title: MetricGrid
 | `gap` | `string \| number` | `'0.75rem'` | Space between cards |
 | `variant` | `string` | `'primary'` | Default card variant |
 | `compact` | `boolean` | `false` | Use compact card spacing |
+
+`columns` stays fixed as the Slidev canvas scales with the browser. Choose fewer columns or split the content across slides when labels become hard to read. Numeric `gap` values use `rem`.
