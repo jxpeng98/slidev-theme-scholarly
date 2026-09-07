@@ -170,18 +170,18 @@
       "id": "layouts/acknowledgments",
       "source": "docs/public/images/layouts/acknowledgments.png",
       "output": "vscode-extension/media/previews/layouts/acknowledgments.png",
-      "sourceSha256": "f802161fa06d045bfd02f89c840a0195a378f55d650b885483207a14981480e8",
-      "outputSha256": "a2bb71cb218758b1b83e681aa5834a67582347e935a1ac93124e359e1c26dbc1",
-      "bytes": 30807
+      "sourceSha256": "6523c478885fe26b0f2b5d53b784235aa92c699f9c6f2ea0367d0d02af6f37d8",
+      "outputSha256": "4ebbb7806b32fffe4d501bcb60fb4171394408dc87e1ac6e3ccb1b1663ab204b",
+      "bytes": 29202
     },
     {
       "kind": "layouts",
       "id": "layouts/agenda",
       "source": "docs/public/images/layouts/agenda.png",
       "output": "vscode-extension/media/previews/layouts/agenda.png",
-      "sourceSha256": "d91c5ec5754f846a0fea0c95f602c39c1b4c7a0e0f88aaf7e7aea5a833d8abcb",
-      "outputSha256": "a8094d6609c08b7887b50457a5c9f7e61c5f0231b756721eca24725aeae7be6b",
-      "bytes": 33127
+      "sourceSha256": "fbde397f3e88630b0f7c4a5b6251e1a3f39c439c20f66f8a80c9133e4fb8a7d3",
+      "outputSha256": "0b7994b11e9543d5347c12385a15aad99146bff2d90a76970a22bebd89bf74b8",
+      "bytes": 35145
     },
     {
       "kind": "layouts",
@@ -359,9 +359,9 @@
       "id": "layouts/methodology",
       "source": "docs/public/images/layouts/methodology.png",
       "output": "vscode-extension/media/previews/layouts/methodology.png",
-      "sourceSha256": "303436cb9b2addb98f5202b90ed0614781fa581d0b7550460053a2541090c790",
-      "outputSha256": "d6bbe95d4516a9458836ef36fb9179c4a1a028f6979562b817b42984243dde81",
-      "bytes": 33912
+      "sourceSha256": "1f1407a73d7e29cb6ef6a269af10772f1d189ba30d2cba4c52eb84abe0afe9ed",
+      "outputSha256": "592abb1ecfb835e591b2898c2f3605dd76c844b83bbabf6efbf883567c9d8285",
+      "bytes": 36999
     },
     {
       "kind": "layouts",
@@ -413,9 +413,9 @@
       "id": "layouts/results",
       "source": "docs/public/images/layouts/results.png",
       "output": "vscode-extension/media/previews/layouts/results.png",
-      "sourceSha256": "fc7c1b8e24f6f945482a854eeff330f975725b60cbfec778c614ef5e278e471d",
-      "outputSha256": "6f843fea31501e9bd3874980c11c901ad2becbded76cc4aac3273b5760ac53e9",
-      "bytes": 24765
+      "sourceSha256": "793921ca0eae175404f8aaefe30fc27240dee91d76f9f232aee600a9532013fa",
+      "outputSha256": "fc3ee41c6e38a3f0ec9399f202d47135374f4a2a3d4cdb2424335eeaa35ea1f0",
+      "bytes": 29327
     },
     {
       "kind": "layouts",
@@ -431,9 +431,9 @@
       "id": "layouts/split-image",
       "source": "docs/public/images/layouts/split-image.png",
       "output": "vscode-extension/media/previews/layouts/split-image.png",
-      "sourceSha256": "5df977897f8b2cc78a55c35ecc6421c8bafe5a55bc5f8a234897e44fe995a195",
-      "outputSha256": "cc43088fcc4782764f4b26563c350f0f37a146546c3f47f34bb2a71d5cb63fdd",
-      "bytes": 201470
+      "sourceSha256": "4e59203baaffe8cdefd766b34952ab20fa3fc4a83d3e35b77238f3db7bbae95a",
+      "outputSha256": "cdc3da10e27976729f07ad95bf8139536a2902ca32a2746d7340e9ff815aca90",
+      "bytes": 262127
     },
     {
       "kind": "layouts",
@@ -449,9 +449,9 @@
       "id": "layouts/timeline",
       "source": "docs/public/images/layouts/timeline.png",
       "output": "vscode-extension/media/previews/layouts/timeline.png",
-      "sourceSha256": "e7c496707e943813e77590cedcd5919ba04aa96580f25c029d78e03ed2e8cac9",
-      "outputSha256": "1a7b4b40cb255262c49b2936724ada06162b18ab8ec5349e95cdc98f3ec394eb",
-      "bytes": 34701
+      "sourceSha256": "bab24de2ec8fae2df8bd940a26ac5508eb85801aee3db07bfbc6b614ec3e59c8",
+      "outputSha256": "7443747ad98fbd03277b6276753c04e34ef629410e43bb229a7a280d828e18ed",
+      "bytes": 33615
     },
     {
       "kind": "layouts",
@@ -800,9 +800,9 @@
       "id": "vscode/gui-builder",
       "source": "docs/public/images/vscode/gui-builder.png",
       "output": "vscode-extension/media/previews/vscode/gui-builder.png",
-      "sourceSha256": "992775e50096764b9d82cade1127fafa09aaed013a1a6fd386c3aab028ab225a",
-      "outputSha256": "42c6fbe2ae9c028487fd5a0baf064132b4b5ebe6097f09ba18e218bcb5439193",
-      "bytes": 46618
+      "sourceSha256": "e455a1b3d8f5cf0bd527ad912887defb9aba4dabdaa6cefacd896e6a984f04d5",
+      "outputSha256": "717e0badd3be9f57e0811880452c5719e679bb89ffe6a88d75b96a42d08c4c6d",
+      "bytes": 46696
     },
     {
       "kind": "vscode",

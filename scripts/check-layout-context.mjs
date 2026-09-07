@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { createRequire } from 'node:module'
-import { mkdir, writeFile, rm } from 'node:fs/promises'
+import { mkdir, readFile, writeFile, rm } from 'node:fs/promises'
 import path from 'node:path'
 import { createServer, resolveOptions } from '@slidev/cli'
 import { chromium } from 'playwright-chromium'
@@ -61,6 +61,8 @@ try {
     assert.equal(await el.locator('.header-container').count(), 1, `${headers[i]}: header must render`)
     assert.match(await el.locator('.header-title').innerText(), new RegExp(headers[i]))
     assert.equal(await el.locator('.header-subtitle').innerText(), 'Subtitle evidence')
+    if (['agenda', 'acknowledgments'].includes(headers[i]))
+      assert.equal(await el.locator('h1').count(), 0, `${headers[i]}: do not repeat the header title in the body`)
     for (const long of [false, true]) {
       if (long) await el.locator('.header-title').evaluate(node => { node.textContent = 'Long research title with context and evidence. '.repeat(4) })
       const bounds = await el.evaluate(node => {
@@ -88,6 +90,29 @@ try {
     results.push({layout:'MetricGrid',viewport:width,columns:1})
     await page.screenshot({path:path.join(out,`metric-one-column-${width}.png`), animations:'disabled'})
   }
+  const showcase = await readFile(path.join(root, 'scripts/generate-layout-screenshots.md'), 'utf8')
+  const agenda = showcase.split('<!-- Slide 24: agenda -->')[1].split('<!-- Slide 25: acknowledgments -->')[0].trim()
+  await server.close()
+  await writeFile(entry, source.split('# Review')[0].replace('16/9', '4/3') + '# Review\n\n' + agenda)
+  server = await createServer(await resolveOptions({ entry }, 'dev'), { server: { port: 0 }, clearScreen: false })
+  await server.listen()
+  await page.setViewportSize({width:1280,height:1000})
+  await page.goto(`http://localhost:${server.httpServer.address().port}/2`)
+  const items = page.locator('.slidev-page-2 .agenda-item')
+  await items.first().waitFor()
+  assert.equal(await items.count(), 7)
+  const agendaBounds = await page.locator('.slidev-page-2 .agenda').evaluate(node => ({
+    headerBottom: node.querySelector('.header-container').getBoundingClientRect().bottom,
+    firstTop: node.querySelector('.agenda-item').getBoundingClientRect().top,
+    lastBottom: [...node.querySelectorAll('.agenda-item')].at(-1).getBoundingClientRect().bottom,
+    footerTop: node.querySelector('footer').getBoundingClientRect().top,
+  }))
+  assert.ok(agendaBounds.firstTop >= agendaBounds.headerBottom, 'seven-item agenda must stay below its header')
+  assert.ok(agendaBounds.lastBottom <= agendaBounds.footerTop, 'seven-item agenda must stay above its footer')
+  results.push({layout:'agenda',items:7,bounds:agendaBounds})
+  await page.screenshot({path:path.join(out,'agenda-seven-items.png'), animations:'disabled'})
+  await server.close()
+  await writeFile(entry, source)
   assert.deepEqual(errors, [])
   const cli = createRequire(import.meta.url).resolve('@slidev/cli/bin/slidev.mjs')
   const exported = await promisify(execFile)(process.execPath, [cli, 'export', entry, '--range', '2-8', '--format', 'pdf', '--output', path.join(out, 'headers.pdf'), '--wait', '300'], {cwd:root, timeout:120000})
