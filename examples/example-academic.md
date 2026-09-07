@@ -2,6 +2,7 @@
 theme: ../
 title: Efficient Adaptation for Scientific Models
 footerMiddle: Model Research Talk - Sample Data
+aspectRatio: 16/9
 lang: en
 themeConfig:
   contentMode: light
@@ -49,13 +50,13 @@ Can model adaptation improve accuracy without increasing deployment cost?
 ---
 layout: related-work-matrix
 title: Research Gap
-description: Prior methods improve efficiency, but often depend on costly teachers or pruning pipelines.
+description: Foundational architectures motivate a deployment-aware adaptation study.
 ---
 
-| Work | Setting | Method | Remaining limitation |
+| Work | Setting | Contribution | Scope |
 | --- | --- | --- | --- |
-| LeCun et al. 2015 | General deep learning | Representation learning | Deployment cost is not the objective |
-| Smith 2023 | Efficient training | Distillation and pruning | Requires an expensive teacher model |
+| !@lecun2015deep | General deep learning | Review of representation learning | Broad architectural foundations |
+| !@vaswani2017attention | Sequence modelling | Self-attention architecture | Translation benchmarks |
 | **This study** | Scientific adaptation | **Lightweight routing** | Requires labeled target examples |
 
 ::notes::

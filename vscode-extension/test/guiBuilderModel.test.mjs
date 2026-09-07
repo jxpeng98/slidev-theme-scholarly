@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 
 import {
   createBuilderSlide,
-  renderBuilderMarkdown
+  renderBuilderMarkdown,
+  renderBuilderSlides
 } from '../out/guiBuilderModel.js';
+import { BUILDER_TEMPLATES } from '../out/sharedData.js';
 
 test('renders scholarly frontmatter and ordered slides from GUI state', () => {
   const markdown = renderBuilderMarkdown({
@@ -70,6 +72,16 @@ test('uses practical placeholder text when a GUI slide is incomplete', () => {
   assert.match(markdown, /Add content here\./);
 });
 
+test('uses Chinese placeholders for a Chinese deck', () => {
+  const markdown = renderBuilderMarkdown({
+    lang: 'zh-CN',
+    slides: [createBuilderSlide('default')]
+  });
+
+  assert.match(markdown, /# 未命名页面/);
+  assert.match(markdown, /在这里填写内容。/);
+});
+
 test('renders layout-specific configuration and named slots', () => {
   const markdown = renderBuilderMarkdown({
     slides: [
@@ -117,4 +129,72 @@ test('preserves declared string values instead of coercing YAML-like scalars', (
   assert.match(markdown, /subtitle: "null"/);
   assert.match(markdown, /qrcodeLabel: "2026"/);
   assert.match(markdown, /website: "true"/);
+});
+
+test('builds the paper-talk workflow from the shared CLI template', () => {
+  const workflow = BUILDER_TEMPLATES.find(template => template.id === 'paper-talk');
+
+  assert.ok(workflow);
+  assert.equal(workflow.deck.slides.length, 8);
+
+  const markdown = renderBuilderMarkdown(workflow.deck);
+  assert.match(markdown, /description: Structured academic paper presentation/);
+  assert.match(markdown, /layout: paper-summary/);
+  assert.match(markdown, /paperTitle: Efficient Adaptation for Scientific Models/);
+  assert.match(markdown, /::problem::/);
+  assert.match(markdown, /layout: method-pipeline/);
+  assert.match(markdown, /activeStep: 2/);
+  assert.match(markdown, /layout: references/);
+});
+
+test('renders one selected slide without deck frontmatter', () => {
+  const markdown = renderBuilderSlides([
+    createBuilderSlide('quote', { title: 'Key claim', body: 'Evidence belongs beside the claim.' })
+  ]);
+
+  assert.match(markdown, /^---\nlayout: quote\n---/);
+  assert.doesNotMatch(markdown, /theme: scholarly/);
+});
+
+test('rejects malformed layout settings at both generation boundaries', () => {
+  assert.throws(() => renderBuilderMarkdown({ slides: [{ layout: 'default', config: [] }] }), /mapping/);
+  for (const images of [{}, null, ['valid.png', 2], '["unfinished"', [], undefined]) {
+    const slide = createBuilderSlide('split-image', { title: 'Images', config: { images } });
+    assert.throws(() => renderBuilderSlides([slide]), /images/);
+    assert.throws(() => renderBuilderMarkdown({ title: 'Deck', slides: [slide] }), /images/);
+  }
+  for (const configSource of ['images: {}', 'images: null', 'images: [a.png, 2]']) {
+    const slide = createBuilderSlide('split-image', { configSource });
+    assert.throws(() => renderBuilderSlides([slide]), /images/);
+    assert.throws(() => renderBuilderMarkdown({ slides: [slide] }), /images/);
+  }
+  assert.throws(() => renderBuilderSlides([
+    createBuilderSlide('method-pipeline', { config: { steps: [{ description: 'Missing title' }] } })
+  ]), /steps/);
+  assert.throws(() => renderBuilderSlides([
+    createBuilderSlide('default', { config: { fontsize: { h1: [] } } })
+  ]), /fontsize/);
+  assert.throws(() => renderBuilderMarkdown({ title: '', slides: [createBuilderSlide('cover')] }), /title/);
+  assert.throws(() => renderBuilderMarkdown({ title: 'Deck', slides: [] }), /slide/);
+});
+
+test('preserves supported scalar, union and structured setting values', () => {
+  const images = renderBuilderSlides([createBuilderSlide('split-image', {
+    config: { images: ['a.png', 'b.png'], captions: [] }
+  })]);
+  assert.match(images, /images: \["a.png","b.png"\]/);
+  assert.match(images, /captions: \[\]/);
+  const source = renderBuilderSlides([
+    createBuilderSlide('toc', { config: { title: false, showNumbers: false } }),
+    createBuilderSlide('paper-summary', { config: { year: 2026, authors: 'A. Researcher' } }),
+    createBuilderSlide('auto-size', { config: { minFontSize: '18', fontsize: { h1: '2rem', body: 18 } } }),
+    createBuilderSlide('method-pipeline', { config: { steps: [{ title: 'Collect', detail: 'Source data' }] } })
+  ]);
+  assert.match(source, /title: false/);
+  assert.match(source, /showNumbers: false/);
+  assert.match(source, /year: 2026/);
+  assert.match(source, /authors: A. Researcher/);
+  assert.match(source, /minFontSize: 18/);
+  assert.match(source, /"h1":"2rem","body":18/);
+  assert.match(source, /"title":"Collect"/);
 });

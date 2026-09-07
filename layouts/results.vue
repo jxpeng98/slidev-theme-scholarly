@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout results h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout results h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow px-8 py-6 flex flex-col" :style="computedStyles">
       <div v-if="$slots.header" class="mb-4">
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<{
 })
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 
 const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(${props.cols}, minmax(0, 1fr))`

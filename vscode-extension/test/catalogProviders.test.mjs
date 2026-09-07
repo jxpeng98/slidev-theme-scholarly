@@ -29,13 +29,24 @@ class ThemeIcon {
   }
 }
 
-function loadCatalogModules() {
+function loadCatalogModules(language = 'en', bundle) {
   const Module = require('node:module');
   const originalLoad = Module._load;
 
   Module._load = function patchedLoad(request, parent, isMain) {
     if (request === 'vscode') {
       return {
+        env: { language },
+        l10n: {
+          bundle,
+          t(message, ...args) {
+            const localized = bundle?.[message] ?? message;
+            return args.reduce(
+              (result, value, index) => result.replaceAll(`{${index}}`, String(value)),
+              localized
+            );
+          }
+        },
         MarkdownString,
         ThemeIcon,
         TreeItem,
@@ -53,7 +64,7 @@ function loadCatalogModules() {
   };
 
   try {
-    for (const moduleName of ['../out/providers.js', '../out/preview.js']) {
+    for (const moduleName of ['../out/localization.js', '../out/providers.js', '../out/preview.js']) {
       const resolved = require.resolve(moduleName);
       delete require.cache[resolved];
     }
@@ -121,8 +132,8 @@ test('exposes complete, grouped layout and component catalog metadata', async ()
   const layoutGroups = await layoutProvider.getChildren();
   const structureItems = await layoutProvider.getChildren(layoutGroups[0]);
   const cover = structureItems.find(item => item.item.id === 'cover');
-  assert.match(cover.tooltip.value, /Configuration:/);
-  assert.match(cover.tooltip.value, /Slots:/);
+  assert.match(cover.tooltip.value, /Settings:/);
+  assert.match(cover.tooltip.value, /Content slots:/);
   assert.match(cover.tooltip.value, /Cover title, subtitle, and other opening content/);
 });
 
@@ -146,8 +157,8 @@ test('resolves every visual component variant to its canonical preview', () => {
     }],
     slots: [{ name: 'right', description: 'Right-hand column content.' }]
   }, 'layout');
-  assert.match(configuration, /Frontmatter configuration/);
-  assert.match(configuration, /Standard Slidev frontmatter/);
+  assert.match(configuration, /Frontmatter settings/);
+  assert.match(configuration, /Standard Slidev keys/);
   assert.match(configuration, /<code>transition<\/code>/);
   assert.match(configuration, /ratio/);
   assert.match(configuration, /optional/);
@@ -180,11 +191,11 @@ test('preserves theme descriptions in the Themes tree', async () => {
   assert.equal(fontThemes[0].label, 'Classic');
   assert.equal(fontThemes[0].description, 'Traditional academic feel');
 
-  assert.equal(groups[3].label, 'Light & Dark Modes');
+  assert.equal(groups[3].label, 'Light and Dark Modes');
   const modes = await provider.getChildren(groups[3]);
   assert.deepEqual(
     modes.map(item => item.label),
-    ['Content Slides', 'Headers, Footers & Navigation', 'Section Dividers']
+    ['Content Slides', 'Headers, Footers, and Navigation', 'Section Dividers']
   );
 });
 
@@ -203,4 +214,22 @@ test('orders CLI actions by the documentation workflow', async () => {
     buildItems.slice(0, 4).map(item => item.label),
     ['List Layouts', 'List Components', 'Append Snippet...', 'Apply Workflow...']
   );
+});
+
+test('shows localized catalog and theme labels in Simplified Chinese', async () => {
+  const bundle = require('../l10n/bundle.l10n.zh-cn.json');
+  const { providers } = loadCatalogModules('zh-cn', bundle);
+
+  assert.equal(providers.layouts.find(item => item.id === 'cover').label, '标题页');
+  assert.equal(
+    providers.layouts.find(item => item.id === 'two-cols').details.useFor,
+    '比较两组内容，或并排展示相关信息。'
+  );
+  assert.match(
+    providers.components.find(item => item.canonicalName === 'PaperCard').description,
+    /论文元数据/
+  );
+
+  const themeGroups = await new providers.ThemesProvider({ fsPath: '' }).getChildren();
+  assert.deepEqual(themeGroups.map(item => item.label), ['预设', '配色主题', '字体主题', '明暗模式']);
 });

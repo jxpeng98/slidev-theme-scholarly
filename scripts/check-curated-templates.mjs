@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { mkdtempSync, rmSync } from 'node:fs'
 import path from 'node:path'
+import { tmpdir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
@@ -88,7 +89,7 @@ for (const template of expectedTemplates) {
   expect(Boolean(item?.description), `${template.name} should have a description`)
 }
 
-const tempRoot = mkdtempSync(path.join('/private/tmp', 'scholarly-curated-templates-'))
+const tempRoot = mkdtempSync(path.join(tmpdir(), 'scholarly-curated-templates-'))
 
 try {
   for (const template of expectedTemplates) {
@@ -128,6 +129,12 @@ try {
       expect(citation.hasReferencesSlide, `${template.name} should include a references slide`)
       expect(citation.duplicateKeys.length === 0, `${template.name} should not include duplicate BibTeX keys`)
       expect(citation.unresolvedKeys.length === 0, `${template.name} should resolve all citation keys`)
+      const bibliography = path.join(target, citation.bibFile)
+      const originalBib = 'User bibliography: keep this content.\n'
+      fs.writeFileSync(bibliography, originalBib)
+      const retry = runCli(['init', target, '--template', template.name])
+      expect(retry.status !== 0, `${template.name} should refuse a nonempty project without --force`)
+      expect(readText(bibliography) === originalBib, `${template.name} must preserve an existing bibliography`)
     }
   }
 

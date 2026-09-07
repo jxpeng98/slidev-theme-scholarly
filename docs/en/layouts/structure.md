@@ -91,7 +91,7 @@ Next, we explain the method
 
 **What it shows:**
 
-- Large, centered text
+- Large text, left-aligned by default
 - No header (more space for the title)
 - Footer at the bottom
 
@@ -184,9 +184,15 @@ highlightCurrent: true # optional, default: true
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string \| false` | `Outline` | Title text, set to `false` to hide |
+| `heading` | `string \| false` | - | Overrides `title` for the visible outline heading |
 | `showNumbers` | `boolean` | `true` | Show numbered badges |
 | `highlightCurrent` | `boolean` | `true` | Highlight the current section |
 | `sections` | `string[]` | - | Manually specify section titles (overrides auto-extraction) |
+
+When the outline is the first slide, keep `title` as the presentation name and
+set `heading: false` to hide the outline heading, or `heading: Outline` to give
+it a separate name. Deck Builder converts a hidden first-page title automatically.
+On later slides, the existing `title: false` syntax remains supported.
 
 ---
 

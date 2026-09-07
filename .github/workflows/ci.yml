@@ -49,17 +49,20 @@ jobs:
       - name: Build English example deck
         run: pnpm exec slidev build examples/example.md --out "${RUNNER_TEMP}/slidev-example-en" --without-notes
 
-      - name: Build Academic example deck
+      - name: Build Academic 16:9 example deck
         run: pnpm exec slidev build examples/example-academic.md --out "${RUNNER_TEMP}/slidev-example-academic" --without-notes
 
       - name: Build Chinese example deck
         run: pnpm exec slidev build examples/example-zh.md --out "${RUNNER_TEMP}/slidev-example-zh" --without-notes
 
-  vscode-extension:
-    name: VS Code Extension Check
+  quality:
+    name: Full Quality Gate
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      CI: true
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,12 +77,16 @@ jobs:
         with:
           node-version: '24'
           cache: pnpm
-          cache-dependency-path: vscode-extension/pnpm-lock.yaml
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            vscode-extension/pnpm-lock.yaml
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Install extension dependencies
         working-directory: vscode-extension
         run: pnpm install --frozen-lockfile
 
-      - name: Compile extension
-        working-directory: vscode-extension
-        run: pnpm run compile
+      - name: Run full quality gate
+        run: pnpm run check

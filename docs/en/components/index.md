@@ -37,3 +37,5 @@ Or accept data through props:
 ```
 
 Open a component page for its props and complete examples. For shorter authoring syntax, see [syntax sugar](../syntax-sugar).
+
+Blank lines around Markdown inside component tags allow Slidev to parse it correctly. Labels such as `Paper` and `Evidence` default to English; use each component's `label` or other text props when you need another language. The research names and numbers in examples are illustrative.

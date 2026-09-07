@@ -15,3 +15,5 @@ title: 学术工作流
 | [课程讲义](./course-lecture) | `basic` 或 `academic` 模板 | 讲概念、定义、例子和总结。 |
 
 选择配色前，请先阅读[主题模式与对比度](../theme-mode-contrast)中的可读性建议。
+
+这里的“工作流”指报告的组织方式。CLI 的 `workflow apply` 是向已有文件追加片段的操作；创建完整项目应使用各页示例中的 `init --template`。

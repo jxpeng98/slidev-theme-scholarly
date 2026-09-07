@@ -43,7 +43,9 @@ content and chrome surfaces explicitly:
 # Before
 themeConfig:
   colorMode: dark
+```
 
+```yaml
 # After
 themeConfig:
   contentMode: dark
@@ -78,20 +80,18 @@ Prefer:
 
 - Short inline [Highlight](../components/highlight) spans over full paragraph highlights.
 - [Block](../components/block) or [EvidenceBlock](../components/evidence-block) when the content needs a title and body.
-- `type="warning"` only for actual warnings; use `type="info"` or `type="primary"` for neutral emphasis.
+- `type="warning"` only for actual warnings; use `type="info"` for a neutral Block, or `type="primary"` for a neutral Highlight.
 - `high-contrast` for a final readability check before export.
 
 ## Quick check
 
-Run the doctor and a visual export before sharing:
+Run these commands from your presentation project after [setting up PDF export](./quick-start#check-and-export):
 
 ```bash
 pnpm exec sch doctor
-pnpm run theme:matrix
+pnpm run export
 ```
 
-To check the theme matrix without exporting screenshots:
+Inspect the exported slides at presentation size. Check quote slides, inline Highlight text, figures, tables, and footnotes in the mode you will use. A high-contrast preset cannot compensate for text that is too small or a chart with indistinguishable series.
 
-```bash
-node scripts/check-theme-matrix.mjs --dry-run
-```
+Maintainers can check all theme combinations with the repository's `theme:matrix` script; see [Contributing](../contributing#theme-and-preview-changes).

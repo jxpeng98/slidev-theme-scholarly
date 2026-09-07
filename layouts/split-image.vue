@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout split-image h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout split-image h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow flex items-center justify-center px-6 py-4 gap-4" :style="computedStyles">
       <div v-for="(img, idx) in images" :key="idx" class="flex-1 flex flex-col items-center h-full justify-center">
@@ -31,7 +31,7 @@ defineProps<{
 }>()
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 const computedStyles = useFontSizeStyles()
 </script>
 

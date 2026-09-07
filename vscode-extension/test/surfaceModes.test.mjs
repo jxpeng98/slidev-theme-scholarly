@@ -111,11 +111,29 @@ test('upserts new theme mode keys while preserving legacy colorMode tolerance', 
     updateYaml('theme: scholarly', { colorMode: 'dark' }),
     [
       'theme: scholarly',
-      '',
       'themeConfig:',
       '  contentMode: dark'
     ].join('\n'),
     'legacy colorMode updates write contentMode'
+  );
+});
+
+test('normalizes indentation while preserving themeConfig values', () => {
+  const commands = loadCommandsWithVscodeMock();
+  const updateYaml = commands.__test.upsertThemeConfigYaml;
+
+  assert.equal(
+    updateYaml([
+      'theme: scholarly',
+      'themeConfig:',
+      '    colorTheme: classic-blue'
+    ].join('\n'), { colorTheme: 'yale-blue', fontTheme: 'modern' }),
+    [
+      'theme: scholarly',
+      'themeConfig:',
+      '  colorTheme: yale-blue',
+      '  fontTheme: modern'
+    ].join('\n')
   );
 });
 
@@ -179,4 +197,19 @@ test('extension manifest exposes new mode commands and hides legacy color mode c
 
   assert.ok(manifest.activationEvents.includes('onCommand:slidev-scholarly.setColorMode'));
   assert.ok(!titleMenuCommands.includes('slidev-scholarly.setColorMode'));
+});
+
+test('theme updates preserve commented and inline YAML mappings and reject invalid inputs', () => {
+  const yaml = require('../out/vendor/js-yaml');
+  const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
+  for (const source of [
+    'themeConfig: # palette\n  fontTheme: traditional\n  outlineToc: false\n  custom: {nested: [1, 2]}',
+    'themeConfig: {fontTheme: traditional, outlineToc: false, custom: {nested: [1, 2]}}'
+  ]) {
+    const parsed = yaml.load(update(source + '\nother: {keep: true}', {colorTheme:'yale-blue'}));
+    assert.deepEqual(parsed.themeConfig, {fontTheme:'traditional', outlineToc:false, custom:{nested:[1,2]}, colorTheme:'yale-blue'});
+    assert.deepEqual(parsed.other, {keep:true});
+  }
+  for (const source of ['themeConfig: {}\nthemeConfig: {}', 'themeConfig: []', 'themeConfig: broken', 'themeConfig: ['])
+    assert.throws(() => update(source, {colorTheme:'yale-blue'}));
 });

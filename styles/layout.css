@@ -419,6 +419,19 @@ footer {
   right: 0;
 }
 
+/* These flex layouts reserve the header's actual height, including subtitles. */
+.slidev-layout.flow-header-layout {
+  padding: 0 0 var(--scholarly-footer-height);
+}
+
+.flow-header-layout > .header-container {
+  position: static;
+}
+
+.flow-header-layout > .flex-grow {
+  min-height: 0;
+}
+
 .header-centered {
   position: absolute;
   top: 50%;

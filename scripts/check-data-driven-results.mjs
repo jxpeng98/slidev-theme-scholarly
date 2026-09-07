@@ -3,7 +3,7 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { transformWithEsbuild } from 'vite'
+import { transformWithOxc } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -50,7 +50,7 @@ const importDataHelpers = async () => {
   const source = await readText('utils/data.ts')
   if (!source) return {}
 
-  const transformed = await transformWithEsbuild(source, 'utils/data.ts', {
+  const transformed = await transformWithOxc(source, 'utils/data.ts', {
     loader: 'ts',
     format: 'esm',
     target: 'es2020',
@@ -105,10 +105,13 @@ for (const [name, file, markdownTable, chartingDependency] of [
   ['Chinese features', 'docs/zh/guide/features.md', 'Markdown 表格', '图表依赖'],
 ]) {
   const text = await readText(file)
-  expectContains(name, text, "import rows from './results.json'")
-  expectContains(name, text, "import csv from './results.csv?raw'")
-  expectContains(name, text, "slidev-theme-scholarly/utils/data")
-  expectContains(name, text, 'parseCsvTable')
+  const guide = await readText(file.replace('features.md', 'data-driven.md'))
+  expectContains(name, text, './data-driven')
+  expectContains(name, guide, "import rows from './results.json'")
+  expectContains(name, guide, "import csv from './metrics.csv?raw'")
+  expectContains(name, guide, 'slidev-theme-scholarly/utils/data')
+  expectContains(name, guide, 'parseCsvTable')
+  expectContains(name, guide, '<script setup>')
   expectContains(name, text, 'ResultTable')
   expectContains(name, text, 'MetricGrid')
   expectContains(name, text, markdownTable)

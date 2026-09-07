@@ -12,7 +12,7 @@ Use `Theorem` for theorems, lemmas, definitions, proofs, and other formal statem
 - Consistent styling
 - English and Chinese labels
 
-### Basic Usage
+## Basic Usage
 
 ```markdown
 <Theorem type="theorem" title="Pythagorean Theorem">
@@ -26,7 +26,7 @@ $$a^2 + b^2 = c^2$$
 
 The rendered heading is “Theorem 1 (Pythagorean Theorem).”
 
-### Available Types
+## Available Types
 
 Each type uses a distinct color:
 
@@ -45,14 +45,14 @@ Each type uses a distinct color:
 
 `proof` and `note` are rendered without automatic numbering by default. `claim` participates in the same auto-numbering flow as the other numbered theorem types.
 
-### Examples
+## Examples
 
 **Simple theorem:**
 
 ```markdown
 <Theorem type="theorem">
 
-Every bounded sequence has a convergent subsequence.
+Every bounded sequence of real numbers has a convergent subsequence.
 
 </Theorem>
 ```
@@ -62,7 +62,7 @@ Every bounded sequence has a convergent subsequence.
 ```markdown
 <Theorem type="definition" title="Continuity">
 
-A function $f$ is continuous at $x = a$ if...
+A function $f$ is continuous at $x=a$ if $\lim_{x \to a} f(x) = f(a)$.
 
 </Theorem>
 ```

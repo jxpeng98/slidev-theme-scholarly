@@ -12,7 +12,7 @@ A layout controls the structure of an entire slide. Scholarly includes 34 layout
 | I need to... | Start with... | Reference |
 |---|---|---|
 | Open, divide, or close a talk | `cover`, `section`, `toc`, `end` | [Structure](./structure) |
-| Arrange text, figures, or columns | `default`, `two-cols`, `figure`, `image-right` | [Content](./content) |
+| Arrange text, figures, or columns | `default`, `two-cols`, `figure`, `image-right` | [Default slide](./structure#default), [content layouts](./content) |
 | Make one idea stand out | `focus`, `fact`, `quote`, `statement` | [Emphasis](./emphasis) |
 | Present methods, evidence, or findings | `method-pipeline`, `experiment-grid`, `results`, `references` | [Academic](./academic) |
 

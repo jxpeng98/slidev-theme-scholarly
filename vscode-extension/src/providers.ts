@@ -18,6 +18,7 @@ import {
   TEMPLATES
 } from './sharedData';
 import type { CliActionId } from './commands';
+import { localizeDetail, t } from './localization';
 
 export interface SnippetItem {
   id?: string;
@@ -62,7 +63,7 @@ function createLayoutTooltip(
   md.appendMarkdown(`**${label}**  \`${layoutId}\`\n\n${description}\n\n`);
   appendCatalogDetails(md, details);
   md.appendMarkdown(toMarkdownCodeBlock(snippet));
-  md.appendMarkdown('\n\n*Use the Preview action for the full catalog entry.*');
+  md.appendMarkdown(`\n\n*${t('Open Preview to see the full catalog entry.')}*`);
   return md;
 }
 
@@ -83,40 +84,40 @@ function createComponentTooltip(
   md.appendMarkdown(`**${label}** — ${description}\n\n`);
   appendCatalogDetails(md, details);
   md.appendMarkdown(toMarkdownCodeBlock(snippet));
-  md.appendMarkdown('\n\n*Use the Preview action for the full catalog entry.*');
+  md.appendMarkdown(`\n\n*${t('Open Preview to see the full catalog entry.')}*`);
   return md;
 }
 
 function appendCatalogDetails(md: vscode.MarkdownString, details: PreviewDetails | undefined): void {
   if (!details) return;
-  if (details.category) md.appendMarkdown(`**Category:** ${details.category}\n\n`);
-  if (details.useFor) md.appendMarkdown(`**Best for:** ${details.useFor}\n\n`);
+  if (details.category) md.appendMarkdown(`**${t('Category')}:** ${details.category}\n\n`);
+  if (details.useFor) md.appendMarkdown(`**${t('Best for')}:** ${details.useFor}\n\n`);
   if (details.features?.length) {
-    md.appendMarkdown(`**Provides:** ${details.features.join(' · ')}\n\n`);
+    md.appendMarkdown(`**${t('Includes')}:** ${details.features.join(' · ')}\n\n`);
   }
   if (details.config) {
     if (details.config.length) {
-      md.appendMarkdown('**Configuration:**\n\n');
+      md.appendMarkdown(`**${t('Settings')}:**\n\n`);
       for (const item of details.config) {
-        const options = item.options?.length ? `; values: ${item.options.join(' | ')}` : '';
-        const defaultValue = item.default !== undefined ? `; default: ${item.default}` : '';
-        const requirement = item.required ? 'required' : 'optional';
+        const options = item.options?.length ? `; ${t('values')}: ${item.options.join(' | ')}` : '';
+        const defaultValue = item.default !== undefined ? `; ${t('default')}: ${item.default}` : '';
+        const requirement = item.required ? t('required') : t('optional');
         md.appendMarkdown(`- \`${item.name}\` — \`${item.type}\`; ${requirement}${defaultValue}${options}: ${item.description}\n`);
       }
       md.appendMarkdown('\n');
     } else {
-      md.appendMarkdown('**Configuration:** No item-specific props.\n\n');
+      md.appendMarkdown(`**${t('Settings')}:** ${t('No item-specific settings.')}\n\n`);
     }
   }
   if (details.slots) {
     if (details.slots.length) {
-      md.appendMarkdown('**Slots:**\n\n');
+      md.appendMarkdown(`**${t('Content slots')}:**\n\n`);
       for (const slot of details.slots) {
         md.appendMarkdown(`- \`${slot.name}\`: ${slot.description}\n`);
       }
       md.appendMarkdown('\n');
     } else {
-      md.appendMarkdown('**Slots:** None.\n\n');
+      md.appendMarkdown(`**${t('Content slots')}:** ${t('None')}\n\n`);
     }
   }
 }
@@ -141,7 +142,7 @@ function createThemeTooltip(
   md.appendMarkdown(`**${label}**\n\n`);
   if (description) md.appendMarkdown(`${description}\n\n`);
   if (colorTheme) md.appendMarkdown(`\`colorTheme: ${colorTheme}\`\n\n`);
-  md.appendMarkdown('*Use the Preview action for the full theme gallery.*');
+  md.appendMarkdown(`*${t('Open Preview to see the full theme gallery.')}*`);
   return md;
 }
 
@@ -195,21 +196,31 @@ function createLayoutSnippetItem(
   definition?: SnippetDefinition
 ): SnippetItem {
   const catalog = LAYOUT_CATALOG[layoutId];
+  const label = catalog ? t(catalog.label) : layoutId;
   return {
     id: layoutId,
-    label: catalog?.label ?? layoutId,
-    description: catalog?.summary
-      ?? (definition ? stripCategoryPrefix(definition.description) : `Insert ${layoutId} layout`),
+    label,
+    description: catalog
+      ? localizeDetail(catalog.summary, t('{0} slide layout', label))
+      : definition ? stripCategoryPrefix(definition.description) : t('Insert the {0} layout', layoutId),
     icon: 'layout',
     snippet: definition?.body ?? `---\nlayout: ${layoutId}\n---\n\n$0`,
     details: catalog
       ? {
           category: categoryLabel,
-          useFor: catalog.useFor,
-          features: catalog.features,
+          useFor: localizeDetail(catalog.useFor, t('Use this layout for {0} slides.', label)),
+          features: catalog.features
+            .map(feature => localizeDetail(feature, ''))
+            .filter(Boolean),
           tags: catalog.tags,
-          config: catalog.config,
-          slots: catalog.slots
+          config: catalog.config.map(item => ({
+            ...item,
+            description: localizeDetail(item.description, t('Controls {0}.', item.name))
+          })),
+          slots: catalog.slots.map(slot => ({
+            ...slot,
+            description: localizeDetail(slot.description, t('Content for {0}.', slot.name))
+          }))
         }
       : { category: categoryLabel }
   };
@@ -220,11 +231,14 @@ function createComponentSnippetItem(definition: SnippetDefinition): SnippetItem 
   const canonicalName = resolveComponentName(label, definition.body);
   const catalog = canonicalName ? COMPONENT_CATALOG[canonicalName] : undefined;
   const category = catalog?.category ?? inferUtilityCategory(label);
-  const categoryLabel = COMPONENT_GROUPS.find(group => group.name === category)?.label ?? category;
+  const categorySource = COMPONENT_GROUPS.find(group => group.name === category)?.label ?? category;
+  const categoryLabel = t(categorySource);
   return {
     id: canonicalName ?? label,
     label,
-    description: catalog?.summary ?? definition.description,
+    description: catalog
+      ? localizeDetail(catalog.summary, t('{0} content block', label))
+      : localizeDetail(definition.description, t('{0} snippet', label)),
     icon: componentIcon(label, canonicalName),
     category,
     canonicalName,
@@ -232,15 +246,23 @@ function createComponentSnippetItem(definition: SnippetDefinition): SnippetItem 
     details: catalog
       ? {
           category: categoryLabel,
-          useFor: catalog.useFor,
-          features: catalog.features,
+          useFor: localizeDetail(catalog.useFor, t('Use {0} as a reusable content block.', label)),
+          features: catalog.features
+            .map(feature => localizeDetail(feature, ''))
+            .filter(Boolean),
           tags: catalog.aliases,
-          config: catalog.config,
-          slots: catalog.slots
+          config: catalog.config.map(item => ({
+            ...item,
+            description: localizeDetail(item.description, t('Controls {0}.', item.name))
+          })),
+          slots: catalog.slots.map(slot => ({
+            ...slot,
+            description: localizeDetail(slot.description, t('Content for {0}.', slot.name))
+          }))
         }
       : {
           category: categoryLabel,
-          useFor: definition.description
+          useFor: localizeDetail(definition.description, t('Insert the {0} snippet.', label))
         }
   };
 }
@@ -287,10 +309,10 @@ export const layoutCategories = Object.fromEntries(
   LAYOUT_GROUPS.map(group => [
     group.name,
     {
-      label: group.label,
-      description: group.description,
+      label: t(group.label),
+      description: localizeDetail(group.description, t('Related slide layouts')),
       icon: group.icon,
-      layouts: group.items.map(id => createLayoutSnippetItem(id, group.label, layoutSnippetById.get(id)))
+      layouts: group.items.map(id => createLayoutSnippetItem(id, t(group.label), layoutSnippetById.get(id)))
     }
   ])
 );
@@ -310,8 +332,8 @@ export const componentCategories = Object.fromEntries(
   COMPONENT_GROUPS.map(group => [
     group.name,
     {
-      label: group.label,
-      description: group.description,
+      label: t(group.label),
+      description: localizeDetail(group.description, t('Related content blocks')),
       items: components.filter(item => item.category === group.name)
     }
   ])
@@ -329,7 +351,7 @@ export class SnippetTreeItem extends vscode.TreeItem {
     this.iconPath = new vscode.ThemeIcon(item.icon || 'symbol-snippet');
     this.command = {
       command: 'slidev-scholarly.insertLayout',
-      title: 'Insert',
+      title: t('Insert'),
       arguments: [{ snippet: item.snippet }]
     };
   }
@@ -400,7 +422,7 @@ export class LayoutsProvider implements vscode.TreeDataProvider<vscode.TreeItem>
           );
           item.command = {
             command: 'slidev-scholarly.insertLayout',
-            title: 'Insert',
+            title: t('Insert'),
             arguments: [{ snippet: layout.snippet }]
           };
           return item;
@@ -442,7 +464,7 @@ export class ComponentsProvider implements vscode.TreeDataProvider<vscode.TreeIt
         );
         item.command = {
           command: 'slidev-scholarly.insertComponent',
-          title: 'Insert',
+          title: t('Insert'),
           arguments: [{ snippet: component.snippet }]
         };
         return item;
@@ -462,15 +484,15 @@ export class TemplatesProvider implements vscode.TreeDataProvider<SnippetTreeIte
   getChildren(): Thenable<SnippetTreeItem[]> {
     const items = TEMPLATES.map(template => {
       const item: SnippetItem = {
-        label: template.label,
-        description: template.description,
+        label: t(template.label),
+        description: localizeDetail(template.description, t('Ready-to-use presentation template')),
         icon: 'file-code',
         snippet: template.id
       };
       const treeItem = new SnippetTreeItem(item, vscode.TreeItemCollapsibleState.None);
       treeItem.command = {
         command: 'slidev-scholarly.newPresentation',
-        title: 'Create',
+        title: t('Create'),
         arguments: [item.snippet]
       };
       return treeItem;
@@ -538,10 +560,10 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
   getChildren(element?: vscode.TreeItem): Thenable<vscode.TreeItem[]> {
     if (!element) {
       return Promise.resolve([
-        new ThemeGroupTreeItem('presets', 'Presets'),
-        new ThemeGroupTreeItem('colorThemes', 'Color Themes'),
-        new ThemeGroupTreeItem('fontThemes', 'Font Themes'),
-        new ThemeGroupTreeItem('modes', 'Light & Dark Modes')
+        new ThemeGroupTreeItem('presets', t('Presets')),
+        new ThemeGroupTreeItem('colorThemes', t('Color Themes')),
+        new ThemeGroupTreeItem('fontThemes', t('Font Themes')),
+        new ThemeGroupTreeItem('modes', t('Light and Dark Modes'))
       ]);
     }
 
@@ -552,19 +574,19 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
             const item = new ThemeValueTreeItem(
               'preset',
               preset.id,
-              preset.label,
-              preset.description,
+              t(preset.label),
+              localizeDetail(preset.description, t('Ready-made color and font combination')),
               {
                 command: 'slidev-scholarly.applyThemePreset',
-                title: 'Apply Preset',
+                title: t('Apply Preset'),
                 arguments: [preset]
               },
               { colorTheme: preset.colorTheme, fontTheme: preset.fontTheme }
             );
             item.tooltip = createThemeTooltip(
               this.extensionUri,
-              preset.label,
-              preset.description,
+              t(preset.label),
+              localizeDetail(preset.description, t('Ready-made color and font combination')),
               preset.colorTheme
             );
             return item;
@@ -578,19 +600,19 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
             const item = new ThemeValueTreeItem(
               'colorTheme',
               theme.value,
-              theme.label,
-              theme.description,
+              t(theme.label),
+              localizeDetail(theme.description, t('Color palette for the presentation')),
               {
                 command: 'slidev-scholarly.setColorTheme',
-                title: 'Set Color Theme',
+                title: t('Set Color Theme'),
                 arguments: [theme.value]
               },
               { colorTheme: theme.value }
             );
             item.tooltip = createThemeTooltip(
               this.extensionUri,
-              theme.label,
-              theme.description,
+              t(theme.label),
+              localizeDetail(theme.description, t('Color palette for the presentation')),
               theme.value
             );
             return item;
@@ -604,17 +626,17 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
             const item = new ThemeValueTreeItem(
               'fontTheme',
               theme.value,
-              theme.label,
-              theme.description,
+              t(theme.label),
+              localizeDetail(theme.description, t('Font pairing for the presentation')),
               {
                 command: 'slidev-scholarly.setFontTheme',
-                title: 'Set Font Theme',
+                title: t('Set Font Theme'),
                 arguments: [theme.value]
               },
               { fontTheme: theme.value }
             );
             item.tooltip = new vscode.MarkdownString(
-              `**${theme.label}**\n\n${theme.description}\n\n\`fontTheme: ${theme.value}\`\n\n*Use the Preview action for usage guidance.*`
+              `**${t(theme.label)}**\n\n${localizeDetail(theme.description, t('Font pairing for the presentation'))}\n\n\`fontTheme: ${theme.value}\`\n\n*${t('Open Preview for usage guidance.')}*`
             );
             return item;
           })
@@ -624,20 +646,20 @@ export class ThemesProvider implements vscode.TreeDataProvider<vscode.TreeItem> 
       if (element.groupId === 'modes') {
         const modes = [
           {
-            label: 'Content Slides',
-            description: 'Set content backgrounds to light or dark',
+            label: t('Content Slides'),
+            description: t('Set slide backgrounds to light or dark'),
             icon: 'color-mode',
             command: 'slidev-scholarly.setContentMode'
           },
           {
-            label: 'Headers, Footers & Navigation',
-            description: 'Set the chrome mode',
+            label: t('Headers, Footers, and Navigation'),
+            description: t('Set their background and text contrast'),
             icon: 'layout-menubar',
             command: 'slidev-scholarly.setChromeMode'
           },
           {
-            label: 'Section Dividers',
-            description: 'Set the section mode',
+            label: t('Section Dividers'),
+            description: t('Set section backgrounds to light or dark'),
             icon: 'split-vertical',
             command: 'slidev-scholarly.setSectionMode'
           }
@@ -668,114 +690,114 @@ type CliActionItem = {
 
 const CLI_GROUPS: Record<CliGroupId, { label: string; icon: string; items: CliActionItem[] }> = {
   create: {
-    label: 'Start',
+    label: t('Start'),
     icon: 'new-file',
     items: [
       {
-        label: 'New Presentation...',
-        description: 'Create a deck with guided prompts',
+        label: t('New Presentation...'),
+        description: t('Create a deck with guided prompts'),
         icon: 'new-file',
         action: 'initPresentation'
       },
       {
-        label: 'List Templates',
-        description: 'See every starting template',
+        label: t('List Templates'),
+        description: t('See every starting template'),
         icon: 'list-flat',
         action: 'templateList'
       }
     ]
   },
   theme: {
-    label: 'Customize',
+    label: t('Customize'),
     icon: 'paintcan',
     items: [
       {
-        label: 'Set Theme...',
-        description: 'Choose colors, fonts, and surface modes',
+        label: t('Set Theme...'),
+        description: t('Choose colors, fonts, and surface modes'),
         icon: 'wand',
         action: 'themeApply'
       },
       {
-        label: 'Apply Curated Preset...',
-        description: 'Apply a ready-made theme combination',
+        label: t('Apply Curated Preset...'),
+        description: t('Apply a ready-made theme combination'),
         icon: 'paintcan',
         action: 'themePresetApply'
       },
       {
-        label: 'List Color Themes',
-        description: 'See every color theme',
+        label: t('List Color Themes'),
+        description: t('See every color theme'),
         icon: 'symbol-color',
         action: 'themeList'
       },
       {
-        label: 'List Curated Presets',
-        description: 'See every preset combination',
+        label: t('List Curated Presets'),
+        description: t('See every preset combination'),
         icon: 'list-flat',
         action: 'themePresetList'
       }
     ]
   },
   snippets: {
-    label: 'Build',
+    label: t('Build'),
     icon: 'symbol-snippet',
     items: [
       {
-        label: 'List Layouts',
-        description: 'See available slide structures',
+        label: t('List Layouts'),
+        description: t('See available slide structures'),
         icon: 'layout',
         action: 'layoutList'
       },
       {
-        label: 'List Components',
-        description: 'See available content blocks',
+        label: t('List Components'),
+        description: t('See available content blocks'),
         icon: 'symbol-method',
         action: 'componentList'
       },
       {
-        label: 'Append Snippet...',
-        description: 'Add a ready-made block to slides.md',
+        label: t('Append Snippet...'),
+        description: t('Add a ready-made block to slides.md'),
         icon: 'add',
         action: 'snippetAppend'
       },
       {
-        label: 'Apply Workflow...',
-        description: 'Add a paper, seminar, or quick workflow',
+        label: t('Apply Workflow...'),
+        description: t('Add a paper, seminar, or quick workflow'),
         icon: 'git-commit',
         action: 'workflowApply'
       },
       {
-        label: 'List Snippets',
-        description: 'See every reusable block',
+        label: t('List Snippets'),
+        description: t('See every reusable block'),
         icon: 'list-flat',
         action: 'snippetList'
       },
       {
-        label: 'Show Snippet...',
-        description: 'Print a block without changing a file',
+        label: t('Show Snippet...'),
+        description: t('Print a block without changing a file'),
         icon: 'eye',
         action: 'snippetShow'
       },
       {
-        label: 'List Workflows',
-        description: 'See every presentation workflow',
+        label: t('List Workflows'),
+        description: t('See every presentation workflow'),
         icon: 'list-tree',
         action: 'workflowList'
       }
     ]
   },
   tools: {
-    label: 'Check & Help',
+    label: t('Check & Help'),
     icon: 'tools',
     items: [
       {
-        label: 'Doctor',
-        description: 'Check setup, citations, and project files',
+        label: t('Doctor'),
+        description: t('Check setup, citations, and project files'),
         icon: 'pulse',
         action: 'doctor'
       },
       {
-        label: 'Help',
-        description: 'List every CLI command',
+        label: t('Help'),
+        description: t('List every CLI command'),
         icon: 'question',
         action: 'help'
       }
@@ -801,7 +823,7 @@ class CliActionTreeItem extends vscode.TreeItem {
     this.contextValue = 'cliAction';
     this.command = {
       command: 'slidev-scholarly.cliAction',
-      title: 'Run CLI Action',
+      title: t('Run CLI Action'),
       arguments: [actionItem.action]
     };
   }

@@ -4,11 +4,13 @@ title: Academic Layouts
 
 # Academic Layouts
 
-These research-specific layouts cover papers, methods, experiments, results, defenses, and references.
+Use these layouts for papers, methods, experiments, results, defenses, and references. Each example describes one slide; paper names and numerical results are illustrative. `title` and `subtitle` set the frame header, while `heading` sets a separate heading inside layouts that support it.
 
 ## paper-summary - Paper Reading Summary {#paper-summary}
 
 **Use for:** Summarizing one paper's metadata, problem, method, and main finding.
+
+![paper-summary layout preview](/images/layouts/paper-summary.png)
 
 ```markdown
 ---
@@ -49,6 +51,8 @@ Accuracy improves by 3.2 points with no additional inference cost.
 
 **Use for:** Comparing prior work, methods, assumptions, and gaps before introducing your contribution.
 
+![related-work-matrix layout preview](/images/layouts/related-work-matrix.png)
+
 ```markdown
 ---
 layout: related-work-matrix
@@ -77,6 +81,8 @@ Use the matrix to make the research gap explicit before the method slide.
 ## method-pipeline - Method Pipeline {#method-pipeline}
 
 **Use for:** Showing a research workflow as ordered steps, with optional emphasis on the current step.
+
+![method-pipeline layout preview](/images/layouts/method-pipeline.png)
 
 ```markdown
 ---
@@ -109,6 +115,10 @@ Optional note about assumptions, controls, or reproducibility.
 ## result-highlight - Result Highlight {#result-highlight}
 
 **Use for:** Leading with one main result, then supporting it with evidence or caveats.
+
+![result-highlight layout preview](/images/layouts/result-highlight.png)
+
+Keep one headline metric and a short claim on this slide. Use the evidence slot for concise benchmark, dataset, or uncertainty notes; move detailed tables and long explanations to a following slide. Check both playback and the exported PNG or PDF after changing the aspect ratio or adding content.
 
 ```markdown
 ---
@@ -144,6 +154,10 @@ variant: success
 
 **Use for:** Comparing experimental settings, metrics, and notes in a compact grid.
 
+![experiment-grid layout preview](/images/layouts/experiment-grid.png)
+
+The academic example fits four short experiments in two columns at 16:9 and 4:3. Longer names, settings, or notes need more room. Keep the metric and its unit together, and split a dense comparison across slides instead of shrinking key text. `cols` controls the column count; it does not automatically paginate overflowing content.
+
 ```markdown
 ---
 layout: experiment-grid
@@ -178,6 +192,8 @@ Optional note about experimental controls or evaluation protocol.
 
 **Use for:** Stating the boundary of a claim and how the study controls or scopes it.
 
+![limitation layout preview](/images/layouts/limitation.png)
+
 ```markdown
 ---
 layout: limitation
@@ -206,6 +222,8 @@ description: Name what the current study can and cannot support.
 ## defense-question - Defense Question {#defense-question}
 
 **Use for:** Preparing a thesis-defense or Q&A slide with an answer, evidence, and follow-up.
+
+![defense-question layout preview](/images/layouts/defense-question.png)
 
 ```markdown
 ---
@@ -238,6 +256,8 @@ If compute budget increases, compare against a larger teacher model.
 ## appendix-index - Appendix Index {#appendix-index}
 
 **Use for:** Building a backup-slide map for appendices, extra experiments, and proofs.
+
+![appendix-index layout preview](/images/layouts/appendix-index.png)
 
 ```markdown
 ---
@@ -296,7 +316,7 @@ rightColor: green
 - `title`: Main title
 - `subtitle`: Optional subtitle
 - `leftLabel`, `rightLabel`: Column labels
-- `leftColor`, `rightColor`: `red`, `green`, `blue`, `amber`, `purple`
+- `leftColor`, `rightColor`: `red`, `green`, `blue`, or `gray`
 
 ---
 
@@ -343,15 +363,9 @@ cols: 2
 title: Key Results
 ---
 
-<div class="p-4 bg-white rounded shadow">
-  <h3>Accuracy</h3>
-  <h1>94.7%</h1>
-</div>
+<MetricCard label="Accuracy" value="94.7" unit="%" />
 
-<div class="p-4 bg-white rounded shadow">
-  <h3>Speed</h3>
-  <h1>2.3x</h1>
-</div>
+<MetricCard label="Speedup" value="2.3" unit="×" />
 ```
 
 **Props:**

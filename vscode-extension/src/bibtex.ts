@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { t } from './localization';
 
 // BibTeX entry interface
 export interface BibEntry {
@@ -102,7 +103,7 @@ export function extractPaperMetadata(entry: BibEntry): PaperMetadata {
 
 export function renderPaperMarkdown(metadata: PaperMetadata, layout: 'paper-summary' | 'paper-card' = 'paper-summary'): string {
     if (layout === 'paper-card') {
-        const attrs = [`title="${escapeVueAttribute(metadata.title || 'Untitled Paper')}"`];
+        const attrs = [`title="${escapeVueAttribute(metadata.title || t('Untitled Paper'))}"`];
         if (metadata.authors.length)
             attrs.push(`:authors='${JSON.stringify(metadata.authors).replace(/'/g, '&apos;')}'`);
         if (metadata.venue)
@@ -114,13 +115,13 @@ export function renderPaperMarkdown(metadata: PaperMetadata, layout: 'paper-summ
         if (metadata.url)
             attrs.push(`url="${escapeVueAttribute(metadata.url)}"`);
 
-        return `<PaperCard\n  ${attrs.join('\n  ')}\n>\n\nAdd the main contribution or discussion notes.\n\n</PaperCard>\n`;
+        return `<PaperCard\n  ${attrs.join('\n  ')}\n>\n\n${t('Add the main contribution or discussion notes.')}\n\n</PaperCard>\n`;
     }
 
     const lines = [
         '---',
         'layout: paper-summary',
-        `paperTitle: ${escapeYamlScalar(metadata.title || 'Untitled Paper')}`
+        `paperTitle: ${escapeYamlScalar(metadata.title || t('Untitled Paper'))}`
     ];
 
     if (metadata.authors.length) {
@@ -140,15 +141,15 @@ export function renderPaperMarkdown(metadata: PaperMetadata, layout: 'paper-summ
     lines.push('---');
     lines.push('');
     lines.push('::problem');
-    lines.push('- Add the paper problem or research question.');
+    lines.push(`- ${t('Add the paper problem or research question.')}`);
     lines.push('::');
     lines.push('');
     lines.push('::method');
-    lines.push('- Add the method or study design.');
+    lines.push(`- ${t('Add the method or study design.')}`);
     lines.push('::');
     lines.push('');
     lines.push('::finding');
-    lines.push('- Add the key result or takeaway.');
+    lines.push(`- ${t('Add the key result or takeaway.')}`);
     lines.push('::');
 
     return `${lines.join('\n')}\n`;
@@ -157,11 +158,11 @@ export function renderPaperMarkdown(metadata: PaperMetadata, layout: 'paper-summ
 function getAnchorSyntaxLabel(syntax: AnchorTarget['syntax']): string {
     switch (syntax) {
         case 'heading':
-            return 'Heading anchor';
+            return t('Heading anchor');
         case 'anchor':
-            return 'Standalone anchor';
+            return t('Standalone anchor');
         case 'named-anchor':
-            return 'Named anchor';
+            return t('Named anchor');
         default:
             return 'HTML id';
     }
@@ -196,7 +197,7 @@ export function parseAnchorTargets(document: vscode.TextDocument): AnchorTarget[
     }
 
     for (const match of text.matchAll(ANCHOR_SUGAR_RE))
-        addAnchor(match[1], `Anchor #${match[1]}`, 'anchor', match.index ?? 0);
+        addAnchor(match[1], t('Anchor #{0}', match[1] ?? ''), 'anchor', match.index ?? 0);
 
     for (const match of text.matchAll(HTML_ID_RE)) {
         const tag = (match[1] ?? 'element').toLowerCase();
@@ -218,11 +219,11 @@ function createAnchorCompletionItem(anchor: AnchorTarget, range: vscode.Range): 
     const item = new vscode.CompletionItem(anchor.id, vscode.CompletionItemKind.Reference);
     const syntaxLabel = getAnchorSyntaxLabel(anchor.syntax);
 
-    item.detail = `${syntaxLabel} · line ${anchor.line + 1}`;
+    item.detail = t('{0} · line {1}', syntaxLabel, anchor.line + 1);
     item.documentation = new vscode.MarkdownString(
         `**${anchor.label}**\n\n` +
         `\`#${anchor.id}\`\n\n` +
-        `${syntaxLabel} on line ${anchor.line + 1}`
+        t('{0} on line {1}', syntaxLabel, anchor.line + 1)
     );
     item.insertText = anchor.id;
     item.filterText = anchor.id;
@@ -427,6 +428,10 @@ export async function findBibFile(document?: vscode.TextDocument): Promise<strin
     if (!resolvedDocument) return undefined;
 
     const text = resolvedDocument.getText();
+    const localWorkspace = vscode.workspace.workspaceFolders?.find(folder => folder.uri.scheme === 'file');
+    const docDir = resolvedDocument.uri.scheme === 'file'
+        ? path.dirname(resolvedDocument.uri.fsPath)
+        : localWorkspace?.uri.fsPath;
 
     // Look for bibFile in frontmatter
     const frontmatterMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -436,15 +441,13 @@ export async function findBibFile(document?: vscode.TextDocument): Promise<strin
             const raw = bibFileMatch[1].trim();
             const noComment = raw.split('#')[0].trim();
             const bibPath = noComment.replace(/^['"]|['"]$/g, '');
-            const docDir = path.dirname(resolvedDocument.uri.fsPath);
-            return path.resolve(docDir, bibPath);
+            return docDir ? path.resolve(docDir, bibPath) : undefined;
         }
     }
 
     // Fallback: look for references.bib in workspace
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (workspaceFolders) {
-        const defaultBib = path.join(workspaceFolders[0].uri.fsPath, 'references.bib');
+    if (localWorkspace) {
+        const defaultBib = path.join(localWorkspace.uri.fsPath, 'references.bib');
         if (fs.existsSync(defaultBib)) {
             return defaultBib;
         }
@@ -467,7 +470,7 @@ export async function loadBibEntries(document?: vscode.TextDocument): Promise<Bi
     }
 
     const cached = cachedEntriesByPath.get(bibPath);
-    if (cached && cached.length > 0) return cached;
+    if (cached) return cached;
 
     try {
         const content = fs.readFileSync(bibPath, 'utf8');
@@ -503,14 +506,14 @@ export class BibCompletionProvider implements vscode.CompletionItemProvider {
             );
 
             // Build detail string
-            const author = entry.author ? entry.author.split(' and ')[0] : 'Unknown';
+            const author = entry.author ? entry.author.split(' and ')[0] : t('Unknown');
             const year = entry.year || '';
             item.detail = `${author} (${year})`;
 
             // Build documentation
             item.documentation = new vscode.MarkdownString(
-                `**${entry.title || 'Untitled'}**\n\n` +
-                `*${entry.author || 'Unknown author'}*\n\n` +
+                `**${entry.title || t('Untitled')}**\n\n` +
+                `*${entry.author || t('Unknown author')}*\n\n` +
                 `${entry.journal || entry.booktitle || entry.publisher || ''} ${year}`
             );
 
@@ -563,14 +566,14 @@ export class BibHoverProvider implements vscode.HoverProvider {
         if (!entry) return undefined;
 
         const markdown = new vscode.MarkdownString();
-        markdown.appendMarkdown(`### ${entry.title || 'Untitled'}\n\n`);
-        markdown.appendMarkdown(`**Authors:** ${entry.author || 'Unknown'}\n\n`);
-        markdown.appendMarkdown(`**Year:** ${entry.year || 'N/A'}\n\n`);
+        markdown.appendMarkdown(`### ${entry.title || t('Untitled')}\n\n`);
+        markdown.appendMarkdown(`**${t('Authors')}:** ${entry.author || t('Unknown')}\n\n`);
+        markdown.appendMarkdown(`**${t('Year')}:** ${entry.year || t('N/A')}\n\n`);
         if (entry.journal) {
-            markdown.appendMarkdown(`**Journal:** ${entry.journal}\n\n`);
+            markdown.appendMarkdown(`**${t('Journal')}:** ${entry.journal}\n\n`);
         }
         if (entry.booktitle) {
-            markdown.appendMarkdown(`**Conference:** ${entry.booktitle}\n\n`);
+            markdown.appendMarkdown(`**${t('Conference')}:** ${entry.booktitle}\n\n`);
         }
         markdown.appendMarkdown(`\`@${entry.key}\``);
 
@@ -584,15 +587,15 @@ export class BibTreeItem extends vscode.TreeItem {
         public readonly entry: BibEntry,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState
     ) {
-        const author = entry.author ? entry.author.split(' and ')[0].split(',')[0] : 'Unknown';
-        super(`${author} (${entry.year || 'N/A'})`, collapsibleState);
+        const author = entry.author ? entry.author.split(' and ')[0].split(',')[0] : t('Unknown');
+        super(`${author} (${entry.year || t('N/A')})`, collapsibleState);
         this.description = entry.key;
         this.tooltip = entry.title || entry.key;
         this.iconPath = new vscode.ThemeIcon('book');
         this.contextValue = 'referenceCitation';
         this.command = {
             command: 'slidev-scholarly.insertBibKey',
-            title: 'Insert Citation',
+            title: t('Insert Citation'),
             arguments: [entry.key]
         };
     }
@@ -605,12 +608,12 @@ class AnchorTreeItem extends vscode.TreeItem {
     ) {
         super(anchor.label, collapsibleState);
         this.description = `#${anchor.id}`;
-        this.tooltip = `${anchor.label}\n#${anchor.id}\n${getAnchorSyntaxLabel(anchor.syntax)} · line ${anchor.line + 1}`;
+        this.tooltip = `${anchor.label}\n#${anchor.id}\n${t('{0} · line {1}', getAnchorSyntaxLabel(anchor.syntax), anchor.line + 1)}`;
         this.iconPath = new vscode.ThemeIcon(anchor.syntax === 'heading' ? 'symbol-key' : 'link');
         this.contextValue = 'referenceAnchor';
         this.command = {
             command: 'slidev-scholarly.insertAnchorKey',
-            title: 'Insert Anchor Reference',
+            title: t('Insert Anchor Reference'),
             arguments: [anchor.id]
         };
     }
@@ -621,7 +624,7 @@ class ReferenceGroupItem extends vscode.TreeItem {
         public readonly kind: 'citations' | 'anchors',
         count: number
     ) {
-        super(kind === 'citations' ? 'Citations' : 'Internal Anchors', vscode.TreeItemCollapsibleState.Expanded);
+        super(kind === 'citations' ? t('Citations') : t('Internal Anchors'), vscode.TreeItemCollapsibleState.Expanded);
         this.description = String(count);
         this.iconPath = new vscode.ThemeIcon(kind === 'citations' ? 'book' : 'link');
         this.contextValue = 'referenceGroup';
@@ -644,7 +647,8 @@ export class BibTreeProvider implements vscode.TreeDataProvider<ReferenceTreeIte
     }
 
     async getChildren(element?: ReferenceTreeItem): Promise<ReferenceTreeItem[]> {
-        const document = vscode.window.activeTextEditor?.document;
+        const activeDocument = vscode.window.activeTextEditor?.document;
+        const document = activeDocument?.languageId === 'markdown' ? activeDocument : undefined;
 
         if (element instanceof ReferenceGroupItem) {
             if (element.kind === 'citations') {

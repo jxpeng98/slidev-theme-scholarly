@@ -44,7 +44,7 @@ title: 语法糖
 :::
 ```
 
-**类型：** `theorem`、`lemma`、`proposition`、`corollary`、`definition`、`example`、`remark`
+**类型：** `theorem`、`lemma`、`proposition`、`corollary`、`definition`、`example`、`remark`、`proof`、`note`、`claim`
 
 ### Highlight（高亮）
 
@@ -124,4 +124,4 @@ title: 研究方法
 - 主题会在构建时处理这些 Markdown 指令。
 - 指令支持对应组件的全部属性。
 - 数组和对象等复杂属性需要使用 Vue 绑定语法 `:prop`。
-- 修改语法后需要重启 Slidev。
+- 保存 `slides.md` 后，指令内容会随预览刷新。更换主题依赖或配置后，如果没有生效，再重启 Slidev。

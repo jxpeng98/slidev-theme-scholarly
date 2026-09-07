@@ -6,9 +6,11 @@ title: VS Code 插件
 
 这款插件让你可以直接在 VS Code 中使用 Scholarly 的模板、布局、组件、引用、主题设置和项目检查。侧边栏按照创建、制作、定制和检查的顺序组织。
 
+插件会跟随 VS Code 的显示语言，提供英文和简体中文界面。本页使用中文命令名称，截图展示英文界面；可在命令面板中搜索 `Slidev Scholarly` 查找对应操作。
+
 ## 安装
 
-从 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets) 安装 **Slidev Scholarly**。
+从 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets) 安装 **Slidev Scholarly**，需要 VS Code 1.106.0 或更新版本。预览和导出还需要在演示项目中安装 Slidev 和主题，详见[快速开始](./quick-start)。
 
 ## 打开插件
 
@@ -20,12 +22,12 @@ title: VS Code 插件
 
 | 阶段 | 视图 | 作用 |
 |---|---|---|
-| 开始 | **Start · Templates** | 从模板创建演示 |
-| 制作 | **Build · Layouts** | 插入整张幻灯片的结构 |
-| 制作 | **Build · Components** | 插入定理、指标、证据等内容 |
-| 制作 | **Build · Citations & Anchors** | 插入 BibTeX key、论文摘要和内部链接 |
-| 定制 | **Customize · Themes** | 设置预设、颜色、字体和明暗模式 |
-| 参考 | **Reference · CLI Actions** | 运行 CLI 任务、项目检查和帮助 |
+| 开始 | **开始 · 模板** | 从模板创建演示 |
+| 制作 | **制作 · 布局** | 插入整张幻灯片的结构 |
+| 制作 | **制作 · 组件** | 插入定理、指标、证据等内容 |
+| 制作 | **制作 · 引用与锚点** | 插入 BibTeX key、论文摘要和内部链接 |
+| 定制 | **定制 · 主题** | 设置预设、颜色、字体和明暗模式 |
+| 参考 | **参考 · CLI 操作** | 运行 CLI 任务、项目检查和帮助 |
 
 <figure class="docs-screenshot docs-screenshot--narrow">
   <img src="/images/vscode/sidebar-overview.png" alt="VS Code 中的 Slidev Scholarly 侧边栏，包含模板、布局、组件、引用和主题设置" loading="lazy">
@@ -34,35 +36,39 @@ title: VS Code 插件
 
 ## 1. 创建演示
 
-从 **Start · Templates** 选择模板，或运行：
+在**开始 · 模板**中选择模板，插件会调用 CLI 创建完整项目。输入新文件夹或空文件夹的名称，再打开该目录，安装依赖并启动预览：
 
-```text
-Slidev Scholarly: Create Presentation
+```bash
+pnpm install
+pnpm run dev
 ```
 
-模板生成的是普通 Markdown 文件，可以直接编辑。
+命令面板中的 `Slidev Scholarly: 新建演示` 则只创建起步 Markdown 文件：有工作区时写入工作区，没有工作区时打开未命名文档。预览前需要将该文件放入 Slidev 项目。
 
-### 使用 GUI Builder
+### 用 Deck Builder 搭好大纲
 
-想先通过界面搭一份初稿，可以运行 `Slidev Scholarly: Open GUI Builder`。它支持：
+运行 `Slidev Scholarly: 打开 Deck Builder`，按以下步骤操作：
 
-- 添加、排序和删除幻灯片；
-- 编辑常用内容字段；
-- 选择颜色、字体和页面模式；
-- 新建文件，或将结果插入当前编辑器。
+1. 选择一种工作流，例如论文汇报或答辩。
+2. 查看每张幻灯片的布局缩略图，再补充或调整顺序。
+3. 选中幻灯片，填写这一页的内容。
 
-生成的内容仍是普通的 Slidev Markdown。
+大纲完成后，可以生成一份未命名的 Markdown 文档，也可以把当前页追加到已打开 Markdown 文件的末尾，保留原有全局配置和页面。后续编辑和实时预览仍在 Slidev 中完成。
+
+含引用的工作流还需要在保存的 Markdown 旁提供 `references.bib`。生成大纲后，点击通知中的**创建完整模板项目**，初始化包含引用文件的模板，再将当前大纲保存到该项目中。关闭通知不会更改大纲；创建项目会拒绝覆盖非空文件夹。
+
+切换布局会保留该页各布局的草稿，生成时只使用当前布局。编辑区较窄时，按需展开工作流、布局库或大纲。可以用方向键选择工作流，再按 Tab 进入后续控件。
 
 <figure class="docs-screenshot">
-  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly GUI Builder，包含演示信息、主题设置、布局库和幻灯片列表" loading="lazy">
-  <figcaption>先在这里搭好初稿，再编辑生成的 Markdown。</figcaption>
+  <img src="/images/vscode/gui-builder.png" alt="Slidev Scholarly Deck Builder，依次显示工作流、幻灯片大纲和当前布局的内容输入区" loading="lazy">
+  <figcaption>先选工作流并看懂布局，再填写初稿。</figcaption>
 </figure>
 
 ## 2. 制作幻灯片
 
 ### 插入布局和组件
 
-从侧边栏选择布局或组件。点击项目会在光标处插入 Markdown；点击眼睛图标可以先看预览。
+从侧边栏选择布局或组件。点击项目会在光标处插入 Markdown；点击眼睛图标可以先看预览。插入整页片段时，应将光标放在页面边界，并检查前后的 `---` 分隔符。
 
 三类内容的分工如下：
 
@@ -86,14 +92,14 @@ Slidev Scholarly: Create Presentation
 
 ### 插入引用和锚点
 
-**Build · Citations & Anchors** 会列出当前文档中的 BibTeX 条目和内部锚点。
+**制作 · 引用与锚点** 会列出当前文档中的 BibTeX 条目和内部锚点。
 
 常用命令：
 
-- `Slidev Scholarly: Insert Citation`
-- `Slidev Scholarly: Insert Internal Anchor`
-- `Slidev Scholarly: Insert Internal Anchor Reference`
-- `Slidev Scholarly: Insert Paper Summary`
+- `Slidev Scholarly: 插入引用`
+- `Slidev Scholarly: 插入内部锚点`
+- `Slidev Scholarly: 插入内部锚点引用`
+- `Slidev Scholarly: 插入论文概览`
 
 ### 使用代码片段
 
@@ -114,12 +120,12 @@ Slidev Scholarly: Create Presentation
 
 ## 3. 定制演示
 
-**Customize · Themes** 包含四组设置：
+**定制 · 主题** 包含四组设置：
 
-- **Presets**
-- **Color Themes**
-- **Font Themes**
-- **Light & Dark Modes**
+- **预设**
+- **配色主题**
+- **字体主题**
+- **明暗模式**
 
 主题操作只会更新当前 Markdown 文件的 frontmatter，不会改写幻灯片内容。
 
@@ -130,14 +136,14 @@ Slidev Scholarly: Create Presentation
 
 ## 4. 检查并获取帮助
 
-**Reference · CLI Actions** 按任务整理命令：
+**参考 · CLI 操作** 按任务整理命令：
 
 | 分组 | 操作 |
 |---|---|
-| Start | 创建演示或查看模板 |
-| Build | 查看布局和组件、添加片段或应用工作流 |
-| Customize | 设置主题或查看预设 |
-| Check & Help | 运行 `doctor` 或查看 CLI 帮助 |
+| 开始 | 创建演示或查看模板 |
+| 制作 | 查看布局和组件、添加片段或应用工作流 |
+| 定制 | 设置主题或查看预设 |
+| 检查与帮助 | 运行 `doctor` 或查看 CLI 帮助 |
 
 ### 引用诊断
 
@@ -178,7 +184,7 @@ Slidev Scholarly: Create Presentation
 <details>
 <summary>打开开发诊断</summary>
 
-运行 `Slidev Scholarly: Toggle Dev Mode`。开启后，状态栏会显示 `Scholarly Dev`，**Slidev Scholarly** 输出通道会记录操作耗时。
+运行 `Slidev Scholarly: 切换开发模式`。开启后，状态栏会显示 `Scholarly Dev`，**Slidev Scholarly** 输出通道会记录操作耗时。
 
 设置项：
 

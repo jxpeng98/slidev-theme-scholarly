@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout methodology h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout methodology h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow flex w-full overflow-hidden" :style="computedStyles">
       <div class="flex-1 p-10 overflow-y-auto flex flex-col justify-center" :style="{ flex: leftFlex }">
@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<{
 })
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 
 const leftFlex = computed(() => {
   const parts = props.ratio.split(':').map(Number)

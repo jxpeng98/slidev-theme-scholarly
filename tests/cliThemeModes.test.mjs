@@ -280,3 +280,28 @@ themeConfig:
   assert.equal(checks['theme-config-section-mode'].severity, 'ok')
   assert.equal(checks['theme-config-section-mode'].summary, 'MATCH')
 })
+
+test('theme apply preserves YAML mappings and refuses invalid settings without writing', async () => {
+  const { default: yaml } = await import('js-yaml')
+  const { file } = makeTempSlides()
+  for (const themeConfig of [
+    'themeConfig: # palette\n  fontTheme: traditional\n  outlineToc: false\n  custom: {colorMode: light, nested: [1, 2]}',
+    'themeConfig: {fontTheme: traditional, outlineToc: false, custom: {colorMode: light, nested: [1, 2]}}',
+  ]) {
+    const original = `---\ntheme: scholarly\n${themeConfig}\nother: {keep: true}\n---\n\n# Body\n`
+    writeFileSync(file, original)
+    const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
+    assert.equal(result.status, 0, result.stderr)
+    const updated = readFileSync(file, 'utf8')
+    const head = yaml.load(updated.match(/^---\n([\s\S]*?)\n---/)[1])
+    assert.deepEqual(head.themeConfig, { fontTheme: 'traditional', outlineToc: false, custom: { colorMode: 'light', nested: [1, 2] }, colorTheme: 'yale-blue' })
+    assert.deepEqual(head.other, { keep: true })
+    assert.ok(updated.endsWith('\n\n# Body\n'))
+  }
+  for (const invalid of ['themeConfig: {}\nthemeConfig: {}', 'themeConfig: []', 'themeConfig: broken', 'themeConfig: [']) {
+    const original = `---\n${invalid}\n---\n\n# Untouched\n`
+    writeFileSync(file, original)
+    assert.notEqual(runCli(['theme', 'apply', 'yale-blue', '--file', file]).status, 0)
+    assert.equal(readFileSync(file, 'utf8'), original)
+  }
+})

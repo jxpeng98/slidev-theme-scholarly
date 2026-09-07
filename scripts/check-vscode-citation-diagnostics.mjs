@@ -62,8 +62,9 @@ Ignore escaped \\@literal2026, emails person@example.com, URLs https://example.c
 expectIncludes('citationDiagnostics.ts', diagnosticsSource, 'export class CitationDiagnosticsController')
 expectIncludes('citationDiagnostics.ts', diagnosticsSource, "createDiagnosticCollection('slidev-scholarly-citations')")
 expectIncludes('citationDiagnostics.ts', diagnosticsSource, 'export class CitationCodeActionProvider')
-expectIncludes('citationDiagnostics.ts', diagnosticsSource, 'Add bibFile: ./references.bib')
-expectIncludes('citationDiagnostics.ts', diagnosticsSource, 'Add references slide')
+// The compiled provider's edits are exercised by the extension test suite.
+expectIncludes('citationDiagnostics.ts', diagnosticsSource, "code === 'missing-setup'")
+expectIncludes('citationDiagnostics.ts', diagnosticsSource, "code === 'missing-references-slide'")
 expectIncludes('extension.ts', extensionSource, "from './citationDiagnostics'")
 expectIncludes('extension.ts', extensionSource, 'registerCitationDiagnostics(context')
 

@@ -30,7 +30,7 @@ const resolvedSectionMode = computed<'dark' | 'light'>(() => {
   })
 
   return resolveScholarlySectionMode({
-    localSectionMode: $frontmatter.value?.sectionMode,
+    localSectionMode: $frontmatter?.sectionMode,
     globalSectionMode: themeConfig.value.sectionMode,
     contentMode: resolvedModes.contentMode,
   })

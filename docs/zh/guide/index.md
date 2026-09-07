@@ -1,45 +1,53 @@
 ---
-title: 使用指南
-description: 从空目录到完成 Scholarly 演示的最短路径。
+title: 文档导航
+description: 按任务整理的 Scholarly 指南和参考页面。
 ---
 
-# 使用指南
+# 文档导航
 
-先看你现在要做什么，再从下面找到对应文档。
+第一次使用 Scholarly，请从[快速开始](./quick-start)阅读。需要查找具体功能时，可以使用本页索引。
 
-## 1. 开始
+## 创建和维护项目
 
-| 当前情况 | 对应文档 |
-|---|---|
-| 创建一份新演示 | [快速开始](./quick-start) |
-| 为论文报告、答辩、综述、结果报告或课程讲义选择结构 | [学术工作流](./workflows/) |
-| 已有 Slidev 项目 | [添加主题](./quick-start#添加到已有-slidev-项目) |
-| 将已有 Scholarly 演示升级到新版本 | [升级说明](./upgrade) |
+- [快速开始](./quick-start)：安装、编写、导出 PDF 和构建静态网站。
+- [VS Code 插件](./vscode-extension)：创建项目、Deck Builder、补全和诊断。
+- [升级说明](./upgrade)：更新依赖，处理旧配置。
+- [示例](../examples)：完整演示和布局画廊。
+- [功能概览](./features)：主要能力与离线使用。
 
-## 2. 制作
+## 选择报告结构
 
-| 要完成的事 | 对应文档 |
-|---|---|
-| 选择整张幻灯片的结构 | [布局](../layouts/) |
-| 添加定理、指标、证据和论文信息 | [组件](../components/) |
-| 添加 BibTeX 引用、注脚和参考文献页 | [引用](../components/cite) |
-| 用 Markdown 指令代替常用 Vue 标签 | [语法糖](../syntax-sugar) |
-| 复制一份可以直接运行的演示 | [示例](../examples) |
+[学术工作流](./workflows/)涵盖[论文报告](./workflows/paper-talk)、[学位答辩](./workflows/thesis-defense)、[文献综述](./workflows/literature-review)、[结果报告](./workflows/results-heavy)和[课程讲义](./workflows/course-lecture)。
 
-## 3. 定制
+## 布局参考
 
-| 要完成的事 | 对应文档 |
-|---|---|
-| 设置作者、页脚、编号和单页选项 | [配置](./configurations) |
-| 选择颜色和字体 | [颜色与字体](./themes) |
-| 设置正文、界面和章节页的明暗模式 | [主题模式与对比度](./theme-mode-contrast) |
-| 从编辑器插入布局、组件和引用 | [VS Code 插件](./vscode-extension) |
+[布局](../layouts/)负责整张幻灯片的结构：
 
-## 4. 参考
+- [结构布局](../layouts/structure)：封面、目录、章节、自适应正文和结束页。
+- [内容布局](../layouts/content)：分栏、图片和列表。
+- [强调布局](../layouts/emphasis)：引语、数字、陈述和问题。
+- [学术布局](../layouts/academic)：论文概览、方法、证据、问答和参考文献。
 
-| 要完成的事 | 对应文档 |
-|---|---|
-| 查看全部功能 | [功能概览](./features) |
-| 配置本地开发环境 | [参与贡献](../contributing) |
+## 组件参考
 
-遇到问题时，先运行 `pnpm exec sch doctor`，再根据提示修改配置。
+[组件](../components/)负责幻灯片内的内容：
+
+- 正式陈述：[Theorem](../components/theorem)、[Block](../components/block)、[Highlight](../components/highlight)。
+- 内容组织：[Columns](../components/columns)、[Steps](../components/steps)、[Keywords](../components/keywords)。
+- 结果展示：[MetricCard](../components/metric-card)、[MetricGrid](../components/metric-grid)、[ResultTable](../components/result-table)。
+- 证据与方法：[EvidenceBlock](../components/evidence-block)、[EquationBlock](../components/equation-block)、[DatasetCard](../components/dataset-card)。
+- 研究背景：[PaperCard](../components/paper-card)、[ContributionList](../components/contribution-list)、[CaveatList](../components/caveat-list)。
+- 文献与跳转：[引用、注脚和锚点](../components/cite)。
+- 局部配色预览：[ThemePreview](../components/theme-preview)。
+
+简写方式见 [Markdown 指令](../syntax-sugar)，导入数据的方式见[从数据生成幻灯片](./data-driven)。
+
+## 配置演示
+
+- [配置](./configurations)：字段位置、作者、页脚、编号和字号。
+- [颜色与字体](./themes)：配色、字体搭配和自定义颜色。
+- [主题模式与对比度](./theme-mode-contrast)：明暗控制、优先级和可读性。
+
+## 参与贡献
+
+[贡献指南](../contributing)说明仓库安装、测试、双语文档维护和预览图更新方法。

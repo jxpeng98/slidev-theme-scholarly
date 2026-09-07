@@ -1,6 +1,6 @@
 # Slidev Theme Scholarly
 
-[Slidev Theme Scholarly](https://scholarly-docs.jxpeng.dev/zh/) 是一套面向学术报告的 Slidev 主题。你仍然用 Markdown 编写幻灯片，同时可以直接使用学术布局、研究组件和 BibTeX 引用，并通过命令行或 VS Code 完成编辑。
+[Slidev Theme Scholarly](https://scholarly-docs.jxpeng.dev/zh/) 是一套用于论文报告、学位答辩、课程讲义和研究汇报的 Slidev 主题。用 Markdown 编写幻灯片，用布局和组件组织研究内容，再用 BibTeX 管理引用。主题附带命令行工具，也可以搭配 VS Code 插件使用。
 
 [![npm](https://img.shields.io/npm/v/slidev-theme-scholarly?label=npm&color=1F4E79)](https://www.npmjs.com/package/slidev-theme-scholarly)
 [![VS Code](https://img.shields.io/visual-studio-marketplace/v/jxpeng98.slidev-scholarly-snippets?label=VS%20Code&color=2E5A88)](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets)
@@ -8,7 +8,7 @@
 
 [文档](https://scholarly-docs.jxpeng.dev/zh/) | [在线演示](https://scholarly.jxpeng.dev/) | [English](./README.md)
 
-![使用 Slidev Theme Scholarly 制作的研究报告](./docs/public/images/themes/classic-blue/1.png)
+![使用 Slidev Theme Scholarly 制作的研究报告](https://scholarly-docs.jxpeng.dev/images/themes/classic-blue/1.png)
 
 ## 主要功能
 
@@ -24,7 +24,7 @@
 
 ### 1. 创建项目
 
-开始前请确认 Node.js 版本不低于 20，然后依次运行：
+建议使用 Node.js 24 LTS 和 pnpm 10。尚未安装 pnpm 时，先运行 `npm install -g pnpm@10`，再创建项目：
 
 ```bash
 npx -y slidev-theme-scholarly init my-talk --template academic
@@ -77,7 +77,7 @@ pnpm exec sch component list
 pnpm exec sch snippet list
 ```
 
-例如，插入一个定理块：
+例如，在文件末尾追加一个定理块：
 
 ```bash
 pnpm exec sch snippet append theorem --file slides.md
@@ -89,10 +89,12 @@ pnpm exec sch snippet append theorem --file slides.md
 
 ```bash
 pnpm exec sch doctor
+pnpm add -D playwright-chromium
+pnpm exec playwright install chromium
 pnpm run export
 ```
 
-导出完成后，终端会显示 PDF 路径。要发布为网站，请运行 `pnpm run build`。
+CLI 导出前需要完成一次 Playwright 安装。导出结束后，终端会显示 PDF 路径。`pnpm run build` 会把静态网站写入 `dist/`，再将该目录部署到网站托管服务。详见[导出与部署](https://scholarly-docs.jxpeng.dev/zh/guide/quick-start#check-and-export)。
 
 ## 添加到已有 Slidev 项目
 
@@ -100,16 +102,16 @@ pnpm run export
 pnpm add -D slidev-theme-scholarly
 ```
 
-然后在 `slides.md` 顶部加入 `theme: scholarly`。引用功能不需要项目级 `vite.config.ts`。
+在 `slides.md` 的第一个 YAML 配置块中设置 `theme: scholarly`，继续使用原项目的预览和构建命令。引用还需要 BibTeX 文件，具体步骤见[引用配置](https://scholarly-docs.jxpeng.dev/zh/components/cite)。Scholarly 会自行加载引用支持，无需额外创建 `vite.config.ts`。
 
 ## 在 VS Code 中使用
 
 安装 [Slidev Scholarly for VS Code](https://marketplace.visualstudio.com/items?itemName=jxpeng98.slidev-scholarly-snippets) 后，打开一个 Markdown 文件，再在右侧 Secondary Side Bar 中打开 **Slidev Scholarly**。
 
-侧边栏中可以选择模板，插入布局、组件和引用，调整主题，或运行项目检查。以下操作也可以直接从命令面板启动：
+从侧边栏选择模板可创建完整项目；Deck Builder 用于整理大纲并生成 Markdown，也可以向已有文件追加页面。常用命令面板操作包括：
 
 - `Slidev Scholarly: Create Presentation`
-- `Slidev Scholarly: Open GUI Builder`
+- `Slidev Scholarly: Open Deck Builder`
 - `Slidev Scholarly: Insert Citation`
 
 其余用法见 [VS Code 插件指南](https://scholarly-docs.jxpeng.dev/zh/guide/vscode-extension)。
@@ -131,8 +133,10 @@ pnpm add -D slidev-theme-scholarly
 ## 参与贡献
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
+pnpm --dir vscode-extension install --frozen-lockfile
 pnpm run dev
+# 停止预览后再运行检查。
 pnpm run check
 ```
 

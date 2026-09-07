@@ -4,7 +4,7 @@ title: Content Layouts
 
 # Content Layouts
 
-These layouts arrange images, columns, and lists.
+These layouts arrange images, columns, and lists. Put local images in the presentation project's `public/` directory and reference them as `/image.png`. Each code block below describes one slide.
 
 ## two-cols - Two Columns {#two-cols}
 
@@ -55,7 +55,7 @@ The right column takes three fifths of the available width.
 ```markdown
 ---
 layout: image-left
-image: ./path/to/image.png
+image: /image.png
 ratio: "1:2"
 title: Image Left Layout
 ---
@@ -92,7 +92,7 @@ Add a short description of the setup.
 ```markdown
 ---
 layout: image-right
-image: https://example.com/image.jpg
+image: /image.png
 ratio: "3:2"
 fit: contain
 title: Image Right Layout
@@ -162,7 +162,7 @@ icon: "→"
 ```markdown
 ---
 layout: figure
-image: ./images/architecture.png
+image: /architecture.png
 caption: Overview of our proposed system architecture.
 label: "Figure 1:"
 title: System Architecture
@@ -180,8 +180,8 @@ Use `image` instead of `src` in Slidev frontmatter. `src` is reserved by Slidev 
 - `label`: Label prefix (e.g., "Figure 1:")
 - `title`: Slide title
 - `subtitle`: Optional subtitle
-- `height`: Image height (default: `60%`)
-- `fit`: `contain`, `cover`, `fill` (default: `contain`)
+- `height`: Maximum image height (default: `55vh`)
+- `fit`: `contain` or `cover` (default: `contain`)
 
 ---
 
@@ -195,8 +195,8 @@ Use `image` instead of `src` in Slidev frontmatter. `src` is reserved by Slidev 
 ---
 layout: split-image
 images:
-  - ./before.png
-  - ./after.png
+  - /before.png
+  - /after.png
 captions:
   - Before optimization
   - After optimization

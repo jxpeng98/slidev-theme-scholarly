@@ -1,74 +1,58 @@
 ---
 title: Upgrade Notes
+description: Update Slidev and Scholarly, migrate older settings, and verify an existing deck.
 ---
 
 # Upgrade Notes
 
-Scholarly is preparing for a major upgrade. Upcoming releases may introduce breaking changes for existing decks.
+Upgrade the presentation project's dependencies, then check its rendered output. Updating the VS Code extension alone does not update the theme or Slidev installed in that project.
 
-## What might be affected
+## Before updating
 
-Depending on your setup, upgrading may require changes in one or more areas:
+Save or commit the deck, `package.json`, and lockfile together so you can restore a working version. Read the [theme releases](https://github.com/jxpeng98/slidev-theme-scholarly/releases) and [changelog](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md) for the versions you are moving between.
 
-- **Slidev / Node.js requirements**: ensure your local environment matches the versions required by the theme.
-- **Theme configuration**: some frontmatter keys and `themeConfig` options may change.
-- **Layouts / components**: layout names, props, defaults, or styling tokens may change.
-- **Build/export behavior**: PDF export and asset handling may be affected by upstream Slidev changes.
+This repository and its starter templates use Slidev **52.19.1**. Use Node.js 24 LTS and pnpm 10 for the documented workflow; see [environment setup](./quick-start#_1-prepare-the-environment). The installed package and your lockfile determine the versions in an existing project.
 
-## Recommended upgrade checklist
+## Update the project
 
-1. Check your Node.js version (the theme requires Node.js 20+):
+From the presentation directory:
 
-   ```bash
-   node -v
-   ```
+```bash
+pnpm list @slidev/cli slidev-theme-scholarly
+pnpm add -D @slidev/cli@52.19.1 slidev-theme-scholarly@latest
+pnpm exec sch doctor
+pnpm run dev
+```
 
-2. Upgrade Slidev to a compatible version:
+The theme installs its matching Slidev client and type dependencies. If your project also declares `@slidev/client` or `@slidev/types` directly, align those with the CLI version. Keep using your existing package manager and review the lockfile changes.
 
-   ```bash
-   npm i -D @slidev/cli
-   ```
+## Check older settings
 
-3. Upgrade the theme:
+| Older configuration | Current guidance |
+|---|---|
+| `themeConfig.colorMode` | Still supported. Use `contentMode` and `chromeMode` explicitly for new decks; see [mode migration](./theme-mode-contrast#legacy-decks-and-precedence). |
+| `outlineSidebar`, `outlineSidebarOpen` | Still supported inside `themeConfig`. Prefer `outlineToc`, `outlineTocOpen`. |
+| `src` on a `figure` slide | Use `image`; Slidev reserves `src` for importing slide files. |
+| `title: false` on a first-page `toc` | Keep `title` as the presentation name and use `heading: false`; see [TOC](../layouts/structure#toc). |
+| Project-level citation plugin setup | Scholarly now loads citation hooks from the theme. Remove duplicate citation registration while keeping unrelated Vite plugins. |
 
-   ```bash
-   npm i -D slidev-theme-scholarly
-   ```
+These notes describe current compatibility behavior. Check the release notes for any additional migration required by the version you install.
 
-4. Start Slidev and fix any reported errors:
+## Verify before sharing
 
-   ```bash
-   npx slidev
-   ```
+1. Open the deck and inspect cover, section, dense result, and reference slides.
+2. Check images, equations, citations, footnotes, and internal links.
+3. Export a PDF and build the static site using [the quick-start export steps](./quick-start#check-and-export).
+4. Compare the output with the saved version, especially if fonts, aspect ratio, or light/dark modes changed.
 
-If something breaks, pin the previous version temporarily while you migrate.
+If the upgrade breaks the deck, restore the saved `package.json` and lockfile together, reinstall dependencies, and return to the working version while you investigate.
 
-## Using pre-releases (for early testing)
+## Test a prerelease
 
-We publish **pre-releases** so changes can be tested before the stable release.
+Check which npm channels exist before selecting one:
 
-### Tag / version format
+```bash
+pnpm view slidev-theme-scholarly dist-tags
+```
 
-| Type | Tag format | Example |
-|------|-----------|---------|
-| Stable | `vX.Y.Z` | `v2.0.0` |
-| Pre-release | `vX.Y.Z-<pre>` | `v2.0.0-beta.1`, `v2.0.0-rc.0` |
-
-Pre-releases follow SemVer and **must include** the `-<pre>` prerelease segment; otherwise, the CI will treat them as stable releases.
-
-- Install the current pre-release channel:
-
-  ```bash
-  npm i -D slidev-theme-scholarly@next
-  ```
-
-- Return to the stable channel:
-
-  ```bash
-  npm i -D slidev-theme-scholarly
-  ```
-
-## Where to find the detailed changes
-
-- [GitHub Releases](https://github.com/jxpeng98/slidev-theme-scholarly/releases)
-- [Changelog](https://github.com/jxpeng98/slidev-theme-scholarly/blob/main/CHANGELOG.md)
+If a `next` tag is listed, install it with `pnpm add -D slidev-theme-scholarly@next`. To return to the stable channel, run `pnpm add -D slidev-theme-scholarly@latest`. Test prereleases in a copy or branch of the deck.

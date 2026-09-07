@@ -9,6 +9,8 @@ Start a lecture, tutorial, or structured lesson with the `basic` template:
 
 ```bash
 npx -y slidev-theme-scholarly init lecture --template basic
+cd lecture
+pnpm install
 ```
 
 ## Recommended layouts
@@ -28,6 +30,8 @@ npx -y slidev-theme-scholarly init lecture --template basic
 - [Highlight](../../components/highlight) for short terms, not long paragraphs.
 
 ## Useful snippets
+
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
 
 ```bash
 pnpm exec sch snippet append theorem --file slides.md

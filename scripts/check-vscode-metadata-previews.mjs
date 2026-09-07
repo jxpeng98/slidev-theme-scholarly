@@ -2,6 +2,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
+import { isDeepStrictEqual } from 'node:util'
+import { parseTemplateDeck } from '../vscode-extension/scripts/sync-shared-data.mjs'
 
 const root = path.resolve(new URL('..', import.meta.url).pathname)
 const extensionRoot = path.join(root, 'vscode-extension')
@@ -98,10 +100,24 @@ await expectSameFile(
   path.join(root, 'shared', 'layouts.json'),
   path.join(extensionRoot, 'shared', 'layouts.json'),
 )
-await expectSameFile(
-  path.join(root, 'shared', 'templates.json'),
-  path.join(extensionRoot, 'shared', 'templates.json'),
+const extensionTemplates = await readJson(path.join(extensionRoot, 'shared', 'templates.json'))
+const publicTemplates = extensionTemplates && {
+  ...extensionTemplates,
+  templates: extensionTemplates.templates?.map(({ deck, ...metadata }) => metadata),
+}
+expect(
+  isDeepStrictEqual(publicTemplates, sharedTemplates),
+  'VS Code template public metadata should match shared/templates.json',
 )
+for (const template of sharedTemplates?.templates ?? []) {
+  const source = await readText(path.join(root, 'cli', 'templates', template.id, 'slides.md'))
+  if (!source) continue
+  const actual = extensionTemplates?.templates?.find(item => item.id === template.id)?.deck
+  expect(
+    isDeepStrictEqual(actual, parseTemplateDeck(source, template.id)),
+    `VS Code template "${template.id}" deck should match its CLI source (run sync-shared-data)`,
+  )
+}
 
 expectIncludes('sync-shared-data.mjs', syncSharedSource, 'templates.json')
 expectIncludes('providers.ts', providersSource, 'LAYOUT_GROUPS')

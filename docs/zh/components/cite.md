@@ -4,7 +4,7 @@ title: 引用
 
 # 引用
 
-Scholarly 可以直接读取 BibTeX 文件。正文中的引用会自动汇总到参考文献页。
+Scholarly 会读取本地 BibTeX 文件，将正文引用的条目汇总到参考文献页。先准备文献文件，再添加引用和参考文献页。手动注记与 Markdown 注脚的用法另列在后文。
 
 ## 配置
 
@@ -28,6 +28,28 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 - `mla`
 - `chicago-author-date`
 
+## BibTeX 文件示例
+
+在 `slides.md` 旁创建 `references.bib`。后文示例使用的 key 均来自这两个条目：
+
+```bibtex
+@article{lecun2015deep,
+  title={Deep learning},
+  author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
+  journal={Nature},
+  volume={521},
+  pages={436--444},
+  year={2015}
+}
+
+@inproceedings{vaswani2017attention,
+  title={Attention is all you need},
+  author={Vaswani, Ashish and others},
+  booktitle={NeurIPS},
+  year={2017}
+}
+```
+
 ## 基本用法
 
 ### 括号引用
@@ -35,10 +57,10 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 括号引用使用 `@citekey`：
 
 ```markdown
-深度学习已经革新了人工智能 @lecun2015deep。
+深度学习综述介绍了这些方法 @lecun2015deep。
 ```
 
-渲染为：深度学习已经革新了人工智能（LeCun 等，2015）。
+使用 APA 样式时，引用显示为 `(LeCun et al., 2015)`。引用格式由 `bibStyle` 决定，不会随正文语言自动翻译。
 
 ### 叙述性引用
 
@@ -48,31 +70,51 @@ bibShowNum: false        # 参考文献是否显示数字标记（如 [1]）
 !@vaswani2017attention 提出了 Transformer 架构。
 ```
 
-渲染为：Vaswani 等（2017）提出了 Transformer 架构。
+使用 APA 样式时，叙述性引用显示为 `Vaswani et al. (2017)`。
 
 ### 多个引用
 
+一句话涉及多篇文献时，可以连续写多个 key。每个 key 都应在参考文献文件中存在：
+
 ```markdown
-近期研究 @smith2023deep @wang2022attention 表明……
+这些论文讨论了神经网络架构 @lecun2015deep @vaswani2017attention。
 ```
 
-### 分组引用
+## 参考文献
 
-如果一个结论有多篇论文支持，可以在同一句中连续写多个 BibTeX key：
+添加一个参考文献页：
 
 ```markdown
-高效适配通常需要结合多篇工作的证据 @smith2023deep @wang2022attention。
+---
+layout: references
+---
 ```
 
-### 补充说明
+主题会根据幻灯片中实际使用的引用生成参考文献。
 
-需要补充一条简短的阅读说明时，可以使用 `<Cite :inline="false">`。
-这类说明不会写入 BibTeX 参考文献，只用于补充上下文。
+如果页面正文为空，或只包含标题和注释，主题会自动插入参考文献。
+
+需要指定插入位置时，在相应位置写入 `[[bibliography]]`。
+
+项目无需为引用功能额外配置 `vite.config.ts`；所需的处理逻辑已经包含在主题包中。
+
+## 分页
+
+每一页参考文献都需要单独添加一张幻灯片。`perPage` 限制当前页的条目数，不会自动创建后续页面：
 
 ```markdown
-<Cite :inline="false" author="Smith 等" year="2026">
-主要指标均报告 5 次随机种子平均值和置信区间。
-</Cite>
+---
+layout: references
+perPage: 5
+page: 1
+---
+
+---
+layout: references
+perPage: 5
+page: 2
+title: "参考文献（续）"
+---
 ```
 
 ## Markdown 注脚
@@ -120,30 +162,22 @@ footnoteDisplay: notes-only
 
 打印或导出时，注脚会显示为幻灯片底部的普通列表。
 
-## 参考文献
+## 内部锚点跳转
 
-添加一个参考文献页：
+在 Slidev 的交互视图中，Scholarly 会将内部 `href="#..."` 链接识别为跨页跳转：
 
-```markdown
----
-layout: references
----
-```
+- 正文中的 BibTeX 引用可以直接跳到对应条目，即使参考文献在另一页
+- 普通内部链接如 `[跳转](#appendix-proof)` 也可以跨页工作，只要目标位置使用了 `## 标题 {#appendix-proof}`、`::anchor{#appendix-proof}`，或者显式声明了 `id="appendix-proof"`
+- 跳转后会显示 `Back to source` 按钮，点击即可回到原来的引用或链接位置
 
-主题会根据幻灯片中实际使用的引用生成参考文献。
-
-如果页面正文为空，或只包含标题和注释，主题会自动插入参考文献。
-
-需要指定插入位置时，在相应位置写入 `[[bibliography]]`。
-
-项目无需为引用功能额外配置 `vite.config.ts`；所需的处理逻辑已经包含在主题包中。
+跨页跳转只在现场演示和浏览器中生效；打印和导出仍使用静态内容。
 
 ## 运行诊断
 
 引用没有按预期显示时，运行：
 
 ```bash
-npx -y slidev-theme-scholarly doctor
+pnpm exec sch doctor
 ```
 
 检查结果包括：
@@ -160,57 +194,6 @@ npx -y slidev-theme-scholarly doctor
 - Citation bibliography: [WARN] missing .bib file: ./references.bib
 - Citation keys: [WARN] unresolved citation keys: missing2026
 - References slide: [WARN] missing; add layout: references
-```
-
-## 内部锚点跳转
-
-在 Slidev 的交互视图中，Scholarly 会将内部 `href="#..."` 链接识别为跨页跳转：
-
-- 正文中的 BibTeX 引用可以直接跳到对应条目，即使参考文献在另一页
-- 普通内部链接如 `[跳转](#appendix-proof)` 也可以跨页工作，只要目标位置使用了 `## 标题 {#appendix-proof}`、`::anchor{#appendix-proof}`，或者显式声明了 `id="appendix-proof"`
-- 跳转后会显示 `Back to source` 按钮，点击即可回到原来的引用或链接位置
-
-跨页跳转只在现场演示和浏览器中生效；打印和导出仍使用静态内容。
-
-## 分页
-
-对于较长的参考文献列表，使用分页：
-
-```markdown
----
-layout: references
-perPage: 5
-page: 1
----
-
----
-layout: references
-perPage: 5
-page: 2
-title: "参考文献（续）"
----
-```
-
-## BibTeX 文件示例
-
-在项目根目录创建 `references.bib` 文件：
-
-```bibtex
-@article{lecun2015deep,
-  title={Deep learning},
-  author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
-  journal={Nature},
-  volume={521},
-  pages={436--444},
-  year={2015}
-}
-
-@inproceedings{vaswani2017attention,
-  title={Attention is all you need},
-  author={Vaswani, Ashish and others},
-  booktitle={NeurIPS},
-  year={2017}
-}
 ```
 
 ## Cite 组件（手动）

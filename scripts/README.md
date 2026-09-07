@@ -11,7 +11,7 @@ pnpm install
 pnpm exec playwright install chromium
 ```
 
-The browser install is required only for PNG and PDF export.
+Chromium is needed for PNG/PDF exports and browser checks. Use Node.js 24 LTS and pnpm 10; see the [contributing guide](../docs/en/contributing.md) for the full repository setup.
 
 ## Generate preview images
 
@@ -33,7 +33,7 @@ pnpm run theme:matrix
 ```
 
 This creates light and dark previews under
-`/private/tmp/scholarly-theme-matrix/<color-theme>/<color-mode>/`. To validate
+`<system-temp>/scholarly-theme-matrix/<color-theme>/<mode>/`. To validate
 the matrix without opening Playwright, run:
 
 ```bash
