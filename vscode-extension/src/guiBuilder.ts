@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { renderBuilderMarkdown, renderBuilderSlides, type BuilderDeckState } from './guiBuilderModel';
+import { parseBuilderConfigSource, renderBuilderMarkdown, renderBuilderSlides, type BuilderDeckState } from './guiBuilderModel';
 import { renderGuiBuilderHtml, type GuiBuilderLayoutOption } from './guiBuilderView';
 import { layouts } from './providers';
 import { BUILDER_TEMPLATES, COLOR_THEMES, CONTENT_MODES, FONT_THEMES, SURFACE_MODES } from './sharedData';
@@ -113,6 +113,17 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
         content: renderBuilderMarkdown(message.state)
       });
       await vscode.window.showTextDocument(document);
+      const bibFile = parseBuilderConfigSource(message.state.frontmatterSource || '').bibFile;
+      if (typeof bibFile === 'string' && bibFile.trim()) {
+        const template = BUILDER_TEMPLATES.find(item => item.id === message.state?.templateId);
+        const action = t('Create template project');
+        const selected = await vscode.window.showInformationMessage(
+          t('This outline needs {0} beside the saved Markdown. Create a complete template project, then save this outline into it.', bibFile),
+          ...(template ? [action] : [])
+        );
+        if (template && selected === action)
+          await vscode.commands.executeCommand('slidev-scholarly.newPresentation', template.id);
+      }
       return;
     }
 

@@ -129,6 +129,12 @@ try {
       expect(citation.hasReferencesSlide, `${template.name} should include a references slide`)
       expect(citation.duplicateKeys.length === 0, `${template.name} should not include duplicate BibTeX keys`)
       expect(citation.unresolvedKeys.length === 0, `${template.name} should resolve all citation keys`)
+      const bibliography = path.join(target, citation.bibFile)
+      const originalBib = 'User bibliography: keep this content.\n'
+      fs.writeFileSync(bibliography, originalBib)
+      const retry = runCli(['init', target, '--template', template.name])
+      expect(retry.status !== 0, `${template.name} should refuse a nonempty project without --force`)
+      expect(readText(bibliography) === originalBib, `${template.name} must preserve an existing bibliography`)
     }
   }
 

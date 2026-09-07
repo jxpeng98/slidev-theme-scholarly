@@ -54,6 +54,12 @@ Run `Slidev Scholarly: Open Deck Builder`, then follow these steps:
 
 Create the Markdown deck when the outline is ready, or append only the selected slide to the end of the active Markdown file. Appending preserves the existing deck settings and pages. Continue editing and previewing in Slidev.
 
+Citation workflows also need the `references.bib` file beside the saved Markdown.
+After generating an outline, choose **Create template project** in the notification
+to initialize the complete starter, then save your generated outline into that
+project. The notification can be dismissed without changing the outline; creating
+a project refuses to overwrite a nonempty folder.
+
 In a split editor, workflows, deck settings, and the layout library collapse into
 compact controls above the outline and editor. At 700px or narrower, expand the
 outline when needed; the editing area and generation actions remain accessible.

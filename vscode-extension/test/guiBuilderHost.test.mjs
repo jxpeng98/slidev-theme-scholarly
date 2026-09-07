@@ -9,7 +9,8 @@ test('Builder retains the explicit insertion target across Webview focus', async
   let receive, disposePanel, changeEditor, closeDocument;
   let disposed = 0;
   let editSucceeds = true;
-  const warnings = [], errors = [], insertions = [], shown = [];
+  const warnings = [], errors = [], insertions = [], shown = [], notices = [], commands = [];
+  let chooseProject = false;
   const original = '---\ntheme: scholarly\ntitle: Original\nbibFile: ./refs.bib\n---\n\n# First\n\nKeep all content.\n\n---\nlayout: default\n---\n\n# Second\n';
   const editor = (languageId = 'markdown', content = original) => ({
     document: { languageId, isClosed: false, getText: () => content, offsetAt: () => 0, positionAt: offset => ({ offset }) },
@@ -47,8 +48,13 @@ test('Builder retains the explicit insertion target across Webview focus', async
         return visible;
       },
       showWarningMessage: message => warnings.push(message),
-      showErrorMessage: message => errors.push(message)
+      showErrorMessage: message => errors.push(message),
+      showInformationMessage: async (message, ...actions) => {
+        notices.push({ message, actions });
+        return chooseProject ? actions[0] : undefined;
+      }
     },
+    commands: { executeCommand: async (...args) => commands.push(args) },
     workspace: {
       onDidCloseTextDocument(callback) {
         closeDocument = callback; return { dispose() { disposed++; } };
@@ -114,6 +120,25 @@ test('Builder retains the explicit insertion target across Webview focus', async
 
   await receive({ type: 'generateNewDocument', state });
   assert.match(shown.at(-1).document.content, /^---\ntheme: scholarly/);
+  const { BUILDER_TEMPLATES } = require('../out/sharedData.js');
+  for (const template of BUILDER_TEMPLATES) {
+    const previous = notices.length;
+    await receive({ type: 'generateNewDocument', state: { ...template.deck, templateId: template.id } });
+    if (['basic', 'zh'].includes(template.id)) {
+      assert.equal(notices.length, previous, 'plain templates need no bibliography prompt');
+    } else {
+      assert.equal(notices.length, previous + 1, `${template.id} must explain the bibliography dependency`);
+      assert.match(notices.at(-1).message, /references\.bib/);
+      assert.deepEqual(notices.at(-1).actions, ['Create template project']);
+    }
+  }
+  assert.equal(notices.length, 6);
+  assert.equal(commands.length, 0, 'dismissing the prompt must leave the generated Markdown untouched');
+  chooseProject = true;
+  const paper = BUILDER_TEMPLATES.find(template => template.id === 'paper-talk');
+  await receive({ type: 'generateNewDocument', state: { ...paper.deck, templateId: paper.id } });
+  assert.deepEqual(commands, [['slidev-scholarly.newPresentation', 'paper-talk']]);
+  assert.match(shown.at(-1).document.content, /bibFile: \.\/references\.bib/);
   editSucceeds = false;
   focusWebview();
   await insert();

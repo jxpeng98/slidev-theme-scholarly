@@ -421,5 +421,7 @@
   "Conference Lightning": "会议短报告",
   "Short conference talk focused on one claim and supporting evidence": "围绕一个核心论点及其证据展开的短报告",
   "Chinese Starter": "中文入门",
-  "Chinese starter deck": "简洁的中文入门演示"
+  "Chinese starter deck": "简洁的中文入门演示",
+  "Create template project": "创建完整模板项目",
+  "This outline needs {0} beside the saved Markdown. Create a complete template project, then save this outline into it.": "保存此大纲时，需要在 Markdown 旁提供 {0}。可先创建完整模板项目，再将当前大纲保存到其中。"
 }
