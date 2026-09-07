@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0-beta.1] - 2026-09-08
+
+This test release brings the reviewed theme, CLI, documentation, and VS Code
+extension changes together on `dev`. The matching extension test package is
+`1.4.2`, distributed as a pre-release VSIX on GitHub.
+
+### Added
+
+- English and Simplified Chinese extension interfaces, with a revised Deck
+  Builder, keyboard navigation, and clearer project and Markdown creation flows.
+- Complete JSON and CSV authoring guides, plus checks for documentation examples,
+  internal links, localized search, and responsive layouts.
+
+### Changed
+
+- Upgraded Slidev to `52.19.1` and updated all eight starter templates.
+- Reorganized the bilingual README and documentation around setup, authoring
+  tasks, and reference material; corrected installation and export instructions.
+- Refreshed theme and extension previews to match the corrected layouts.
+
+### Fixed
+
+- Preserved YAML mappings, existing slide content, and insertion targets when
+  editing themes or using the Deck Builder.
+- Corrected first-slide generation, whitespace-only decks, title editing,
+  required-field feedback, and citation project guidance.
+- Restored layout headers, respected explicit grid columns and section modes,
+  removed duplicate titles, and kept research evidence visible in exports.
+- Included the YAML runtime in VSIX packages and made validation paths portable.
+
+### Testing and Upgrade Notes
+
+- Install the theme test version with
+  `pnpm add slidev-theme-scholarly@1.5.0-beta.1`; the npm channel is `next`.
+- Install `slidev-scholarly-snippets-1.4.2.vsix` through VS Code's **Install from
+  VSIX** command. This release does not publish the extension to Marketplace.
+- Use Node.js 24 LTS and pnpm 10 for the documented workflows. CLI PDF and image
+  exports also require `playwright-chromium`.
+- The npm `latest` channel remains on the stable `1.4.1` release. To return to it,
+  run `pnpm add slidev-theme-scholarly@1.4.1`.
+
 ## [1.4.1] - 2026-07-29
 
 ### Changed
