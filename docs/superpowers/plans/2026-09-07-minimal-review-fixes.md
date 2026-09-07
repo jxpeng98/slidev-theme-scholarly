@@ -19,6 +19,7 @@ R01 的 YAML 序列化可能规范化缩进和注释；配置值和未知字段�
 - A 已完成：CLI 与扩展按 YAML 映射更新配置，删除旧写入正则；保留嵌套字段和各自的旧模式兼容逻辑。19 项针对性测试通过，新增负例在修复前均以重复键失败，修复后通过。日志：`artifacts/fixes-2026-09-07/a-before.log`、`a-after.log`、`a-compile.log`。
 - 根包补充 `js-yaml: 4.2.0` 直接依赖和锁文件 importer；版本与完整性记录已存在于锁文件。离线元数据不完整，未升级其他依赖；全新安装由最终远程 CI 验证。
 - B 已完成：页面追加至文件末尾，空 Markdown 创建合法主题首页；副标题保留自定义封面正文；标题使用单一文本入口，目录标题保留显示/隐藏选择。34 项插件测试、lint 和中英文/明暗/五视口 Webview 回归通过。真实 parser 验证原有全局配置与每页内容保持一致。证据：`b-host-before.log`、`b-tests.log`、`b-ui.log`、`b-lint.log`。
+- B 空白边界补充：仅含空格、换行或制表符的 Markdown 按空文件处理，替换空白后生成首页；有内容的文稿继续追加。新增实际 parser 负例先得到两页，修复后得到一页且保留全局主题；34 项插件测试和 lint 再次通过。证据：`b-whitespace-before.log`、`b-whitespace-tests.log`、`b-whitespace-lint.log`。最终 VSIX 重新构建并复核，见 `e-vsix-package-final.log`、`e-vsix-check-final.log`。
 - C 已完成：七处 frontmatter 使用 Slidev 提供的普通对象；六种页眉参与自然排版，正文按实际高度避让；MetricGrid 遵守显式列数。新增浏览器检查先复现缺失页眉，修复后通过六种布局的标题、副标题、长标题避让、局部章节浅色及两种窗口的单列断言；七页 PDF 导出成功。证据：`c-before.log`、`c-after.log`、`c-after/`。章节截图改用视口截图，避免元素稳定性等待超时；已人工检查浅色章节与窄窗指标截图。
 - D 已完成：六个引用工作流在生成 Markdown 后提示 `references.bib` 依赖，可调用已有完整模板初始化命令；普通工作流无提示，关闭通知不触发创建。先复现缺失提示，再通过 34 项插件测试、lint 和模板检查；实际 CLI 验证拒绝覆盖非空项目并保留用户 bibliography。中英文通知与使用说明已同步。证据：`d-before.log`、`d-tests.log`、`d-lint.log`、`d-templates.log`。
 - C 导出复查补充：恢复页眉后，议程和致谢还会显示内部重复标题；七项议程因此越过内容顶部。内部标题改为仅在无页眉时显示；实际七项议程的全部内容边界、两种布局的重复标题检查及七页 PDF 导出通过。证据：`c-final.log`、`c-final/`。检查切换 16:9 与 4:3 夹具时明确重启 Slidev 服务，避免依赖开发服务器配置热更新时序。

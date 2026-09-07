@@ -17,7 +17,10 @@ test('Builder retains the explicit insertion target across Webview focus', async
     selection: { active: { line: 0, character: 10 } }, viewColumn: 1,
     edit: async callback => {
       if (!editSucceeds) return false;
-      callback({ insert: (position, content) => insertions.push({ position, content }) });
+      callback({
+        insert: (position, content) => insertions.push({ position, content }),
+        replace: (range, content) => insertions.push({ position: range.start, end: range.end, content })
+      });
       return true;
     }
   });
@@ -33,6 +36,7 @@ test('Builder retains the explicit insertion target across Webview focus', async
   };
   const vscode = {
     ViewColumn: { One: 1 }, Uri: { joinPath: (...parts) => parts.join('/') },
+    Range: class { constructor(start, end) { this.start = start; this.end = end; } },
     env: { language: 'en' }, l10n: { t: (message, ...args) => message.replace('{0}', args[0]) },
     window: {
       activeTextEditor: first,
@@ -111,12 +115,16 @@ test('Builder retains the explicit insertion target across Webview focus', async
   assert.equal(insertions.length, 2, 'closing the target clears it');
   assert.equal(warnings.length, 2);
 
-  changeEditor(editor('markdown', ''));
-  focusWebview();
-  await insert();
-  const empty = await parser.parse(insertions.at(-1).content);
-  assert.equal(empty.slides.length, 1);
-  assert.equal(empty.slides[0].frontmatter.theme, 'scholarly');
+  for (const whitespace of ['', '\n\n', '  \n\t\n']) {
+    changeEditor(editor('markdown', whitespace));
+    focusWebview();
+    await insert();
+    const change = insertions.at(-1);
+    const content = whitespace.slice(0, change.position.offset) + change.content + whitespace.slice(change.end?.offset ?? change.position.offset);
+    const empty = await parser.parse(content);
+    assert.equal(empty.slides.length, 1, 'blank files must not gain an empty slide before the headmatter');
+    assert.equal(empty.slides[0].frontmatter.theme, 'scholarly');
+  }
 
   await receive({ type: 'generateNewDocument', state });
   assert.match(shown.at(-1).document.content, /^---\ntheme: scholarly/);

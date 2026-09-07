@@ -146,7 +146,9 @@ async function handleBuilderMessage(panel: vscode.WebviewPanel, message: Builder
         ? '\n\n' + renderBuilderSlides([slide], message.state.lang)
         : renderBuilderMarkdown({ lang: message.state.lang, slides: [slide] });
       const inserted = await editor.edit(editBuilder => {
-        editBuilder.insert(editor.document.positionAt(content.length), markdown);
+        const end = editor.document.positionAt(content.length);
+        if (content.trim()) editBuilder.insert(end, markdown);
+        else editBuilder.replace(new vscode.Range(editor.document.positionAt(0), end), markdown);
       });
       if (!inserted) throw new Error(t('The slide could not be inserted. Try again in the target Markdown file.'));
     }
