@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout acknowledgments h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout acknowledgments h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow flex flex-col items-center justify-center text-center p-10" :style="computedStyles">
       <h1 class="text-3xl font-bold mb-12 text-primary tracking-wide">
@@ -52,7 +52,7 @@ const props = defineProps<{
 }>()
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 
 const gridCols = computed(() => {
   const hasFunders = props.funders && props.funders.length > 0

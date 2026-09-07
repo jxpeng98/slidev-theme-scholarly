@@ -84,6 +84,10 @@ const steps = [
 
 if (fullVisual) {
   steps.push({
+    name: 'Layout frontmatter and explicit grid columns',
+    command: ['node', 'scripts/check-layout-context.mjs'],
+  })
+  steps.push({
     name: 'Documentation responsive layout',
     command: ['node', 'scripts/check-docs-layout.mjs'],
   })
