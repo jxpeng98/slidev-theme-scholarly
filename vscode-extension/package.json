@@ -2,7 +2,7 @@
   "name": "slidev-scholarly-snippets",
   "displayName": "Slidev Scholarly",
   "description": "%extension.description%",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "publisher": "jxpeng98",
   "icon": "images/icon-256.png",
   "engines": {
