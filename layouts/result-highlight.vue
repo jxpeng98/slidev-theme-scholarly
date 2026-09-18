@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<{
   baseline?: string
   variant?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
 }>(), {
-  eyebrow: 'Result Highlight',
+  eyebrow: undefined,
   label: 'Primary Metric',
   metric: '0.0',
   variant: 'primary',
@@ -81,13 +81,17 @@ const variantClass = computed(() => `is-${props.variant}`)
 </script>
 
 <style scoped>
+.slidev-layout.result-highlight {
+  padding: 0;
+}
+
 .result-highlight-main {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 1rem;
   padding: 2rem 2.5rem calc(var(--scholarly-footer-height) + 1rem);
-  overflow: auto;
 }
 
 .result-highlight-main.has-header {
@@ -99,7 +103,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   grid-template-columns: minmax(0, 1.45fr) minmax(12rem, 0.75fr);
   gap: 1rem;
   align-items: stretch;
-  padding: 1.15rem;
+  padding: 1rem;
   border: 1px solid var(--scholarly-result-border, var(--scholarly-content-border));
   border-radius: 0.55rem;
   background: var(--scholarly-result-bg, var(--scholarly-content-surface));
@@ -140,7 +144,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   margin: 0 0 0.35rem;
   color: var(--scholarly-result-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -158,7 +162,7 @@ const variantClass = computed(() => `is-${props.variant}`)
   max-width: 44rem;
   margin: 0.5rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: 1.125rem;
   line-height: 1.45;
 }
 
@@ -167,10 +171,8 @@ const variantClass = computed(() => `is-${props.variant}`)
   flex-direction: column;
   justify-content: center;
   min-width: 0;
-  padding: 0.9rem;
-  border: 1px solid var(--scholarly-content-border);
-  border-radius: 0.5rem;
-  background: var(--scholarly-content-surface);
+  padding-left: 1rem;
+  border-left: 1px solid var(--scholarly-result-border, var(--scholarly-content-border));
 }
 
 .result-highlight-value {
@@ -188,7 +190,7 @@ const variantClass = computed(() => `is-${props.variant}`)
 }
 
 .result-highlight-value small {
-  font-size: 0.9rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 750;
 }
 
@@ -198,20 +200,17 @@ const variantClass = computed(() => `is-${props.variant}`)
   gap: 0.45rem;
   margin-top: 0.65rem;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 650;
 }
 
 .result-highlight-context span {
-  padding: 0.16rem 0.48rem;
-  border: 1px solid var(--scholarly-content-border);
-  border-radius: 999px;
-  background: var(--scholarly-content-surface-muted);
+  display: block;
 }
 
 .result-highlight-body {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
   gap: 0.9rem;
   min-height: 0;
 }
@@ -219,11 +218,11 @@ const variantClass = computed(() => `is-${props.variant}`)
 .result-highlight-evidence,
 .result-highlight-detail {
   min-width: 0;
-  padding: 0.9rem 1rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--scholarly-content-border);
   border-radius: 0.5rem;
   background: var(--scholarly-content-surface);
-  overflow: auto;
+  font-size: 1.125rem;
 }
 
 .result-highlight-evidence {
@@ -236,5 +235,13 @@ const variantClass = computed(() => `is-${props.variant}`)
 .result-highlight-evidence :deep(p),
 .result-highlight-evidence :deep(ul) {
   margin-top: 0;
+}
+
+.result-highlight-body :deep(ul) {
+  margin-bottom: 0;
+}
+
+.result-highlight-body :deep(li) {
+  line-height: 1.4;
 }
 </style>

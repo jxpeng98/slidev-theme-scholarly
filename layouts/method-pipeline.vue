@@ -108,7 +108,7 @@ const pipelineStyle = computed(() => ({
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -126,7 +126,7 @@ const pipelineStyle = computed(() => ({
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -161,7 +161,7 @@ const pipelineStyle = computed(() => ({
   background: var(--slidev-theme-primary);
   color: var(--scholarly-content-on-primary);
   font-family: var(--scholarly-font-sans);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 800;
 }
 
@@ -181,13 +181,13 @@ const pipelineStyle = computed(() => ({
 
 .method-pipeline-copy p {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
 }
 
 .method-pipeline-copy small {
   display: block;
   margin-top: 0.5rem;
-  font-size: 0.62rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
 }
 

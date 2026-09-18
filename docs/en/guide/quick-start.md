@@ -1,135 +1,146 @@
 ---
 title: Quick Start
+description: Create a Scholarly project, write your first slides, and export or build the deck.
 ---
 
 # Quick Start
 
-## Requirements
+This guide takes you from a new folder to a working presentation. If you already have a Slidev project, skip to [adding the theme](#add-scholarly-to-an-existing-slidev-project). For an editor-based workflow, see the [VS Code extension](./vscode-extension).
 
-Install Node.js 20 or newer. The generated projects use `pnpm`.
+## 1. Prepare the environment
 
-## Create A Deck
-
-Use the CLI without a global install:
+Use **Node.js 24 LTS** and **pnpm 10**. Check your versions:
 
 ```bash
-npx -y slidev-theme-scholarly init my-talk
+node --version
+pnpm --version
+```
+
+Install pnpm if needed:
+
+```bash
+npm install -g pnpm@10
+```
+
+The current Slidev/Vite toolchain requires Node.js `^20.19.0 || >=22.12.0`; an early Node 20 or 22 release is not enough. Node 24 is the recommended starting point. See the [Vite requirements](https://vite.dev/guide/) and [Node.js release schedule](https://nodejs.org/en/about/previous-releases).
+
+## 2. Create the project
+
+Start with the `academic` template, which includes a bibliography:
+
+```bash
+npx -y slidev-theme-scholarly init my-talk --template academic
 cd my-talk
 pnpm install
+```
+
+The CLI creates `slides.md`, `package.json`, a README, and, for citation templates, `references.bib`. It refuses to overwrite a nonempty folder.
+
+To choose another template, run `npx -y slidev-theme-scholarly template list`. [Academic Workflows](./workflows/) explains which templates suit paper talks, defenses, reviews, results talks, and lectures.
+
+## 3. Preview and write
+
+```bash
 pnpm run dev
 ```
 
-The browser opens with a live Slidev preview. Edit `slides.md` to start writing.
+Keep this terminal running. The browser opens automatically and updates when you save `slides.md`.
 
-The first `npx` run may need to download Scholarly before it can execute the
-CLI. npm stores that temporary installation in its cache rather than adding it
-to your project or global packages. The `-y` flag accepts the cache installation
-without prompting.
+The first YAML block contains deck settings. Later blocks set options for individual slides; `---` separates pages:
 
-## Pick A Template
+```markdown
+---
+theme: scholarly
+lang: en
+---
 
-List available templates:
+# Presentation title
 
-```bash
-npx -y slidev-theme-scholarly template list
+The main idea
+
+---
+layout: section
+---
+
+# Methods
 ```
 
-Common choices:
+A [layout](../layouts/) arranges a whole slide. A [component](../components/) adds content such as a theorem or metric inside that layout. Keep blank lines around Markdown inside Vue component tags.
 
-| Template | Use it for |
-| --- | --- |
-| `basic` | Minimal English starter |
-| `academic` | General academic deck with BibTeX |
-| `paper-talk` | Paper presentations with summary, method, results, and references |
-| `seminar` | Research seminars with agenda, related work, method, and discussion |
-| `thesis-defense` | Defense decks with experiments, limitations, Q&A, and appendix map |
-| `reading-group` | Paper critique and group discussion |
-| `conference-lightning` | Short talks focused on one result |
-| `zh` | Minimal Chinese starter |
+## 4. Add content
 
-Create from a specific template:
+Use the CLI to browse the available building blocks:
 
 ```bash
-npx -y slidev-theme-scholarly init paper-session --template paper-talk
-npx -y slidev-theme-scholarly init defense --template thesis-defense
-```
-
-If you are unsure, start with the [academic workflow guide](./workflows/).
-
-## Useful CLI Commands
-
-After `pnpm install`, run the project-local `sch` binary with `pnpm exec`.
-This keeps the CLI version aligned with the version declared by the project.
-
-Discover what the theme provides:
-
-```bash
-pnpm exec sch theme list
 pnpm exec sch layout list
 pnpm exec sch component list
 pnpm exec sch snippet list
 ```
 
-Apply a theme preset or append common content:
+Append a theorem snippet to the end of `slides.md`:
 
 ```bash
-pnpm exec sch theme preset apply cambridge --file slides.md
 pnpm exec sch snippet append theorem --file slides.md
+```
+
+`snippet append` adds content at the end of the file; it does not target the editor cursor or necessarily create a new slide. `workflow apply` appends a sequence of snippets to the deck. Inspect the result before adding another workflow:
+
+```bash
+pnpm exec sch workflow list
 pnpm exec sch workflow apply paper --file slides.md
 ```
 
-Check the project setup:
+Theme commands update the first YAML block:
+
+```bash
+pnpm exec sch theme preset apply oxford --file slides.md
+```
+
+## 5. Check and export {#check-and-export}
+
+Run the project check and review its suggested fixes:
 
 ```bash
 pnpm exec sch doctor
-pnpm exec sch doctor --json
 ```
 
-`sch doctor` reports `OK`, `WARN`, and `ERROR` items with concrete next actions.
-Use `--json` for CI, scripts, or editor integrations.
+Fix `ERROR` items and review relevant `WARN` items. The doctor checks setup and citation metadata; inspect the rendered slides for overflow, missing images, and readable text.
 
-With npm, install `slidev-theme-scholarly` locally and use `npx sch`. A global
-install is optional:
+### Export a PDF
+
+CLI export needs Playwright and Chromium. Install them once in the presentation project, then export:
+
+```bash
+pnpm add -D playwright-chromium
+pnpm exec playwright install chromium
+pnpm run export
+```
+
+The terminal prints the PDF path. If installing a browser is inconvenient, use Slidev's **Export** page in a Chromium-based browser. See [Slidev exporting](https://sli.dev/guide/exporting) for PNG, PPTX, ranges, and export options.
+
+### Build a website
+
+```bash
+pnpm run build
+```
+
+This writes a static site to `dist/`. Upload that directory to a static host to publish it. When hosting under a subpath, set Slidev's `--base` option as described in [Slidev hosting](https://sli.dev/guide/hosting).
+
+## Add Scholarly to an existing Slidev project
+
+```bash
+pnpm add -D slidev-theme-scholarly
+```
+
+Set `theme: scholarly` in the first YAML block of `slides.md`, preserving its other settings. Continue using your project's preview and build commands. Check the [upgrade notes](./upgrade) when updating Slidev at the same time.
+
+Citations are loaded by the theme, so no project-level `vite.config.ts` is needed. Follow [Citations](../components/cite) to add a BibTeX file and reference page.
+
+## Optional global CLI
+
+Inside a project, `pnpm exec sch` uses that project's installed theme version. For use outside a project, either use the `npx -y slidev-theme-scholarly` form above or install globally:
 
 ```bash
 npm i -g slidev-theme-scholarly
-sch template list
+sch help
 ```
-
-## Manual Setup For An Existing Slidev Project
-
-Install the theme:
-
-```bash
-npm i -D slidev-theme-scholarly
-```
-
-Set the frontmatter in `slides.md`:
-
-```markdown
----
-theme: scholarly
-bibFile: references.bib
-bibStyle: apa
----
-```
-
-Run Slidev:
-
-```bash
-npx slidev
-```
-
-Scholarly registers its citation hooks from the theme package. Normal usage does
-not require a project-level `vite.config.ts`.
-
-Add a references slide:
-
-```markdown
----
-layout: references
----
-```
-
-Use `[[bibliography]]` only when you need to choose the exact bibliography
-position inside that slide.

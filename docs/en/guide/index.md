@@ -1,47 +1,53 @@
 ---
-title: Guide
+title: Documentation Map
+description: All Scholarly guides and reference pages, organized by task.
 ---
 
-# Guide
+# Documentation Map
 
-Use this guide when you want to build a Scholarly deck, choose the right
-template, and tune the theme without reading every reference page first.
+New to Scholarly? Follow [Quick start](./quick-start). Use this page when you need to find a specific guide or reference.
 
-## Start
+## Start and maintain a project
 
-New deck:
+- [Quick start](./quick-start): installation, authoring, PDF export, and static builds.
+- [VS Code extension](./vscode-extension): projects, Deck Builder, completions, and diagnostics.
+- [Upgrade notes](./upgrade): dependency updates and older configurations.
+- [Examples](../examples): complete decks and layout galleries.
+- [Feature overview](./features): capabilities and offline use.
 
-- [Quick Start](./quick-start.md): create a deck, pick a template, run it locally.
-- [Academic Workflows](./workflows/): choose a paper talk, thesis defense,
-  reading group, course lecture, or results-heavy path.
+## Choose a talk structure
 
-Existing Slidev deck:
+The [Academic Workflows](./workflows/) guide covers [paper talks](./workflows/paper-talk), [thesis defenses](./workflows/thesis-defense), [literature reviews](./workflows/literature-review), [results talks](./workflows/results-heavy), and [course lectures](./workflows/course-lecture).
 
-- [Quick Start](./quick-start.md#manual-setup-for-an-existing-slidev-project):
-  add the theme and enable references.
-- [Upgrade Notes](./upgrade.md): check compatibility notes before moving an old
-  deck forward.
+## Layout reference
 
-## Choose Building Blocks
+[Layouts](../layouts/) arrange a whole slide:
 
-- [Layouts](../layouts/): pick page structures for title, content, methods,
-  results, references, appendix, and Q&A slides.
-- [Components](../components/): add theorems, blocks, citations, metrics,
-  equations, datasets, paper summaries, and caveats.
-- [Syntax Sugar](../syntax-sugar.md): write common components with Markdown
-  directives instead of Vue tags.
+- [Structure](../layouts/structure): cover, outline, section breaks, adaptive content, and closing.
+- [Content](../layouts/content): columns, figures, images, and lists.
+- [Emphasis](../layouts/emphasis): quotes, statistics, statements, and questions.
+- [Academic](../layouts/academic): paper summaries, methods, evidence, Q&A, and references.
 
-## Customize
+## Component reference
 
-- [Configuration](./configurations.md): authors, footer, colors, fonts,
-  theorem numbering, footnotes, and per-slide overrides.
-- [Color & Typography Themes](./themes.md): preview and choose presets.
-- [Theme Mode and Contrast](./theme-mode-contrast.md): keep light/dark mode and
-  contrast readable.
+[Components](../components/) add content inside a slide:
 
-## Work Faster
+- Statements: [Theorem](../components/theorem), [Block](../components/block), [Highlight](../components/highlight).
+- Page composition: [Columns](../components/columns), [Steps](../components/steps), [Keywords](../components/keywords).
+- Results: [MetricCard](../components/metric-card), [MetricGrid](../components/metric-grid), [ResultTable](../components/result-table).
+- Evidence: [EvidenceBlock](../components/evidence-block), [EquationBlock](../components/equation-block), [DatasetCard](../components/dataset-card).
+- Research context: [PaperCard](../components/paper-card), [ContributionList](../components/contribution-list), [CaveatList](../components/caveat-list).
+- Sources: [Citations, footnotes, and anchors](../components/cite).
+- Palette samples: [ThemePreview](../components/theme-preview).
 
-- [VS Code Extension](./vscode-extension.md): snippets, previews, BibTeX
-  helpers, and deck metadata support.
-- [Examples](../examples.md): inspect complete examples after you know which
-  pattern you need.
+For shorter component syntax, see [Markdown directives](../syntax-sugar). For imported values, see [Data-Driven Slides](./data-driven).
+
+## Configure the deck
+
+- [Configuration](./configurations): field locations, authors, footer, numbering, and font sizes.
+- [Colors and typography](./themes): palettes, font pairings, and custom colors.
+- [Theme Mode and Contrast](./theme-mode-contrast): light/dark controls, precedence, and readability.
+
+## Contribute
+
+[Contributing](../contributing) covers the repository setup, checks, bilingual documentation, and preview updates.

@@ -57,28 +57,24 @@ const steps = [
     command: ['node', 'scripts/check-data-driven-results.mjs'],
   },
   {
-    name: 'Theorem numbering regression contract',
-    command: ['node', '--test', 'tests/theoremNumbering.test.mjs'],
-  },
-  {
-    name: 'Screenshot export safety contract',
-    command: ['node', '--test', 'tests/screenshotExport.test.mjs'],
-  },
-  {
-    name: 'Theme mode regression contract',
-    command: ['node', '--test', 'tests/themeModes.test.mjs'],
-  },
-  {
-    name: 'CLI theme mode regression contract',
-    command: ['node', '--test', 'tests/cliThemeModes.test.mjs'],
+    name: 'Root test suite',
+    command: ['pnpm', 'run', 'test'],
   },
   {
     name: 'VS Code extension compile',
     command: ['pnpm', 'run', 'vscode:compile'],
   },
   {
+    name: 'Builder Markdown page and metadata behavior',
+    command: ['node', 'scripts/check-builder-output.mjs'],
+  },
+  {
     name: 'Documentation build',
     command: ['pnpm', 'run', 'docs:build'],
+  },
+  {
+    name: 'Documentation links and anchors',
+    command: ['node', 'scripts/check-docs-links.mjs'],
   },
   {
     name: 'CLI doctor',
@@ -91,6 +87,26 @@ const steps = [
 ]
 
 if (fullVisual) {
+  steps.push({
+    name: 'Layout frontmatter and explicit grid columns',
+    command: ['node', 'scripts/check-layout-context.mjs'],
+  })
+  steps.push({
+    name: 'Documentation responsive layout',
+    command: ['node', 'scripts/check-docs-layout.mjs'],
+  })
+  steps.push({
+    name: 'Builder browser workflow behavior',
+    command: ['node', 'scripts/check-ui-workflows.mjs'],
+  })
+  steps.push({
+    name: 'TOC first-page title compatibility',
+    command: ['node', 'scripts/check-toc-headings.mjs'],
+  })
+  steps.push({
+    name: 'Research slide content visibility and export',
+    command: ['node', 'scripts/check-slide-content.mjs'],
+  })
   steps.push({
     name: 'Theme matrix visual export',
     command: ['node', 'scripts/check-theme-matrix.mjs'],

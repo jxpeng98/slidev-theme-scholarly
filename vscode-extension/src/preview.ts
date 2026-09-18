@@ -8,6 +8,7 @@ import {
   type ThemePalette
 } from './sharedData';
 import { WEBVIEW_THEME_CSS } from './webviewTheme';
+import { isChineseUi, t } from './localization';
 
 export type PreviewKind = 'layout' | 'component' | 'colorTheme' | 'fontTheme' | 'preset';
 
@@ -140,7 +141,7 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
     if (!this.view) return;
 
     this.view.webview.html = `<!DOCTYPE html>
-<html lang="en">
+<html lang="${isChineseUi() ? 'zh-cn' : 'en'}">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';" />
@@ -176,8 +177,8 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
 	  <div class="welcome">
       <div>
         <span class="welcome-mark" aria-hidden="true">Aa</span>
-	      <h1>Catalog preview</h1>
-	      <p>Choose Preview on a layout, component, or theme to see its visual and usage guidance.</p>
+	      <h1>${t('Catalog preview')}</h1>
+	      <p>${t('Open Preview on a layout, component, or theme to see how it looks and when to use it.')}</p>
       </div>
 	  </div>
 </body>
@@ -246,30 +247,30 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
     if (request.colorTheme) meta.push(`colorTheme: ${request.colorTheme}`);
     if (request.fontTheme) meta.push(`fontTheme: ${request.fontTheme}`);
     const metaHtml = meta.length
-      ? `<div class="meta" aria-label="Metadata">${meta.map(item => `<span class="pill">${escapeHtml(item)}</span>`).join('')}</div>`
+      ? `<div class="meta" aria-label="${t('Metadata')}">${meta.map(item => `<span class="pill">${escapeHtml(item)}</span>`).join('')}</div>`
       : '';
 
     let gallery: string;
     if (images.length === 0) {
       const message = request.kind === 'fontTheme'
-        ? 'Apply this typography preset to a deck to inspect its heading, body, and code fonts together.'
-        : 'This insertion helper has no separate screenshot. Its behavior and exact syntax are documented below.';
-      gallery = `<div class="empty"><strong>Visual preview unavailable</strong><span>${message}</span></div>`;
+        ? t('Apply this font theme to a deck to see its heading, body, and code fonts together.')
+        : t('This item has no separate screenshot. Its behavior and exact syntax are shown below.');
+      gallery = `<div class="empty"><strong>${t('No visual preview')}</strong><span>${message}</span></div>`;
     } else if (images.length === 1) {
-      gallery = `<figure class="single"><img src="${images[0]}" alt="Preview of ${escapeHtml(title)}" /></figure>`;
+      gallery = `<figure class="single"><img src="${images[0]}" alt="${escapeHtml(t('Preview of {0}', title))}" /></figure>`;
     } else {
-      const labels = ['Cover', 'Content', 'Section', 'Closing'];
+      const labels = [t('Cover'), t('Content'), t('Section'), t('Closing')];
       gallery = `<div class="gallery-grid">${images.map((src, index) => `
         <figure>
-          <img src="${src}" alt="${labels[index] || `Preview ${index + 1}`} view of ${escapeHtml(title)}" />
-          <figcaption>${labels[index] || `Preview ${index + 1}`}</figcaption>
+          <img src="${src}" alt="${escapeHtml(t('{0} view of {1}', labels[index] || t('Preview {0}', index + 1), title))}" />
+          <figcaption>${labels[index] || t('Preview {0}', index + 1)}</figcaption>
         </figure>
       `).join('')}</div>`;
     }
 
     const previewNote = details?.previewNote
       ?? (request.kind === 'layout' || request.kind === 'component'
-        ? 'Catalog screenshot baseline: Classic Blue · Classic font · Light content. The final deck follows your selected theme.'
+        ? t('Preview baseline: Classic Blue · Classic font · Light content. Your deck still uses the theme you choose.')
         : '');
 
     const paletteTheme = request.kind === 'colorTheme'
@@ -280,7 +281,7 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
     const palette = paletteTheme ? COLOR_THEME_PALETTES[paletteTheme] : undefined;
     const paletteHtml = palette
       ? `<section class="section" aria-labelledby="palette-heading">
-          <h2 id="palette-heading">Theme palette</h2>
+          <h2 id="palette-heading">${t('Theme palette')}</h2>
           ${renderPalette(palette)}
         </section>`
       : '';
@@ -289,13 +290,13 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
     const configurationHtml = renderConfiguration(details, request.kind);
     const snippetHtml = snippet
       ? `<section class="section" aria-labelledby="usage-heading">
-          <h2 id="usage-heading">Usage</h2>
+          <h2 id="usage-heading">${t('Usage')}</h2>
           <pre tabindex="0"><code>${snippet}</code></pre>
         </section>`
       : '';
 
     return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${isChineseUi() ? 'zh-cn' : 'en'}">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${csp} data:; style-src 'unsafe-inline';" />
@@ -434,7 +435,7 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
     ${metaHtml}
   </header>
   <section class="section" aria-labelledby="visual-heading">
-    <h2 id="visual-heading">Visual preview</h2>
+    <h2 id="visual-heading">${t('Visual preview')}</h2>
     ${gallery}
     ${previewNote ? `<p class="preview-note">${escapeHtml(previewNote)}</p>` : ''}
   </section>
@@ -449,11 +450,11 @@ export class PreviewViewProvider implements vscode.WebviewViewProvider {
 
 function kindLabel(kind: PreviewKind): string {
   switch (kind) {
-    case 'layout': return 'Layout catalog';
-    case 'component': return 'Component catalog';
-    case 'preset': return 'Theme preset';
-    case 'colorTheme': return 'Color theme';
-    case 'fontTheme': return 'Font theme';
+    case 'layout': return t('Layout catalog');
+    case 'component': return t('Component catalog');
+    case 'preset': return t('Theme preset');
+    case 'colorTheme': return t('Color theme');
+    case 'fontTheme': return t('Font theme');
   }
 }
 
@@ -462,21 +463,21 @@ function renderGuidance(details: PreviewDetails | undefined): string {
 
   const cards: string[] = [];
   if (details.useFor) {
-    cards.push(`<article class="guidance-card"><h2>Best for</h2><p>${escapeHtml(details.useFor)}</p></article>`);
+    cards.push(`<article class="guidance-card"><h2>${t('Best for')}</h2><p>${escapeHtml(details.useFor)}</p></article>`);
   }
   if (details.features?.length) {
-    cards.push(renderListCard('What it provides', details.features));
+    cards.push(renderListCard(t('What it includes'), details.features));
   }
   if (details.variants?.length) {
-    cards.push(renderListCard('Variants', details.variants));
+    cards.push(renderListCard(t('Variants'), details.variants));
   }
   if (details.tips?.length) {
-    cards.push(renderListCard('Usage tips', details.tips));
+    cards.push(renderListCard(t('Tips'), details.tips));
   }
   if (!cards.length) return '';
 
   return `<section class="section" aria-labelledby="guidance-heading">
-    <h2 id="guidance-heading">How to use it</h2>
+    <h2 id="guidance-heading">${t('How to use it')}</h2>
     <div class="guidance-grid">${cards.join('')}</div>
   </section>`;
 }
@@ -490,36 +491,36 @@ function renderConfiguration(details: PreviewDetails | undefined, kind: PreviewK
 
   const config = details?.config ?? [];
   const slots = details?.slots ?? [];
-  const configTitle = kind === 'layout' ? 'Frontmatter configuration' : 'Component props';
+  const configTitle = kind === 'layout' ? t('Frontmatter settings') : t('Component props');
   const scopeNote = kind === 'layout'
-    ? '<p class="config-scope">These are layout- and theme-specific keys. Standard Slidev frontmatter such as <code>layout</code>, <code>class</code>, and <code>transition</code> remains available on every slide.</p>'
+    ? `<p class="config-scope">${t('These settings belong to this layout or theme. Standard Slidev keys such as {0}, {1}, and {2} still work on every slide.', '<code>layout</code>', '<code>class</code>', '<code>transition</code>')}</p>`
     : '';
   const emptyText = kind === 'layout'
-    ? 'This layout has no layout-specific frontmatter props.'
-    : 'This component has no configurable props.';
+    ? t('This layout has no layout-specific settings.')
+    : t('This component has no configurable props.');
   const configBody = config.length
     ? `<div class="config-list">${config.map(renderConfigItem).join('')}</div>`
     : `<p class="config-empty">${emptyText}</p>`;
   const slotsBody = slots.length
     ? `<ul class="slot-list">${slots.map(slot => `<li><code>${escapeHtml(slot.name)}</code><span class="slot-description">${escapeHtml(slot.description)}</span></li>`).join('')}</ul>`
-    : '<p class="config-empty">No content slots.</p>';
+    : `<p class="config-empty">${t('No content slots.')}</p>`;
 
   return `<section class="section" aria-labelledby="configuration-heading">
     <h2 id="configuration-heading">${configTitle}</h2>
     ${scopeNote}
     ${configBody}
-    <h2 id="slots-heading" class="subheading">Content slots</h2>
+    <h2 id="slots-heading" class="subheading">${t('Content slots')}</h2>
     ${slotsBody}
   </section>`;
 }
 
 function renderConfigItem(item: CatalogConfigEntry): string {
-  const requirement = `<span>${item.required ? 'required' : 'optional'}</span>`;
+  const requirement = `<span>${item.required ? t('required') : t('optional')}</span>`;
   const defaultValue = item.default !== undefined
-    ? `<span>default: ${escapeHtml(item.default)}</span>`
+    ? `<span>${t('default')}: ${escapeHtml(item.default)}</span>`
     : '';
   const options = item.options?.length
-    ? `<span>values: ${item.options.map(escapeHtml).join(' | ')}</span>`
+    ? `<span>${t('values')}: ${item.options.map(escapeHtml).join(' | ')}</span>`
     : '';
 
   return `<article class="config-item">
@@ -531,11 +532,11 @@ function renderConfigItem(item: CatalogConfigEntry): string {
 
 function renderPalette(palette: ThemePalette): string {
   const swatches: Array<[string, string]> = [
-    ['Primary', palette.primary],
-    ['Primary light', palette.primaryLight],
-    ['Accent', palette.accent],
-    ['Background', palette.background],
-    ['Foreground', palette.foreground]
+    [t('Primary'), palette.primary],
+    [t('Primary light'), palette.primaryLight],
+    [t('Accent'), palette.accent],
+    [t('Background'), palette.background],
+    [t('Foreground'), palette.foreground]
   ];
 
   return `<div class="palette">${swatches.map(([label, color]) => `

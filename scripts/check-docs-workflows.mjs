@@ -1,9 +1,15 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
+import yaml from 'js-yaml'
 
 const root = path.resolve(new URL('..', import.meta.url).pathname)
 const docsRoot = path.join(root, 'docs')
 const failures = []
+const require = createRequire(import.meta.url)
+const slidevRequire = createRequire(require.resolve('@slidev/cli/package.json'))
+const { parse } = await import(pathToFileURL(slidevRequire.resolve('@slidev/parser')).href)
 
 const workflows = [
   'paper-talk',
@@ -65,6 +71,18 @@ function expectWorkflowLinks(locale, text) {
     expectIncludes(`${locale} workflows index`, text, `./${workflow}`)
 }
 
+async function checkLayoutLinks(file, text) {
+  const links = text.matchAll(/\]\((\.\.\/\.\.\/layouts\/[^)#]+)#([^)]+)\)/g)
+  for (const [, target, anchor] of links) {
+    const targetFile = path.resolve(path.dirname(file), `${target}.md`)
+    const targetText = await readText(targetFile)
+    expect(
+      targetText.includes(`{#${anchor}}`),
+      `${path.relative(root, file)} links to missing anchor ${target}#${anchor}`,
+    )
+  }
+}
+
 async function checkLocale(locale, config) {
   const localeRoot = path.join(docsRoot, locale)
   const home = await readText(path.join(localeRoot, 'index.md'))
@@ -109,6 +127,7 @@ async function checkLocale(locale, config) {
     expectIncludes(name, text, '../../components/')
     expect(/(?:npx -y slidev-theme-scholarly|pnpm exec sch) (?:init|snippet|workflow)/.test(text), `${name} should include an explicit Scholarly CLI command`)
     expect(!/^sch\b/m.test(text), `${name} should not rely on a globally installed sch binary`)
+    await checkLayoutLinks(file, text)
   }
 }
 
@@ -123,6 +142,8 @@ for (const [name, text] of [['README.md', rootReadme], ['README-zh.md', rootRead
 }
 
 const configSource = await readText(path.join(docsRoot, '.vitepress', 'config.ts'))
+expectIncludes('docs/.vitepress/config.ts', configSource, "srcExclude: ['superpowers/**']")
+expectIncludes('docs/.vitepress/config.ts', configSource, 'locales: {\n    en:')
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/en/guide/workflows/'")
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/zh/guide/workflows/'")
 expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/en/guide/theme-mode-contrast'")
@@ -131,6 +152,30 @@ expectIncludes('docs/.vitepress/config.ts', configSource, "link: '/zh/guide/them
 for (const [locale, config] of Object.entries(localeConfig))
   await checkLocale(locale, config)
 
+// Validate the examples readers copy, including duplicate YAML keys in headmatter.
+const pages = (await fs.readdir(docsRoot, { recursive: true }))
+  .map(file => file.replaceAll(path.sep, '/'))
+  .filter(file => /^(en|zh)\//.test(file) && file.endsWith('.md')).sort()
+expect(
+  JSON.stringify(pages.filter(file => file.startsWith('en/')).map(file => file.slice(3)))
+    === JSON.stringify(pages.filter(file => file.startsWith('zh/')).map(file => file.slice(3))),
+  'English and Chinese documentation should have matching pages',
+)
+let examples = 0
+for (const file of [...pages.map(file => path.join(docsRoot, file)), path.join(root, 'README.md'), path.join(root, 'README-zh.md')]) {
+  const source = await readText(file)
+  for (const match of source.matchAll(/^```(yaml|yml|markdown)\n([\s\S]*?)^```/gm)) {
+    const [, language, content] = match
+    try {
+      if (language === 'markdown') await parse(content)
+      else yaml.loadAll(content)
+      examples += 1
+    } catch (error) {
+      failures.push(`${path.relative(root, file)}:${source.slice(0, match.index).split('\n').length}: ${error.message}`)
+    }
+  }
+}
+
 if (failures.length) {
   console.error('Documentation workflow IA checks failed:')
   for (const failure of failures)
@@ -138,4 +183,4 @@ if (failures.length) {
   process.exit(1)
 }
 
-console.log('Documentation workflow IA checks passed.')
+console.log(`Documentation workflow IA checks passed: ${pages.length} localized pages, ${examples} parsed examples.`)

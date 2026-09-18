@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { t } from './localization';
 
 type CompletionResult =
   | vscode.CompletionItem[]
@@ -130,8 +131,8 @@ export class DevModeController implements vscode.Disposable {
         this.statusBar.command = 'slidev-scholarly.toggleDevMode';
       }
 
-      this.statusBar.text = '$(pulse) Scholarly Dev';
-      this.statusBar.tooltip = `Slidev Scholarly dev mode is enabled\nSlow threshold: ${this._slowThresholdMs}ms`;
+      this.statusBar.text = `$(pulse) ${t('Scholarly Dev')}`;
+      this.statusBar.tooltip = `${t('Slidev Scholarly dev mode is on')}\n${t('Slow threshold: {0}ms', this._slowThresholdMs)}`;
       this.statusBar.show();
       return;
     }
@@ -150,4 +151,3 @@ export class DevModeController implements vscode.Disposable {
     }
   }
 }
-

@@ -1,9 +1,9 @@
 <template>
-  <div class="slidev-layout agenda h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout agenda h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow flex items-center justify-center" :style="computedStyles">
       <div class="w-full max-w-3xl px-8">
-        <h1 class="text-3xl font-bold mb-10 text-center text-primary tracking-tight">
+        <h1 v-if="!hasHeader" class="text-3xl font-bold mb-10 text-center text-primary tracking-tight">
           {{ title || 'Agenda' }}
         </h1>
         <div class="space-y-4">
@@ -37,7 +37,7 @@ const props = defineProps<{
 }>()
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 const parsedItems = computed(() => props.items || [])
 const computedStyles = useFontSizeStyles()
 </script>

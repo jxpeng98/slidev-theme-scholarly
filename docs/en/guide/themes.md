@@ -4,567 +4,182 @@ title: Color & Typography Themes
 
 # Color & Typography Themes
 
-Slidev Theme Scholarly v2.0 introduces customizable color and typography themes to match your institution's branding or personal preferences.
+Choose a color palette and font pairing independently. Set both in the first YAML block of `slides.md`:
+
+```yaml
+---
+theme: scholarly
+themeConfig:
+  colorTheme: oxford-burgundy
+  fontTheme: traditional
+---
+```
+
+The default is `classic-blue` with `classic`. Names such as Oxford and Cambridge identify presets in this theme; they are not official university templates.
+
+## Color Themes
+
+| `colorTheme` | Primary | Accent | Light background |
+|---|---|---|---|
+| <span id="classic-academic-blue-default"></span>`classic-blue` | `#1e3a5f` | `#b8860b` | `#fdfbf7` |
+| <span id="oxford-burgundy"></span>`oxford-burgundy` | `#862633` | `#c5a572` | `#faf8f5` |
+| <span id="cambridge-green"></span>`cambridge-green` | `#00543c` | `#d4af37` | `#f8faf7` |
+| <span id="yale-blue"></span>`yale-blue` | `#0f4d92` | `#d4af37` | `#f7f9fc` |
+| <span id="princeton-orange"></span>`princeton-orange` | `#e87722` | `#1c1c1c` | `#fffbf5` |
+| <span id="nordic-blue"></span>`nordic-blue` | `#2e5266` | `#d4a762` | `#f5f8fa` |
+| <span id="warm-sepia"></span>`warm-sepia` | `#5d4037` | `#d4a574` | `#faf6f1` |
+| <span id="monochrome-professional"></span>`monochrome` | `#2d3748` | `#718096` | `#ffffff` |
+| <span id="high-contrast-accessibility"></span>`high-contrast` | `#000000` | `#0066cc` | `#ffffff` |
+
+These are palette values. Content and navigation modes also affect the colors used on a rendered slide. Check figures, links, and text against the final background, including when using `high-contrast`.
+
+## Typography Themes
+
+Each preset defines font stacks. The browser uses the first available font, so output may differ between machines. Choosing a preset does not install every font in its stack; ensure any required fonts are available before exporting.
+
+| `fontTheme` | Body style | Serif stack starts with | Sans-serif stack starts with |
+|---|---|---|---|
+| <span id="classic-palatino-default"></span>`classic` | Serif | Palatino Linotype, Book Antiqua, Palatino | Helvetica Neue, Helvetica, Arial |
+| <span id="modern-academica"></span>`modern` | Sans-serif | Georgia, Cambria | Source Sans Pro, Segoe UI, Roboto |
+| <span id="traditional-garamond"></span>`traditional` | Serif | Garamond, Baskerville | Gill Sans, Optima, Helvetica |
+| <span id="contemporary-sans"></span>`contemporary` | Sans-serif | Charter, Georgia, Cambria | Inter, SF Pro Display, Segoe UI |
+| <span id="humanist"></span>`humanist` | Sans-serif | Crimson Text, Libre Baskerville, Georgia | Open Sans, Noto Sans |
+| <span id="technical"></span>`technical` | Sans-serif | Computer Modern, Latin Modern | IBM Plex Sans, Roboto |
+| <span id="elegant-serif"></span>`elegant` | Serif | Cormorant Garamond, EB Garamond | Montserrat, Lato |
+| <span id="sans-default"></span>`sans-default` | Sans-serif | Georgia, Cambria | Inter, SF Pro Display, system fonts |
+
+## Combining Themes
+
+The CLI also provides four combined presets: `classic`, `oxford`, `cambridge`, and `modern`.
+
+```bash
+pnpm exec sch theme preset list
+pnpm exec sch theme preset apply oxford --file slides.md
+```
+
+To choose colors and fonts separately, edit `themeConfig` as shown above or use `pnpm exec sch theme apply oxford-burgundy --font traditional --file slides.md`.
+
+## Surface modes
+
+`colorTheme` selects the palette. `contentMode`, `chromeMode`, and `sectionMode` control the slide body, headers and controls, and section dividers. See [Theme Mode and Contrast](./theme-mode-contrast) for combinations and per-slide section overrides.
+
+## Custom Colors
+
+Place `themeColors` at the top level, beside `themeConfig`:
+
+```yaml
+---
+theme: scholarly
+themeConfig:
+  colorTheme: classic-blue
+themeColors:
+  primary: '#254b64'
+  accent: '#875d20'
+---
+```
+
+Supported keys are `primary`, `primaryLight`, `accent`, `bgWarm`, `textPrimary`, `headerBg`, `footerLeftBg`, `footerCenterBg`, and `footerRightBg`. These override palette CSS variables on the document root and body. Check the resulting foreground/background combinations in the modes you use.
 
 ## Theme Gallery
+
+Each row shows a cover, section, content, and quote slide using the named palette. These previews show one configuration; your content mode and installed fonts also affect the result.
 
 <div class="theme-gallery">
   <div class="theme-section">
     <h3>Classic Blue (Default)</h3>
     <div class="theme-slides">
-      <img src="/images/themes/classic-blue/1.png" alt="Classic Blue - Cover" />
-      <img src="/images/themes/classic-blue/2.png" alt="Classic Blue - Section" />
-      <img src="/images/themes/classic-blue/3.png" alt="Classic Blue - Content" />
-      <img src="/images/themes/classic-blue/4.png" alt="Classic Blue - Quote" />
+      <img src="/images/themes/classic-blue/1.png" alt="Classic Blue - Cover" loading="lazy" />
+      <img src="/images/themes/classic-blue/2.png" alt="Classic Blue - Section" loading="lazy" />
+      <img src="/images/themes/classic-blue/3.png" alt="Classic Blue - Content" loading="lazy" />
+      <img src="/images/themes/classic-blue/4.png" alt="Classic Blue - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Oxford Burgundy</h3>
     <div class="theme-slides">
-      <img src="/images/themes/oxford/1.png" alt="Oxford - Cover" />
-      <img src="/images/themes/oxford/2.png" alt="Oxford - Section" />
-      <img src="/images/themes/oxford/3.png" alt="Oxford - Content" />
-      <img src="/images/themes/oxford/4.png" alt="Oxford - Quote" />
+      <img src="/images/themes/oxford/1.png" alt="Oxford - Cover" loading="lazy" />
+      <img src="/images/themes/oxford/2.png" alt="Oxford - Section" loading="lazy" />
+      <img src="/images/themes/oxford/3.png" alt="Oxford - Content" loading="lazy" />
+      <img src="/images/themes/oxford/4.png" alt="Oxford - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Cambridge Green</h3>
     <div class="theme-slides">
-      <img src="/images/themes/cambridge/1.png" alt="Cambridge - Cover" />
-      <img src="/images/themes/cambridge/2.png" alt="Cambridge - Section" />
-      <img src="/images/themes/cambridge/3.png" alt="Cambridge - Content" />
-      <img src="/images/themes/cambridge/4.png" alt="Cambridge - Quote" />
+      <img src="/images/themes/cambridge/1.png" alt="Cambridge - Cover" loading="lazy" />
+      <img src="/images/themes/cambridge/2.png" alt="Cambridge - Section" loading="lazy" />
+      <img src="/images/themes/cambridge/3.png" alt="Cambridge - Content" loading="lazy" />
+      <img src="/images/themes/cambridge/4.png" alt="Cambridge - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Yale Blue</h3>
     <div class="theme-slides">
-      <img src="/images/themes/yale/1.png" alt="Yale - Cover" />
-      <img src="/images/themes/yale/2.png" alt="Yale - Section" />
-      <img src="/images/themes/yale/3.png" alt="Yale - Content" />
-      <img src="/images/themes/yale/4.png" alt="Yale - Quote" />
+      <img src="/images/themes/yale/1.png" alt="Yale - Cover" loading="lazy" />
+      <img src="/images/themes/yale/2.png" alt="Yale - Section" loading="lazy" />
+      <img src="/images/themes/yale/3.png" alt="Yale - Content" loading="lazy" />
+      <img src="/images/themes/yale/4.png" alt="Yale - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Princeton Orange</h3>
     <div class="theme-slides">
-      <img src="/images/themes/princeton/1.png" alt="Princeton - Cover" />
-      <img src="/images/themes/princeton/2.png" alt="Princeton - Section" />
-      <img src="/images/themes/princeton/3.png" alt="Princeton - Content" />
-      <img src="/images/themes/princeton/4.png" alt="Princeton - Quote" />
+      <img src="/images/themes/princeton/1.png" alt="Princeton - Cover" loading="lazy" />
+      <img src="/images/themes/princeton/2.png" alt="Princeton - Section" loading="lazy" />
+      <img src="/images/themes/princeton/3.png" alt="Princeton - Content" loading="lazy" />
+      <img src="/images/themes/princeton/4.png" alt="Princeton - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Nordic Blue</h3>
     <div class="theme-slides">
-      <img src="/images/themes/nordic/1.png" alt="Nordic - Cover" />
-      <img src="/images/themes/nordic/2.png" alt="Nordic - Section" />
-      <img src="/images/themes/nordic/3.png" alt="Nordic - Content" />
-      <img src="/images/themes/nordic/4.png" alt="Nordic - Quote" />
+      <img src="/images/themes/nordic/1.png" alt="Nordic - Cover" loading="lazy" />
+      <img src="/images/themes/nordic/2.png" alt="Nordic - Section" loading="lazy" />
+      <img src="/images/themes/nordic/3.png" alt="Nordic - Content" loading="lazy" />
+      <img src="/images/themes/nordic/4.png" alt="Nordic - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Monochrome</h3>
     <div class="theme-slides">
-      <img src="/images/themes/monochrome/1.png" alt="Monochrome - Cover" />
-      <img src="/images/themes/monochrome/2.png" alt="Monochrome - Section" />
-      <img src="/images/themes/monochrome/3.png" alt="Monochrome - Content" />
-      <img src="/images/themes/monochrome/4.png" alt="Monochrome - Quote" />
+      <img src="/images/themes/monochrome/1.png" alt="Monochrome - Cover" loading="lazy" />
+      <img src="/images/themes/monochrome/2.png" alt="Monochrome - Section" loading="lazy" />
+      <img src="/images/themes/monochrome/3.png" alt="Monochrome - Content" loading="lazy" />
+      <img src="/images/themes/monochrome/4.png" alt="Monochrome - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>Warm Sepia</h3>
     <div class="theme-slides">
-      <img src="/images/themes/sepia/1.png" alt="Sepia - Cover" />
-      <img src="/images/themes/sepia/2.png" alt="Sepia - Section" />
-      <img src="/images/themes/sepia/3.png" alt="Sepia - Content" />
-      <img src="/images/themes/sepia/4.png" alt="Sepia - Quote" />
+      <img src="/images/themes/sepia/1.png" alt="Sepia - Cover" loading="lazy" />
+      <img src="/images/themes/sepia/2.png" alt="Sepia - Section" loading="lazy" />
+      <img src="/images/themes/sepia/3.png" alt="Sepia - Content" loading="lazy" />
+      <img src="/images/themes/sepia/4.png" alt="Sepia - Quote" loading="lazy" />
     </div>
   </div>
 
   <div class="theme-section">
     <h3>High Contrast</h3>
     <div class="theme-slides">
-      <img src="/images/themes/high-contrast/1.png" alt="High Contrast - Cover" />
-      <img src="/images/themes/high-contrast/2.png" alt="High Contrast - Section" />
-      <img src="/images/themes/high-contrast/3.png" alt="High Contrast - Content" />
-      <img src="/images/themes/high-contrast/4.png" alt="High Contrast - Quote" />
+      <img src="/images/themes/high-contrast/1.png" alt="High Contrast - Cover" loading="lazy" />
+      <img src="/images/themes/high-contrast/2.png" alt="High Contrast - Section" loading="lazy" />
+      <img src="/images/themes/high-contrast/3.png" alt="High Contrast - Content" loading="lazy" />
+      <img src="/images/themes/high-contrast/4.png" alt="High Contrast - Quote" loading="lazy" />
     </div>
   </div>
 </div>
 
-<style>
-.theme-gallery {
-  margin: 2rem 0;
-}
-.theme-section {
-  margin-bottom: 3rem;
-  padding: 1.5rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-}
-.theme-section h3 {
-  margin: 0 0 1rem 0;
-  color: var(--vp-c-text-1);
-}
-.theme-slides {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-.theme-slides img {
-  width: 100%;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.theme-slides img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-}
-@media (max-width: 768px) {
-  .theme-slides {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 480px) {
-  .theme-slides {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
-
-## Color Themes
-
-Choose from 9 professionally designed color palettes:
-
-### Classic Academic Blue (Default)
-
-The default theme inspired by traditional academic institutions.
-
-```yaml
----
-theme: scholarly
-# Classic Blue is the default, no additional configuration needed
----
-```
-
-**Colors:**
-- Primary: `#1e3a5f` (Deep Academic Blue)
-- Accent: `#b8860b` (Academic Gold)
-- Background: `#fdfbf7` (Warm Ivory)
-
-### Oxford Burgundy
-
-Rich burgundy inspired by Oxford University.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: oxford-burgundy
----
-```
-
-**Colors:**
-- Primary: `#862633` (Oxford Burgundy)
-- Accent: `#c5a572` (Antique Gold)
-- Background: `#faf8f5` (Off-white)
-
-### Cambridge Green
-
-Classic green reminiscent of Cambridge University.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: cambridge-green
----
-```
-
-**Colors:**
-- Primary: `#00543c` (Cambridge Green)
-- Accent: `#d4af37` (Gold)
-
-### Yale Blue
-
-Traditional Yale blue for a distinguished look.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: yale-blue
----
-```
-
-**Colors:**
-- Primary: `#0f4d92` (Yale Blue)
-- Accent: `#d4af37` (Gold)
-
-### Princeton Orange
-
-Vibrant orange for energetic presentations.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: princeton-orange
----
-```
-
-**Colors:**
-- Primary: `#e87722` (Princeton Orange)
-- Accent: `#1c1c1c` (Black)
-
-### Monochrome Professional
-
-Clean, professional grayscale theme.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: monochrome
----
-```
-
-### Warm Sepia
-
-Warm, vintage-inspired sepia tones.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: warm-sepia
----
-```
-
-### Nordic Blue
-
-Cool, Scandinavian-inspired blue palette.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: nordic-blue
----
-```
-
-### High Contrast (Accessibility)
-
-Maximum contrast theme for accessibility needs. WCAG AAA compliant.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: high-contrast
----
-```
-
-**Colors:**
-- Primary: `#000000` (Black)
-- Accent: `#0066cc` (Blue)
-- Background: `#ffffff` (White)
-
-## Typography Themes
-
-Choose from 8 carefully curated font combinations:
-
-### Classic Palatino (Default)
-
-Traditional academic typography with Palatino serif and Helvetica sans.
-
-```yaml
----
-theme: scholarly
-# Classic is the default
----
-```
-
-**Fonts:**
-- Serif: Palatino Linotype, Book Antiqua, Palatino
-- Sans: Helvetica Neue, Helvetica, Arial
-
-### Modern Academica
-
-Contemporary academic styling with Georgia and Source Sans Pro.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: modern
----
-```
-
-**Fonts:**
-- Serif: Georgia, Cambria
-- Sans: Source Sans Pro, Segoe UI, Roboto
-
-### Traditional Garamond
-
-Classic book typography with Garamond.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: traditional
----
-```
-
-**Fonts:**
-- Serif: Garamond, Baskerville
-- Sans: Gill Sans, Optima, Helvetica
-
-### Contemporary Sans
-
-Clean, modern sans-serif focused design.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: contemporary
----
-```
-
-**Fonts:**
-- Serif: Charter, Georgia, Cambria
-- Sans: Inter, SF Pro Display, Segoe UI
-
-### Humanist
-
-Warm, readable humanist typefaces.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: humanist
----
-```
-
-**Fonts:**
-- Serif: Crimson Text, Libre Baskerville, Georgia
-- Sans: Open Sans, Noto Sans
-
-### Technical
-
-LaTeX-inspired technical typography.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: technical
----
-```
-
-**Fonts:**
-- Serif: Computer Modern, Latin Modern
-- Sans: IBM Plex Sans, Roboto
-
-### Elegant Serif
-
-Refined, elegant serif typography.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: elegant
----
-```
-
-**Fonts:**
-- Serif: Cormorant Garamond, EB Garamond
-- Sans: Montserrat, Lato
-
-### Sans Default
-
-Sans-serif focused typography for modern presentations.
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  fontTheme: sans-default
----
-```
-
-**Fonts:**
-- Sans: Inter, SF Pro Display, system-ui
-- Serif: Georgia, Cambria (for fallback)
-
-## Combining Themes
-
-You can combine color and typography themes:
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  colorTheme: oxford-burgundy
-  fontTheme: traditional
-  contentMode: light # Ordinary slide and readable content surfaces
-  chromeMode: dark   # Header, footer, TOC, and toolbar surfaces
-  sectionMode: dark  # Section slide appearance
----
-```
-
-## Surface Modes
-
-Control readable slide surfaces, player chrome, and section dividers separately:
-
-| Option | Controls | Values |
-|-------|----------|--------|
-| `contentMode` | Ordinary slide canvas, quote, code, table, footnotes, Highlight, Block, and Theorem | `light`, `dark` |
-| `chromeMode` | Header, footer, page number, navigation buttons, TOC, and toolbar surfaces | `light`, `dark`, `match`, `inverse` |
-| `sectionMode` | Default section slide appearance | `light`, `dark`, `match`, `inverse` |
-
-Legacy `colorMode` remains a deprecated alias for `contentMode`. When
-`contentMode` is omitted, Scholarly first checks `colorMode`, then follows
-Slidev's current light/dark state. For compatibility, legacy `colorMode` also
-drives `chromeMode` when neither `contentMode` nor `chromeMode` is set.
-
-### Migration Examples
-
-```yaml
-# Before
-themeConfig:
-  colorTheme: classic-blue
-  colorMode: dark
-  sectionMode: dark
-
-# After
-themeConfig:
-  colorTheme: classic-blue
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
-```
-
-```yaml
-# All-light deck
-themeConfig:
-  colorTheme: high-contrast
-  contentMode: light
-  chromeMode: match
-  sectionMode: match
-```
-
-```yaml
-# All-dark deck
-themeConfig:
-  colorTheme: nordic-blue
-  contentMode: dark
-  chromeMode: match
-  sectionMode: match
-```
-
-### Global Defaults
-
-Set it in headmatter:
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  contentMode: light
-  chromeMode: dark
-  sectionMode: dark
----
-```
-
-### Priority Chain
-
-```
-contentMode > legacy colorMode > Slidev light/dark state
-chromeMode > legacy colorMode when contentMode is absent > 'dark'
-sectionMode > 'dark'
-```
-
-| Value | Description |
-|-------|-------------|
-| `light` | Light surfaces with dark text |
-| `dark` | Dark surfaces with light text |
-| `match` | Follow `contentMode` |
-| `inverse` | Invert `contentMode`; available for `chromeMode` and `sectionMode` |
-
-## Section Mode
-
-Control the appearance of section layout slides independently:
-
-### Global Default
-
-Set a default for all section slides in your headmatter:
-
-```yaml
----
-theme: scholarly
-themeConfig:
-  sectionMode: inverse  # light, dark, match, or inverse
----
-```
-
-### Per-Slide Override
-
-Override the global setting on individual section slides:
-
-```yaml
----
-layout: section
-sectionMode: dark  # light, dark, match, or inverse
----
-
-# This Section Uses Dark Mode
-```
-
-### Priority Chain
-
-```
-Per-slide sectionMode > Global themeConfig.sectionMode > 'dark' (default)
-```
-
-| Value | Description |
-|-------|-------------|
-| `dark` | Dark gradient background with light text (default) |
-| `light` | Light background with dark text |
-| `match` | Use the resolved `contentMode` |
-| `inverse` | Use the opposite of the resolved `contentMode` |
-
-## Custom Colors
-
-Override specific colors while using a theme:
-
-```yaml
----
-theme: scholarly
-themeColors:
-  primary: '#your-custom-color'
-  accent: '#your-accent-color'
----
-```
-
-Use `themeColors` for custom colors. Preset values come from the CSS rule selected by `themeConfig.colorTheme`; explicit `themeColors` overrides are mirrored to both `<html>` and `<body>` so they remain authoritative across Slidev surfaces.
 
 ## Live Examples
 
-Each color theme has a dedicated example file demonstrating the theme in action:
+After [cloning and installing the repository](../contributing), run a palette example from the repository root:
 
 | Theme | Command |
 |-------|---------|
@@ -580,38 +195,5 @@ Each color theme has a dedicated example file demonstrating the theme in action:
 
 The decks in `examples/` use `theme: ../` so they work when running Slidev from this repository. If you installed the theme from npm, change it to `theme: scholarly`.
 
-## Implementation Details
-
-Themes are applied using CSS custom properties and data attributes:
-
-- Color themes use `[data-color-theme="theme-name"]`
-- Font themes use `[data-font-theme="theme-name"]`
-- Content mode uses `[data-content-mode="dark/light"]`
-- Chrome mode uses `[data-chrome-mode="dark/light"]`
-- Section mode uses `[data-section-mode="dark/light"]`
-
-`data-color-mode` is kept as a legacy mirror of `data-content-mode`.
-
-This allows for seamless theme switching without reloading the presentation.
-
-### Semantic Token Groups
-
-Scholarly keeps readable content colors separate from the theme's identity colors. When creating a new color theme or adjusting light/dark behavior, prefer these token groups instead of hard-coded component colors:
-
-| Token group | Purpose | Examples |
-|-------------|---------|----------|
-| Chrome tokens | Header, footer, toolbar, and navigation surfaces | `--scholarly-chrome-bg`, `--scholarly-toolbar-hover` |
-| Content tokens | Readable slide body surfaces, borders, code, quote, and table colors | `--scholarly-content-surface`, `--scholarly-code-bg`, `--scholarly-quote-fg` |
-| Accent tokens | Theme identity colors provided by color presets or `themeColors` | `--slidev-theme-primary`, `--slidev-theme-primary-light`, `--scholarly-accent` |
-| Semantic tokens | Variant-specific readable states for highlights, blocks, and theorems | `--scholarly-highlight-warning-bg`, `--scholarly-block-info-border`, `--scholarly-theorem-definition-accent` |
-| Interaction tokens | Hover, focus, pinned, active, and muted UI feedback | `--scholarly-toolbar-hover`, `--scholarly-content-fg-muted` |
-
-The key rule is that a background token and its foreground token must move together. For example, `Highlight` uses `--scholarly-highlight-*-bg` and `--scholarly-highlight-*-fg`, so a dark highlight background cannot accidentally inherit dark body text in light mode.
-
-## Regenerate Theme Screenshots
-
-To export the first 4 slides of every theme example into `images/themes/*` (and sync to `docs/public/images/themes/*`), run:
-
-```bash
-pnpm run export:theme-images
-```
+Theme implementation and preview regeneration are documented in
+[Contributing](../contributing#theme-and-preview-changes).

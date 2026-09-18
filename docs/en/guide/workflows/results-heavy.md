@@ -4,17 +4,19 @@ title: Results-Heavy Presentation Workflow
 
 # Results-Heavy Presentation Workflow
 
-Use this path when the main story is driven by metrics, ablations, datasets, and
-experimental comparisons.
+When metrics, ablations, datasets, and experiment comparisons carry the story,
+start with the `conference-lightning` template:
 
 ```bash
 npx -y slidev-theme-scholarly init results-talk --template conference-lightning
+cd results-talk
+pnpm install
 ```
 
 ## Recommended layouts
 
-- [result-highlight](../../layouts/academic#result-highlight---result-highlight) for the headline finding.
-- [experiment-grid](../../layouts/academic#experiment-grid---experiment-grid) for grouped studies.
+- [result-highlight](../../layouts/academic#result-highlight) for the headline finding.
+- [experiment-grid](../../layouts/academic#experiment-grid) for grouped studies.
 - [results](../../layouts/academic#results) for dashboard-style summaries.
 - [fact](../../layouts/emphasis#fact) for one decisive number.
 - [figure](../../layouts/content#figure) for chart-focused slides.
@@ -29,13 +31,15 @@ npx -y slidev-theme-scholarly init results-talk --template conference-lightning
 
 ## Useful snippets
 
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
+
 ```bash
 pnpm exec sch snippet append results --file slides.md
 pnpm exec sch snippet append block --file slides.md
 ```
 
-Turn repeated result claims into a MetricGrid or EvidenceBlock instead of
-duplicating ad-hoc boxes.
+If the same result pattern appears more than once, use a MetricGrid or
+EvidenceBlock instead of rebuilding the box on every slide.
 
 ## Theme mode and contrast
 

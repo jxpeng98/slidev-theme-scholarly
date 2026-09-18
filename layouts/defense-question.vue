@@ -107,7 +107,7 @@ const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.val
   margin: 0 0 0.35rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 750;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -124,7 +124,7 @@ const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.val
 .defense-question-source {
   margin: 0.45rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.76rem;
+  font-size: var(--scholarly-text-sm);
 }
 
 .defense-question-grid {

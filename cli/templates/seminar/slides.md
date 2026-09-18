@@ -27,18 +27,10 @@ Speaker Name
 layout: agenda
 title: Agenda
 items:
-  - label: 1
-    title: Context
-    description: Why the problem matters
-  - label: 2
-    title: Related Work
-    description: Where the current project fits
-  - label: 3
-    title: Method
-    description: What we changed and measured
-  - label: 4
-    title: Discussion
-    description: What feedback would help most
+  - 'Context: Why the problem matters'
+  - 'Related Work: Where the current project fits'
+  - 'Method: What we changed and measured'
+  - 'Discussion: What feedback would help most'
 ---
 
 ---

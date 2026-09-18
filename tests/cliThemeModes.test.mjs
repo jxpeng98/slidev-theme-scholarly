@@ -280,3 +280,73 @@ themeConfig:
   assert.equal(checks['theme-config-section-mode'].severity, 'ok')
   assert.equal(checks['theme-config-section-mode'].summary, 'MATCH')
 })
+
+test('theme apply preserves YAML mappings and refuses invalid settings without writing', async () => {
+  const { default: yaml } = await import('js-yaml')
+  const { file } = makeTempSlides()
+  for (const themeConfig of [
+    'themeConfig: # palette\n  fontTheme: traditional\n  outlineToc: false\n  custom: {colorMode: light, nested: [1, 2]}',
+    'themeConfig: {fontTheme: traditional, outlineToc: false, custom: {colorMode: light, nested: [1, 2]}}',
+  ]) {
+    const original = `---\ntheme: scholarly\n${themeConfig}\nother: {keep: true}\n---\n\n# Body\n`
+    writeFileSync(file, original)
+    const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
+    assert.equal(result.status, 0, result.stderr)
+    const updated = readFileSync(file, 'utf8')
+    if (themeConfig.includes('# palette')) assert.match(updated, /# palette/)
+    const head = yaml.load(updated.match(/^---\n([\s\S]*?)\n---/)[1])
+    assert.deepEqual(head.themeConfig, { fontTheme: 'traditional', outlineToc: false, custom: { colorMode: 'light', nested: [1, 2] }, colorTheme: 'yale-blue' })
+    assert.deepEqual(head.other, { keep: true })
+    assert.ok(updated.endsWith('\n\n# Body\n'))
+  }
+  for (const invalid of ['themeConfig: {}\nthemeConfig: {}', 'themeConfig: []', 'themeConfig: broken', 'themeConfig: [']) {
+    const original = `---\n${invalid}\n---\n\n# Untouched\n`
+    writeFileSync(file, original)
+    assert.notEqual(runCli(['theme', 'apply', 'yale-blue', '--file', file]).status, 0)
+    assert.equal(readFileSync(file, 'utf8'), original)
+  }
+})
+
+
+test('theme editing preserves comments, quotes, aliases, and CRLF slide bodies', async () => {
+  const { default: yaml } = await import('js-yaml')
+  const { file } = makeTempSlides()
+  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette # local override\n'
+  writeFileSync(file, '---\r\n' + source.replace(/\n/g, '\r\n') + '---\r\n# Body\r\n')
+  const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
+  assert.equal(result.status, 0, result.stderr)
+  const updated = readFileSync(file, 'utf8')
+  for (const text of ['# Author notes', '# reusable', '# local override', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text)
+  assert.ok(updated.endsWith('---\r\n# Body\r\n'))
+  assert.doesNotMatch(updated, /(?<!\r)\n/)
+  const data = yaml.load(updated.split('---')[1])
+  assert.equal(data.defaults.colorTheme, 'classic-blue')
+  assert.equal(data.themeConfig.colorTheme, 'yale-blue')
+})
+
+test('doctor enforces the supported Vite Node version boundaries', () => {
+  for (const [version, severity] of [['20.18.9','error'], ['20.19.0','ok'], ['21.7.0','error'], ['22.11.0','error'], ['22.12.0','ok'], ['24.0.0','ok']]) {
+    const result = spawnSync(process.execPath, ['--input-type=module', '-e', `
+      Object.defineProperty(process.versions, 'node', {value: ${JSON.stringify(version)}});
+      process.argv = [process.execPath, ${JSON.stringify(cliPath)}, 'doctor', '--json'];
+      await import(${JSON.stringify(cliPath)});
+    `], {cwd: rootDir, encoding: 'utf8'})
+    const check = JSON.parse(result.stdout).checks.find(check => check.id === 'node-version')
+    assert.equal(check.severity, severity, version)
+    assert.equal(check.required, '^20.19.0 || >=22.12.0')
+  }
+})
+
+
+test('theme apply creates mappings for absent and comment-only frontmatter', () => {
+  const { file } = makeTempSlides()
+  for (const original of ['', '# Body\n', '---\n# Keep comment\n---\n# Body\n']) {
+    writeFileSync(file, original)
+    const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
+    assert.equal(result.status, 0, result.stderr)
+    const updated = readFileSync(file, 'utf8')
+    assert.match(updated, /colorTheme: yale-blue/)
+    if (original.includes('# Body')) assert.ok(updated.endsWith('# Body\n'))
+    if (original.includes('# Keep comment')) assert.ok(updated.includes('# Keep comment'))
+  }
+})

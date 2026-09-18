@@ -18,7 +18,7 @@ authors:
 
 # High Contrast Theme
 
-Maximum accessibility for all audiences
+High-contrast slides for readability checks
 
 ---
 layout: section
@@ -44,7 +44,7 @@ Over 1 billion people worldwide live with some form of disability. Accessible de
 
 <Block type="success" title="Compliance">
 
-WCAG 2.1 Level AAA compliance ensures the widest possible audience can access content.
+WCAG contrast targets provide measurable checks, but the final result depends on every text and background pair in the deck.
 
 </Block>
 
@@ -137,14 +137,14 @@ title: Compliance Checklist
 
 ## Accessibility Requirements
 
-| Criterion | AAA Requirement | This Theme |
+| Criterion | AAA target | Final-deck check |
 |-----------|-----------------|------------|
-| Text Contrast | 7:1 | ✓ 21:1 |
-| Large Text | 4.5:1 | ✓ 21:1 |
+| Normal text contrast | 7:1 | Verify each color pair |
+| Large text contrast | 4.5:1 | Verify each color pair |
 | Focus Visible | Required | ✓ Yes |
 | Text Resize | 200% | ✓ Supported |
 
-<Highlight type="success">This theme meets WCAG 2.1 Level AAA standards.</Highlight>
+<Highlight type="success">Use the palette as a starting point, then verify every final text and background pair.</Highlight>
 
 ---
 layout: center

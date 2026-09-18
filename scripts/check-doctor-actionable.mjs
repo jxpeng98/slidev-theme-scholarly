@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
+import { tmpdir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
@@ -23,7 +24,7 @@ function runDoctor(cwd, args = []) {
 }
 
 function withProject(files, fn) {
-  const dir = mkdtempSync(path.join('/private/tmp', 'scholarly-doctor-actionable-'))
+  const dir = mkdtempSync(path.join(tmpdir(), 'scholarly-doctor-actionable-'))
   try {
     for (const [name, content] of Object.entries(files)) {
       const target = path.join(dir, name)

@@ -4,7 +4,7 @@ title: ContributionList
 
 # ContributionList
 
-`ContributionList` displays numbered contribution claims with optional evidence markers. Use it for title-adjacent contribution slides or paper summary sections.
+`ContributionList` breaks a paper's contributions into numbered claims and can attach evidence to each one.
 
 ![ContributionList example](/images/components/contribution-list.png)
 

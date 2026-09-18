@@ -1,8 +1,10 @@
 # __PROJECT_NAME__
 
-Presentation scaffold created by `scholarly`.
+This starter contains a minimal Scholarly presentation.
 
-## Run
+Use Node.js 24 LTS and pnpm 10.
+
+## Start
 
 ```bash
 pnpm install
@@ -17,4 +19,6 @@ pnpm run build
 
 ## Notes
 
-- Use `layout: references` for an automatically generated bibliography slide
+- This minimal template has no bibliography file. To add citations, create `references.bib`, set `bibFile`, and add a `layout: references` slide.
+
+Edit `slides.md` while the preview runs. `pnpm run build` writes a static site to `dist/`; upload that directory to your host to publish it. For PDF export, install Playwright and Chromium first. See the [quick-start guide](https://scholarly-docs.jxpeng.dev/en/guide/quick-start#check-and-export).

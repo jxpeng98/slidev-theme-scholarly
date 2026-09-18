@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout timeline h-full flex flex-col">
+  <div class="slidev-layout flow-header-layout timeline h-full flex flex-col">
     <ScholarlyHeader v-if="hasHeader" class="flex-shrink-0" />
     <div class="flex-grow flex flex-col justify-center px-12 py-4" :style="computedStyles">
       <h1 v-if="title" class="mb-10 text-center text-3xl font-bold text-primary">{{ title }}</h1>
@@ -44,7 +44,7 @@ defineProps<{
 }>()
 
 const { $frontmatter } = useSlideContext()
-const hasHeader = computed(() => $frontmatter.value?.title || $frontmatter.value?.subtitle)
+const hasHeader = computed(() => $frontmatter?.title || $frontmatter?.subtitle)
 const computedStyles = useFontSizeStyles()
 </script>
 

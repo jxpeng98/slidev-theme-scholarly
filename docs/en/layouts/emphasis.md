@@ -4,9 +4,9 @@ title: Emphasis Layouts
 
 # Emphasis Layouts
 
-Layouts for highlighting key messages, quotes, and statistics.
+These layouts make a quote, number, or conclusion the focus of the slide.
 
-## quote - Quotations
+## quote - Quotations {#quote}
 
 **Use for:** Highlighting memorable quotes
 
@@ -15,11 +15,11 @@ Layouts for highlighting key messages, quotes, and statistics.
 ```markdown
 ---
 layout: quote
-author: Richard Feynman
-source: The Character of Physical Law, 1965
+author: Research team
+source: Illustrative research note
 ---
 
-The first principle is that you must not fool yourself.
+Report the conditions under which the result holds.
 ```
 
 **Props:**
@@ -33,7 +33,7 @@ The first principle is that you must not fool yourself.
 
 ---
 
-## fact - Single Statistic
+## fact - Single Statistic {#fact}
 
 **Use for:** Highlighting important numbers or facts
 
@@ -55,27 +55,26 @@ Accuracy on benchmark dataset
 
 **What it shows:**
 
-- Very large gradient-colored number
+- Large number
 - Smaller description below
-- Glass effect with decorative elements
+- Simple decorative elements
 
 ---
 
-## statement - Important Statement
+## statement - Important Statement {#statement}
 
-**Use for:** Bold, impactful statements that need emphasis
+**Use for:** One sentence the audience should remember
 
 ![Statement Layout Example](/images/layouts/statement.png)
 
 ```markdown
 ---
 layout: statement
-author: Einstein
 ---
 
-# Imagination is more important than knowledge
+# State the claim with its scope
 
-The true sign of intelligence is not knowledge but imagination.
+Specify the setting in which your evidence supports the conclusion.
 ```
 
 **Props:**
@@ -89,9 +88,9 @@ The true sign of intelligence is not knowledge but imagination.
 
 ---
 
-## focus - Focused Statement
+## focus - Focused Statement {#focus}
 
-**Use for:** Highlight a single important statement or question with visual emphasis
+**Use for:** One important statement or question
 
 ![Focus Layout Example](/images/layouts/focus.png)
 

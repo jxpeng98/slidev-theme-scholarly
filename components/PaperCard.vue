@@ -118,7 +118,7 @@ const authorsText = computed(() => {
   display: block;
   margin-bottom: 0.12rem;
   color: var(--paper-accent);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
@@ -140,7 +140,7 @@ const authorsText = computed(() => {
   border-radius: 999px;
   background: var(--paper-soft-bg);
   color: var(--paper-accent);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
   line-height: 1.2;
 }
@@ -149,7 +149,7 @@ const authorsText = computed(() => {
 .paper-contribution {
   margin: 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.4;
 }
 
@@ -165,7 +165,7 @@ const authorsText = computed(() => {
   border-radius: 999px;
   background: var(--paper-soft-bg);
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 600;
   line-height: 1.2;
 }
@@ -180,7 +180,7 @@ const authorsText = computed(() => {
 
 .paper-content {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.4;
 }
 
@@ -209,7 +209,7 @@ const authorsText = computed(() => {
 
 .paper-link {
   color: var(--paper-accent);
-  font-size: 0.75rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 650;
   text-decoration: none;
 }

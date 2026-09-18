@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
+import { t } from './localization';
 
 type SharedCitationReference = {
   key: string
@@ -157,7 +158,7 @@ export async function analyzeCitationDiagnostics(
   if (!configuredBibFile && !defaultBibExists) {
     issues.push(createIssue(
       'missing-setup',
-      'Citations found, but no bibFile frontmatter or references.bib file was found.',
+      t('This file contains citations, but no bibFile setting or references.bib file was found.'),
       firstCitationRange,
       { bibFile: './references.bib', bibFilePath: defaultBibPath }
     ));
@@ -166,7 +167,7 @@ export async function analyzeCitationDiagnostics(
   if (!citationModule.hasReferencesSlide(content)) {
     issues.push(createIssue(
       'missing-references-slide',
-      'Citations found, but no references slide exists. Add a slide with layout: references.',
+      t('This file contains citations, but no references slide. Add a slide with layout: references.'),
       firstCitationRange
     ));
   }
@@ -179,7 +180,7 @@ export async function analyzeCitationDiagnostics(
   if (!fs.existsSync(bibFilePath)) {
     issues.push(createIssue(
       'missing-bib',
-      `Missing bibliography file: ${bibFile}`,
+      t('Bibliography file not found: {0}', bibFile),
       bibRange,
       { bibFile, bibFilePath }
     ));
@@ -191,7 +192,7 @@ export async function analyzeCitationDiagnostics(
   for (const duplicateKey of duplicateKeys) {
     issues.push(createIssue(
       'duplicate-key',
-      `Duplicate BibTeX key: ${duplicateKey}`,
+      t('Duplicate BibTeX key: {0}', duplicateKey),
       bibRange,
       { key: duplicateKey, bibFile, bibFilePath }
     ));
@@ -204,7 +205,7 @@ export async function analyzeCitationDiagnostics(
 
     issues.push(createIssue(
       'unresolved-key',
-      `Unresolved citation key: ${ref.key}`,
+      t('Citation key not found: {0}', ref.key),
       rangeFromReference(document, ref),
       { key: ref.key, bibFile, bibFilePath }
     ));
@@ -305,7 +306,7 @@ function createAddBibFileAction(
   document: vscode.TextDocument,
   diagnostic: vscode.Diagnostic
 ): vscode.CodeAction {
-  const action = new vscode.CodeAction('Add bibFile: ./references.bib', vscode.CodeActionKind.QuickFix);
+  const action = new vscode.CodeAction(t('Add bibFile: ./references.bib'), vscode.CodeActionKind.QuickFix);
   const edit = new vscode.WorkspaceEdit();
   const text = document.getText();
 
@@ -325,7 +326,7 @@ function createReferencesSlideAction(
   document: vscode.TextDocument,
   diagnostic: vscode.Diagnostic
 ): vscode.CodeAction {
-  const action = new vscode.CodeAction('Add references slide', vscode.CodeActionKind.QuickFix);
+  const action = new vscode.CodeAction(t('Add a references slide'), vscode.CodeActionKind.QuickFix);
   const edit = new vscode.WorkspaceEdit();
   const text = document.getText();
   const prefix = text.endsWith('\n') ? '\n' : '\n\n';
@@ -351,12 +352,12 @@ function createBibliographyFileAction(
   if (!bibFilePath)
     return undefined;
 
-  const action = new vscode.CodeAction(`Create bibliography file: ${bibFile}`, vscode.CodeActionKind.QuickFix);
+  const action = new vscode.CodeAction(t('Create bibliography file: {0}', bibFile), vscode.CodeActionKind.QuickFix);
   const uri = vscode.Uri.file(bibFilePath);
   const edit = new vscode.WorkspaceEdit();
 
   edit.createFile(uri, { ignoreIfExists: true });
-  edit.insert(uri, new vscode.Position(0, 0), '% Add BibTeX entries here.\n');
+  edit.insert(uri, new vscode.Position(0, 0), `% ${t('Add BibTeX entries here.')}\n`);
 
   action.edit = edit;
   action.diagnostics = [diagnostic];
@@ -370,7 +371,7 @@ function createBibStubAction(
   if (!data?.key || !data.bibFilePath)
     return undefined;
 
-  const action = new vscode.CodeAction(`Append BibTeX stub for ${data.key}`, vscode.CodeActionKind.QuickFix);
+  const action = new vscode.CodeAction(t('Add a BibTeX stub for {0}', data.key), vscode.CodeActionKind.QuickFix);
   const uri = vscode.Uri.file(data.bibFilePath);
   const edit = new vscode.WorkspaceEdit();
   const current = fs.existsSync(data.bibFilePath) ? fs.readFileSync(data.bibFilePath, 'utf8') : '';

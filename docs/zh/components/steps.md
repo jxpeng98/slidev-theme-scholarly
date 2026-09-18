@@ -4,7 +4,7 @@ title: Steps
 
 # Steps 组件
 
-`Steps` 组件显示带有编号步骤和连接线的工作流程或过程。
+`Steps` 按顺序展示流程，并可突出当前步骤。
 
 ## 基本用法
 
@@ -16,7 +16,7 @@ title: Steps
 ]" />
 ```
 
-或使用语法糖：
+也可以写成 Markdown 指令：
 
 ```markdown
 :::steps{:steps='[{"title":"步骤 1","description":"说明"}]' :activeStep="1"}:::
@@ -31,7 +31,7 @@ title: Steps
   { title: '数据收集', description: '收集并预处理数据集' },
   { title: '模型设计', description: '设计高效的架构' },
   { title: '训练', description: '使用优化的流程训练' },
-  { title: '评估', description: '与基线进行对比' }
+  { title: '评估', description: '与基线对比' }
 ]" :activeStep="2" />
 ```
 

@@ -4,7 +4,7 @@ title: Citations
 
 # Citations
 
-The theme has built-in support for academic citations using BibTeX files. Citations are automatically collected and bibliography is generated.
+Scholarly reads a local BibTeX file, collects the keys cited in your slides, and builds a reference list. Set up the bibliography file first, then add citations and a reference slide. Manual notes and Markdown footnotes are described separately below.
 
 ## Configuration
 
@@ -28,6 +28,28 @@ bibShowNum: false        # Show numbered markers in bibliography (e.g. [1])
 - `mla`
 - `chicago-author-date`
 
+## BibTeX File Example
+
+Create `references.bib` beside `slides.md`. The keys in this sample are used in the examples below:
+
+```bibtex
+@article{lecun2015deep,
+  title={Deep learning},
+  author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
+  journal={Nature},
+  volume={521},
+  pages={436--444},
+  year={2015}
+}
+
+@inproceedings{vaswani2017attention,
+  title={Attention is all you need},
+  author={Vaswani, Ashish and others},
+  booktitle={NeurIPS},
+  year={2017}
+}
+```
+
 ## Basic Usage
 
 ### Parenthetical Citations
@@ -35,10 +57,10 @@ bibShowNum: false        # Show numbered markers in bibliography (e.g. [1])
 Use `@citekey` for parenthetical citations:
 
 ```markdown
-Deep learning has revolutionized AI @lecun2015deep.
+A review of deep learning describes these methods @lecun2015deep.
 ```
 
-Renders as: Deep learning has revolutionized AI (LeCun et al., 2015).
+With APA style: A review of deep learning describes these methods (LeCun et al., 2015).
 
 ### Narrative Citations
 
@@ -52,27 +74,47 @@ Renders as: Vaswani et al. (2017) introduced the Transformer architecture.
 
 ### Multiple Citations
 
+Use several keys when a sentence refers to more than one paper. Every key must exist in the bibliography:
+
 ```markdown
-Recent advances @smith2023deep @wang2022attention have shown...
+These papers discuss neural network architectures @lecun2015deep @vaswani2017attention.
 ```
 
-### Grouped Citations
+## Bibliography
 
-Place multiple BibTeX keys in the same sentence when one claim is supported by several papers:
+Add a references slide:
 
 ```markdown
-Efficient adaptation is commonly evaluated with grouped evidence @smith2023deep @wang2022attention.
+---
+layout: references
+---
 ```
 
-### Footnote-like Citation Note
+The theme builds the bibliography from the citations used in your slides.
 
-For a short manual note that behaves like a footnote or reading annotation, use `<Cite :inline="false">`.
-This is not connected to the BibTeX bibliography; it is for manual context.
+If the slide body is empty or contains only headings and comments, the theme inserts the bibliography automatically.
+
+If you want custom placement inside a references slide, add `[[bibliography]]` exactly where the list should appear.
+
+You do not need a project-level `vite.config.ts`; Scholarly registers the citation hooks from the theme package.
+
+## Pagination
+
+Create one references slide for each page. `perPage` limits the entries on a slide; it does not create additional slides automatically:
 
 ```markdown
-<Cite :inline="false" author="Smith et al." year="2026">
-Reports all primary metrics as five-seed averages with confidence intervals.
-</Cite>
+---
+layout: references
+perPage: 5
+page: 1
+---
+
+---
+layout: references
+perPage: 5
+page: 2
+title: "References (continued)"
+---
 ```
 
 ## Markdown Footnotes
@@ -91,7 +133,7 @@ In Slidev's interactive view, the theme applies academic footnote styling automa
 - Click the marker to pin the popover
 - Press `Esc` or click outside to close it
 
-You can set a global default in the headmatter:
+Set the global default in the deck headmatter:
 
 ```yaml
 ---
@@ -99,7 +141,7 @@ footnoteDisplay: hover-only
 ---
 ```
 
-And override it per slide with frontmatter:
+Override it on an individual slide with frontmatter:
 
 ```markdown
 ---
@@ -120,30 +162,22 @@ Priority order:
 
 When you print or export slides, footnotes fall back to the normal footnote block at the bottom of the slide.
 
-## Bibliography
+## Cross-Slide Anchor Jumps
 
-Add a references slide:
+In Slidev's interactive view, Scholarly turns internal `href="#..."` links into slide-aware jumps:
 
-```markdown
----
-layout: references
----
-```
+- In-text BibTeX citations can jump to the matching bibliography entry, even when the references list is on another slide
+- Generic internal links such as `[Jump](#appendix-proof)` work across slides when the target is declared with `## Appendix {#appendix-proof}`, `::anchor{#appendix-proof}`, or an explicit `id="appendix-proof"`
+- After jumping, a floating `Back to source` button appears so you can return to the previous citation or link position
 
-The bibliography is automatically generated from all citations used in your slides.
-
-If the slide body is empty, or only contains headings/comments, the theme injects the bibliography automatically.
-
-If you want custom placement inside a references slide, add `[[bibliography]]` exactly where the list should appear.
-
-Normal theme usage does not require a project-level `vite.config.ts`; Scholarly registers the citation hooks from the theme package itself.
+This behavior is designed for live presentations and local browser viewing. Print and export outputs keep the normal static content.
 
 ## Doctor Diagnostics
 
 Run the doctor when citations do not render as expected:
 
 ```bash
-npx -y slidev-theme-scholarly doctor
+pnpm exec sch doctor
 ```
 
 The citation checks report:
@@ -162,60 +196,9 @@ Common warnings:
 - References slide: [WARN] missing; add layout: references
 ```
 
-## Internal Anchor Jumps
-
-In Slidev's interactive view, Scholarly now upgrades internal `href="#..."` links into slide-aware jumps:
-
-- In-text BibTeX citations can jump to the matching bibliography entry, even when the references list is on another slide
-- Generic internal links such as `[Jump](#appendix-proof)` work across slides when the target is declared with `## Appendix {#appendix-proof}`, `::anchor{#appendix-proof}`, or an explicit `id="appendix-proof"`
-- After jumping, a floating `Back to source` button appears so you can return to the previous citation or link position
-
-This behavior is designed for live presentations and local browser viewing. Print and export outputs keep the normal static content.
-
-## Pagination
-
-For long reference lists, use pagination:
-
-```markdown
----
-layout: references
-perPage: 5
-page: 1
----
-
----
-layout: references
-perPage: 5
-page: 2
-title: "References (continued)"
----
-```
-
-## BibTeX File Example
-
-Create a `references.bib` file in your project root:
-
-```bibtex
-@article{lecun2015deep,
-  title={Deep learning},
-  author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey},
-  journal={Nature},
-  volume={521},
-  pages={436--444},
-  year={2015}
-}
-
-@inproceedings{vaswani2017attention,
-  title={Attention is all you need},
-  author={Vaswani, Ashish and others},
-  booktitle={NeurIPS},
-  year={2017}
-}
-```
-
 ## Cite Component (Manual)
 
-The `<Cite>` component is a lightweight helper for manual citation notes (non-BibTeX). For BibTeX citations, prefer `@citekey` / `!@citekey`.
+Use the lightweight `<Cite>` component for manual notes that do not belong in BibTeX. For formal citations, prefer `@citekey` or `!@citekey`.
 
 ### Author-Year Marker (Legacy)
 
@@ -248,3 +231,12 @@ Optionally set a fixed `id`:
 Reference item here.
 </Cite>
 ```
+
+### Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `id` | `string \| number` | automatic | Fixed numeric marker or key |
+| `inline` | `boolean` | `true` | Uses inline rather than block presentation |
+| `author` | `string` | - | Author text for a manual author-year marker |
+| `year` | `string \| number` | - | Year for a manual author-year marker |

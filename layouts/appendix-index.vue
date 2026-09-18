@@ -98,7 +98,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -116,7 +116,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.45;
 }
 
@@ -158,7 +158,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   height: 2.1rem;
   background: var(--slidev-theme-primary);
   color: var(--scholarly-content-on-primary);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
 }
 
 .appendix-index-page {
@@ -167,7 +167,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
   border: 1px solid var(--scholarly-content-border);
   background: var(--scholarly-content-surface-muted);
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
 }
 
 .appendix-index-copy h2 {
@@ -181,7 +181,7 @@ const normalizedItems = computed(() => props.items.length ? props.items : [
 .appendix-index-copy p {
   margin: 0.22rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   line-height: 1.45;
 }
 

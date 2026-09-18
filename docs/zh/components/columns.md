@@ -4,7 +4,7 @@ title: Columns
 
 # Columns 组件
 
-`Columns` 组件创建灵活的多列布局。
+`Columns` 将正文分成两至四列，适合并列比较或组织相关内容。
 
 ## 基本用法
 
@@ -22,7 +22,7 @@ title: Columns
 </Columns>
 ```
 
-或使用语法糖：
+也可以写成 Markdown 指令：
 
 ```markdown
 :::columns{columns="2" gap="2rem"}

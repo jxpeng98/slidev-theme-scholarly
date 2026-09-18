@@ -7,9 +7,9 @@
       :subtitle="headerSubtitle"
     />
     <main class="experiment-grid-main" :class="{ 'has-header': hasHeader }" :style="computedStyles">
-      <section class="experiment-grid-intro">
+      <section v-if="eyebrow || showHeading || description" class="experiment-grid-intro">
         <p v-if="eyebrow" class="experiment-grid-eyebrow">{{ eyebrow }}</p>
-        <h1>{{ heading }}</h1>
+        <h1 v-if="showHeading">{{ heading }}</h1>
         <p v-if="description" class="experiment-grid-description">{{ description }}</p>
       </section>
 
@@ -78,7 +78,7 @@ const props = withDefaults(defineProps<{
   metricLabel?: string
   noteLabel?: string
 }>(), {
-  eyebrow: 'Experiment Grid',
+  eyebrow: undefined,
   cols: 2,
   setupLabel: 'Setup',
   metricLabel: 'Metric',
@@ -97,6 +97,7 @@ const headerTitle = computed(() => props.title || frontmatter.value?.title || ''
 const headerSubtitle = computed(() => props.subtitle || frontmatter.value?.subtitle || '')
 const hasHeader = computed(() => Boolean(headerTitle.value || headerSubtitle.value))
 const heading = computed(() => props.heading || headerTitle.value || 'Experiment Grid')
+const showHeading = computed(() => !hasHeader.value || heading.value !== headerTitle.value)
 const normalizedExperiments = computed(() => props.experiments.length ? props.experiments : [
   { name: 'Ablation', setup: 'Remove one module at a time', result: '-2.1', metric: 'accuracy points', note: 'Largest drop from routing module' },
   { name: 'Robustness', setup: 'Evaluate across shifted domains', result: '+1.4', metric: 'macro F1', note: 'Stable under moderate shift' },
@@ -107,13 +108,17 @@ const gridStyle = computed(() => ({
 </script>
 
 <style scoped>
+.slidev-layout.experiment-grid {
+  padding: 0;
+}
+
 .experiment-grid-main {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 0.95rem;
+  gap: 0.75rem;
   padding: 2rem 2.5rem calc(var(--scholarly-footer-height) + 1rem);
-  overflow: auto;
 }
 
 .experiment-grid-main.has-header {
@@ -124,7 +129,7 @@ const gridStyle = computed(() => ({
   margin: 0 0 0.3rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.7rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -142,11 +147,12 @@ const gridStyle = computed(() => ({
   max-width: 58rem;
   margin: 0.35rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: 1.125rem;
   line-height: 1.45;
 }
 
 .experiment-grid-cards {
+  grid-row: 2;
   display: grid;
   grid-template-columns: repeat(var(--scholarly-experiment-grid-cols), minmax(0, 1fr));
   gap: 0.85rem;
@@ -162,15 +168,14 @@ const gridStyle = computed(() => ({
 }
 
 .experiment-grid-card {
-  padding: 0.9rem;
-  overflow: auto;
+  padding: 0.75rem;
 }
 
 .experiment-grid-card-header {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.45rem;
 }
 
 .experiment-grid-card-header span {
@@ -182,7 +187,7 @@ const gridStyle = computed(() => ({
   background: var(--slidev-theme-primary);
   color: var(--scholarly-content-on-primary);
   font-family: var(--scholarly-font-sans);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 800;
 }
 
@@ -190,42 +195,50 @@ const gridStyle = computed(() => ({
   margin: 0;
   color: var(--scholarly-content-fg, var(--scholarly-text-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.96rem;
+  font-size: 1.125rem;
   line-height: 1.2;
 }
 
 .experiment-grid-card dl {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.35rem;
   margin: 0;
+}
+
+.experiment-grid-card dl > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
 }
 
 .experiment-grid-card dt {
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.62rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 750;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 .experiment-grid-card dd {
-  margin: 0.12rem 0 0;
+  margin: 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.72rem;
-  line-height: 1.45;
+  font-size: var(--scholarly-text-sm);
+  line-height: 1.3;
 }
 
 .experiment-grid-card dd strong {
   color: var(--scholarly-content-fg, var(--scholarly-text-primary));
-  font-size: 1rem;
+  font-size: 1.4rem;
   margin-right: 0.25rem;
 }
 
 .experiment-grid-body {
-  padding: 0.75rem 0.9rem;
-  background: var(--scholarly-content-surface-muted);
+  grid-row: 3;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--scholarly-content-fg-muted);
+  font-size: 1.125rem;
 }
 
 .experiment-grid-body :deep(p) {

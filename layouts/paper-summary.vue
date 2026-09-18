@@ -120,7 +120,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
   margin: 0 0 0.35rem;
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
   font-family: var(--scholarly-font-sans);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -138,7 +138,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
 .paper-summary-meta {
   margin-top: 0.45rem;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
 }
 
 .paper-summary-meta,
@@ -173,7 +173,7 @@ const metaItems = computed(() => [props.venue, props.year, props.status, props.d
   border-radius: 999px;
   background: var(--scholarly-content-surface-muted);
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
-  font-size: 0.62rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
 }
 

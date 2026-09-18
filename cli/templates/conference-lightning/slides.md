@@ -7,7 +7,7 @@ aspectRatio: 16/9
 lang: en
 themeConfig:
   colorTheme: high-contrast
-  fontTheme: sans
+  fontTheme: sans-default
   chromeMode: dark
   sectionMode: dark
   outlineToc: false

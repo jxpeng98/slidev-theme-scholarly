@@ -4,19 +4,21 @@ title: Paper Talk Workflow
 
 # Paper Talk Workflow
 
-Use this path for a conference presentation, lab meeting, or reading-session
-talk centered on one paper and its contribution.
+For a conference talk, lab meeting, or reading session about one paper, start
+with the `paper-talk` template:
 
 ```bash
 npx -y slidev-theme-scholarly init paper-session --template paper-talk
+cd paper-session
+pnpm install
 ```
 
 ## Recommended layouts
 
-- [paper-summary](../../layouts/academic#paper-summary---paper-reading-summary) for the paper snapshot.
-- [method-pipeline](../../layouts/academic#method-pipeline---method-pipeline) for the approach.
-- [result-highlight](../../layouts/academic#result-highlight---result-highlight) for the primary result.
-- [limitation](../../layouts/academic#limitation---limitation) when you need a balanced caveat.
+- [paper-summary](../../layouts/academic#paper-summary) for the paper snapshot.
+- [method-pipeline](../../layouts/academic#method-pipeline) for the approach.
+- [result-highlight](../../layouts/academic#result-highlight) for the primary result.
+- [limitation](../../layouts/academic#limitation) when you need a balanced caveat.
 - [references](../../layouts/academic#references) for the bibliography.
 
 ## Recommended components
@@ -29,14 +31,16 @@ npx -y slidev-theme-scholarly init paper-session --template paper-talk
 
 ## Useful snippets
 
+Run these from the new project directory. They append to `slides.md`; review the added content before continuing.
+
 ```bash
 pnpm exec sch snippet append cite --file slides.md
 pnpm exec sch snippet append methodology --file slides.md
 pnpm exec sch snippet append results --file slides.md
 ```
 
-Use the VS Code sidebar previews when deciding whether a paper section needs a
-layout or a component.
+The VS Code sidebar previews can help you decide whether a section needs a full
+layout or only a component.
 
 ## Theme mode and contrast
 

@@ -52,17 +52,17 @@ cols: 2
 experiments:
   - name: Visual QA
     setup: Theme matrix across modes
-    result: 72
+    result: '72'
     metric: screenshots
     note: Covers quote, code, table, and highlight states
   - name: Citation QA
     setup: Doctor and VS Code diagnostics
-    result: 5
+    result: '5'
     metric: issue classes
     note: Catches missing setup and unresolved keys
   - name: Template QA
     setup: Initialize every curated workflow
-    result: 5
+    result: '5'
     metric: templates
     note: Validates package replacement and references
   - name: User Fit

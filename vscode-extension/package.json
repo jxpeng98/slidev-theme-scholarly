@@ -1,8 +1,8 @@
 {
   "name": "slidev-scholarly-snippets",
-  "displayName": "Slidev Scholarly Snippets",
-  "description": "Quick snippets and templates for Slidev Theme Scholarly",
-  "version": "1.4.1",
+  "displayName": "Slidev Scholarly",
+  "description": "%extension.description%",
+  "version": "1.5.0",
   "publisher": "jxpeng98",
   "icon": "images/icon-256.png",
   "engines": {
@@ -49,6 +49,7 @@
     "onCommand:slidev-scholarly.preview"
   ],
   "main": "./out/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "viewsContainers": {
       "secondarySidebar": [
@@ -62,39 +63,39 @@
     "views": {
       "slidev-scholarly": [
         {
+          "id": "scholarly-templates",
+          "name": "%view.templates%",
+          "icon": "$(new-file)"
+        },
+        {
           "id": "scholarly-layouts",
-          "name": "Layouts",
+          "name": "%view.layouts%",
           "icon": "$(layout)"
         },
         {
           "id": "scholarly-components",
-          "name": "Components",
+          "name": "%view.components%",
           "icon": "$(symbol-method)"
         },
         {
-          "id": "scholarly-templates",
-          "name": "Templates",
-          "icon": "$(file-code)"
-        },
-        {
-          "id": "scholarly-themes",
-          "name": "Themes",
-          "icon": "$(paintcan)"
-        },
-        {
           "id": "scholarly-references",
-          "name": "References",
+          "name": "%view.references%",
           "icon": "$(book)"
         },
         {
+          "id": "scholarly-themes",
+          "name": "%view.themes%",
+          "icon": "$(paintcan)"
+        },
+        {
           "id": "scholarly-cli",
-          "name": "CLI",
+          "name": "%view.cli%",
           "icon": "$(terminal)"
         },
         {
           "type": "webview",
           "id": "scholarly-preview",
-          "name": "Preview",
+          "name": "%view.preview%",
           "icon": "$(eye)",
           "visibility": "hidden"
         }
@@ -103,112 +104,134 @@
     "commands": [
       {
         "command": "slidev-scholarly.insertLayout",
-        "title": "Insert Layout",
+        "title": "%command.insertLayout%",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.insertComponent",
-        "title": "Insert Component",
+        "title": "%command.insertComponent%",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.newPresentation",
-        "title": "New Scholarly Presentation",
+        "title": "%command.createPresentation%",
+        "category": "Slidev Scholarly",
         "icon": "$(new-file)"
       },
       {
         "command": "slidev-scholarly.insertCitation",
-        "title": "Insert Citation",
+        "title": "%command.insertCitation%",
+        "category": "Slidev Scholarly",
         "icon": "$(quote)"
       },
       {
         "command": "slidev-scholarly.insertInternalAnchor",
-        "title": "Insert Internal Anchor",
+        "title": "%command.insertAnchor%",
+        "category": "Slidev Scholarly",
         "icon": "$(symbol-key)"
       },
       {
         "command": "slidev-scholarly.insertAnchorReference",
-        "title": "Insert Internal Anchor Reference",
+        "title": "%command.insertAnchorReference%",
+        "category": "Slidev Scholarly",
         "icon": "$(link)"
       },
       {
         "command": "slidev-scholarly.insertBibKey",
-        "title": "Insert BibTeX Key",
+        "title": "%command.insertBibKey%",
+        "category": "Slidev Scholarly",
         "icon": "$(add)"
       },
       {
         "command": "slidev-scholarly.insertPaperSummary",
-        "title": "Insert Paper Summary",
+        "title": "%command.insertPaperSummary%",
+        "category": "Slidev Scholarly",
         "icon": "$(file-text)"
       },
       {
         "command": "slidev-scholarly.insertAnchorKey",
-        "title": "Insert Anchor Key",
+        "title": "%command.insertAnchorKey%",
+        "category": "Slidev Scholarly",
         "icon": "$(link)"
       },
       {
         "command": "slidev-scholarly.applyThemePreset",
-        "title": "Apply Theme Preset",
+        "title": "%command.applyThemePreset%",
+        "category": "Slidev Scholarly",
         "icon": "$(wand)"
       },
       {
         "command": "slidev-scholarly.setColorTheme",
-        "title": "Set Color Theme",
+        "title": "%command.setColorTheme%",
+        "category": "Slidev Scholarly",
         "icon": "$(symbol-color)"
       },
       {
         "command": "slidev-scholarly.setFontTheme",
-        "title": "Set Font Theme",
+        "title": "%command.setFontTheme%",
+        "category": "Slidev Scholarly",
         "icon": "$(text-size)"
       },
       {
         "command": "slidev-scholarly.setContentMode",
-        "title": "Set Content Mode",
+        "title": "%command.setContentMode%",
+        "category": "Slidev Scholarly",
         "icon": "$(color-mode)"
       },
       {
         "command": "slidev-scholarly.setChromeMode",
-        "title": "Set Chrome Mode",
+        "title": "%command.setChromeMode%",
+        "category": "Slidev Scholarly",
         "icon": "$(layout-menubar)"
       },
       {
         "command": "slidev-scholarly.setSectionMode",
-        "title": "Set Section Mode",
+        "title": "%command.setSectionMode%",
+        "category": "Slidev Scholarly",
         "icon": "$(split-vertical)"
       },
       {
         "command": "slidev-scholarly.openSidebar",
-        "title": "Open Slidev Scholarly Sidebar",
+        "title": "%command.openSidebar%",
+        "category": "Slidev Scholarly",
         "icon": "$(layout-sidebar-left)"
       },
       {
         "command": "slidev-scholarly.openGuiBuilder",
-        "title": "Open GUI Builder",
+        "title": "%command.openDeckBuilder%",
+        "category": "Slidev Scholarly",
         "icon": "$(layout)"
       },
       {
         "command": "slidev-scholarly.refreshReferences",
-        "title": "Refresh References",
+        "title": "%command.refreshReferences%",
+        "category": "Slidev Scholarly",
         "icon": "$(refresh)"
       },
       {
         "command": "slidev-scholarly.cliAction",
-        "title": "Run Scholarly CLI Action",
+        "title": "%command.runCliAction%",
+        "category": "Slidev Scholarly",
         "icon": "$(terminal)"
       },
       {
         "command": "slidev-scholarly.cliMenu",
-        "title": "Scholarly CLI Quick Actions",
+        "title": "%command.openCliActions%",
+        "category": "Slidev Scholarly",
         "icon": "$(terminal-bash)"
       },
       {
         "command": "slidev-scholarly.toggleDevMode",
-        "title": "Slidev Scholarly: Toggle Dev Mode",
+        "title": "%command.toggleDevMode%",
+        "category": "Slidev Scholarly",
         "icon": "$(debug)"
       },
       {
         "command": "slidev-scholarly.preview",
-        "title": "Preview",
+        "title": "%command.previewItem%",
+        "category": "Slidev Scholarly",
         "icon": "$(eye)"
       }
     ],
@@ -334,13 +357,13 @@
         "slidevScholarly.devMode.enabled": {
           "type": "boolean",
           "default": false,
-          "description": "Enable extension development mode with performance diagnostics and timing logs."
+          "description": "%config.devMode%"
         },
         "slidevScholarly.devMode.slowThresholdMs": {
           "type": "number",
           "default": 25,
           "minimum": 1,
-          "description": "Mark operations slower than this threshold (ms) as SLOW in dev mode."
+          "description": "%config.slowThreshold%"
         }
       }
     }
@@ -350,13 +373,17 @@
     "sync-previews": "node ./scripts/sync-previews.mjs",
     "sync-snippets": "node ./scripts/sync-snippets.mjs",
     "vscode:prepublish": "npm run sync-previews && npm run sync-snippets && npm run compile",
-    "compile": "npm run sync-shared-data && npm run sync-snippets && tsc -p ./",
-    "watch": "npm run sync-shared-data && npm run sync-snippets && tsc -watch -p ./",
+    "compile": "npm run sync-shared-data && npm run sync-snippets && node scripts/copy-yaml-runtime.mjs && tsc -p ./",
+    "watch": "npm run sync-shared-data && npm run sync-snippets && node scripts/copy-yaml-runtime.mjs && tsc -watch -p ./",
     "test": "node --test test/*.test.mjs",
     "lint": "eslint src --ext ts",
     "package": "vsce package",
+    "check:package": "node scripts/check-vsix.mjs",
     "publish": "vsce publish",
     "publish:pre": "vsce publish --pre-release"
+  },
+  "vsce": {
+    "dependencies": false
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
@@ -365,7 +392,9 @@
     "@typescript-eslint/parser": "^8.61.1",
     "@vscode/vsce": "3.9.2",
     "eslint": "^10.5.0",
-    "typescript": "^6.0.3"
+    "js-yaml": "4.2.0",
+    "typescript": "^6.0.3",
+    "yaml": "2.9.0"
   },
   "repository": {
     "type": "git",

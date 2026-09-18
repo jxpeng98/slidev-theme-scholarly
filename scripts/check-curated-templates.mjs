@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { mkdtempSync, rmSync } from 'node:fs'
 import path from 'node:path'
+import { tmpdir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
@@ -65,6 +66,16 @@ function readText(file) {
 const listResult = runCli(['template', 'list', '--json'])
 expect(listResult.status === 0, `template list --json should exit 0, got ${listResult.status}`)
 
+const themes = JSON.parse(readText(path.join(root, 'shared', 'themes.json')))
+const validFontThemes = new Set(themes.fontThemes.map(theme => theme.id))
+for (const entry of fs.readdirSync(path.join(root, 'cli', 'templates'), { withFileTypes: true })) {
+  if (!entry.isDirectory())
+    continue
+  const slides = readText(path.join(root, 'cli', 'templates', entry.name, 'slides.md'))
+  const fontTheme = slides.match(/^\s*fontTheme:\s*([^\s#]+)/m)?.[1]
+  expect(!fontTheme || validFontThemes.has(fontTheme), `${entry.name} should use a valid fontTheme, got ${fontTheme}`)
+}
+
 let listedTemplates = []
 try {
   listedTemplates = JSON.parse(listResult.stdout || '[]')
@@ -78,7 +89,7 @@ for (const template of expectedTemplates) {
   expect(Boolean(item?.description), `${template.name} should have a description`)
 }
 
-const tempRoot = mkdtempSync(path.join('/private/tmp', 'scholarly-curated-templates-'))
+const tempRoot = mkdtempSync(path.join(tmpdir(), 'scholarly-curated-templates-'))
 
 try {
   for (const template of expectedTemplates) {
@@ -118,6 +129,12 @@ try {
       expect(citation.hasReferencesSlide, `${template.name} should include a references slide`)
       expect(citation.duplicateKeys.length === 0, `${template.name} should not include duplicate BibTeX keys`)
       expect(citation.unresolvedKeys.length === 0, `${template.name} should resolve all citation keys`)
+      const bibliography = path.join(target, citation.bibFile)
+      const originalBib = 'User bibliography: keep this content.\n'
+      fs.writeFileSync(bibliography, originalBib)
+      const retry = runCli(['init', target, '--template', template.name])
+      expect(retry.status !== 0, `${template.name} should refuse a nonempty project without --force`)
+      expect(readText(bibliography) === originalBib, `${template.name} must preserve an existing bibliography`)
     }
   }
 

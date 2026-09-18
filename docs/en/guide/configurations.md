@@ -4,8 +4,7 @@ title: Configuration Guide
 
 # Configuration Guide
 
-Most decks only need a small frontmatter block. Add it at the top of
-`slides.md`:
+Put deck-wide settings in the first YAML block of `slides.md` (headmatter). Later YAML blocks belong to individual slides. Appearance presets go under `themeConfig`; fields such as `authors`, `bibFile`, `fontsize`, and `themeColors` stay at the top level:
 
 ```yaml
 ---
@@ -33,9 +32,9 @@ themeConfig:
 | --- | --- | --- |
 | `theme` | Enable the theme | `scholarly` |
 | `lang` | Theorem and proof labels | `en`, `zh` |
-| `aspectRatio` | Slide dimensions | `16/9`, `4/3` |
+| `aspectRatio` | Slide dimensions | `16/9`, `4/3` (default: `4/3`) |
 | `bibFile` | BibTeX source | `./references.bib` |
-| `bibStyle` | Bibliography style | `apa`, `ieee`, `chicago` |
+| `bibStyle` | Bibliography style | `apa`, `ieee`, `chicago-author-date` |
 
 ## Authors And Footer
 
@@ -58,11 +57,11 @@ Footer defaults:
 | Middle | Empty unless `footerMiddle` is set |
 | Right | Page number |
 
-Override text with `footerLeft`, `footerMiddle`, or `footerRight`.
+Override text with `footerLeft`, `footerMiddle`, or `footerRight`. Use the structured `authors` array to show names and affiliations on the cover.
 
 ## Theme Config
 
-Use `themeConfig` for visual and player behavior:
+Use `themeConfig` to control the deck's appearance and player behavior:
 
 ```yaml
 themeConfig:
@@ -81,18 +80,17 @@ themeConfig:
 | `beamerNav` | Footer navigation buttons in play mode | `true` |
 | `outlineToc` | Footer TOC button and outline panel | `false` |
 | `outlineTocOpen` | Open the outline panel on load | `false` |
-| `footnoteDisplay` | `both`, `hover-only`, or `notes-only` | `both` |
+| `footnoteDisplay` | Legacy location; prefer the top-level field described below | `both` |
 
 Color and surface controls:
 
 | Option | Controls | Default |
 | --- | --- | --- |
 | `colorTheme` | Brand palette: primary, accent, paper tone, and base text color | `classic-blue` |
-| `contentMode` | Ordinary slide canvas, readable content surfaces, quote, code, table, footnotes, Highlight, Block, and Theorem | Follows `colorMode`, then Slidev dark state |
-| `chromeMode` | Header, footer, page number, navigation buttons, TOC, and toolbar surfaces | `dark` |
+| `contentMode` | Slide background, text, code, tables, and content components | Follows `colorMode`, then Slidev dark state |
+| `chromeMode` | Header, footer, page numbers, navigation, outline, and toolbars | `dark` |
 | `sectionMode` | Default appearance for `layout: section` slides | `dark` |
 | `colorMode` | Legacy alias for `contentMode` | Deprecated |
-| `themeColors` | Advanced CSS variable overrides for brand and footer colors | unset |
 
 Notes:
 
@@ -105,18 +103,7 @@ Notes:
 
 ## Color Surface Modes
 
-Slidev `colorSchema` controls the player-level light/dark toggle. Scholarly
-splits theme surfaces into explicit controls:
-
-- `contentMode` controls the ordinary slide canvas and readable content surfaces.
-- `chromeMode` controls headers, footers, page numbers, navigation, TOC, and toolbar surfaces.
-- `sectionMode` controls `layout: section` slides and accepts `light`, `dark`, `match`, and `inverse`.
-
-`contentMode` accepts `light` and `dark`. `chromeMode` accepts `light`, `dark`,
-`match`, and `inverse`. Legacy `colorMode` is still supported as an alias for
-`contentMode`, and also preserves old chrome behavior when neither
-`contentMode` nor `chromeMode` is set, but new decks should use `contentMode`
-and `chromeMode`.
+Use `contentMode` for body content, `chromeMode` for headers and controls, and `sectionMode` for chapter dividers. If `contentMode` is unset, content follows Slidev's light/dark state, subject to the legacy `colorMode` fallback.
 
 ```yaml
 colorSchema: both
@@ -127,25 +114,24 @@ themeConfig:
   sectionMode: dark
 ```
 
-Common patterns:
-
-| Goal | Configuration |
-| --- | --- |
-| Light academic content with dark chrome and section dividers | `contentMode: light`, `chromeMode: dark`, `sectionMode: dark` |
-| All-light deck | `contentMode: light`, `chromeMode: match`, `sectionMode: match` |
-| All-dark deck | `contentMode: dark`, `chromeMode: match`, `sectionMode: match` |
-| Accessibility-first deck | `colorTheme: high-contrast` and explicit surface modes |
+See [Theme Mode and Contrast](./theme-mode-contrast) for supported values, precedence, and per-slide section overrides. For custom palette values, use top-level [`themeColors`](./themes#custom-colors).
 
 ## Theorem Numbering
 
 Customize automatic theorem numbers:
 
 ```yaml
-theoremNumberFormat: '{number}'      # 1, 2, 3
-theoremNumberFormat: '({number})'    # (1), (2), (3)
-theoremNumberFormat: '[{number}]'    # [1], [2], [3]
-theoremNumberFormat: '{number}.'     # 1., 2., 3.
+theoremNumberFormat: '({number})'
 ```
+
+Choose one format:
+
+| Format | Output |
+|---|---|
+| `'{number}'` | 1, 2, 3 |
+| `'({number})'` | (1), (2), (3) |
+| `'[{number}]'` | [1], [2], [3] |
+| `'{number}.'` | 1., 2., 3. |
 
 Use the `number` prop for one manual number, or `:autoNumber="false"` for an
 unnumbered statement.
@@ -174,8 +160,8 @@ fontsize:
 # Custom Sized Slide
 ```
 
-Accepted values include `px`, `rem`, `em`, and numbers. Numbers are treated as
-pixels. Per-slide settings override global settings.
+Values can use `px`, `rem`, or `em`; plain numbers are treated as pixels.
+Per-slide settings take precedence over the global settings.
 
 For cover-only typography, use scoped CSS on the cover slide:
 

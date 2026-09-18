@@ -2,17 +2,17 @@
 title: Theorem
 ---
 
-# Theorem Components
+# Theorem
 
-## What are Theorem Components?
+## When to use it
 
-In academic presentations, you often need to present formal statements like theorems, lemmas, or definitions. This theme provides a special component that:
+Use `Theorem` for theorems, lemmas, definitions, proofs, and other formal statements. It includes:
 
-- Automatically numbers your theorems
-- Styles them professionally
-- Supports multiple languages
+- Automatic numbering
+- Consistent styling
+- English and Chinese labels
 
-### Basic Usage
+## Basic Usage
 
 ```markdown
 <Theorem type="theorem" title="Pythagorean Theorem">
@@ -24,11 +24,11 @@ $$a^2 + b^2 = c^2$$
 </Theorem>
 ```
 
-**Result:** A nicely formatted box with "Theorem 1 (Pythagorean Theorem)" as the header and your content inside.
+The rendered heading is “Theorem 1 (Pythagorean Theorem).”
 
-### Available Types
+## Available Types
 
-Each type has a different color:
+Each type uses a distinct color:
 
 | Type | English | Chinese | Color |
 |------|---------|---------|-------|
@@ -45,14 +45,14 @@ Each type has a different color:
 
 `proof` and `note` are rendered without automatic numbering by default. `claim` participates in the same auto-numbering flow as the other numbered theorem types.
 
-### Examples
+## Examples
 
 **Simple theorem:**
 
 ```markdown
 <Theorem type="theorem">
 
-Every bounded sequence has a convergent subsequence.
+Every bounded sequence of real numbers has a convergent subsequence.
 
 </Theorem>
 ```
@@ -62,7 +62,7 @@ Every bounded sequence has a convergent subsequence.
 ```markdown
 <Theorem type="definition" title="Continuity">
 
-A function $f$ is continuous at $x = a$ if...
+A function $f$ is continuous at $x=a$ if $\lim_{x \to a} f(x) = f(a)$.
 
 </Theorem>
 ```
@@ -72,7 +72,7 @@ A function $f$ is continuous at $x = a$ if...
 ```markdown
 <Theorem type="lemma" number="3.2">
 
-This will be numbered as "Lemma 3.2" instead of auto-numbering.
+This lemma appears as "Lemma 3.2" instead of using an automatic number.
 
 </Theorem>
 ```
@@ -96,3 +96,14 @@ The original cash payment was real, but the **expense for this year** is only th
 
 </Theorem>
 ```
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `type` | `string` | `'theorem'` | Statement type listed above |
+| `number` | `string \| number` | automatic | Explicit display number |
+| `title` | `string` | - | Optional title after the type and number |
+| `autoNumber` | `boolean` | `true` | Enables automatic numbering for supported types |
+| `compact` | `boolean` | `false` | Reduces margins, padding, and heading size |
+| `showHeader` | `boolean` | `true` | Hides the type, number, and title row when false |

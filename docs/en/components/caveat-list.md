@@ -4,7 +4,7 @@ title: CaveatList
 
 # CaveatList
 
-`CaveatList` presents limitations with optional mitigation notes. It is intended for scoped claims, defense questions, and result slides where boundaries need to be explicit.
+`CaveatList` pairs research limitations with possible responses, making the boundary of a claim clear on result and defense slides.
 
 ![CaveatList example](/images/components/caveat-list.png)
 

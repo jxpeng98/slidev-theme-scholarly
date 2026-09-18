@@ -1,36 +1,53 @@
 ---
-title: 指南
+title: 文档导航
+description: 按任务整理的 Scholarly 指南和参考页面。
 ---
 
-# 指南
+# 文档导航
 
-当你要创建 Scholarly 演示、选择合适模板，或调整主题配置时，可以先从本指南开始，而不是逐页阅读所有参考文档。
+第一次使用 Scholarly，请从[快速开始](./quick-start)阅读。需要查找具体功能时，可以使用本页索引。
 
-## 开始
+## 创建和维护项目
 
-新建演示：
+- [快速开始](./quick-start)：安装、编写、导出 PDF 和构建静态网站。
+- [VS Code 插件](./vscode-extension)：创建项目、Deck Builder、补全和诊断。
+- [升级说明](./upgrade)：更新依赖，处理旧配置。
+- [示例](../examples)：完整演示和布局画廊。
+- [功能概览](./features)：主要能力与离线使用。
 
-- [快速开始](./quick-start.md)：创建演示、选择模板，并在本地运行预览。
-- [学术工作流](./workflows/)：根据论文报告、学位答辩、读书会、课程讲义或结果展示场景选择起点。
+## 选择报告结构
 
-已有 Slidev 项目：
+[学术工作流](./workflows/)涵盖[论文报告](./workflows/paper-talk)、[学位答辩](./workflows/thesis-defense)、[文献综述](./workflows/literature-review)、[结果报告](./workflows/results-heavy)和[课程讲义](./workflows/course-lecture)。
 
-- [快速开始](./quick-start.md#手动方式)：添加主题并启用引用功能。
-- [升级说明](./upgrade.md)：升级旧演示前先检查兼容性说明。
+## 布局参考
 
-## 选择构件
+[布局](../layouts/)负责整张幻灯片的结构：
 
-- [布局](../layouts/)：选择封面、正文、方法、结果、参考文献、附录和问答页结构。
-- [组件](../components/)：插入定理、信息块、引用、指标、公式、数据集、论文摘要和局限说明。
-- [语法糖](../syntax-sugar.md)：用 Markdown 指令写常用组件，减少 Vue 标签。
+- [结构布局](../layouts/structure)：封面、目录、章节、自适应正文和结束页。
+- [内容布局](../layouts/content)：分栏、图片和列表。
+- [强调布局](../layouts/emphasis)：引语、数字、陈述和问题。
+- [学术布局](../layouts/academic)：论文概览、方法、证据、问答和参考文献。
 
-## 自定义
+## 组件参考
 
-- [配置](./configurations.md)：设置作者、页脚、颜色、字体、定理编号、注脚和单页覆盖。
-- [色彩与字体主题](./themes.md)：预览并选择主题预设。
-- [主题模式与对比度](./theme-mode-contrast.md)：保持浅色/深色模式和对比度可读。
+[组件](../components/)负责幻灯片内的内容：
 
-## 提高效率
+- 正式陈述：[Theorem](../components/theorem)、[Block](../components/block)、[Highlight](../components/highlight)。
+- 内容组织：[Columns](../components/columns)、[Steps](../components/steps)、[Keywords](../components/keywords)。
+- 结果展示：[MetricCard](../components/metric-card)、[MetricGrid](../components/metric-grid)、[ResultTable](../components/result-table)。
+- 证据与方法：[EvidenceBlock](../components/evidence-block)、[EquationBlock](../components/equation-block)、[DatasetCard](../components/dataset-card)。
+- 研究背景：[PaperCard](../components/paper-card)、[ContributionList](../components/contribution-list)、[CaveatList](../components/caveat-list)。
+- 文献与跳转：[引用、注脚和锚点](../components/cite)。
+- 局部配色预览：[ThemePreview](../components/theme-preview)。
 
-- [VS Code 插件](./vscode-extension.md)：使用代码片段、预览、BibTeX 辅助和演示元数据支持。
-- [示例](../examples.md)：明确需要的模式后，再查看完整示例。
+简写方式见 [Markdown 指令](../syntax-sugar)，导入数据的方式见[从数据生成幻灯片](./data-driven)。
+
+## 配置演示
+
+- [配置](./configurations)：字段位置、作者、页脚、编号和字号。
+- [颜色与字体](./themes)：配色、字体搭配和自定义颜色。
+- [主题模式与对比度](./theme-mode-contrast)：明暗控制、优先级和可读性。
+
+## 参与贡献
+
+[贡献指南](../contributing)说明仓库安装、测试、双语文档维护和预览图更新方法。

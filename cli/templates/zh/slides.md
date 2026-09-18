@@ -7,7 +7,7 @@ aspectRatio: 4/3
 lang: zh-CN
 themeConfig:
   colorTheme: cambridge-green
-  fontTheme: academic
+  fontTheme: elegant
   chromeMode: dark
   sectionMode: dark
   outlineToc: true

@@ -4,7 +4,7 @@ title: PaperCard
 
 # PaperCard
 
-`PaperCard` presents a paper's title, authors, venue, status, and contribution. It works well in related-work slides, paper summaries, and reading-group decks.
+`PaperCard` keeps a paper's title, authors, venue, status, and main contribution together for related work, summaries, or reading groups.
 
 ![PaperCard example](/images/components/paper-card.png)
 

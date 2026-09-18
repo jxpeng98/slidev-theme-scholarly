@@ -4,7 +4,7 @@ title: DatasetCard
 
 # DatasetCard
 
-`DatasetCard` summarizes a dataset's task, scale, split, source, and license. Use it when introducing benchmarks or explaining experimental setup.
+`DatasetCard` keeps a dataset's task, scale, split, source, and license together on an experiment or data slide.
 
 ![DatasetCard example](/images/components/dataset-card.png)
 

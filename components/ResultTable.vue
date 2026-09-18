@@ -2,7 +2,7 @@
   <figure :class="['scholarly-result-table', { 'result-table-compact': compact }]">
     <figcaption v-if="caption" class="result-table-caption">{{ caption }}</figcaption>
 
-    <div class="result-table-scroll">
+    <div v-if="normalizedColumns.length && normalizedRows.length" class="result-table-scroll">
       <table>
         <thead>
           <tr>
@@ -29,6 +29,9 @@
         </tbody>
       </table>
     </div>
+    <p v-else class="result-table-empty" role="status">
+      No result rows available. Check the slide data source.
+    </p>
   </figure>
 </template>
 
@@ -143,7 +146,7 @@ function formatCell(value: ResultCell, column: NormalizedColumn, row: ResultReco
 .result-table-caption {
   margin: 0 0 0.45rem;
   color: var(--result-table-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 650;
   line-height: 1.35;
 }
@@ -163,7 +166,7 @@ function formatCell(value: ResultCell, column: NormalizedColumn, row: ResultReco
   border-collapse: collapse;
   background: transparent;
   color: inherit;
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.35;
 }
 
@@ -178,7 +181,7 @@ function formatCell(value: ResultCell, column: NormalizedColumn, row: ResultReco
 .scholarly-result-table th {
   background: var(--result-table-surface-muted);
   color: var(--result-table-muted);
-  font-size: 0.72rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -215,11 +218,20 @@ function formatCell(value: ResultCell, column: NormalizedColumn, row: ResultReco
 }
 
 .result-table-compact table {
-  font-size: 0.76rem;
+  font-size: 0.95rem;
 }
 
 .result-table-compact th,
 .result-table-compact td {
   padding: 0.34rem 0.5rem;
+}
+
+.result-table-empty {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--result-table-border);
+  color: var(--result-table-muted);
+  font-size: var(--scholarly-text-sm);
+  text-align: center;
 }
 </style>

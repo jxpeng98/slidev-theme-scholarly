@@ -23,7 +23,7 @@
             :class="{
               'toc-item--no-numbers': !showNumbers,
               'is-active': highlightCurrent && section.isActive,
-              'is-inactive': highlightCurrent && !section.isActive
+              'is-inactive': highlightCurrent && hasActiveSection && !section.isActive
             }"
             @click="navigateToSection(section.slideNo)"
           >
@@ -65,23 +65,31 @@ interface TocSection {
   isActive: boolean
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   /** Custom title for the TOC (default: 'Outline'), set to false to hide */
   title?: string | false
+  /** Overrides title without changing the presentation title on page one. */
+  heading?: string | false
   /** Show section numbers (default: true) */
   showNumbers?: boolean
   /** Highlight the current active section (default: true) */
   highlightCurrent?: boolean
   /** Manually specify sections (overrides auto-extraction) */
   sections?: string[]
-}>()
+}>(), {
+  title: undefined,
+  heading: undefined,
+  showNumbers: true,
+  highlightCurrent: true,
+})
 
-const { $slidev } = useSlideContext()
+const { $slidev, $frontmatter } = useSlideContext()
 
 // TOC title - from frontmatter or default
 const tocTitle = computed(() => {
-  if (props.title === false) return ''
-  if (typeof props.title === 'string' && props.title.trim()) return props.title
+  const title = props.heading ?? props.title ?? $frontmatter?.title
+  if (title === false) return ''
+  if (typeof title === 'string' && title.trim()) return title
 
   const slidevConfigs = $slidev?.configs as any
   const lang = String(slidevConfigs?.lang || slidevConfigs?.language || 'en')
@@ -183,6 +191,8 @@ const tocSections = computed<TocSection[]>(() => {
 
   return sections
 })
+
+const hasActiveSection = computed(() => tocSections.value.some(section => section.isActive))
 
 const navigateToSection = (slideNo: number) => {
   if (slideNo > 0) {

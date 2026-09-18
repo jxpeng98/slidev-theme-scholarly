@@ -93,7 +93,7 @@ const displayReference = computed(() => {
 
 .equation-label {
   color: var(--scholarly-content-accent-fg, var(--slidev-theme-primary));
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
@@ -104,7 +104,7 @@ const displayReference = computed(() => {
   min-width: 0;
   overflow: hidden;
   color: var(--scholarly-content-fg);
-  font-size: 0.95rem;
+  font-size: var(--scholarly-text-sm);
   font-weight: 700;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -114,7 +114,7 @@ const displayReference = computed(() => {
 .equation-reference {
   flex: 0 0 auto;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-xs);
   font-variant-numeric: tabular-nums;
   font-weight: 650;
 }
@@ -151,7 +151,7 @@ const displayReference = computed(() => {
   padding: 0.55rem 0.85rem;
   border-top: 1px solid var(--scholarly-content-border);
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.35;
 }
 </style>

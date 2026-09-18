@@ -4,7 +4,7 @@ title: Keywords
 
 # Keywords Component
 
-The `Keywords` component displays keyword tags, perfect for showing research topics or key concepts.
+`Keywords` turns research topics or key concepts into a short set of tags.
 
 ## Basic Usage
 
@@ -12,7 +12,7 @@ The `Keywords` component displays keyword tags, perfect for showing research top
 <Keywords :keywords="['Machine Learning', 'Deep Learning', 'Neural Networks']" />
 ```
 
-Or using the syntax sugar:
+The Markdown directive is equivalent:
 
 ```markdown
 :::keywords{:keywords='["Machine Learning", "Deep Learning"]' color="blue"}:::

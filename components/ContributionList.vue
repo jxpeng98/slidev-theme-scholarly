@@ -86,7 +86,7 @@ withDefaults(defineProps<Props>(), {
   display: block;
   margin-bottom: 0.12rem;
   color: var(--contribution-accent);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.2;
@@ -127,7 +127,7 @@ withDefaults(defineProps<Props>(), {
   border-radius: 999px;
   background: var(--contribution-soft-bg);
   color: var(--contribution-accent);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   font-variant-numeric: tabular-nums;
   font-weight: 750;
   line-height: 1;
@@ -147,7 +147,7 @@ withDefaults(defineProps<Props>(), {
 .contribution-body p {
   margin: 0.18rem 0 0;
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.82rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.4;
 }
 
@@ -159,14 +159,14 @@ withDefaults(defineProps<Props>(), {
   border-radius: 999px;
   background: var(--contribution-soft-bg);
   color: var(--contribution-accent);
-  font-size: 0.68rem;
+  font-size: var(--scholarly-text-xs);
   font-weight: 650;
   line-height: 1.2;
 }
 
 .contribution-content {
   color: var(--scholarly-content-fg-muted);
-  font-size: 0.78rem;
+  font-size: var(--scholarly-text-sm);
   line-height: 1.4;
 }
 

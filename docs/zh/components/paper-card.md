@@ -4,7 +4,7 @@ title: PaperCard
 
 # PaperCard
 
-`PaperCard` 用于展示论文标题、作者、会议、状态和贡献摘要。适合 related work、paper summary 和 reading group deck。
+`PaperCard` 把论文标题、作者、发表信息和主要贡献放在一张卡片中，适合用于相关工作、论文概览和读书会。
 
 ![PaperCard 示例](/images/components/paper-card.png)
 
@@ -16,8 +16,8 @@ title: PaperCard
   :authors="['A. Smith', 'B. Lee']"
   venue="ICML"
   year="2026"
-  status="Accepted"
-  contribution="在 task-specific fine-tuning 前加入轻量 routing。"
+  status="已接收"
+  contribution="在针对任务的微调前加入轻量路由模块。"
 />
 ```
 
@@ -34,9 +34,9 @@ title: PaperCard
 />
 ```
 
-## Props
+## 属性
 
-| Prop | 类型 | 默认值 | 说明 |
+| 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `title` | `string` | 必填 | 论文标题 |
 | `label` | `string` | `'Paper'` | 标题上方的小标签 |
@@ -47,6 +47,6 @@ title: PaperCard
 | `doi` | `string` | - | 不带 URL 前缀的 DOI |
 | `url` | `string` | - | 论文链接 |
 | `urlLabel` | `string` | `'Open paper'` | 链接文字 |
-| `contribution` | `string` | - | 一句话贡献或 takeaway |
+| `contribution` | `string` | - | 一句话贡献或核心结论 |
 | `variant` | `string` | `'primary'` | `primary`、`success`、`warning`、`danger` 或 `info` |
 | `compact` | `boolean` | `false` | 使用紧凑间距 |

@@ -476,6 +476,12 @@
                     "description": "Sets the table-of-contents heading; false hides it, and the fallback follows the deck language."
                 },
                 {
+                    "name": "heading",
+                    "type": "string | false",
+                    "required": false,
+                    "description": "Overrides the outline heading independently of title; use false to hide it when the outline is the first slide."
+                },
+                {
                     "name": "showNumbers",
                     "type": "boolean",
                     "required": false,

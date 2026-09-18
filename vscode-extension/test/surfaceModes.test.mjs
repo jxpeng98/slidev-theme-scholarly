@@ -111,11 +111,29 @@ test('upserts new theme mode keys while preserving legacy colorMode tolerance', 
     updateYaml('theme: scholarly', { colorMode: 'dark' }),
     [
       'theme: scholarly',
-      '',
       'themeConfig:',
       '  contentMode: dark'
     ].join('\n'),
     'legacy colorMode updates write contentMode'
+  );
+});
+
+test('normalizes indentation while preserving themeConfig values', () => {
+  const commands = loadCommandsWithVscodeMock();
+  const updateYaml = commands.__test.upsertThemeConfigYaml;
+
+  assert.equal(
+    updateYaml([
+      'theme: scholarly',
+      'themeConfig:',
+      '    colorTheme: classic-blue'
+    ].join('\n'), { colorTheme: 'yale-blue', fontTheme: 'modern' }),
+    [
+      'theme: scholarly',
+      'themeConfig:',
+      '  colorTheme: yale-blue',
+      '  fontTheme: modern'
+    ].join('\n')
   );
 });
 
@@ -179,4 +197,43 @@ test('extension manifest exposes new mode commands and hides legacy color mode c
 
   assert.ok(manifest.activationEvents.includes('onCommand:slidev-scholarly.setColorMode'));
   assert.ok(!titleMenuCommands.includes('slidev-scholarly.setColorMode'));
+});
+
+test('theme updates preserve commented and inline YAML mappings and reject invalid inputs', () => {
+  const yaml = require('../out/vendor/js-yaml');
+  const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
+  for (const source of [
+    'themeConfig: # palette\n  fontTheme: traditional\n  outlineToc: false\n  custom: {nested: [1, 2]}',
+    'themeConfig: {fontTheme: traditional, outlineToc: false, custom: {nested: [1, 2]}}'
+  ]) {
+    const updated = update(source + '\nother: {keep: true}', {colorTheme:'yale-blue'});
+    if (source.includes('# palette')) assert.match(updated, /# palette/);
+    const parsed = yaml.load(updated);
+    assert.deepEqual(parsed.themeConfig, {fontTheme:'traditional', outlineToc:false, custom:{nested:[1,2]}, colorTheme:'yale-blue'});
+    assert.deepEqual(parsed.other, {keep:true});
+  }
+  for (const source of ['themeConfig: {}\nthemeConfig: {}', 'themeConfig: []', 'themeConfig: broken', 'themeConfig: ['])
+    assert.throws(() => update(source, {colorTheme:'yale-blue'}));
+});
+
+
+test('theme editing retains comments and quotes without changing aliased defaults', () => {
+  const yaml = require('../out/vendor/js-yaml');
+  const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
+  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette # local override';
+  const updated = update(source, {colorTheme: 'yale-blue'});
+  for (const text of ['# Author notes', '# reusable', '# local override', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text);
+  const data = yaml.load(updated);
+  assert.equal(data.defaults.colorTheme, 'classic-blue');
+  assert.equal(data.themeConfig.colorTheme, 'yale-blue');
+});
+
+
+test('theme editing creates mappings for empty and comment-only frontmatter', () => {
+  const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
+  for (const source of ['', '# Keep comment']) {
+    const updated = update(source, {colorTheme: 'yale-blue'});
+    assert.match(updated, /colorTheme: yale-blue/);
+    if (source) assert.ok(updated.includes(source));
+  }
 });

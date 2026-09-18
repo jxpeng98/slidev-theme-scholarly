@@ -54,6 +54,12 @@ const componentIds = [
     slug: 'caveat-list',
     snippet: 'Slidev Scholarly: CaveatList',
   },
+  {
+    name: 'ResultTable',
+    file: 'ResultTable.vue',
+    slug: 'result-table',
+    snippet: 'Slidev Scholarly: ResultTable',
+  },
 ]
 
 const requiredTokens = [
@@ -101,12 +107,11 @@ const sharedLayouts = JSON.parse(await readText('shared/layouts.json') || '{}')
 const extensionLayouts = JSON.parse(await readText('vscode-extension/shared/layouts.json') || '{}')
 const componentSnippets = await readText('vscode-extension/snippets/components.json')
 const vscodeComponentSnippets = await readText('vscode-extension/snippets/components.vscode.json')
-const academicExample = await readText('examples/example-academic.md')
+const academicGallery = await readText('examples/example-academic-gallery.md')
 const screenshotSource = await readText('scripts/generate-component-screenshots.md')
 const screenshotExport = await readText('scripts/export-component-screenshots.mjs')
 const englishIndex = await readText('docs/en/components/index.md')
 const chineseIndex = await readText('docs/zh/components/index.md')
-const docsConfig = await readText('docs/.vitepress/config.ts')
 
 const sharedComponentNames = sharedLayouts.componentNames || []
 const extensionComponentNames = extensionLayouts.componentNames || []
@@ -123,9 +128,7 @@ for (const component of componentIds) {
   expectContains('vscode-extension/snippets/components.vscode.json', vscodeComponentSnippets, component.snippet)
   expectContains('docs/en/components/index.md', englishIndex, `./${component.slug}`)
   expectContains('docs/zh/components/index.md', chineseIndex, `./${component.slug}`)
-  expectContains('docs/.vitepress/config.ts', docsConfig, `/en/components/${component.slug}`)
-  expectContains('docs/.vitepress/config.ts', docsConfig, `/zh/components/${component.slug}`)
-  expectContains('examples/example-academic.md', academicExample, `<${component.name}`)
+  expectContains('examples/example-academic-gallery.md', academicGallery, `<${component.name}`)
   expectContains('scripts/generate-component-screenshots.md', screenshotSource, `<${component.name}`)
   expectContains('scripts/export-component-screenshots.mjs', screenshotExport, `'${component.slug}'`)
   await expectFile(`docs/public/images/components/${component.slug}.png`)
