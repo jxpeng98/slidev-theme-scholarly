@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import yaml from 'js-yaml'
+import { isAlias, parseDocument } from 'yaml'
 import { spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 import { analyzeCitationProject } from '../shared/citations.mjs'
@@ -289,7 +290,7 @@ function printDoctorHelp() {
   ${cliName} doctor [--json]
 
 Checks:
-  - Node.js version (must be >= 20)
+  - Node.js version (20.19+ or 22.12+; 24 recommended)
   - Package managers (pnpm/npm)
   - Slidev availability
   - Local project files (slides.md, package.json)
@@ -1331,13 +1332,17 @@ function applyThemeToFile(options) {
   let contentMode = inputContentMode
   if (!contentMode && !CONTENT_MODES.includes(normalizeId(config.contentMode)) && CONTENT_MODES.includes(normalizeId(config.colorMode)))
     contentMode = normalizeId(config.colorMode)
-  delete config.colorMode
+  const document = parseDocument(fm?.body || '', { merge: true })
+  if (document.errors.length) throw document.errors[0]
+  // Materialize an aliased config so editing it does not change its source.
+  if (isAlias(document.get('themeConfig', true)))
+    document.set('themeConfig', document.createNode(config))
+  document.deleteIn(['themeConfig', 'colorMode'])
   for (const [key, value] of Object.entries({ colorTheme, fontTheme, contentMode, chromeMode, sectionMode })) {
-    if (value) config[key] = value
+    if (value) document.setIn(['themeConfig', key], value)
   }
-  data.theme = 'scholarly'
-  data.themeConfig = config
-  const frontmatter = `---${eol}${yaml.dump(data, { lineWidth: -1 }).replace(/\n/g, eol)}---${eol}`
+  document.set('theme', 'scholarly')
+  const frontmatter = `---${eol}${document.toString({ lineWidth: 0 }).replace(/\n/g, eol)}---${eol}`
   const content = frontmatter + (fm ? fm.rest : original)
   fs.writeFileSync(targetFile, content, 'utf8')
 
@@ -1891,8 +1896,8 @@ function checkPlaywrightBrowserAvailable() {
 
 function collectDoctorChecks() {
   const nodeVersion = process.versions.node
-  const nodeMajor = Number(nodeVersion.split('.')[0] || 0)
-  const nodeOk = Number.isFinite(nodeMajor) && nodeMajor >= 20
+  const [nodeMajor, nodeMinor] = nodeVersion.split('.').map(Number)
+  const nodeOk = (nodeMajor === 20 && nodeMinor >= 19) || (nodeMajor === 22 && nodeMinor >= 12) || nodeMajor > 22
   const pnpmCheck = checkBinary('pnpm')
   const npmCheck = checkBinary('npm')
   const slidevCheck = checkBinary('slidev')
@@ -1905,9 +1910,9 @@ function collectDoctorChecks() {
       'node-version',
       'Node.js',
       nodeOk ? 'ok' : 'error',
-      `v${nodeVersion} (required >= 20)`,
-      'Use Node.js 20 or newer.',
-      { version: nodeVersion, required: '>=20' },
+      `v${nodeVersion} (required ${packageJson.engines.node})`,
+      'Use Node.js 20.19+ or 22.12+ (Node.js 24 recommended).',
+      { version: nodeVersion, required: packageJson.engines.node },
     ),
     createDoctorCheck(
       'pnpm',

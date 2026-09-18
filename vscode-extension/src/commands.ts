@@ -59,6 +59,7 @@ type ThemePreset = {
 }
 
 const yamlParser = require('./vendor/js-yaml');
+const { isAlias, parseDocument } = require('./vendor/yaml');
 
 const CLI_COMMAND_PREFIX = ['npx', '-y', '--package', 'slidev-theme-scholarly', 'sch'];
 const CLI_SNIPPETS = ['theorem', 'block', 'cite', 'cover', 'section', 'methodology', 'results', 'references'] as const;
@@ -1151,14 +1152,17 @@ function upsertThemeConfigYaml(source: string, update: ThemeConfigUpdate): strin
     throw new Error('Slide frontmatter must be a YAML mapping.');
   if (data.themeConfig !== undefined && (!data.themeConfig || Object.getPrototypeOf(data.themeConfig) !== Object.prototype))
     throw new Error('themeConfig must be a YAML mapping.');
-  const config = { ...data.themeConfig };
+  const document = parseDocument(source, { merge: true });
+  if (document.errors.length) throw document.errors[0];
+  // Materialize aliases before editing so their source remains unchanged.
+  if (isAlias(document.get('themeConfig', true)))
+    document.set('themeConfig', document.createNode(data.themeConfig));
   const { colorMode, ...values } = update;
   values.contentMode ||= colorMode;
   for (const [key, value] of Object.entries(values)) {
-    if (value) config[key] = value;
+    if (value) document.setIn(['themeConfig', key], value);
   }
-  data.themeConfig = config;
-  return yamlParser.dump(data, { lineWidth: -1 }).trimEnd();
+  return document.toString({ lineWidth: 0 }).trimEnd();
 }
 
 export const __test = {

@@ -65,6 +65,25 @@ Install the generated `.vsix` with `Extensions: Install from VSIX...`.
 
 `Slidev Scholarly: Toggle Dev Mode` enables timing logs in the **Slidev Scholarly** output channel. Settings are `slidevScholarly.devMode.enabled` and `slidevScholarly.devMode.slowThresholdMs` (default: `25`). See [Contributing](https://scholarly-docs.jxpeng.dev/en/contributing) for the repository workflow.
 
+## Publish locally
+
+Extension release tags do not run a GitHub Actions publishing job. Build and
+check each VSIX locally, then publish that exact file with an authenticated
+`vsce` session:
+
+```bash
+cd vscode-extension
+pnpm exec vsce package --out /tmp/scholarly-stable.vsix
+node scripts/check-vsix.mjs /tmp/scholarly-stable.vsix
+pnpm exec vsce publish --packagePath /tmp/scholarly-stable.vsix
+```
+
+For a Beta package, add `--pre-release` to both the package and publish commands.
+Keep channel-specific filenames. GitHub Releases can distribute stable and Beta
+VSIX files with the same manifest version; Marketplace rejects a second upload
+of the same extension version and target platform, even for a different channel.
+A separate Marketplace Beta release therefore needs a distinct version number.
+
 ## License
 
 MIT

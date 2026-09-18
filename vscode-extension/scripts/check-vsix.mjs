@@ -24,11 +24,15 @@ try {
     assert.equal(createHash('sha256').update(bytes).digest('hex'), entry.outputSha256, entry.output)
   }
   assert.match(await readFile(path.join(extension, 'out/vendor/js-yaml-LICENSE'), 'utf8'), /Permission is hereby granted/)
+  assert.match(await readFile(path.join(extension, 'out/vendor/yaml-LICENSE'), 'utf8'), /Permission to use/);
   // Execute outside the repository, with no workspace dependency resolution.
   const result = execFileSync(process.execPath, ['-e', `
     const assert = require('node:assert/strict');
     const { renderBuilderMarkdown, renderBuilderSlides } = require('./extension/out/guiBuilderModel');
     const yaml = require('./extension/out/vendor/js-yaml');
+    const document = require('./extension/out/vendor/yaml').parseDocument('# keep comment\\nthemeConfig: {}');
+    document.setIn(['themeConfig', 'colorTheme'], 'yale-blue');
+    assert.ok(document.toString().includes('# keep comment'));
     const { BUILDER_TEMPLATES } = require('./extension/out/sharedData');
     assert.equal(BUILDER_TEMPLATES.length, 8);
     for (const { deck } of BUILDER_TEMPLATES) {

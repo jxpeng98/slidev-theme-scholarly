@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-09-18
+
+This stable release brings the reviewed 1.5.0 beta theme, CLI, documentation,
+and bilingual VS Code extension together at version 1.5.0.
+
+### Changed
+
+- Updated Slidev to 52.19.1 across the theme and eight starter templates.
+- Improved Deck Builder editing, keyboard navigation, bilingual guidance, and
+  project creation; reorganized the README and documentation around common tasks.
+- Improved layout headers, title handling, grid columns, research content exports,
+  and responsive documentation. The catalog remains 34 layouts and 17 components.
+- Extension packages are now built, checked, and published locally. GitHub Actions
+  continues to validate the project and publish the npm theme.
+
+### Fixed
+
+- Theme editing now preserves YAML comments and quoted values in the CLI and
+  extension, including configs that reference shared defaults through an alias.
+- Aligned the package engine requirement and CLI doctor with Vite:
+  Node.js 20.19+ on the 20.x line, or 22.12+. Node.js 24 is recommended.
+- Included both YAML runtimes and their licenses in the standalone VSIX.
+- Retained the beta fixes for slide insertion, first-page generation, metadata,
+  citation guidance, and exported content visibility.
+
+### Upgrade Notes
+
+- Install the stable theme with `pnpm add -D slidev-theme-scholarly@1.5.0`.
+- Review existing decks after upgrading: automatic text sizing has a 16px lower
+  bound, and portrait screens up to 640px use a scrolling presentation layout.
+- Browser and keyboard checks do not establish native screen-reader coverage;
+  a complete VoiceOver session remains unverified.
+
 ## [1.5.0-beta.1] - 2026-09-08
 
 This test release brings the reviewed theme, CLI, documentation, and VS Code
