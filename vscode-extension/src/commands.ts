@@ -1155,8 +1155,9 @@ function upsertThemeConfigYaml(source: string, update: ThemeConfigUpdate): strin
   const document = parseDocument(source, { merge: true });
   if (document.errors.length) throw document.errors[0];
   // Materialize aliases before editing so their source remains unchanged.
-  if (isAlias(document.get('themeConfig', true)))
-    document.set('themeConfig', document.createNode(data.themeConfig));
+  const configNode = document.get('themeConfig', true);
+  if (isAlias(configNode))
+    document.set('themeConfig', Object.assign(document.createNode(data.themeConfig), { comment: configNode.comment, commentBefore: configNode.commentBefore }));
   const { colorMode, ...values } = update;
   values.contentMode ||= colorMode;
   for (const [key, value] of Object.entries(values)) {

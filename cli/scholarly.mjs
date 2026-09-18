@@ -1335,8 +1335,9 @@ function applyThemeToFile(options) {
   const document = parseDocument(fm?.body || '', { merge: true })
   if (document.errors.length) throw document.errors[0]
   // Materialize an aliased config so editing it does not change its source.
-  if (isAlias(document.get('themeConfig', true)))
-    document.set('themeConfig', document.createNode(config))
+  const configNode = document.get('themeConfig', true)
+  if (isAlias(configNode))
+    document.set('themeConfig', Object.assign(document.createNode(config), { comment: configNode.comment, commentBefore: configNode.commentBefore }))
   if (document.hasIn(['themeConfig', 'colorMode'])) document.deleteIn(['themeConfig', 'colorMode'])
   for (const [key, value] of Object.entries({ colorTheme, fontTheme, contentMode, chromeMode, sectionMode })) {
     if (value) document.setIn(['themeConfig', key], value)

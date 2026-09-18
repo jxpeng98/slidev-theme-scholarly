@@ -311,12 +311,12 @@ test('theme apply preserves YAML mappings and refuses invalid settings without w
 test('theme editing preserves comments, quotes, aliases, and CRLF slide bodies', async () => {
   const { default: yaml } = await import('js-yaml')
   const { file } = makeTempSlides()
-  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette\n'
+  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette # local override\n'
   writeFileSync(file, '---\r\n' + source.replace(/\n/g, '\r\n') + '---\r\n# Body\r\n')
   const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
   assert.equal(result.status, 0, result.stderr)
   const updated = readFileSync(file, 'utf8')
-  for (const text of ['# Author notes', '# reusable', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text)
+  for (const text of ['# Author notes', '# reusable', '# local override', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text)
   assert.ok(updated.endsWith('---\r\n# Body\r\n'))
   assert.doesNotMatch(updated, /(?<!\r)\n/)
   const data = yaml.load(updated.split('---')[1])

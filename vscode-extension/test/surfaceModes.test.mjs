@@ -220,9 +220,9 @@ test('theme updates preserve commented and inline YAML mappings and reject inval
 test('theme editing retains comments and quotes without changing aliased defaults', () => {
   const yaml = require('../out/vendor/js-yaml');
   const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
-  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette';
+  const source = '# Author notes\ndefaults: &palette {colorTheme: classic-blue} # reusable\ntitle: "Quoted title" # keep title\nthemeConfig: *palette # local override';
   const updated = update(source, {colorTheme: 'yale-blue'});
-  for (const text of ['# Author notes', '# reusable', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text);
+  for (const text of ['# Author notes', '# reusable', '# local override', '"Quoted title" # keep title']) assert.ok(updated.includes(text), text);
   const data = yaml.load(updated);
   assert.equal(data.defaults.colorTheme, 'classic-blue');
   assert.equal(data.themeConfig.colorTheme, 'yale-blue');
