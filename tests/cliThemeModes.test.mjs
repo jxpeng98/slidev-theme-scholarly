@@ -336,3 +336,17 @@ test('doctor enforces the supported Vite Node version boundaries', () => {
     assert.equal(check.required, '^20.19.0 || >=22.12.0')
   }
 })
+
+
+test('theme apply creates mappings for absent and comment-only frontmatter', () => {
+  const { file } = makeTempSlides()
+  for (const original of ['', '# Body\n', '---\n# Keep comment\n---\n# Body\n']) {
+    writeFileSync(file, original)
+    const result = runCli(['theme', 'apply', 'yale-blue', '--file', file])
+    assert.equal(result.status, 0, result.stderr)
+    const updated = readFileSync(file, 'utf8')
+    assert.match(updated, /colorTheme: yale-blue/)
+    if (original.includes('# Body')) assert.ok(updated.endsWith('# Body\n'))
+    if (original.includes('# Keep comment')) assert.ok(updated.includes('# Keep comment'))
+  }
+})

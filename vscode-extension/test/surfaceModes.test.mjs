@@ -227,3 +227,13 @@ test('theme editing retains comments and quotes without changing aliased default
   assert.equal(data.defaults.colorTheme, 'classic-blue');
   assert.equal(data.themeConfig.colorTheme, 'yale-blue');
 });
+
+
+test('theme editing creates mappings for empty and comment-only frontmatter', () => {
+  const update = loadCommandsWithVscodeMock().__test.upsertThemeConfigYaml;
+  for (const source of ['', '# Keep comment']) {
+    const updated = update(source, {colorTheme: 'yale-blue'});
+    assert.match(updated, /colorTheme: yale-blue/);
+    if (source) assert.ok(updated.includes(source));
+  }
+});

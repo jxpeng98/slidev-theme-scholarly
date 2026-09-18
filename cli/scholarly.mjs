@@ -1337,7 +1337,7 @@ function applyThemeToFile(options) {
   // Materialize an aliased config so editing it does not change its source.
   if (isAlias(document.get('themeConfig', true)))
     document.set('themeConfig', document.createNode(config))
-  document.deleteIn(['themeConfig', 'colorMode'])
+  if (document.hasIn(['themeConfig', 'colorMode'])) document.deleteIn(['themeConfig', 'colorMode'])
   for (const [key, value] of Object.entries({ colorTheme, fontTheme, contentMode, chromeMode, sectionMode })) {
     if (value) document.setIn(['themeConfig', key], value)
   }
